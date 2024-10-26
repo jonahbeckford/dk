@@ -114,12 +114,6 @@ function(get_jdk_home)
 
     # Apple has a standard to locate JDKs. But we'll prefer the local JDK if present.
     if(CMAKE_HOST_APPLE)
-        # Microsoft JDK uses Contents/Home (a bundle) while Zulu does not. Search both.
-        set(JAVA_HOME "${CMAKE_SOURCE_DIR}/.ci/local/share/${JDK_FOLDER}/Contents/Home")
-        if(EXISTS "${JAVA_HOME}/bin/javac")
-            set(JAVA_HOME "${JAVA_HOME}" PARENT_SCOPE)
-            return()
-        endif()
         set(JAVA_HOME "${CMAKE_SOURCE_DIR}/.ci/local/share/${JDK_FOLDER}")
         if(EXISTS "${JAVA_HOME}/bin/javac")
             set(JAVA_HOME "${JAVA_HOME}" PARENT_SCOPE)
@@ -180,6 +174,16 @@ function(get_jdk_home)
     set(JAVA_HOME "${JAVA_HOME}" PARENT_SCOPE)
 endfunction()
 
+function(java_jdk__link_if_src_exist_and_dest_doesnt)
+    set(noValues)
+    set(singleValues SRC ORIGINAL DEST)
+    set(multiValues)
+    cmake_parse_arguments(PARSE_ARGV 0 ARG "${noValues}" "${singleValues}" "${multiValues}")
+    if(EXISTS "${ARG_SRC}" AND NOT EXISTS "${ARG_DEST}")
+        file(CREATE_LINK "${ARG_ORIGINAL}" "${ARG_DEST}" SYMBOLIC)
+    endif()
+endfunction()
+
 # Java is needed to run the Android SDK Manager.
 # We use Temurin for JDK when needed and if available. Recommended by
 # https://formulae.brew.sh/cask/android-commandlinetools.
@@ -198,9 +202,6 @@ function(install_java_jdk)
     set_jdk_folder()
 
     set(hints "${CMAKE_SOURCE_DIR}/.ci/local/share/${JDK_FOLDER}/bin")
-    if(CMAKE_HOST_APPLE)
-        list(PREPEND hints "${CMAKE_SOURCE_DIR}/.ci/local/share/${JDK_FOLDER}/Contents/Home/bin")
-    endif()
     set(find_program_INITIAL)
     if(ARG_NO_SYSTEM_PATH)
         list(APPEND find_program_INITIAL NO_DEFAULT_PATH)
@@ -272,10 +273,18 @@ function(install_java_jdk)
             else()
                 message(FATAL_ERROR "Your APPLE ${host_machine_type} platform is currently not supported by this download script")
             endif()
-            message(${loglevel} "Downloading JDK from ${url}")                
+            message(${loglevel} "Downloading JDK from ${url}")
             file(DOWNLOAD "${url}" ${CMAKE_CURRENT_BINARY_DIR}/java.tar.gz EXPECTED_HASH SHA256=${expected_sha256})
             message(${loglevel} "Extracting JDK")
             file(ARCHIVE_EXTRACT INPUT ${CMAKE_CURRENT_BINARY_DIR}/java.tar.gz DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+            # Maintain symlinks to Contents/Home so that we can have a consistent JAVA_HOME on all platforms.
+            # Context: Microsoft JDK uses Contents/Home (a bundle) while Zulu does not (but it has symlinks like we do here).
+            set(_o "Contents/Home")
+            set(_s "${CMAKE_CURRENT_BINARY_DIR}/${out_base}/${_o}")
+            foreach(_i IN ITEMS bin conf include jmods legal lib man release)
+                java_jdk__link_if_src_exist_and_dest_doesnt(SRC "${_s}/${_i}" ORIGINAL "${_o}/${_i}" DEST "${CMAKE_CURRENT_BINARY_DIR}/${out_base}/${_i}")
+            endforeach()
             set(downloaded ON)
         elseif(CMAKE_HOST_UNIX)
             if(NOT ARG_DKML_TARGET_ABI)
