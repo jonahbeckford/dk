@@ -2,6 +2,11 @@
 
 ## Pending
 
+## 2.1.4.7
+
+- The generated `dune` files in the `#/s` are now relocatable. That means you can move the project directory (both the source code and the `#s/` folder) and your build should in theory work. However, the `findlib.conf` has hardcoded paths that might be addressed in a later version of findlib <https://github.com/ocaml/ocamlfind/pull/72>.
+- The generated `dune` and `dune-project` files are now `.z-dk-dune` and `dune-file`. That lets Dune projects work with DkCoder without having to remove existing `dune-project` and `dune` files. An empty `dune-workspace` will also be created if it doesn't exist so that Merlin knows there is a Dune project.
+
 ## 2.1.4.4
 
 - `DKML_TARGET_ABI` environment variable, if set, is honored in `./dk dksdk.java.jdk.download`. `./dk dksdk.java.jdk.download DKML_TARGET_ABI <abi>` is also supported.
