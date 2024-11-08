@@ -2,6 +2,20 @@
 
 ## Pending
 
+## 2.1.4.8
+
+- Allow unpackaged scripts to run. That means `./dk DkRun_Project.Run somefile.ml` can have `somefile.ml` be any path on the filesystem. That gives a new third way to run scripts:
+  1. With a standard module id (ex. DkDev.Export).
+  2. With a path which ends with one or more MlFront module names and has an immediate MlFront library name ancestor. For example `../a/b/c/SomeTest_Std/X/Y/Z.ml` will be a standard module `SomeTest_Std.X.Y.Z` because the path ends with the module names `X`, `Y` and `Z` and has an immediate library name `SomeTest_Std`.
+  3. (new change) Any other path will be treated as if it were the reserved module id `ZzZz_Zz.<CapitalizedBasename>` as long as the path's basename, when capitalized, is a valid standard module name. For example:
+  
+  - `somefile.ml` becomes `ZzZz_Zz.Somefile`
+  - `A.ml` becomes `ZzZz_Zz.A`
+  - `AbcDefHello.ml` becomes `ZzZz_Zz.AbcDefHello`
+  - `AbcDef_Hello.ml` is not accepted because it matches MlFront library name standards
+  - `A__.ml` is not accepted because it has a double underscore
+  - `_A.ml` is not accepted because it begins with an underscore
+
 ## 2.1.4.7
 
 - The generated `dune` files in the `#/s` are now relocatable. That means you can move the project directory (both the source code and the `#s/` folder) and your build should in theory work. However, the `findlib.conf` has hardcoded paths that might be addressed in a later version of findlib <https://github.com/ocaml/ocamlfind/pull/72>.
