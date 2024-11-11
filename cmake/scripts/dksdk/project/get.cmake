@@ -139,10 +139,10 @@ function(dksdk_project_get)
         list(APPEND get_OPTS -D ONLY_DKSDK_VERSION=1)
     endif()
     if(ARG_OVERRIDE_DKSDK_VERSION)
-        list(APPEND get_OPTS -D "OVERRIDE_DKSDK_VERSION=${OVERRIDE_DKSDK_VERSION}")
+        list(APPEND get_OPTS -D "OVERRIDE_DKSDK_VERSION=${ARG_OVERRIDE_DKSDK_VERSION}")
     endif()
     if(ARG_DKSDK_CMAKE_GITREF)
-        list(APPEND get_OPTS -D "DKSDK_CMAKE_GITREF=${DKSDK_CMAKE_GITREF}")
+        list(APPEND get_OPTS -D "DKSDK_CMAKE_GITREF=${ARG_DKSDK_CMAKE_GITREF}")
     endif()
 
     # Fetch dksdk-access.
