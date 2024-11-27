@@ -2,6 +2,18 @@
 
 ## Pending
 
+## 2.1.4.10
+
+- New `DkDev_Std.Export create-blib` subcommand to make a blib archive.
+- Patched capnp behind `Tr1Capnp_Std` that is amenable to codept analysis: <https://github.com/capnproto/capnp-ocaml/pull/91> and <https://github.com/capnproto/capnp-ocaml/pull/92>
+- `DkDev_Std.Export` now exports `.cmti` in addition to `.cmi`
+- The `Run` (ex. `./dk DkRun_Project.Run`) is now native code rather than bytecode. Native code has dead-code and other optimizations necessary so that more features can be added to `Run` while still fitting inside a 32-bit end-user environment.
+- Renamed `DkDev_Std` to `MlStd_Std`. In an upcoming version you will be able to drop the trailing `Std` segments, so that `MlStd_Std.Export` could be invoked as `Ml.Export`.
+- All `MlStd_Std` scripts will skip the ToS check, not just the newly renamed `MlStd_Std.Exec`, `MlStd_Std.Export` and `MlStd_Std.Legal.Record`. This will mean `dk Ml.*` will be consistently:
+  1. Apache 2.0 license
+  2. No terms of service check
+- Mitigate occurrence of `Reason: flexdll error: cannot relocate xxxx RELOC_REL32, target is too far` on `windows_x86_64` when `./dk DkRun_Project.Run` (etc.) runs: <https://github.com/diskuv/dkml-compiler/compare/b211c65d1ac69590ce75e9ae8405fb71a3654f63...main>
+
 ## 2.1.4.9
 
 - The marshalled `.mli` filenames (part of `Location.t`) are now equal in both DkSDK CMake and DkSDK Coder for all the package dependencies of DkSDKFFI_OCaml: base,ocplib-endian,res,result,sexplib0, and stdio. That makes their `.cmi` checksums equivalent which avoids `make inconsistent assumptions` ocamlc errors.
