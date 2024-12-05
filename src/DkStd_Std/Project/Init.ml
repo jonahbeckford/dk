@@ -100,8 +100,11 @@ let () =
   let slots = Slots.create () in
 
   let new_project_dirp = Fpath.v !new_project_dir in
+  let dkcoder_project_dirp = Fpath.v !dkcoder_project_dir in
   if not (Bos.OS.Dir.exists new_project_dirp |> Utils.rmsg) then
     Printf.ksprintf Utils.fail "NEW_PROJECT_DIR %s does not exist" !new_project_dir;
+  if not (Bos.OS.Dir.exists dkcoder_project_dirp |> Utils.rmsg) then
+    Printf.ksprintf Utils.fail "DKCODER_PROJECT_DIR %s does not exist" !dkcoder_project_dir;
 
   (* git init *)
   if not (Bos.OS.Dir.exists Fpath.(new_project_dirp / ".git") |> Utils.rmsg) then
@@ -126,8 +129,8 @@ let () =
     Bos.OS.File.write gitignore (String.trim contents_gitignore_untrimmed) |> Utils.rmsg);
 
   (* git add, git update-index *)
-  let files = ["dk"; "dk.cmd"; "__dk.cmake"; ".gitattributes"; ".gitignore"] in
-  Utils.git ~quiet:() ~slots ("add" :: files);
+  let project_files = ["dk"; "dk.cmd"; "__dk.cmake"; ".gitattributes"; ".gitignore"] in
+  Utils.git ~quiet:() ~slots ("add" :: project_files);
   Utils.git ~quiet:() ~slots ["update-index"; "--chmod=+x"; "dk"];
 
   (* fail fast if there are any changes in the dkcoder project. We don't want to delete modifications! *)
@@ -147,4 +150,9 @@ let () =
     exit 3
   end;
 
-  Utils.git ~quiet:() ~slots ("status" :: "--short" :: files)
+  (* Delete the dkcoder project if requested *)
+  if !delete_dkcoder_after then
+    DkFs_C99.Path.rm ~recurse:() ~force:() [ dkcoder_project_dirp ] |> Utils.rmsg;
+
+  (* Display the status of the project files *)
+  Utils.git ~quiet:() ~slots ("status" :: "--short" :: project_files)
