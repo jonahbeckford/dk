@@ -114,12 +114,10 @@ macro(dkcoder_project_init)
         set(dk_cmd "${CMAKE_SOURCE_DIR}/dk")
     endif()
 
-    set(init_OPTIONS)
+    set(init_OPTIONS -delete-dkcoder-after)
     # all DkStd_Std commands must run in old versions of DkCoder. Confer dkcoder/src/DkStd_Std/README.md
-    if(ARG_QUIET)
-        set(dk_run DkRun_V2_1.RunQuiet)
-    else()
-        set(dk_run DkRun_V2_1.Run)
+    set(dk_run DkRun_V2_1.RunAway)
+    if(NOT ARG_QUIET)        
         string(APPEND init_OPTIONS " -verbose")
     endif()
 
@@ -129,8 +127,11 @@ macro(dkcoder_project_init)
     if(CMAKE_HOST_WIN32)
         cmake_path(NATIVE_PATH dk_cmd dk_cmd_NATIVE)
         cmake_path(NATIVE_PATH DKCODER_PWD DKCODER_PWD_NATIVE)
+        cmake_path(NATIVE_PATH CMAKE_SOURCE_DIR CMAKE_SOURCE_DIR_NATIVE)
+        cmake_path(NATIVE_PATH CMAKE_CURRENT_BINARY_DIR CMAKE_CURRENT_BINARY_DIR_NATIVE)
         file(CONFIGURE OUTPUT "${DKCODER_POST_SCRIPT}" CONTENT [[@ECHO OFF
-CALL "@dk_cmd_NATIVE@" @dk_run@ --generator dune -- DkStd_Std.Project.Init @init_OPTIONS@ "@DKCODER_PWD_NATIVE@"
+CD /D "@CMAKE_CURRENT_BINARY_DIR_NATIVE@"
+CALL "@dk_cmd_NATIVE@" @dk_run@ --generator dune --you-dir "@CMAKE_SOURCE_DIR_NATIVE@\src" -- DkStd_Std.Project.Init @init_OPTIONS@ "@DKCODER_PWD_NATIVE@" "@CMAKE_SOURCE_DIR_NATIVE@"
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 ECHO dkcoder: project installed.
 ]]
@@ -138,7 +139,8 @@ ECHO dkcoder: project installed.
     else()
         file(CONFIGURE OUTPUT "${DKCODER_POST_SCRIPT}" CONTENT [[#!/bin/sh
 set -euf
-'@dk_cmd@' @dk_run@ --generator dune -- DkStd_Std.Project.Init @init_OPTIONS@ '@DKCODER_PWD@'
+cd '@CMAKE_CURRENT_BINARY_DIR@'
+'@dk_cmd@' @dk_run@ --generator dune --you-dir '@CMAKE_SOURCE_DIR@/src' -- DkStd_Std.Project.Init @init_OPTIONS@ '@DKCODER_PWD@' '@CMAKE_SOURCE_DIR@'
 ECHO "dkcoder: project installed."
 ]]
             @ONLY NEWLINE_STYLE UNIX)

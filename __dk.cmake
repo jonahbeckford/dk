@@ -799,6 +799,7 @@ SET DK_NONCE=
 SET DK_PROJ_DIR=
 SET DK_PWD=
 SET DK_QUIET=
+SET DK_AWAY=
 SET DK_DATA_HOME=
 SET DK_TTY=
 SET DK_UNZIP_DEST=
@@ -992,6 +993,11 @@ Environment variables:
             set(quiet ON)
         endif()
 
+        # Rename RunAway to Run
+        if(package_namespace STREQUAL "Dk" AND package_qualifier STREQUAL "Run" AND module STREQUAL "RunAway")
+            set(module Run)
+        endif()
+        
         # Detect ABI
         __dkcoder_abi(
             ABI_VARIABLE abi

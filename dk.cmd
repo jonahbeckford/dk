@@ -47,13 +47,16 @@ SET DK_CKSUM_7ZEXTRA=db3a1cbe57a26fac81b65c6a2d23feaecdeede3e4c1fe8fb93a7b91d72d
 SET DK_CKSUM_CMAKE=d129425d569140b729210f3383c246dec19c4183f7d0afae1837044942da3b4b
 SET DK_CKSUM_NINJA=f550fec705b6d6ff58f2db3c374c2277a37691678d6aba463adcbb129108467a
 
-REM --------- Quiet Detection ---------
-REM Enabled? If suffix of the first argument is "Quiet".
+REM --------- Quiet and Away Detection ---------
+REM Enabled? If suffix of the first argument is "Quiet" or "Away"
 REM Example: DkRun_Project.RunQuiet
+REM Example: DkRun_Project.RunAway
 
 SET DK_ARG1=%1
 SET DK_QUIET=0
+SET DK_AWAY=0
 IF "%DK_ARG1:~-5%" == "Quiet" SET DK_QUIET=1
+IF "%DK_ARG1:~-4%" == "Away" SET DK_AWAY=1
 SET DK_ARG1=
 
 REM --------- Data Home ---------
@@ -203,8 +206,8 @@ REM -------------- Run finder --------------
 
 SET DK_WORKDIR=%DK_DATA_HOME%\work
 
-CD /d %DK_PROJ_DIR%
-"%DK_CMAKE_EXE%" -D CMAKE_GENERATOR=Ninja -D "CMAKE_MAKE_PROGRAM=%DK_NINJA_EXE%" -D "DKCODER_PWD:FILEPATH=%DK_PWD%" -D "DKCODER_DATA_HOME:FILEPATH=%DK_DATA_HOME%" -D "DKCODER_WORKDIR:FILEPATH=%DK_WORKDIR%" -D "DKCODER_NONCE:STRING=%DK_NONCE%" -D "DKCODER_TTY:STRING=%DK_TTY%" -D "DKCODER_CMDLINE:STRING=%DK_CMDLINE%" -P __dk.cmake
+IF %DK_AWAY% EQU 0 CD /D %DK_PROJ_DIR%
+"%DK_CMAKE_EXE%" -D CMAKE_GENERATOR=Ninja -D "CMAKE_MAKE_PROGRAM=%DK_NINJA_EXE%" -D "DKCODER_PWD:FILEPATH=%DK_PWD%" -D "DKCODER_DATA_HOME:FILEPATH=%DK_DATA_HOME%" -D "DKCODER_WORKDIR:FILEPATH=%DK_WORKDIR%" -D "DKCODER_NONCE:STRING=%DK_NONCE%" -D "DKCODER_TTY:STRING=%DK_TTY%" -D "DKCODER_CMDLINE:STRING=%DK_CMDLINE%" -P "%DK_PROJ_DIR%__dk.cmake"
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 
 REM --------------- Execute post-command outside of CMake --------------
