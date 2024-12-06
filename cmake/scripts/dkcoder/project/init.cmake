@@ -146,8 +146,8 @@ ECHO dkcoder: project installed.
 
 REM The parent dk.cmd script was deleted, and if it continued then
 REM we would get 'The system cannot find the path specified.' so exit
-REM right now.
-EXIT /B 0
+REM the CMD.EXE interpreter right now (not just the current /B batch script).
+EXIT 0
 ]]
             @ONLY NEWLINE_STYLE DOS)
     else()
