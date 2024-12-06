@@ -776,7 +776,7 @@ function(__dkcoder_delegate)
             set(entryExec_PRECOMMAND "\"${DKCODER_OCAMLRUN_NATIVE}\" ")
         endif()
         cmake_path(NATIVE_PATH entryExec entryExec_NATIVE)
-        file(CONFIGURE OUTPUT "${DKCODER_POST_SCRIPT}" CONTENT [[REM @ECHO OFF
+        file(CONFIGURE OUTPUT "${DKCODER_POST_SCRIPT}" CONTENT [[
 REM Clear "SET" variables from dk.cmd. They are not part of DkCoder API.
 
 SET DK_7Z_DOTVER=
