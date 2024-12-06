@@ -114,7 +114,7 @@ macro(dkcoder_project_init)
         set(dk_cmd "${CMAKE_SOURCE_DIR}/dk")
     endif()
 
-    set(init_OPTIONS -delete-dkcoder-after)
+    set(init_OPTIONS)
     # all DkStd_Std commands must run in old versions of DkCoder. Confer dkcoder/src/DkStd_Std/README.md
     set(dk_run DkRun_V2_1.RunAway)
     if(NOT ARG_QUIET)        
@@ -123,7 +123,8 @@ macro(dkcoder_project_init)
 
     # Run the command as a post script. Why?
     # 1. We don't want to run ./dk inside of ./dk. Not sure how the environment variables (etc.) interact.
-    # 2. Makes it easy for DkStd_Std.Project.Init to erase the dkcoder/ project directory on Windows (no erasing a script or executable that is in use).
+    # 2. Makes it possible for DkStd_Std.Project.Init to erase the dkcoder/ project directory on Windows
+    #    (no erasing the currently running dk.cmd script or executable that is in use).
     if(CMAKE_HOST_WIN32)
         cmake_path(NATIVE_PATH dk_cmd dk_cmd_NATIVE)
         cmake_path(NATIVE_PATH DKCODER_PWD DKCODER_PWD_NATIVE)
@@ -131,8 +132,16 @@ macro(dkcoder_project_init)
         cmake_path(NATIVE_PATH CMAKE_CURRENT_BINARY_DIR CMAKE_CURRENT_BINARY_DIR_NATIVE)
         file(CONFIGURE OUTPUT "${DKCODER_POST_SCRIPT}" CONTENT [[
 CD /D "@CMAKE_CURRENT_BINARY_DIR_NATIVE@"
-CALL "@dk_cmd_NATIVE@" @dk_run@ --generator dune --you-dir "@CMAKE_SOURCE_DIR_NATIVE@\src" -- DkStd_Std.Project.Init @init_OPTIONS@ "@DKCODER_PWD_NATIVE@" "@CMAKE_SOURCE_DIR_NATIVE@"
+
+REM 1. We copy the dk.cmd and __dk.cmake to the new project directory
+CALL "@dk_cmd_NATIVE@" @dk_run@ --generator dune --you-dir "@CMAKE_SOURCE_DIR_NATIVE@\src" -- DkStd_Std.Project.Init -windows-boot @init_OPTIONS@ "@DKCODER_PWD_NATIVE@" "@CMAKE_SOURCE_DIR_NATIVE@"
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
+
+REM 2. We do the dkcoder/ project deletion from the new project directory.
+REM The deletion will not erase the running dk.cmd script and cause 'The system cannot find the path specified.'
+CALL "@DKCODER_PWD_NATIVE@\dk.cmd" @dk_run@ --generator dune --you-dir "@CMAKE_SOURCE_DIR_NATIVE@\src" -- DkStd_Std.Project.Init -delete-dkcoder-after @init_OPTIONS@ "@DKCODER_PWD_NATIVE@" "@CMAKE_SOURCE_DIR_NATIVE@"
+IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
+
 ECHO dkcoder: project installed.
 ]]
             @ONLY NEWLINE_STYLE DOS)
@@ -140,7 +149,7 @@ ECHO dkcoder: project installed.
         file(CONFIGURE OUTPUT "${DKCODER_POST_SCRIPT}" CONTENT [[#!/bin/sh
 set -euf
 cd '@CMAKE_CURRENT_BINARY_DIR@'
-'@dk_cmd@' @dk_run@ --generator dune --you-dir '@CMAKE_SOURCE_DIR@/src' -- DkStd_Std.Project.Init @init_OPTIONS@ '@DKCODER_PWD@' '@CMAKE_SOURCE_DIR@'
+'@dk_cmd@' @dk_run@ --generator dune --you-dir '@CMAKE_SOURCE_DIR@/src' -- DkStd_Std.Project.Init -delete-dkcoder-after @init_OPTIONS@ '@DKCODER_PWD@' '@CMAKE_SOURCE_DIR@'
 ECHO "dkcoder: project installed."
 ]]
             @ONLY NEWLINE_STYLE UNIX)

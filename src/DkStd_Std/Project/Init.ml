@@ -10,6 +10,7 @@ let prerr_endline = Tr1Stdlib_V414Io.StdIo.prerr_endline
 let exit = Tr1Stdlib_V414CRuntime.StdExit.exit
 
 let verbose = ref false
+let windows_boot = ref false
 let delete_dkcoder_after = ref false
 let new_project_dir = ref ""
 let dkcoder_project_dir = ref ""
@@ -19,11 +20,12 @@ let anon_fun s =
   else if !dkcoder_project_dir = "" then
     dkcoder_project_dir := s
 
-let usage_msg = "DkStd_Std.Project.Init [-verbose] [-delete-dkcoder-after] NEW_PROJECT_DIR DKCODER_PROJECT_DIR"
+let usage_msg = "DkStd_Std.Project.Init [-verbose] [-windows-boot] [-delete-dkcoder-after] NEW_PROJECT_DIR DKCODER_PROJECT_DIR"
 let speclist =
   [
-    ("-verbose", Arg.Set verbose, "Output debug information");
-    ("-delete-dkcoder-after", Arg.Set delete_dkcoder_after, "Delete the DKCODER_PROJECT_DIR after the NEW_PROJECT_DIR is initialized")
+    ("-verbose", Arg.Set verbose, "Output debug information.");
+    ("-delete-dkcoder-after", Arg.Set delete_dkcoder_after, "Delete the DKCODER_PROJECT_DIR after the NEW_PROJECT_DIR is initialized.");
+    ("-windows-boot", Arg.Set windows_boot, "Do git init if necessary and then copy dk.cmd and __dk.cmake. No other steps are performed. The copied scripts are all that are necessary to run `DkStd_Std.Project.Init -delete-dkcoder-after`. The separate step is necessary so that the running dk.cmd is not deleted, which Command Prompt does not support.");
   ]
 
 
@@ -112,14 +114,17 @@ let () =
   
   (* dk, dk.cmd, __dk.cmake, .gitattributes *)
   let copy_if ?mode s = 
+    let src = Fpath.(dkcoder_project_dirp / s) in
     let dest = Fpath.(new_project_dirp / s) in
     if not (Bos.OS.File.exists dest |> Utils.rmsg) then (
       Printf.eprintf "dkcoder: create %s\n%!" s;
-      DkFs_C99.File.copy ?mode ~src:(Fpath.v s) ~dest () |> Utils.rmsg)
+      DkFs_C99.File.copy ?mode ~src ~dest () |> Utils.rmsg)
   in
-  copy_if ~mode:0o755 "dk";
   copy_if "dk.cmd";
   copy_if "__dk.cmake";
+  (*    Stop here if [windows_boot]. *)
+  if !windows_boot then exit 0;
+  copy_if ~mode:0o755 "dk";
   copy_if ".gitattributes";
 
   (* .gitignore *)

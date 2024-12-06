@@ -750,7 +750,7 @@ function(__dkcoder_delegate)
         if(ARG_FULLY_QUALIFIED_MODULE STREQUAL Run)
             set(entryExec "${DKCODER_RUN}")
         else()
-            message(FATAL_ERROR "Problem: DkCoder only supports the Run entrypoint. Solution: Was there a typo? Try DkRun_${__DkRun_LTS_VERSION}.Run instead.")
+            message(FATAL_ERROR "Problem: DkCoder only supports the Run entrypoint, not ${ARG_FULLY_QUALIFIED_MODULE}. Solution: Was there a typo? Try DkRun_${__DkRun_LTS_VERSION}.Run instead.")
         endif()
     else()
         # If not explicitly a built-in DkCoder entry then use the [Run] entry.
