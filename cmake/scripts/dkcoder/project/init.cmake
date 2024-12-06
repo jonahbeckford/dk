@@ -143,6 +143,11 @@ CALL "@DKCODER_PWD_NATIVE@\dk.cmd" @dk_run@ --generator dune --you-dir "@CMAKE_S
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 
 ECHO dkcoder: project installed.
+
+REM The parent dk.cmd script was deleted, and if it continued then
+REM we would get 'The system cannot find the path specified.' so exit
+REM right now.
+EXIT /B 0
 ]]
             @ONLY NEWLINE_STYLE DOS)
     else()
