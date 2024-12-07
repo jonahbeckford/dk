@@ -25,6 +25,7 @@
 *.c text
 *.c++ text
 *.h text
+.gitignore text
 *.java text
 *.json text
 *.md text

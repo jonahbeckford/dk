@@ -117,6 +117,10 @@ exp-grouping=preserve
 nested-match=align
 |}
 
+let write_crlf_on_win32 fp s =
+  Out_channel.with_open_text (Fpath.to_string fp) (fun oc ->
+    Out_channel.output_string oc s)
+
 let () =
   Arg.parse speclist anon_fun usage_msg;
   if !new_project_dir = "" then Utils.fail "NEW_PROJECT_DIR argument is missing";
@@ -154,15 +158,15 @@ let () =
   let gitignore = Fpath.(new_project_dirp / ".gitignore") in
   if not (Bos.OS.File.exists gitignore |> Utils.rmsg) then (
     Printf.eprintf "dkcoder: create .gitignore\n%!";
-    Bos.OS.File.write gitignore (String.trim contents_gitignore_untrimmed) |> Utils.rmsg);
+    (* Use CRLF on Windows since ".gitignore text" in .gitattributes *)
+    write_crlf_on_win32 gitignore (String.trim contents_gitignore_untrimmed));
 
   (* .ocamlformat *)
   let ocamlformat = Fpath.(new_project_dirp / ".ocamlformat") in
   if not (Bos.OS.File.exists ocamlformat |> Utils.rmsg) then (
     Printf.eprintf "dkcoder: create .ocamlformat\n%!";
-    (* Use CRLF on Windows since .ocamlformat is ".ocamlformat text" in .gitattributes *)
-    Out_channel.with_open_text (Fpath.to_string ocamlformat) (fun oc ->
-      Out_channel.output_string oc (String.trim contents_ocamlformat_untrimmed)));
+    (* Use CRLF on Windows since ".ocamlformat text" in .gitattributes *)
+    write_crlf_on_win32 ocamlformat (String.trim contents_ocamlformat_untrimmed));
 
   (* .vscode/ *)
   let vscode_dirp = Fpath.(new_project_dirp / ".vscode") in
@@ -173,16 +177,14 @@ let () =
   if not (Bos.OS.File.exists extensions_json |> Utils.rmsg) then (
     Printf.eprintf "dkcoder: create .vscode/extensions.json\n%!";
     (* Use CRLF on Windows since .json are "*.json text" in .gitattributes *)
-    Out_channel.with_open_text (Fpath.to_string extensions_json) (fun oc ->
-      Out_channel.output_string oc (String.trim contents_extensions_json_untrimmed)));
+    write_crlf_on_win32 extensions_json (String.trim contents_extensions_json_untrimmed));
 
   (* .vscode/settings.json *)
   let settings_json = Fpath.(vscode_dirp / "settings.json") in
   if not (Bos.OS.File.exists settings_json |> Utils.rmsg) then (
     Printf.eprintf "dkcoder: create .vscode/settings.json\n%!";
     (* Use CRLF on Windows since .json are "*.json text" in .gitattributes *)
-    Out_channel.with_open_text (Fpath.to_string settings_json) (fun oc ->
-      Out_channel.output_string oc (String.trim contents_settings_json_untrimmed)));
+    write_crlf_on_win32 settings_json (String.trim contents_settings_json_untrimmed));
 
   (* git add, git update-index *)
   let project_files = ["dk"; "dk.cmd"; "__dk.cmake"; 
