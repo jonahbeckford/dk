@@ -117,8 +117,17 @@ macro(dkcoder_project_init)
     set(init_OPTIONS)
     # all DkStd_Std commands must run in old versions of DkCoder. Confer dkcoder/src/DkStd_Std/README.md
     set(dk_run DkRun_V2_2.RunAway)
-    if(NOT ARG_QUIET)        
+    if(NOT ARG_QUIET)
         string(APPEND init_OPTIONS " -verbose")
+    endif()
+
+    set(init_ARGS)
+    set(postinstall_WIN32)
+    set(postinstall_UNIX)
+    if(NOT ARG_NOSRC)
+        string(APPEND init_ARGS " MyScripts_Std.StartHere=")
+        set(postinstall_WIN32 "ECHO suggestion: Run with `./dk MyScripts_Std.StartHere`\nECHO suggestion: Open project in VSCode and install the recommended plugins.")
+        set(postinstall_UNIX  "echo 'suggestion: Run with `./dk MyScripts_Std.StartHere`'\necho 'suggestion: Open project in VSCode and install the recommended plugins.'")
     endif()
 
     # Run the command as a post script. Why?
@@ -137,12 +146,13 @@ REM 1. We copy the dk.cmd and __dk.cmake to the new project directory
 CALL "@dk_cmd_NATIVE@" @dk_run@ --generator dune --you-dir "@CMAKE_SOURCE_DIR_NATIVE@\src" -- DkStd_Std.Project.Init -windows-boot @init_OPTIONS@ "@DKCODER_PWD_NATIVE@" "@CMAKE_SOURCE_DIR_NATIVE@"
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 
-REM 2. We do the dkcoder/ project deletion from the new project directory.
+REM 2. We do the dkcoder/ project deletion and src/ construction from the new project directory.
 REM The deletion will not erase the running dk.cmd script and cause 'The system cannot find the path specified.'
-CALL "@DKCODER_PWD_NATIVE@\dk.cmd" @dk_run@ --generator dune --you-dir "@CMAKE_SOURCE_DIR_NATIVE@\src" -- DkStd_Std.Project.Init -delete-dkcoder-after @init_OPTIONS@ "@DKCODER_PWD_NATIVE@" "@CMAKE_SOURCE_DIR_NATIVE@"
+CALL "@DKCODER_PWD_NATIVE@\dk.cmd" @dk_run@ --generator dune --you-dir "@CMAKE_SOURCE_DIR_NATIVE@\src" -- DkStd_Std.Project.Init -delete-dkcoder-after @init_OPTIONS@ "@DKCODER_PWD_NATIVE@" "@CMAKE_SOURCE_DIR_NATIVE@" @init_ARGS@
 IF %ERRORLEVEL% NEQ 0 EXIT /B %ERRORLEVEL%
 
 ECHO dkcoder: project installed.
+@postinstall_WIN32@
 
 REM The parent dk.cmd script was deleted, and if it continued then
 REM we would get 'The system cannot find the path specified.' so exit
@@ -154,8 +164,9 @@ EXIT 0
         file(CONFIGURE OUTPUT "${DKCODER_POST_SCRIPT}" CONTENT [[#!/bin/sh
 set -euf
 cd '@CMAKE_CURRENT_BINARY_DIR@'
-'@dk_cmd@' @dk_run@ --generator dune --you-dir '@CMAKE_SOURCE_DIR@/src' -- DkStd_Std.Project.Init -delete-dkcoder-after @init_OPTIONS@ '@DKCODER_PWD@' '@CMAKE_SOURCE_DIR@'
-ECHO "dkcoder: project installed."
+'@dk_cmd@' @dk_run@ --generator dune --you-dir '@CMAKE_SOURCE_DIR@/src' -- DkStd_Std.Project.Init -delete-dkcoder-after @init_OPTIONS@ '@DKCODER_PWD@' '@CMAKE_SOURCE_DIR@' @init_ARGS@
+echo "dkcoder: project installed."
+@postinstall_UNIX@
 ]]
             @ONLY NEWLINE_STYLE UNIX)
     endif()
@@ -165,7 +176,7 @@ function(run)
     # Get helper functions from this file
     include(${CMAKE_CURRENT_FUNCTION_LIST_FILE})
 
-    set(noValues HELP MOREHELP QUIET)
+    set(noValues HELP MOREHELP QUIET NOSRC)
     set(singleValues LOGLEVEL)
     set(multiValues)
     cmake_parse_arguments(PARSE_ARGV 0 ARG "${noValues}" "${singleValues}" "${multiValues}")

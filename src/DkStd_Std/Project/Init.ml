@@ -2,26 +2,38 @@ module Arg = Tr1Stdlib_V414CRuntime.Arg
 module Bos = Tr1Bos_Std.Bos
 module Format = Tr1Stdlib_V414CRuntime.Format
 module Printf = Tr1Stdlib_V414CRuntime.Printf
+module List = Tr1Stdlib_V414Base.List
 module Logs = Tr1Logs_Std.Logs
+module Map = Tr1Stdlib_V414Base.Map
 module Out_channel = Tr1Stdlib_V414CRuntime.Out_channel
 module StdExit = Tr1Stdlib_V414CRuntime.StdExit
 module String = Tr1Stdlib_V414Base.String
+module Stringext = Tr1String_Ext.Stringext
 module Sys = Tr1Stdlib_V414CRuntime.Sys
 let prerr_endline = Tr1Stdlib_V414Io.StdIo.prerr_endline
 let exit = Tr1Stdlib_V414CRuntime.StdExit.exit
+
+module StringMap = Map.Make (String)
 
 let verbose = ref false
 let windows_boot = ref false
 let delete_dkcoder_after = ref false
 let new_project_dir = ref ""
 let dkcoder_project_dir = ref ""
+let module_id_contents = ref StringMap.empty
+
 let anon_fun s =
   if !new_project_dir = "" then
     new_project_dir := s
   else if !dkcoder_project_dir = "" then
     dkcoder_project_dir := s
+  else
+      match Stringext.cut ~on:"=" s with
+      | None -> ()
+      | Some (module_id, _contents_or_filename) ->
+        module_id_contents := StringMap.add module_id "" !module_id_contents
 
-let usage_msg = "DkStd_Std.Project.Init [-verbose] [-windows-boot] [-delete-dkcoder-after] NEW_PROJECT_DIR DKCODER_PROJECT_DIR"
+let usage_msg = "DkStd_Std.Project.Init [-verbose] [-windows-boot] [-delete-dkcoder-after] NEW_PROJECT_DIR DKCODER_PROJECT_DIR [MODULE_ID1=] [MODULE_ID2=] ..."
 let speclist =
   [
     ("-verbose", Arg.Set verbose, "Output debug information.");
@@ -186,11 +198,29 @@ let () =
     (* Use CRLF on Windows since .json are "*.json text" in .gitattributes *)
     write_crlf_on_win32 settings_json (String.trim contents_settings_json_untrimmed));
 
+  (* src/**.ml *)
+  let source_files = List.filter_map (fun (module_id, content) ->
+    let ml_file =
+      let src_mod = "src" :: Stringext.split ~on:'.' module_id in
+      (String.concat "/" src_mod) ^ ".ml"
+    in
+    match Fpath.of_string ml_file with
+    | Error (`Msg msg) -> Printf.eprintf "dkcoder: INVALID module id: %s. %s\n%!" module_id msg; exit 4
+    | Ok fp ->
+      let abs_fp = Fpath.(new_project_dirp // fp) in
+      Bos.OS.Dir.create (Fpath.parent abs_fp) |> Utils.rmsg |> ignore;
+      Bos.OS.File.write abs_fp content |> Utils.rmsg;
+      Some ml_file)
+    (StringMap.bindings !module_id_contents)
+  in
+
   (* git add, git update-index *)
   let project_files = ["dk"; "dk.cmd"; "__dk.cmake"; 
     ".gitattributes"; ".gitignore";
     ".ocamlformat";
-    ".vscode/settings.json"; ".vscode/extensions.json"] in
+    ".vscode/settings.json"; ".vscode/extensions.json"]
+    @ source_files
+  in
   Utils.git ~quiet:() ~slots ("add" :: project_files);
   Utils.git ~quiet:() ~slots ["update-index"; "--chmod=+x"; "dk"];
 
