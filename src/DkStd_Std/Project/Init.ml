@@ -93,6 +93,7 @@ let contents_gitignore_untrimmed = {|
 /_build/
 /.z-dk-dune-project
 /dune-workspace
+/.merlin
 |}
 
 (* TODO: Once 2.0.0.1 released, add [MlStd_Std.Exec --merlin] *)
