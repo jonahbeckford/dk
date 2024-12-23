@@ -1,5 +1,10 @@
 {
     "cmake.configureOnOpen": false,
+    "ocaml.sandbox": {
+        "kind": "custom",
+        // SYNC: src/DkStd_Std/README.md, .vscode/settings.json, cmake/scripts/dkcoder/project/init.cmake
+        "template": "${firstWorkspaceFolder}/dk.cmd DkRun_V2_2.RunQuiet --log-level ERROR --fixed-length-modules false -- MlStd_Std.Exec --merlin -- $prog $args"
+    },
     "psi-header.config": {
         "forceToTop": true,
         "blankLinesAfter": 1

@@ -116,6 +116,7 @@ macro(dkcoder_project_init)
 
     set(init_OPTIONS)
     # all DkStd_Std commands must run in old versions of DkCoder. Confer dkcoder/src/DkStd_Std/README.md
+    #   SYNC: src/DkStd_Std/README.md, .vscode/settings.json, cmake/scripts/dkcoder/project/init.cmake
     set(dk_run DkRun_V2_2.RunAway)
     if(NOT ARG_QUIET)
         string(APPEND init_OPTIONS " -verbose")

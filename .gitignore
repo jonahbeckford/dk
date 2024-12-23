@@ -2,3 +2,10 @@
 /_build/dksdk-cmd-exe.log
 # ./dk dksdk.android.studio.download
 /.ci/local/share/Android Studio.app/
+
+# ./dk DkRun
+/#s/
+/_build/
+/.merlin
+/.z-dk-dune-project
+/dune-workspace
