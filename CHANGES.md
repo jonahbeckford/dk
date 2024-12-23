@@ -165,7 +165,7 @@ Important Notes
 
   ```ocaml
   module Printf = Tr1Stdlib_V414CRuntime.Printf
-  module Bos = Tr1BosStd.Bos
+  module Bos = Tr1Bos_Std.Bos
   module Bogue = Tr1Bogue_Std.Bogue
   ```
 
