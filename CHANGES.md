@@ -2,6 +2,13 @@
 
 ## Pending
 
+## 2.2.1.3
+
+- Add `Tr1Fpath_Std`.
+- Add `Tr1Cmdliner_Std`.
+- Replace untrusted uses of `Fpath.v` with `Fpath.of_string`, which strengthens handling of user inputs. Use `Tr1Fpath_Cmdliner.Fpath_Cmdliner`  to handle untrusted input in command line arguments.
+- Avoid hardcoded stdlib in REPL, and open the Stdlib shadow module from DkCoder instead.
+
 ## 2.2.1.1
 
 - `dk.sqlite3` is now backwards-compatible, which is required for soon-to-be old versions like `./dk DkRun_V2_2.Run` to co-exist with `./dk DkRun_V2_3.Run`.
