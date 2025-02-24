@@ -9,3 +9,6 @@
 /.merlin
 /.z-dk-dune-project
 /dune-workspace
+
+# ./dk dksdk.gradle.download
+/.ci/local/share/gradle
