@@ -11,7 +11,9 @@
 #                                                                        #
 ##########################################################################
 
-name: Publish ninja-build suitable for dk.exe bootstrap
+# What does suitable mean?
+# 1. On Linux either a low glibc version or none at all (musl static linking)
+name: ninja-build suitable for dk.exe bootstrap
 
 on:
   push:
@@ -19,6 +21,9 @@ on:
 jobs:
   build-static:
     runs-on: ubuntu-latest
+    # We never want the DkCoder version numbers to conflict with the Ninja releases.
+    # So use tags that are real Ninja versions. Example: ninja-1.12.1
+    if: startsWith(github.ref, 'refs/tags/ninja-')
 
     strategy:
       matrix:
@@ -42,7 +47,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # We aren't use cross-compilation. Instead we have multiple platforms
+      # We aren't using cross-compilation. Instead we have multiple platforms
       # with QEMU emulation providing a native environment. An alternative
       # is to use CMake to build Ninja with a cross-compiler.
       - name: Build ${{ matrix.platform }} and export to filesystem
@@ -74,8 +79,6 @@ jobs:
         contents: write
     runs-on: ubuntu-latest
     needs: build-static
-    # We never want the DkCoder version numbers to conflict with the Ninja releases.
-    # So use tags that are real Ninja versions. Example: ninja-1.12.1
     if: startsWith(github.ref, 'refs/tags/ninja-')
     steps:
       - name: Download ninja binaries

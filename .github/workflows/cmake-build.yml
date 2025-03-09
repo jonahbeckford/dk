@@ -11,7 +11,11 @@
 #                                                                        #
 ##########################################################################
 
-name: Publish CMake suitable for dk.exe bootstrap
+# What does suitable mean?
+# 1. On Linux either a low glibc version or none at all (musl static linking)
+# 2. The cmake archive is a zip file since there is fast native support for
+#    zipfiles in dk.exe using MlFront_ZipFile.
+name: CMake suitable for dk.exe bootstrap
 
 on:
   push:
@@ -19,6 +23,9 @@ on:
 jobs:
   build-static:
     runs-on: ubuntu-latest
+    # We never want the DkCoder version numbers to conflict with the CMake releases.
+    # So use tags that are real CMake versions. Example: cmake-3.25.2
+    if: startsWith(github.ref, 'refs/tags/cmake-')
 
     strategy:
       matrix:
@@ -74,6 +81,7 @@ jobs:
 
   rearchive-as-zip:
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/cmake-')
 
     strategy:
       matrix:
@@ -106,8 +114,6 @@ jobs:
     needs:
       - build-static
       - rearchive-as-zip
-    # We never want the DkCoder version numbers to conflict with the CMake releases.
-    # So use tags that are real CMake versions. Example: cmake-3.25.2
     if: startsWith(github.ref, 'refs/tags/cmake-')
     steps:
       - name: Download CMake archives
