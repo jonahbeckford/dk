@@ -18,7 +18,7 @@ function(help)
         set(ARG_MODE FATAL_ERROR)
     endif()
 
-    message(${ARG_MODE} "usage: ./dk dksdk.android.pkg.download PACKAGES...
+    message(${ARG_MODE} "usage: ./dk dksdk.android.pkg.download PACKAGE package
 
 Downloads Android Command Line Tools and if needed a Java JDK as well,
 accepts all Android licenses, and with the Command Line Tools'
