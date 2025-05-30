@@ -32,25 +32,22 @@ The `./dk` tool is compatible with Windows PowerShell, macOS and glibc-based des
 Example 1. The game of Snoke as a set of scripts:
 
 ```sh
-git clone --branch V0_2 https://gitlab.com/diskuv/samples/dkcoder/SanetteBogue.git
-
-./SanetteBogue/dk SanetteBogue_Snoke.Snoke
+git clone --branch V2_3 https://gitlab.com/diskuv/samples/dkcoder/SanetteBogue.git
+./SanetteBogue/dk StdStd_V2_3.Run SanetteBogue_Snoke.Snoke
 ```
 
 Example 2. The documentation site as a set of scripts (on Windows there is an alpha bug; rerun the `--serve` command if it fails the first time):
 
 ```sh
-git clone --branch V0_3 https://gitlab.com/diskuv/samples/dkcoder/DkHelloScript.git
-
-./DkHelloScript/dk DkHelloScript_Std.Y33Article --serve
+git clone --branch V2_3 https://gitlab.com/diskuv/samples/dkcoder/DkHelloScript.git
+./DkHelloScript/dk StdStd_V2_3.Run DkHelloScript_Std.Y33Article --serve
 ```
 
 Example 3. A production webhook microservice as a set of scripts:
 
 ```sh
-git clone --branch V0_3 https://gitlab.com/diskuv/samples/devops/DkSubscribeWebhook.git
-
-./DkSubscribeWebhook/dk DkSubscribeWebhook_Std.Subscriptions subscriptions-serve --help
+git clone --branch V2_3 https://gitlab.com/diskuv/samples/devops/DkSubscribeWebhook.git
+./DkSubscribeWebhook/dk StdStd_V2_3.Run DkSubscribeWebhook_Std.Subscriptions subscriptions-serve --help
 ```
 
 ## Installing
