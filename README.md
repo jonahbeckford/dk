@@ -26,11 +26,12 @@ sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202506160116-sign
 sudo chmod +x /usr/local/bin/dk
 ```
 
-or Linux with glibc (Debian, Ubuntu, etc. but not Alpine):
+or Linux with glibc and libstdc++ (Debian, Ubuntu, etc. but not Alpine):
 
 ```sh
 sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202506160116-signed/dk-linux_x86_64
 sudo chmod +x /usr/local/bin/dk
+[ -x /usr/bin/dnf ] && sudo dnf install -y libstdc++
 ```
 
 Then cross-compile a script to standalone Windows, Linux, Android executables (and to a macOS executable if you are on a macOS machine):
