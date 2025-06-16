@@ -50,6 +50,7 @@ FOURTH, run in Powershell:
 # If this command fails, do it manually from github.com/[yourname]/winget-pkgs.
 komac sync
 
+# The version was a mistake. It should have used DKSDK_WIN32_ASSEMBLY_VERSION not DKSDK_ASSET_VERSION
 komac new Diskuv.dk `
     --version 2.3.202505282324 `
     --release-notes-url "https://github.com/diskuv/dk/releases/tag/2.3.202505282324" `
@@ -67,4 +68,53 @@ komac new Diskuv.dk `
     --package-locale en-US `
     --package-name dk `
     --package-url "https://github.com/diskuv/dk"
+```
+
+### Publishing new versions
+
+| Value                        | Example                   | Where                                                                  |
+| ---------------------------- | ------------------------- | ---------------------------------------------------------------------- |
+| DKSDK_ASSET_VERSION          | `2.4.202506130531-signed` | Do PROCEDURE 1                                                         |
+| DKSDK_WIN32_ASSEMBLY_VERSION | `2.4.25164.1`             | The `DKSDK_WIN32_ASSEMBLY_VERSION` in the `dksdk-constants` CI job [2] |
+
+---
+
+PROCEDURE 1:
+
+Run `$env:DK_FACADE_TRACE="1"; $env:DK_FACADE="UPGRADE_ALWAYS"; ./dk --version`.
+
+The `DKSDK_ASSET_VERSION` is the first "public_version" in the summary.json that is HEALTHY.
+
+---
+
+PROCEDURE 2:
+
+> nit: This is overcomplicated. This value is visible in `DKSDK_WIN32_ASSEMBLY_VERSION` of the `dksdk-constants` CI job, so it can and should go into the SBOM.
+
+Open the [Visual Studio Developer Command Prompt or Visual Studio Developer PowerShell](https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell):
+
+```powershell
+$DKSDK_ASSET_VERSION = "..."
+
+mkdir "$env:TEMP\manifest"
+iwr -OutFile "$env:TEMP\manifest\dk-windows_x86_64.exe" https://diskuv.com/a/dk-exe/$DKSDK_ASSET_VERSION/dk-windows_x86_64.exe
+#   This is the version of the distribution (stdexport archive) not the dk.exe asset version. Run it to make sure it works.
+& "$env:TEMP\manifest\dk-windows_x86_64.exe" --version
+
+mt.exe -inputresource:"$env:TEMP\manifest\dk-windows_x86_64.exe;1" -out:"$env:TEMP\manifest\extracted.manifest" -validate_manifest
+gc "$env:TEMP\manifest\extracted.manifest"
+```
+
+The DKSDK_WIN32_ASSEMBLY_VERSION will be in `<assemblyIdentity type="win32" name="DkDriver_Exec.Entry" version="XXXXX">`
+
+---
+
+```powershell
+$DKSDK_ASSET_VERSION = "..."
+$DKSDK_WIN32_ASSEMBLY_VERSION = "..."
+komac update Diskuv.dk `
+    --version "$DKSDK_WIN32_ASSEMBLY_VERSION" `
+    --urls "https://diskuv.com/a/dk-exe/$DKSDK_ASSET_VERSION/dk-windows_x86_64.exe" `
+    --release-notes-url "https://github.com/diskuv/dk/releases/tag/$DKSDK_ASSET_VERSION" `
+    --submit
 ```
