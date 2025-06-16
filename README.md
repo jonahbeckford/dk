@@ -15,21 +15,21 @@ winget install -e --id Diskuv.dk
 or Apple/Silicon:
 
 ```sh
-sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-distribution/2.3.202505282324/dk-darwin_arm64
+sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202506160116-signed/dk-darwin_arm64
 sudo chmod +x /usr/local/bin/dk
 ```
 
 or Apple/Intel:
 
 ```sh
-sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-distribution/2.3.202505282324/dk-darwin_x86_64
+sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202506160116-signed/dk-darwin_x86_64
 sudo chmod +x /usr/local/bin/dk
 ```
 
 or Linux with glibc (Debian, Ubuntu, etc. but not Alpine):
 
 ```sh
-sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-distribution/2.3.202505282324/dist/dk-linux_x86_64
+sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202506160116-signed/dk-linux_x86_64
 sudo chmod +x /usr/local/bin/dk
 ```
 
