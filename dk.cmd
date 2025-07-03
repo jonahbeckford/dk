@@ -62,15 +62,18 @@ SET DK_ARG3=%3
 SET DK_QUIET=0
 SET _XCOPY_SWITCHES=
 SET _DKEXE_OPTIONS=
+REM     Remove double-quotes from DK_ARG<i> or else the IF will fail with syntax error.
+IF NOT "%DK_ARG1%" == "" SET DK_ARG1=%DK_ARG1:"=%
+IF NOT "%DK_ARG3%" == "" SET DK_ARG3=%DK_ARG3:"=%
 IF "%DK_ARG1:~-5%" == "Quiet" (
     SET DK_QUIET=1
     SET _XCOPY_SWITCHES=/q
-    SET _DKEXE_OPTIONS=-l ERROR
+    SET "_DKEXE_OPTIONS=-l ERROR"
 )
 IF "%DK_ARG3:~-5%" == "Quiet" (
     SET DK_QUIET=1
     SET _XCOPY_SWITCHES=/q
-    SET _DKEXE_OPTIONS=-l ERROR
+    SET "_DKEXE_OPTIONS=-l ERROR"
 )
 SET DK_ARG1=
 SET DK_ARG3=
