@@ -5,7 +5,7 @@ Running and cross-compiling scripts with `dk` solves the problem of **README-iti
 
 `dk` solves README-itis in two ways:
 
-1. You model your actions (all that stuff you would put into a README) with scripts that `dk` will cross-compile for you.
+1. You model your actions (all that stuff you would put into a README) with scripts that `dk` will cross-compile for your users's platforms.
 2. All required actions are executed as needed on your end-users' machines with dk's build tool.
 
 Skip down to [Comparisons](#comparisons) for how `dk` fits in the ecosystem. TLDR: `dk` is similar to the Nix package manager (except `dk` works on Windows) and to Docker (except not as heavy).
@@ -14,28 +14,41 @@ The build tool is quite new and has not yet been integrated into the script runn
 
 A [Quick Start for Scripting](#quick-start---scripting) is below, and the main documentation site for the script runner is <https://diskuv.com/dk/help/latest/>.
 
-## Comparisons
+## Quick Start - Build Tool
 
-*Italics* are pending feature.
+**Install** on Windows with PowerShell, or macOS or Linux with your terminal:
 
-| Tool      | Features better with the tool | Features better with `dk`          |
-| --------- | ----------------------------- | ---------------------------------- |
-| Nix       | Huge set of packages          | Works on Windows                   |
-| (contd.)  |                               | *Signify-backed supply chain*      |
-| Buck2 +   | Scales to millions of files   | Works well outside of monorepo     |
-| ... Bazel | Backed by Big Tech            | Easier to adopt                    |
-| Ninja     | Integrated with CMake. Fast   | Cloud-friendly, sharable artifacts |
-| (contd.)  | Rules to simplify build files | *Pending integration in scripts*   |
-| (contd.)  | Multithreading                | *Pending integration in dk*        |
-| Docker    | Huge set of images            | Works well on Windows              |
-| (contd.)  | Works very well in CI         | Works in CI and *during installs*  |
+```sh
+git clone https://github.com/diskuv/dk.git
+dk/mlfront-shell --version
+```
 
-The following are tools specific to the OCaml language, and `dk` should not replace them. Skip this table you are not an OCaml-er.
+That will do a one-time download of a small binary (< 10MB), and
+give you access to the community-submitted packages (*pending*) in
+<https://github.com/diskuv/dk/tree/1.0/pkgs/include>.
 
-| Tool | Features better with the tool | Features better with `dk`      |
-| ---- | ----------------------------- | ------------------------------ |
-| opam | Thousands of packages         | Immutable storage              |
-| dune | Watch mode. Fast              | Extensible. Not tied to OCaml. |
+**Fetch your first artifact** with:
+
+```sh
+dk/mlfront-shell -- get-asset-file DkDistribution_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f dk-darwin_arm64
+```
+
+That downloaded an executable `dk-darwin_arm64` which is the `dk` script runner for Apple Silicon.
+Change the path to `dk-windows_x86_64`, `dk-windows_x86`, `dk-linux_x86_64`, `dk-linux_x86` or `dk-darwin_x86_64` for other operating systems.
+
+Run it with:
+
+```sh
+./dk-darwin_arm64 --help
+```
+
+Hint: Later you will do [Quick Start for Scripting](#quick-start---scripting) that makes real use of that script runner.
+
+**Build your first package** with:
+
+```sh
+dk/mlfront-shell -- get-object DkDistribution_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64 -f dk-darwin_arm64
+```
 
 ## Quick Start - Scripting
 
@@ -103,6 +116,29 @@ target/ZzZz_Zz.Adhoc-windows_x86.pdb:    MSVC program database ver 7....
 ```
 
 32-bit targets are not ready yet. <https://github.com/diskuv/dk/issues> has the full list of issues.
+
+## Comparisons
+
+*Italics* are pending feature.
+
+| Tool      | Features better with the tool | Features better with `dk`          |
+| --------- | ----------------------------- | ---------------------------------- |
+| Nix       | Huge set of packages          | Works on Windows                   |
+| (contd.)  |                               | *Signify-backed supply chain*      |
+| Buck2 +   | Scales to millions of files   | Works well outside of monorepo     |
+| ... Bazel | Backed by Big Tech            | Easier to adopt                    |
+| Ninja     | Integrated with CMake. Fast   | Cloud-friendly, sharable artifacts |
+| (contd.)  | Rules to simplify build files | *Pending integration in scripts*   |
+| (contd.)  | Multithreading                | *Pending integration in dk*        |
+| Docker    | Huge set of images            | Works well on Windows              |
+| (contd.)  | Works very well in CI         | Works in CI and *during installs*  |
+
+The following are tools specific to the OCaml language, and `dk` should not replace them. Skip this table you are not an OCaml-er.
+
+| Tool | Features better with the tool | Features better with `dk`      |
+| ---- | ----------------------------- | ------------------------------ |
+| opam | Thousands of packages         | Immutable storage              |
+| dune | Watch mode. Fast              | Extensible. Not tied to OCaml. |
 
 ## Licenses
 

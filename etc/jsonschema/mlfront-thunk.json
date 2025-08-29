@@ -1,0 +1,265 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://json.schemastore.org/mlfront-thunk.json",
+    "title": "JSON schema for *.thunk.json and *.thunk.jsonc build files",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "description": "The JSON schema for MlFront *.thunk.json. Used by VS Code for auto-completions, but otherwise ignored.",
+            "type": "string",
+            "default": "https://json.schemastore.org/mlfront-thunk.json"
+        },
+        "schema_version": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "The version of the thunk specification that this thunk object conforms to.",
+            "properties": {
+                "major": {
+                    "type": "integer",
+                    "enum": [
+                        1
+                    ]
+                },
+                "minor": {
+                    "type": "integer",
+                    "enum": [
+                        0
+                    ]
+                }
+            },
+            "required": [
+                "major",
+                "minor"
+            ]
+        },
+        "module_id": {
+            "description": "The identifier to retrieve the output of a thunk. The identifier is optional; if specified, the combination of package and name forms a MlFront_Core.ModuleId, and may be called from a MlFront script using the function call '<package.name>.thunk ()'. The other way to retrieve the output of a thunk is by specifying the output file.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "package": {
+                    "type": "string",
+                    "description": "The package the thunk belongs to. If specified, the package naming must conform to the MlFront_Core.PackageId specifications. Otherwise the package is inferred from the directory structure."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The local name of the thunk. The local name must conform to the MlFront_Core standard namespace term specifications."
+                },
+                "version": {
+                    "type": "object",
+                    "description": "The version of the thunk. The patch version number will be automatically set to the \"current timestamp\" in YYYYMMDDHHMM UTC format (ex. 202507191633). The current timestamp can (and should) be given as an option to the thunk controller.",
+                    "additionalProperties": false,
+                    "properties": {
+                        "major": {
+                            "type": "integer"
+                        },
+                        "minor": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "major",
+                        "minor"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "version"
+            ]
+        },
+        "function": {
+            "description": "The command line invocation that will execute the thunk and generate files in the out/ folder. If no .function is specified, the \"identity\" function which does nothing will be used instead; the identity function is useful when combined with one or more .assets that are redirected in .objects to the out/ folder.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "args": {
+                    "description": "The command line arguments to the executable. All thunk variables (ex. ${SLOT.File.Agnostic}) may be used.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1
+                },
+                "envmods": {
+                    "description": "Environment variables supplied to the executable",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "newthunks": {
+                    "type": "boolean",
+                    "description": "True if the function creates thunk object files in the ${NEWTHUNKS} directory that must be run to create the output files. The default is false. False has more accurate progress tracking and is more efficient for thunk controllers like Buck2 which maintain separate static and dynamic tasks."
+                }
+            },
+            "required": [
+                "args"
+            ]
+        },
+        "precommands": {
+            "description": "The commands used to fetch objects that must be available to execute the thunk. The commands are written in the Thunk Shell Language (TSL). For example, 'get-object VGKot5hBsd81kMupNCXHaqbhv3huEbxAFMLnpcX2hniwn File.Agnostic > gcc'.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "private": {
+                    "description": "The commands used to fetch objects that must be available to execute the thunk. The commands are written in the Thunk Shell Language (TSL). When installing the thunk with an installer thunk controller, these \"private\" objects are not installed with this thunk's output.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "public": {
+                    "description": "The commands used to fetch objects that must be available to execute the thunk. The commands are written in the Thunk Shell Language (TSL). When installing the thunk with an installer thunk controller, these \"public\" objects are installed with this thunk's output. Any \"public\" objects of the \"public\" thunk objects are installed transitively.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "assets": {
+            "description": "The assets, possibly remote, that must be available to execute the thunk. The assets are arranged in \"listings\" that follow the specification in https://diskuv.com/dk/help/latest/manual/DkAssets_Capture-Spec-1/.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "listing_unencrypted": {
+                        "description": "The name and version of the asset must be unique across the object storage",
+                        "type": "object",
+                        "properties": {
+                            "spec_version": {
+                                "type": "integer",
+                                "enum": [
+                                    2
+                                ]
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "string",
+                                "description": "The version must be a semver 2.0.0 compatible version number as documented by https://semver.org/."
+                            }
+                        },
+                        "required": [
+                            "spec_version",
+                            "name",
+                            "version"
+                        ]
+                    },
+                    "listing": {
+                        "description": "The metadata for the asset that may be encrypted in future versions of the asset spec.",
+                        "type": "object",
+                        "properties": {
+                            "origins": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "description": "A local identifier for the origin used to identify the source of each file in the [files] section. More than one file in [files] can come from the same origin."
+                                        },
+                                        "mirrors": {
+                                            "type": "array",
+                                            "description": "The base URL of each source site. The base URL combined with the path in the [files] section become the full URL used to download the asset file when the file is not cached.",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "minItems": 1
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "mirrors"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "files": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "origin": {
+                                    "type": "string",
+                                    "description": "The name of the origin that is the source of the asset file. This field is optional only for canonicalization (comparison purposes); in all other contexts this field is required."
+                                },
+                                "path": {
+                                    "type": "string",
+                                    "description": "The relative subpath from the origin's base URL"
+                                },
+                                "size": {
+                                    "type": "integer",
+                                    "description": "The file size of the asset file. This field is optional only for canonicalization (comparison purposes); in all other contexts this field is required."
+                                },
+                                "checksum": {
+                                    "type": "object",
+                                    "properties": {
+                                        "sha256": {
+                                            "type": "string",
+                                            "description": "The SHA-256 checksum of the asset file, in lowercase hexadecimal."
+                                        }
+                                    },
+                                    "required": [
+                                        "sha256"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "path",
+                                "checksum"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "outputs": {
+            "type": "object",
+            "properties": {
+                "files": {
+                    "description": "These files will be assigned and validated as output after the thunk executable is finished running.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "description": "A set of output files produced by the thunk where all of the given [slots] will produce all of the given relative file [paths]. The file paths are relative to the object slot ${SLOT.name}. The object slot is a namespace that may be used to refer to the file from other thunks.",
+                        "properties": {
+                            "slots": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "description": "The object slot that the file is placed in. The object slot is a namespace that may be used to refer to the file in other thunks."
+                                },
+                                "minItems": 1
+                            },
+                            "paths": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "description": "The file path relative to the object slot."
+                                },
+                                "minItems": 1
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "slots",
+                            "paths"
+                        ]
+                    },
+                    "minItems": 1
+                }
+            }
+        }
+    },
+    "required": [
+        "schema_version",
+        "module_id",
+        "outputs"
+    ]
+}

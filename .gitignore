@@ -15,3 +15,6 @@
 
 # ./dk dksdk.gradle.download
 /.ci/local/share/gradle
+
+# mlfront-shell
+/target/
