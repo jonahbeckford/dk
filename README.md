@@ -30,7 +30,7 @@ give you access to the community-submitted packages (*pending*) in
 **Download your first cloud asset** with:
 
 ```sh
-dk/mlfront-shell -- get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f dk-darwin_arm64
+dk/mlfront-shell -- get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f binary-for-darwin_arm64
 ```
 
 That downloaded an executable `dk-darwin_arm64` which is the `dk` script runner for Apple Silicon.
@@ -39,7 +39,7 @@ Change the path to `dk-windows_x86_64`, `dk-windows_x86`, `dk-linux_x86_64`, `dk
 Run it with:
 
 ```sh
-./dk-darwin_arm64 --help
+./binary-for-darwin_arm64 --help
 ```
 
 Congratulations! Hint: Later you will do [Quick Start for Scripting](#quick-start---scripting) that makes real use of that script runner.
@@ -47,11 +47,25 @@ Congratulations! Hint: Later you will do [Quick Start for Scripting](#quick-star
 **Download your first object** with:
 
 ```sh
-dk/mlfront-shell -- get-object DkExe_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64 -f dk-darwin_arm64
+dk/mlfront-shell -- get-object DkExe_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64 -d dir-for-darwin_arm64
 ```
 
-Objects (ie. `get-object`) have build commands embedded in them. Think of them like build targets.
+Objects (ie. `get-object`) have build commands embedded in them. Think of them like build targets with one or more outputs.
 The `DkExe_Std.Asset.Latest` object has build commands that gets the latest `dk` executable asset for you.
+
+If we inspect our new directory, we'll see:
+
+```sh
+# Windows
+PS1> dir dir-for-darwin_arm64
+
+# Unix
+$ ls -l dir-for-darwin_arm64
+total 17216
+-rw-r--r--  1 jonah  staff  8810960 Jan  1  1980 dk
+```
+
+All of the dates will be squashed to Jan 1, 1980 for reproducibility.
 
 **Build your first package** with:
 

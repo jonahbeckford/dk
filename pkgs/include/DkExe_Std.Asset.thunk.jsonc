@@ -41,9 +41,15 @@ will make the "dk-darwin_arm64" executable from version
   },
   "precommands": {
     // This list of commands is built automatically by
-    // `get-object DkExe_Std.Asset.Latest@1.0.202501010000`.
+    // `get-object DkExe_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64`
+    // (and File.Windows_x86_64, etc.).
     "private": [
-      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f ${SLOT.File.Darwin_arm64}"
+      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f ${SLOT.File.Darwin_arm64}/dk",
+      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_x86_64 -f ${SLOT.File.Darwin_x86_64}/dk",
+      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-linux_x86_64 -f ${SLOT.File.Linux_x86_64}/dk",
+      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-linux_x86 -f ${SLOT.File.Linux_x86}/dk",
+      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-windows_x86_64.exe -f ${SLOT.File.Windows_x86_64}/dk.exe",
+      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-windows_x86.exe -f ${SLOT.File.Windows_x86}/dk.exe"
     ]
   },
   "assets": [
@@ -135,10 +141,50 @@ will make the "dk-darwin_arm64" executable from version
     "files": [
       {
         "slots": [
-          "File.Agnostic"
+          "File.Darwin_arm64"
         ],
         "paths": [
-          "hello.i"
+          "dk"
+        ]
+      },
+      {
+        "slots": [
+          "File.Darwin_x86_64"
+        ],
+        "paths": [
+          "dk"
+        ]
+      },
+      {
+        "slots": [
+          "File.Linux_x86_64"
+        ],
+        "paths": [
+          "dk"
+        ]
+      },
+      {
+        "slots": [
+          "File.Linux_x86"
+        ],
+        "paths": [
+          "dk"
+        ]
+      },
+      {
+        "slots": [
+          "File.Windows_x86_64"
+        ],
+        "paths": [
+          "dk.exe"
+        ]
+      },
+      {
+        "slots": [
+          "File.Windows_x86"
+        ],
+        "paths": [
+          "dk.exe"
         ]
       }
     ]
