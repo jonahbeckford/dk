@@ -27,10 +27,10 @@ That will do a one-time download of a small binary (< 10MB), and
 give you access to the community-submitted packages (*pending*) in
 <https://github.com/diskuv/dk/tree/1.0/pkgs/include>.
 
-**Fetch your first artifact** with:
+**Download your first cloud asset** with:
 
 ```sh
-dk/mlfront-shell -- get-asset-file DkDistribution_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f dk-darwin_arm64
+dk/mlfront-shell -- get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f dk-darwin_arm64
 ```
 
 That downloaded an executable `dk-darwin_arm64` which is the `dk` script runner for Apple Silicon.
@@ -42,13 +42,18 @@ Run it with:
 ./dk-darwin_arm64 --help
 ```
 
-Hint: Later you will do [Quick Start for Scripting](#quick-start---scripting) that makes real use of that script runner.
+Congratulations! Hint: Later you will do [Quick Start for Scripting](#quick-start---scripting) that makes real use of that script runner.
 
-**Build your first package** with:
+**Download your first object** with:
 
 ```sh
-dk/mlfront-shell -- get-object DkDistribution_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64 -f dk-darwin_arm64
+dk/mlfront-shell -- get-object DkExe_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64 -f dk-darwin_arm64
 ```
+
+Objects (ie. `get-object`) have build commands embedded in them. Think of them like build targets.
+The `DkExe_Std.Asset.Latest` object has build commands that gets the latest `dk` executable asset for you.
+
+**Build your first package** with:
 
 ## Quick Start - Scripting
 

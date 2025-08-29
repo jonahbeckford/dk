@@ -3,11 +3,11 @@
 Getting the latest version of dk
 ---------------------------------
 
-The object DkDistribution_Std.Asset.Latest will build (ie. fetch) the
+The object DkExe_Std.Asset.Latest will build (ie. fetch) the
 "private" and "public" asset files listed below. Running the
 following command with `mlfront-shell` or within your own "precommands":
 
-  get-object DkDistribution_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64 -f dk-darwin_arm64
+  get-object DkExe_Std.Asset.Latest@1.0.202501010000 -s File.Darwin_arm64 -f dk-darwin_arm64
 
 will make the "dk-darwin_arm64" executable available to you as the file
 "dk-darwin_arm64".
@@ -19,7 +19,7 @@ All historical versions are/will be available as assets in this file as
 well. Running the following command with `mlfront-shell` or within your
 own "precommands":
 
-  get-asset-file DkDistribution_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f dk-darwin_arm64
+  get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f dk-darwin_arm64
 
 will make the "dk-darwin_arm64" executable from version
 `2.4.202508011516-signed` available to you as the file "dk-darwin_arm64".
@@ -32,7 +32,7 @@ will make the "dk-darwin_arm64" executable from version
     "minor": 0
   },
   "module_id": {
-    "package": "DkDistribution_Std.Asset",
+    "package": "DkExe_Std.Asset",
     "name": "Latest",
     "version": {
       "major": 1,
@@ -41,16 +41,16 @@ will make the "dk-darwin_arm64" executable from version
   },
   "precommands": {
     // This list of commands is built automatically by
-    // `get-object DkDistribution_Std.Asset.Latest@1.0.202501010000`.
+    // `get-object DkExe_Std.Asset.Latest@1.0.202501010000`.
     "private": [
-      "get-asset-file DkDistribution_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f ${SLOT.File.Darwin_arm64}"
+      "get-asset-file DkExe_Std.Asset@2.4.202508011516-signed -p dk-darwin_arm64 -f ${SLOT.File.Darwin_arm64}"
     ]
   },
   "assets": [
     {
       "listing_unencrypted": {
         "spec_version": 2,
-        "name": "DkDistribution_Std.Asset",
+        "name": "DkExe_Std.Asset",
         "version": "2.4.202508011516-signed"
       },
       "listing": {
