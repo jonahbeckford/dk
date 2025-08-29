@@ -69,9 +69,29 @@ $ ls -l dir-for-darwin_arm64
 
 All of the dates are set to Jan 1, 1980 for reproducibility.
 
+**Explore more with the schema**. If you have an IDE/editor that supports JSON schema like Visual Studio Code,
+you can create a build file with the following content (save it with a `.thunk.jsonc` extension):
+
+```json
+{
+  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/1.0/etc/jsonschema/mlfront-thunk.json"
+}
+```
+
+and you will get auto-completion for your build file.
+
+Then you can run it with:
+
+```sh
+dk/mlfront-shell -I the/directory/to/your/build/file -- get-object YourLibrary_Something.Something@1.0.202501010000 -s File.Agnostic
+```
+
+Almost any command you have been doing with `dk/mlfront-shell ... -- THE-COMMAND ...` you can do inside the "precommands" of your build file.
+
 **Shell into your first build** with:
 
 > 2025-08-29: There are [two serious performance bugs](https://github.com/diskuv/dk/issues?q=state%3Aopen%20label%3A%22performance%22) where all assets are downloaded, each time.
+> Sorry! I wouldn't recommend doing this unless you have tens of minutes to wait.
 
 ```sh
 # Only for Apple Silicon ...
@@ -84,7 +104,8 @@ DkDistribution_Std.Asset.Latest@1.0.202501010000 fn/File.Darwin_arm64 %
 OCaml version 4.14.2
 Enter #help;; for help.
 
-# #show Stdlib;;
+# 1+1 ;;
+- : int = 2
 # #quit;;
 ```
 
@@ -105,25 +126,6 @@ Enter #help;; for help.
 # #quit;;
 
 ```
-
-**Explore more with the schema**. If you have an IDE/editor that supports JSON schema like Visual Studio Code,
-you can create a build file with the following content (save it with a `.thunk.jsonc` extension):
-
-```json
-{
-  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/1.0/etc/jsonschema/mlfront-thunk.json"
-}
-```
-
-and you will get auto-completion for your build file.
-
-Then you can run it with:
-
-```sh
-dk/mlfront-shell -I the/directory/to/your/build/file -- get-object YourLibrary_Something.Something@1.0.202501010000 -s File.Agnostic
-```
-
-Almost any command you have been doing with `dk/mlfront-shell ... -- THE-COMMAND ...` you can do inside the "precommands" of your build file.
 
 ## Quick Start - Scripting
 
@@ -198,7 +200,7 @@ target/ZzZz_Zz.Adhoc-windows_x86.pdb:    MSVC program database ver 7....
 
 | Tool      | Features better with the tool | Features better with `dk`          |
 | --------- | ----------------------------- | ---------------------------------- |
-| Nix       | Huge set of packages          | Works on Windows                   |
+| Nix       | Huge set of packages          | Works on Windows. Static types.    |
 | (contd.)  |                               | *Signify-backed supply chain*      |
 | Buck2 +   | Scales to millions of files   | Works well outside of monorepo     |
 | ... Bazel | Backed by Big Tech            | Easier to adopt                    |
