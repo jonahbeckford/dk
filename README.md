@@ -1,8 +1,43 @@
-# dk - A script runner and cross-compiler
+# dk - A script runner, cross-compiler and build tool
 
-The main documentation site is <https://diskuv.com/dk/help/latest/>.
+Running and cross-compiling scripts with `dk` solves the problem of **README-itis**:
+ you give your users a lengthy README document, your users fail to setup your software, and you lose a user forever.
 
-## Quick Start
+`dk` solves README-itis in two ways:
+
+1. You model your actions (all that stuff you would put into a README) with scripts that `dk` will cross-compile for you.
+2. All required actions are executed as needed on your end-users' machines with dk's build tool.
+
+Skip down to [Comparisons](#comparisons) for how `dk` fits in the ecosystem. TLDR: `dk` is similar to the Nix package manager (except `dk` works on Windows) and to Docker (except not as heavy).
+
+The build tool is quite new and has not yet been integrated into the script runner. But it has a working reference implementation, and specifications are at [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
+
+A [Quick Start for Scripting](#quick-start---scripting) is below, and the main documentation site for the script runner is <https://diskuv.com/dk/help/latest/>.
+
+## Comparisons
+
+*Italics* are pending feature.
+
+| Tool      | Features better with the tool | Features better with `dk`          |
+| --------- | ----------------------------- | ---------------------------------- |
+| Nix       | Huge set of packages          | Works on Windows                   |
+| (contd.)  |                               | *Signify-backed supply chain*      |
+| Buck2 +   | Scales to millions of files   | Works well outside of monorepo     |
+| ... Bazel | Backed by Big Tech            | Easier to adopt                    |
+| Ninja     | Integrated with CMake. Fast   | Cloud-friendly, sharable artifacts |
+| (contd.)  | Rules to simplify build files | *Pending integration in scripts*   |
+| (contd.)  | Multithreading                | *Pending integration in dk*        |
+| Docker    | Huge set of images            | Works well on Windows              |
+| (contd.)  | Works very well in CI         | Works in CI and *during installs*  |
+
+The following are tools specific to the OCaml language, and `dk` should not replace them. Skip this table you are not an OCaml-er.
+
+| Tool | Features better with the tool | Features better with `dk`      |
+| ---- | ----------------------------- | ------------------------------ |
+| opam | Thousands of packages         | Immutable storage              |
+| dune | Watch mode. Fast              | Extensible. Not tied to OCaml. |
+
+## Quick Start - Scripting
 
 <!-- SYNC: site:src/content/docs/guide/dk-quick-walkthrough.mdoc, dk.git:README.md#quickstart -->
 
