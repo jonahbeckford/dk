@@ -198,7 +198,7 @@ target/ZzZz_Zz.Adhoc-windows_x86.pdb:    MSVC program database ver 7....
 
 ## Comparisons
 
-*Italics* are pending feature.
+*Italics* are a pending feature.
 
 | Tool      | Features better with the tool | Features better with `dk`          |
 | --------- | ----------------------------- | ---------------------------------- |
