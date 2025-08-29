@@ -88,6 +88,7 @@ dk/mlfront-shell -I the/directory/to/your/build/file -- get-object YourLibrary_S
 
 Almost any command you have been doing with `dk/mlfront-shell ... -- THE-COMMAND ...` you can do inside the "precommands" of your build file.
 
+<!--
 **Shell into your first build** with:
 
 > 2025-08-29: There are [two serious performance bugs](https://github.com/diskuv/dk/issues?q=state%3Aopen%20label%3A%22performance%22) where all assets are downloaded, each time.
@@ -126,6 +127,7 @@ Enter #help;; for help.
 # #quit;;
 
 ```
+-->
 
 ## Quick Start - Scripting
 
