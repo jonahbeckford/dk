@@ -51,14 +51,26 @@ function(run)
       return()
     endif()
 
-    # ninja-1.11.1-windows-x86_64/bin/ninja -> ninja-1.11.1-windows-x86_64
-    cmake_path(GET CMAKE_MAKE_PROGRAM PARENT_PATH d)
-    cmake_path(GET d PARENT_PATH d)
+    # Recognize one of the forms:
+    # A: ninja-1.11.1-windows-x86_64/bin/ninja -> ninja-1.11.1-windows-x86_64
+    # B: /Users/jonah/.local/share/dkcoder/code.1/dkexe/ninja/aa4a5b61-8c9c-42cd-9031-399a4abb09da/ninja
+    # C: /usr/bin/ninja
 
-    # validate it is a standalone ninja directory (rather than /usr/bin/ninja
-    # which we don't yet support)
-    cmake_path(GET d FILENAME f)
-    if(NOT f MATCHES "^ninja-" AND NOT f STREQUAL ninja)
+    cmake_path(GET CMAKE_MAKE_PROGRAM PARENT_PATH d1)
+    cmake_path(GET CMAKE_MAKE_PROGRAM FILENAME CMAKE_MAKE_PROGRAMNAME)
+    cmake_path(GET d1 PARENT_PATH d2)
+    cmake_path(GET d1 FILENAME f1)
+    cmake_path(GET d2 FILENAME f2)
+
+    if(f1 STREQUAL bin AND (f2 MATCHES "^ninja-" OR f2 STREQUAL ninja))
+      set(ninja_bindir "${d1}")
+      file(GLOB ninja_binentries
+        LIST_DIRECTORIES true
+        RELATIVE ${ninja_bindir}
+        ${ninja_bindir}/*)
+    elseif(CMAKE_MAKE_PROGRAMNAME STREQUAL ninja OR CMAKE_MAKE_PROGRAMNAME STREQUAL ninja.exe)
+      set(ninja_binentries "${CMAKE_MAKE_PROGRAM}")
+    else()
       message(FATAL_ERROR "This script does not support Ninja installations that are not embedded in a standalone directory named `ninja-{VERSION}` or `ninja`. Details: CMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}")
     endif()
 
@@ -70,13 +82,9 @@ function(run)
         ONLY_IF_DIFFERENT)
 
     # copy
-    file(GLOB entries
-      LIST_DIRECTORIES true
-      RELATIVE ${d}
-      ${d}/*)
-    foreach(entry IN LISTS entries)
-        file(INSTALL ${d}/${entry}
-            DESTINATION ${CMAKE_SOURCE_DIR}/.ci/ninja
+    foreach(entry IN LISTS ninja_binentries)
+        file(INSTALL ${ninja_bindir}/${entry}
+            DESTINATION ${CMAKE_SOURCE_DIR}/.ci/ninja/bin
             USE_SOURCE_PERMISSIONS)
     endforeach()
 endfunction()
