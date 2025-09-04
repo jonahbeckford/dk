@@ -1,12 +1,12 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "https://json.schemastore.org/mlfront-thunk.json",
-    "title": "JSON schema for *.thunk.json and *.thunk.jsonc build files",
+    "title": "(deprecated) Use mlfront-values.json instead. JSON schema for *.thunk.json and *.thunk.jsonc build files",
     "type": "object",
     "additionalProperties": false,
     "properties": {
         "$schema": {
-            "description": "The JSON schema for MlFront *.thunk.json. Used by VS Code for auto-completions, but otherwise ignored.",
+            "description": "(deprecated) Use mlfront-values.json instead. The JSON schema for MlFront *.thunk.json. Used by VS Code for auto-completions, but otherwise ignored.",
             "type": "string",
             "default": "https://github.com/diskuv/dk/raw/refs/heads/1.0/etc/jsonschema/mlfront-thunk.json"
         },

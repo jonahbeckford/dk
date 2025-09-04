@@ -70,11 +70,11 @@ $ ls -l dir-for-darwin_arm64
 All of the dates are set to Jan 1, 1980 for reproducibility.
 
 **Explore more with the schema**. If you have an IDE/editor that supports JSON schema like Visual Studio Code,
-you can create a build file with the following content (save it with a `.thunk.jsonc` extension):
+you can create a build file with the following content (save it with a `.values.jsonc` extension):
 
 ```json
 {
-  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/1.0/etc/jsonschema/mlfront-thunk.json"
+  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/mlfront-values.json"
 }
 ```
 

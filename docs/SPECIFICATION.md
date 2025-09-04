@@ -1,9 +1,14 @@
 # Specification
 
 - [Specification](#specification)
-  - [Object](#object)
-    - [Saving and Loading Objects](#saving-and-loading-objects)
-    - [Thunk Variables](#thunk-variables)
+  - [Introduction](#introduction)
+    - [Concepts](#concepts)
+    - [Early Limitations](#early-limitations)
+  - [Assets](#assets)
+    - [Local Paths](#local-paths)
+    - [Remote Paths](#remote-paths)
+  - [Forms](#forms)
+    - [Form Variables](#form-variables)
       - [Variable Availability](#variable-availability)
       - [${SLOT.slotname}](#slotslotname)
       - [${NEWTHUNKS}](#newthunks)
@@ -15,13 +20,18 @@
       - [${CONFIG}](#config)
       - [${STATE}](#state)
       - [${RUNTIME}](#runtime)
-    - [Object Slots](#object-slots)
     - [Precommands](#precommands)
-  - [Assets](#assets)
-    - [Local Paths](#local-paths)
-    - [Remote Paths](#remote-paths)
-  - [Thunk Shell Language (TSL)](#thunk-shell-language-tsl)
-    - [Variables available in TSL](#variables-available-in-tsl)
+    - [Environment Modifications](#environment-modifications)
+      - [+NAME=VALUE](#namevalue)
+      - [-NAME](#-name)
+      - [\<NAME=VALUE](#namevalue-1)
+    - [Computations](#computations)
+  - [Objects](#objects)
+    - [Saving and Loading Objects](#saving-and-loading-objects)
+    - [Object Slots](#object-slots)
+  - [Values](#values)
+    - [Value Shell Language (VSL)](#value-shell-language-vsl)
+    - [Variables available in VSL](#variables-available-in-vsl)
       - [get-object ID -s SLOT (-f FILE | -d DIR/)](#get-object-id--s-slot--f-file---d-dir)
       - [install-object ID -s SLOT (-f FILE | -d DIR/)](#install-object-id--s-slot--f-file---d-dir)
       - [pipe-object ID -s SLOT -x PIPE](#pipe-object-id--s-slot--x-pipe)
@@ -30,67 +40,73 @@
       - [Options: -f FILE and -d DIR](#options--f-file-and--d-dir)
       - [Option: \[-n STRIP\]](#option--n-strip)
       - [Option: \[-m MEMBER\]](#option--m-member)
-  - [Thunk](#thunk)
-    - [Thunk JSON Schema](#thunk-json-schema)
-    - [Thunk Canonicalization](#thunk-canonicalization)
-  - [Environment Modifications](#environment-modifications)
-    - [+NAME=VALUE](#namevalue)
-    - [-NAME](#-name)
-    - [\<NAME=VALUE](#namevalue-1)
-  - [Computations](#computations)
+    - [JSON Schema](#json-schema)
+    - [JSON Canonicalization](#json-canonicalization)
 
-## Object
+## Introduction
 
-An object is a BLOB, which is a sequence of bytes. The object may be categorized by how the object comes to exist:
+### Concepts
 
-- a "generated" object created by a function (aka. "thunk"; more on these later!)
-- anything else is an "input" object. For example, a file in your project may be an "input" object.
+In the `dk` build system, you submit *forms* that produce *objects* created from *assets*.
 
-But to re-iterate: There is no concept of an object being a "file" or a "directory".
-The object is just a sequence of bytes.
+The **assets** are input materials. These are files and folders that may be remote: source code, data files, audio, image and video files.
 
-In both cases the thunk system treats the objects as immutable,
-and the objects may be cached and/or persisted to disk whenever necessary.
+A **form** is a document with fields and a submit button. *Tip for engineers*: A form does not need to be entered on a graphical user interface. If you are comfortable with the DOS or Unix terminal, the document is a command line in your terminal. That is, you type the name of an executable followed by options like `--username` as the fields, and then you press ENTER to submit the form. The `dk` scripting system (doc: <https://github.com/diskuv/dk>) is a simple way to make standalone executables/forms.
 
-When a thunk shell command is being run (described in the upcoming [Thunk Shell Language](#thunk-shell-language-tsl) section),
-an object is made available on disk. At this time an object is "realized" into either a file or a directory.
-That is the subject of the next [Saving and Loading Objects](#saving-and-loading-objects) section.
+An **object** is a folder that the form produces.
 
-> Design Note: Why blur the distinction between files and directories?
-> These objects are meant to be *cloud-friendly* so they need to
-> have a canonical representation on cloud object stores like AWS S3. We don't need strict typing everywhere!
-> And using a compressed archive means accessing the multiple
-> outputs of a thunk is quite straightforward; in contrast, other build systems expose the user to added complexity
-> (confer: [make: Handling Tools that Produce Many Outputs](https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html)).
+---
 
-### Saving and Loading Objects
+We use the generic term **value** to mean an asset, a form or an object.
 
-When a thunk shell command reads an immutable object and saves it to a file (ex.
-[get-object -f FILE](#get-object-id--s-slot--f-file---d-dir)),
-the bytes of the immutable object are copied directly to the file.
+All values have names like `YourLibrary_Std.YourPackage.YourThing`. Think of the name as if it were a serial number, as the name uniquely identifies each asset, form and object.
 
-When a thunk shell command reads an immutable object and saves it to a directory (ex.
-[get-object -d DIR](#get-object-id--s-slot--f-file---d-dir)),
-the bytes of the immutable object are:
+All values also have versions like `1.0.0`. Making a change to a value means creating a new value with the same name but with an increased version. For example, if the text of your 2025-09-04 privacy policy is in the asset `YourOrg_Std.StringsForWebSiteAndPrograms.PrivacyPolicy@1.0.20250904`, an end-of-year update to the privacy policy could be `YourOrg_Std.StringsForWebSiteAndPrograms.PrivacyPolicy@1.0.20251231`. These *semantic* versions offer a lot of flexibility and are industry-standard: [external link: semver 2.0](https://semver.org/). The important point is that values do not change; versions do.
 
-- *when the bytes have a zip file header* uncompressed and unzipped into the directory
-- *when the bytes do not have a zip file header* copied into the directory in a file named `THUNKOBJ`
+### Early Limitations
 
-When a thunk shell command saves a file as an immutable object, the file's bytes are saved as-is.
+Practically speaking, the early versions of the `dk` build system have serious limitations:
 
-When a thunk shell command saves a directory as an immutable object, the directory is zipped and the zip archive bytes are saved.
+- only support forms with no fields. Today that means you have to create new forms whenever you need customization.
+- have no graphical user interface or web page for forms (yet!). Everything today must be done from the terminal.
 
-That sounds inefficient, but the thunk system is allowed to optimize a set of thunk shell commands.
-For example, if one shell command saves output into a directory,
-and a second shell command reads data from created by the first shell command,
-the thunk system can give the second shell command a symlink to the first directory
-**without** using a zip archive as an intermediate artifact.
+As these limits are removed, this specification document may be updated.
 
-### Thunk Variables
+## Assets
+
+Assets are remote or local files that are inputs to a build. All assets have SHA-256 checksums.
+
+Assets are accessed with the [get-asset](#get-asset-id--f-file---d-dir) and [get-asset-file](#get-asset-file-id-file_path--f-file---d-dir) commands described in a later section of the document.
+
+### Local Paths
+
+A path, if it does not start with `https://` or `http://` is a *local* path.
+
+A local path may be either:
+
+- a file
+- a directory
+
+A local directory path is always zipped into a zip archive file. For reproducibility, the generated zip archive file will:
+
+- have the zip last modification time to the earliest datetime (Jan 1, 1980 00:00:00)
+- have each zip entry with its modification time to the earliest datetime (Jan 1, 1980 00:00:00)
+- have each zip file entry set its extended attribute to be a "regular file" with `rw-r--r--` permissions
+- use zip compression level 5. That is: "compression method: (2 bytes) ... 5 - The file is Reduced with compression factor 4" at [IANA application/zip]
+
+[IANA application/zip]: https://www.iana.org/assignments/media-types/application/zip
+
+### Remote Paths
+
+A path, if it starts with `https://` or `http://` is a *remote* path.
+
+## Forms
+
+### Form Variables
 
 #### Variable Availability
 
-Some variables are available in the Thunk Shell Language (TSL); see [Variables available in TSL](#variables-available-in-tsl)
+Some variables are available in the Value Shell Language (VSL); see [Variables available in VSL](#variables-available-in-vsl)
 
 All variables are available in thunk `.function.args` and `.function.envmods`.
 
@@ -177,19 +193,6 @@ A temporary directory for the thunk.
 
 There is a special edge case for the install thunk controller: the install thunk controller will set the runtime directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant runtime directory in Unix).
 
-### Object Slots
-
-Each object has one or more slots. Each slot is a container for the object's files.
-
-There are no built-in slots. However, `File.Agnostic` is the conventional slot for files that are ABI-agnostic.
-
-The names of the slots are period-separated "MlFront standard namespace terms". Each of these terms:
-
-- are drawn from the character set `'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '_'`
-- must start with a capital letter
-- must not contain a double underscore (`__`)
-- must not be a MlFront library identifier (ie. a double camel cased string followed by an underscore and another camel cased string, like `XyzAbc_Def`)
-
 ### Precommands
 
 The `precommands` are a **set** of commands run *before* an object's `function`. It is not a sequence of commands since you
@@ -205,37 +208,112 @@ The following optimizations are allowed:
   2. `get-object ... -d ${SLOT.Something.Else}`
   Then the second precommand may be skipped because the requested slot `File.Agnostic` does not match `Something.Else`.
 
-## Assets
+### Environment Modifications
 
-Assets are remote or local files that are inputs to a build. All assets have SHA-256 checksums.
+The names in the environment follow the [POSIX specification](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html), except on Windows the environment names are folded to be case-insensitive.
+The rules are:
 
-Assets are accessed with the [get-asset](#get-asset-id--f-file---d-dir) and [get-asset-file](#get-asset-file-id-file_path--f-file---d-dir) commands described in a later section of the document.
+- The character set for the environment names is the [Portable Character Set](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap06.html#tagtcjh_3) except `=` (`<U003D>`) and `NUL`.
+- The environment name can't start with a digit
+- MlFront restricts more strictly than POSIX for whitespace: the only whitespace accepted are spaces (`<U0020>`). Linefeeds and other non-space whitespace are not accepted.
+- MlFront restricts more strictly than POSIX for control characters: the `BEL` (`<U0007>`) is not accepted.
 
-### Local Paths
+The values in the environment are encoded as UTF-8 and may contain [variables](#form-variables).
 
-A path, if it does not start with `https://` or `http://` is a *local* path.
+Because the first character of an environment modification unambiguously determines the type of modification, like `+` in `+NAME=VALUE` or `-` in `-NAME`, no escaping of environment names or values is required.
 
-A local path may be either:
+#### +NAME=VALUE
 
-- a file
-- a directory
+Add or set the environment variable with name `NAME` to `VALUE`.
 
-A local directory path is always zipped into a zip archive file. For reproducibility, the generated zip archive file will:
+The `VALUE` may contain [variables](#form-variables).
 
-- have the zip last modification time to the earliest datetime (Jan 1, 1980 00:00:00)
-- have each zip entry with its modification time to the earliest datetime (Jan 1, 1980 00:00:00)
-- have each zip file entry set its extended attribute to be a "regular file" with `rw-r--r--` permissions
-- use zip compression level 5. That is: "compression method: (2 bytes) ... 5 - The file is Reduced with compression factor 4" at [IANA application/zip]
+You may use `NAME=` to set the environment variable to empty. It is preferable to use [-NAME](#-name) since programs have inconsistent behavior when environment variables are empty; some treat empty as an unset environment variable, while others treat empty as empty.
 
-[IANA application/zip]: https://www.iana.org/assignments/media-types/application/zip
+#### -NAME
 
-### Remote Paths
+Remove the environment variable with name `NAME`.
 
-A path, if it starts with `https://` or `http://` is a *remote* path.
+#### <NAME=VALUE
 
-## Thunk Shell Language (TSL)
+Prepends `VALUE` and a path separator to the environment variable with name `NAME`.
+However, the path seperator (`;` or `:` on Windows or Unix, respectively) is not added if the environment variable is empty.
 
-**All encodings of TSL are UTF-8 unless explicitly noted as different.**
+The `VALUE` may contain [variables](#form-variables).
+
+For example, `PATH+=C:\Windows\system32` prepends `C:\Windows\system32;` to the PATH on Windows and prepends `C:\Windows\system32:` to the PATH on Unix.
+In this example, the Unix prepending does not make sense, which is why the best practice is to use [variables](#form-variables) for the `VALUE`
+like `PATH+=${CACHE}${/}bin` so the modification is portable across operating systems.
+
+### Computations
+
+Only the [`${SLOT.slotname}`](#slotslotname) referenced in a thunk files are available to other thunks.
+
+## Objects
+
+An object is a BLOB, which is a sequence of bytes. The object may be categorized by how the object comes to exist:
+
+- a "generated" object created by a function (aka. "thunk"; more on these later!)
+- anything else is an "input" object. For example, a file in your project may be an "input" object.
+
+But to re-iterate: There is no concept of an object being a "file" or a "directory".
+The object is just a sequence of bytes.
+
+In both cases the thunk system treats the objects as immutable,
+and the objects may be cached and/or persisted to disk whenever necessary.
+
+When a value shell command is being run (described in the upcoming [Value Shell Language](#value-shell-language-vsl) section),
+an object is made available on disk. At this time an object is "realized" into either a file or a directory.
+That is the subject of the next [Saving and Loading Objects](#saving-and-loading-objects) section.
+
+> Design Note: Why blur the distinction between files and directories?
+> These objects are meant to be *cloud-friendly* so they need to
+> have a canonical representation on cloud object stores like AWS S3. We don't need strict typing everywhere!
+> And using a compressed archive means accessing the multiple
+> outputs of a thunk is quite straightforward; in contrast, other build systems expose the user to added complexity
+> (confer: [make: Handling Tools that Produce Many Outputs](https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html)).
+
+### Saving and Loading Objects
+
+When a value shell command reads an immutable object and saves it to a file (ex.
+[get-object -f FILE](#get-object-id--s-slot--f-file---d-dir)),
+the bytes of the immutable object are copied directly to the file.
+
+When a value shell command reads an immutable object and saves it to a directory (ex.
+[get-object -d DIR](#get-object-id--s-slot--f-file---d-dir)),
+the bytes of the immutable object are:
+
+- *when the bytes have a zip file header* uncompressed and unzipped into the directory
+- *when the bytes do not have a zip file header* copied into the directory in a file named `THUNKOBJ`
+
+When a value shell command saves a file as an immutable object, the file's bytes are saved as-is.
+
+When a value shell command saves a directory as an immutable object, the directory is zipped and the zip archive bytes are saved.
+
+That sounds inefficient, but the thunk system is allowed to optimize a set of value shell commands.
+For example, if one shell command saves output into a directory,
+and a second shell command reads data from created by the first shell command,
+the thunk system can give the second shell command a symlink to the first directory
+**without** using a zip archive as an intermediate artifact.
+
+### Object Slots
+
+Each object has one or more slots. Each slot is a container for the object's files.
+
+There are no built-in slots. However, `File.Agnostic` is the conventional slot for files that are ABI-agnostic.
+
+The names of the slots are period-separated "MlFront standard namespace terms". Each of these terms:
+
+- are drawn from the character set `'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '_'`
+- must start with a capital letter
+- must not contain a double underscore (`__`)
+- must not be a MlFront library identifier (ie. a double camel cased string followed by an underscore and another camel cased string, like `XyzAbc_Def`)
+
+## Values
+
+### Value Shell Language (VSL)
+
+**All encodings of VSL are UTF-8 unless explicitly noted as different.**
 
 There is a POSIX shell styled language to query for objects and assets.
 For example, the "command":
@@ -276,7 +354,7 @@ However, when the directory is a UNC path on Windows (ex. `\\Server2\Share\Test\
 
 For security, the commands may be evaluated in a sandbox or a chroot environment. Do not use `..` path segments or they may fail to resolve in sandboxes.
 
-### Variables available in TSL
+### Variables available in VSL
 
 - `${SLOT.slotname}`
 - `${/}`
@@ -550,15 +628,13 @@ To leave the directory structure as-is, set `STRIP` to `0`. To strip away the to
 
 Gets the zip file member from the object or asset file, which must be a zip archive.
 
-## Thunk
+### JSON Schema
 
-### Thunk JSON Schema
+The schema is at [etc/jsonschema/mlfront-value.json](../etc/jsonschema/mlfront-value.json).
 
-The schema is at [src/MlFront_Thunk/json/schema.json](json/schema.json).
+### JSON Canonicalization
 
-### Thunk Canonicalization
-
-The thunk is reconstructed as JSON exactly with the following keys (and only the following keys) in the exact order:
+The form is reconstructed as JSON exactly with the following keys (and only the following keys) in the exact order:
 
 1. `assets.files.checksum.sha256`
 2. `assets.files.path`
@@ -592,7 +668,7 @@ in the object store.
 
 [RFC 8785]: https://www.rfc-editor.org/rfc/rfc8785
 
-For example, the thunk:
+For example, the form:
 
 ```json
 {
@@ -628,44 +704,3 @@ is canonicalized to:
 ```json
 {"assets":[],"function":{"args":["first"],"envmods":["+OCAMLRUNPARAM=b"],"newthunks":false},"module_id":{"name":"example","version":{"major":1,"minor":0}},"outputs":[["hello.i"]],"precommands":{"private":["VDSo_TM=gcc"],"public":[]},"schema_version":{"major":1,"minor":0}}
 ```
-
-## Environment Modifications
-
-The names in the environment follow the [POSIX specification](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html), except on Windows the environment names are folded to be case-insensitive.
-The rules are:
-
-- The character set for the environment names is the [Portable Character Set](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap06.html#tagtcjh_3) except `=` (`<U003D>`) and `NUL`.
-- The environment name can't start with a digit
-- MlFront restricts more strictly than POSIX for whitespace: the only whitespace accepted are spaces (`<U0020>`). Linefeeds and other non-space whitespace are not accepted.
-- MlFront restricts more strictly than POSIX for control characters: the `BEL` (`<U0007>`) is not accepted.
-
-The values in the environment are encoded as UTF-8 and may contain [variables](#thunk-variables).
-
-Because the first character of an environment modification unambiguously determines the type of modification, like `+` in `+NAME=VALUE` or `-` in `-NAME`, no escaping of environment names or values is required.
-
-### +NAME=VALUE
-
-Add or set the environment variable with name `NAME` to `VALUE`.
-
-The `VALUE` may contain [variables](#thunk-variables).
-
-You may use `NAME=` to set the environment variable to empty. It is preferable to use [-NAME](#-name) since programs have inconsistent behavior when environment variables are empty; some treat empty as an unset environment variable, while others treat empty as empty.
-
-### -NAME
-
-Remove the environment variable with name `NAME`.
-
-### <NAME=VALUE
-
-Prepends `VALUE` and a path separator to the environment variable with name `NAME`.
-However, the path seperator (`;` or `:` on Windows or Unix, respectively) is not added if the environment variable is empty.
-
-The `VALUE` may contain [variables](#thunk-variables).
-
-For example, `PATH+=C:\Windows\system32` prepends `C:\Windows\system32;` to the PATH on Windows and prepends `C:\Windows\system32:` to the PATH on Unix.
-In this example, the Unix prepending does not make sense, which is why the best practice is to use [variables](#thunk-variables) for the `VALUE`
-like `PATH+=${CACHE}${/}bin` so the modification is portable across operating systems.
-
-## Computations
-
-Only the [`${SLOT.slotname}`](#slotslotname) referenced in a thunk files are available to other thunks.
