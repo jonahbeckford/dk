@@ -55,7 +55,7 @@
                             },
                             "version": {
                                 "type": "string",
-                                "description": "The version of the form, which must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Including semver build metadata will lock any generated object versions to the specified build."
+                                "description": "The version of the form, which must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system."
                             }
                         },
                         "required": [
@@ -175,7 +175,7 @@
                             },
                             "version": {
                                 "type": "string",
-                                "description": "The version must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Including semver build metadata will lock any generated object versions to the specified build."
+                                "description": "The version must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system."
                             }
                         },
                         "required": [
