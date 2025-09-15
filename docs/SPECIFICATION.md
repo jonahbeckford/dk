@@ -11,7 +11,8 @@
     - [Form Variables](#form-variables)
       - [Variable Availability](#variable-availability)
       - [${SLOT.slotname}](#slotslotname)
-      - [${NEWTHUNKS}](#newthunks)
+      - [${MOREINCLUDES}](#moreincludes)
+      - [${MORECOMMANDS}](#morecommands)
       - [${/} directory separator](#-directory-separator)
       - [${.exe}](#exe)
       - [${HOME}](#home)
@@ -25,7 +26,7 @@
       - [+NAME=VALUE](#namevalue)
       - [-NAME](#-name)
       - [\<NAME=VALUE](#namevalue-1)
-    - [Computations](#computations)
+    - [Behavior](#behavior)
   - [Objects](#objects)
     - [Saving and Loading Objects](#saving-and-loading-objects)
     - [Object Slots](#object-slots)
@@ -118,19 +119,19 @@ A path, if it starts with `https://` or `http://` is a *remote* path.
 
 Some variables are available in the Value Shell Language (VSL); see [Variables available in VSL](#variables-available-in-vsl)
 
-All variables are available in thunk `.function.args` and `.function.envmods`.
+All variables are available in `.forms.function.args` and `.forms.function.envmods`.
 
 #### ${SLOT.slotname}
 
-The output directory for the thunk.
+The output directory for the form function.
 
-User-specified types are registered with a thunk controller while built-in types are recognized by thunk controllers.
+User-specified types are registered with a build system while built-in types are recognized by build systems.
 
 As of August 2025 the only built-in type is the `File.Agnostic` and `File._abi_` types.
 
-Output directories for the install thunk controller are the end-user installation directories, while for other thunk controllers the output directory may be a sandbox temporary directory.
+Output directories for the build system in install mode are the end-user installation directories, while for other modes the output directory may be a sandbox temporary directory.
 
-Expressions are only evaluated if *all* the output types the expression uses are valid for the thunk controller. For example, an expression that uses the output directory `${SLOT.File.Darwin_arm64}` will be skipped by the install thunk controller if the end-user machine's ABI is not `darwin_arm64`.
+Expressions are only evaluated if *all* the output types the expression uses are valid for the build system. For example, an expression that uses the output directory `${SLOT.File.Darwin_arm64}` will be skipped by the build system in install mode if the end-user machine's ABI is not `darwin_arm64`.
 
 More generally:
 
@@ -145,17 +146,20 @@ More generally:
 | `${SLOT.File.Darwin_arm64}` | Only if the end-user machine's ABI | The install directory    |
 |                             | is `darwin_arm64`                  |                          |
 
-#### ${NEWTHUNKS}
+#### ${MOREINCLUDES}
 
-The directory that the thunk can place new `*.thunk.json` thunk object files into. These thunks are executed before the output files are evaluated.
+The directory that the function can place new `*.values.json` values files into. These values will be available to [MORECOMMANDS](#morecommands).
 
-It is an error to use `${NEWTHUNKS}` if `.function.newthunks` was not set to `true`.
+#### ${MORECOMMANDS}
+
+A file containing [zero or more value shell commands](#value-shell-language-vsl) that the function can write into.
+Any commands in the file are executed after the precommands and the form function, and after [MOREINCLUDES](#moreincludes) has been scanned, but before the output files are verified.
 
 #### ${/} directory separator
 
-The directory separator. Except for one edge case (below), it is always `/` even on Windows. That is, thunk commands can assume the `/` separator, which can simplify thunk code when the thunk interacts with MSYS2.
+The directory separator. Except for one edge case (below), it is always `/` even on Windows. That is, form commands can assume the `/` separator, which can simplify function code when the function interacts with MSYS2.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the directory separator to `\` on Windows and `/` on Unix.
+There is a special edge case for the build system in install mode: the build system in install mode will set the directory separator to `\` on Windows and `/` on Unix.
 This allows installation to canonicalized UNC paths for Windows like the remote file `\\Server2\Share\Test\Foo.txt` or [long-path capable](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry) `\\?\C:\Test\Foo.txt`.
 
 #### ${.exe}
@@ -165,43 +169,43 @@ The executable suffix. Except for one edge case (below), it is always `.exe` eve
 - reduces the need for seperate `.precommands` for Windows and Unix, and separate `.function.args`
 - is a performance and space optimization since a common executable suffix increases the chances that non-ABI specific artifacts share the same hash across Windows and Unix.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the executable suffix to `.exe` on Windows and `` on Unix.
+There is a special edge case for the build system in install mode: the build system in install mode will set the executable suffix to `.exe` on Windows and `` on Unix.
 
 #### ${HOME}
 
-A temporary directory for the thunk.
+A temporary directory for the form function.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the home directory to be the OS-specific home directory for the install end-user.
+There is a special edge case for the build system in install mode: the build system in install mode will set the home directory to be the OS-specific home directory for the install end-user.
 
 #### ${CACHE}
 
-A temporary directory for the thunk.
+A temporary directory for the form function.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the cache directory to be the OS-specific cache directory (ex. `Temporary Internet Files` on Windows, the XDG-compliant cache directory in Unix).
+There is a special edge case for the build system in install mode: the build system in install mode will set the cache directory to be the OS-specific cache directory (ex. `Temporary Internet Files` on Windows, the XDG-compliant cache directory in Unix).
 
 #### ${DATA}
 
-A temporary directory for the thunk.
+A temporary directory for the form function.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the data directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant data directory in Unix).
+There is a special edge case for the build system in install mode: the build system in install mode will set the data directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant data directory in Unix).
 
 #### ${CONFIG}
 
-A temporary directory for the thunk.
+A temporary directory for the form function.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the config directory to be the OS-specific config directory (ex. `LocalAppData` on Windows, the XDG-compliant config directory in Unix).
+There is a special edge case for the build system in install mode: the build system in install mode will set the config directory to be the OS-specific config directory (ex. `LocalAppData` on Windows, the XDG-compliant config directory in Unix).
 
 #### ${STATE}
 
-A temporary directory for the thunk.
+A temporary directory for the form function.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the state directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant state directory in Unix).
+There is a special edge case for the build system in install mode: the build system in install mode will set the state directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant state directory in Unix).
 
 #### ${RUNTIME}
 
-A temporary directory for the thunk.
+A temporary directory for the form function.
 
-There is a special edge case for the install thunk controller: the install thunk controller will set the runtime directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant runtime directory in Unix).
+There is a special edge case for the build system in install mode: the build system in install mode will set the runtime directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant runtime directory in Unix).
 
 ### Precommands
 
@@ -255,21 +259,30 @@ For example, `PATH+=C:\Windows\system32` prepends `C:\Windows\system32;` to the 
 In this example, the Unix prepending does not make sense, which is why the best practice is to use [variables](#form-variables) for the `VALUE`
 like `PATH+=${CACHE}${/}bin` so the modification is portable across operating systems.
 
-### Computations
+### Behavior
 
-Only the [`${SLOT.slotname}`](#slotslotname) referenced in a thunk files are available to other thunks.
+The order of processing is as follows:
+
+1. The form's precommands are executed, in parallel if supported by the build system.
+2. The form's function is executed.
+3. If [${MORECOMMANDS}](#morecommands) is part of the form's arguments or precommands, then:
+   1. The [${MOREINCLUDES}](#moreincludes) directory is scanned for `values.json[c]` and `*.values.json[c]`.
+   2. All scanned values are made available to this form. However, the values are *not available globally* to any other form because globally means the dependency order between the newly scanned values and existing or new forms can't be determined consistently.
+   3. The shell commands in `${MORECOMMANDS}` are run.
+4. The output files are verified to exist.
+5. The [`${SLOT.slotname}`](#slotslotname) that are part of the form's arguments and precommands are made available to other forms.
 
 ## Objects
 
 An object is a BLOB, which is a sequence of bytes. The object may be categorized by how the object comes to exist:
 
-- a "generated" object created by a function (aka. "thunk"; more on these later!)
+- a "generated" object created by a [form](#forms)
 - anything else is an "input" object. For example, a file in your project may be an "input" object.
 
 But to re-iterate: There is no concept of an object being a "file" or a "directory".
 The object is just a sequence of bytes.
 
-In both cases the thunk system treats the objects as immutable,
+In both cases the build system treats the objects as immutable,
 and the objects may be cached and/or persisted to disk whenever necessary.
 
 When a value shell command is being run (described in the upcoming [Value Shell Language](#value-shell-language-vsl) section),
@@ -278,9 +291,9 @@ That is the subject of the next [Saving and Loading Objects](#saving-and-loading
 
 > Design Note: Why blur the distinction between files and directories?
 > These objects are meant to be *cloud-friendly* so they need to
-> have a canonical representation on cloud object stores like AWS S3. We don't need strict typing everywhere!
+> have a canonical representation on cloud value stores like AWS S3. We don't need strict typing everywhere!
 > And using a compressed archive means accessing the multiple
-> outputs of a thunk is quite straightforward; in contrast, other build systems expose the user to added complexity
+> outputs of a form function is quite straightforward; in contrast, other build systems expose the user to added complexity
 > (confer: [make: Handling Tools that Produce Many Outputs](https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html)).
 
 ### Saving and Loading Objects
@@ -300,10 +313,10 @@ When a value shell command saves a file as an immutable object, the file's bytes
 
 When a value shell command saves a directory as an immutable object, the directory is zipped and the zip archive bytes are saved.
 
-That sounds inefficient, but the thunk system is allowed to optimize a set of value shell commands.
+That sounds inefficient, but the build system is allowed to optimize a set of value shell commands.
 For example, if one shell command saves output into a directory,
 and a second shell command reads data from created by the first shell command,
-the thunk system can give the second shell command a symlink to the first directory
+the build system can give the second shell command a symlink to the first directory
 **without** using a zip archive as an intermediate artifact.
 
 ### Object Slots
@@ -337,7 +350,7 @@ will get the object with the id `OurStd_Std.Build.Clang@1.0.0` and place it in t
 There are two ways to run these shell commands:
 
 1. Directly from the command line with the efficient `dk` implementation or the reference implementation `mlfront-shell`. For example, `dk get-object OurStd_Std.Build.Clang@1.0.0 -s File.Agnostic -f clang.exe`.
-2. Embedded as "precommands" in a thunk file. For example,
+2. Embedded as "precommands" in a values file. For example,
 
    ```json
    { // ...
@@ -350,7 +363,7 @@ There are two ways to run these shell commands:
    }
    ```
 
-When embedded as precommands in a thunk file, the command line (which is a JSON string) is split into arguments (a list of strings) using the [POSIX quoting rules at IEEE Std 1003.1-2024 / Shell & Utilities / Shell Command Language / 2.2 Quoting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02). However, no Here-Documents are accepted. The splitting is similar to Python's [shlex.split](https://docs.python.org/3/library/shlex.html#shlex.split).
+When embedded as precommands in a values file, the command line (which is a JSON string) is split into arguments (a list of strings) using the [POSIX quoting rules at IEEE Std 1003.1-2024 / Shell & Utilities / Shell Command Language / 2.2 Quoting](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_02). However, no Here-Documents are accepted. The splitting is similar to Python's [shlex.split](https://docs.python.org/3/library/shlex.html#shlex.split).
 
 All commands have a output path (ex. `-f echo.exe`). Most command have two forms:
 
@@ -409,6 +422,8 @@ The object `ID` implicitly or explicitly contains build metadata; see [ID with B
 
 #### pipe-object ID -s SLOT -x PIPE
 
+> Deprecated. This command will be replaced by dynamic tasks.
+
 Write the contents of the slot `SLOT` for the object uniquely identified by identifier `ID` to the pipe named `PIPE`.
 
 | Option      | Description                                  |
@@ -421,18 +436,18 @@ No two `pipe-object` commands may write to the same pipe `PIPE`.
 
 The location of the pipe is available using the variable `${PIPE.name}`.
 
-Typically, the pipe given to the thunk will be a PIPE_ACCESS_OUTBOUND named pipe server on Windows (ex. `\\ServerName\pipe\SomePipe`) and a write-only fifo pipe on Unix. To be portable, you should:
+Typically, the pipe given to the form function will be a PIPE_ACCESS_OUTBOUND named pipe server on Windows (ex. `\\ServerName\pipe\SomePipe`) and a write-only fifo pipe on Unix. To be portable, you should:
 
 - read from the pipe zero or one time. Do not re-read from the pipe.
 - read the data sequentially from the pipe. Do not use random access read in the pipe.
 - expect the read from the pipe, especially the first byte, to take a long time.
 - use PowerShell or a library in your favorite language to detect and read from the named pipe on Windows
 
-Piping is an **optimization**. If a thunk controller implementation does not support threading, the pipe *will* be a regular file. However, if pipeline is supported, then the thunk controller only has to kick off the build of the thunk dependency `ID SLOT` when you *first access the pipe*.
+Piping is an **optimization**. If the build system does not support threading, the pipe *will* be a regular file. However, if pipeline is supported, then the build system only has to kick off the build of the form function dependency `ID SLOT` when you *first access the pipe*.
 
-Key Optimization: If you don't access the pipe at all in your thunk, then you have saved the cost (clock time, compute, space) of the build for your dependency `ID SLOT`.
+Key Optimization: If you don't access the pipe at all in your form function, then you have saved the cost (clock time, compute, space) of the build for your dependency `ID SLOT`.
 
-So in situations where the content is conditional (ie. read by the thunk only in certain situations) and expensive (ie. the `ID SLOT` is large or has a time-consuming build), use `pipe-object`.
+So in situations where the content is conditional (ie. read by the form function only in certain situations) and expensive (ie. the `ID SLOT` is large or has a time-consuming build), use `pipe-object`.
 
 Here is an example use of a pipe:
 
@@ -721,20 +736,20 @@ The schema is at [etc/jsonschema/mlfront-value.json](../etc/jsonschema/mlfront-v
 
 The form is reconstructed as JSON exactly with the following keys (and only the following keys) in the exact order:
 
-1. `assets.files.checksum.sha256`
-2. `assets.files.path`
-3. `assets.listing_unencrypted.name`
-4. `assets.listing_unencrypted.version`
-5. `function.args`
-6. `function.envmods`
-7. `function.newthunks`
-8. `module_id.name`
-9. `module_id.package`
-10. `module_id.version`
-11. `outputs.files.paths`
-12. `outputs.files.slots`
-13. `precommands.private`
-14. `precommands.public`
+1. `assets.files.checksum.sha1`
+2. `assets.files.checksum.sha256`
+3. `assets.files.path`
+4. `assets.listing_unencrypted.name`
+5. `assets.listing_unencrypted.version`
+6. `forms.function.args`
+7. `forms.function.envmods`
+8. `forms.id.name`
+9. `forms.id.package`
+10. `forms.id.version`
+11. `forms.outputs.files.paths`
+12. `forms.outputs.files.slots`
+13. `forms.precommands.private`
+14. `forms.precommands.public`
 15. `schema_version.major`
 16. `schema_version.minor`
 
@@ -743,13 +758,16 @@ with:
 - all whitespace between JSON tokens removed from the canonicalized JSON
 - all non-existent array values replaced with empty arrays, and all non-existent boolean balues replaced with `false`
 - all `assets.files` sorted by the ascending lexographical UTF-8 byte encoding of `assets.files.path`
+- `assets.files.checksum.sha1` removed if `assets.files.checksum.sha256` is present
 
 The above canonicalization should conform to [RFC 8785]; if there are any ambiguities [RFC 8785] must be followed.
 
-Of particular note is that the `assets.origins`, `assets.files.origin` and `assets.files.size` fields are not present in the canonicalization
-since the asset path and checksum uniquely identifiy an asset file. In other words, if you have a locally cached file
-with the same checksum as a remote asset, you can substitute the locally cached file without changing identifiers
-in the object store.
+Of particular note is that the `assets.listing.origins`, `assets.files.origin`
+and `assets.files.size` fields are not present in the canonicalization since
+the asset path and checksum uniquely identifiy an asset file. In other words,
+if you have a locally cached file with the same checksum as a remote asset,
+you can substitute the locally cached file without changing identifiers
+in the value store.
 
 [RFC 8785]: https://www.rfc-editor.org/rfc/rfc8785
 
@@ -757,37 +775,87 @@ For example, the form:
 
 ```json
 {
-  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/1.0/etc/jsonschema/mlfront-thunk.json",
-  "schema_version":{
-    "major":1,
-    "minor":0
-  },
-  "module_id":{
-    "name": "example",
-    "version":{
-      "major":1,
-      "minor":0
+  "schema_version":{"major":1,"minor":0},
+  "forms": [
+    {
+      "id": {
+        "name": "foo/bar/baz",
+        "version": "0.1.0"
+      },
+      "precommands": {
+        "private": [
+          "private1"
+        ],
+        "public": [
+          "public1"
+        ]
+      },
+      "function": {
+        "args": [
+          "arg1"
+        ],
+        "envmods": [
+          "envmod1"
+        ]
+      },
+      "outputs": {
+        "files": [
+          {
+            "paths": [
+              "outpath1"
+            ],
+            "slots": [
+              "output1"
+            ]
+          }
+        ]
+      }
     }
-  },
-  "precommands": {
-    "private": [ "VDSo_TM=gcc" ]
-  },
-  "function": {
-    "args": ["first"],
-    "envmods": [
-      "+OCAMLRUNPARAM=b"
-    ]
-  },
-  "outputs": {
-    "files": [ ["hello.i"] ]
-  }
+  ],
+  "assets": [
+    {
+      "listing_unencrypted": {
+        "spec_version": 2,
+        "name": "DkDistribution_Std.Asset",
+        "version": "2.4.202508011516-signed"
+      },
+      "listing": {
+        "origins": [
+          {
+            "name": "github-release",
+            "mirrors": [
+              "https://github.com/diskuv/dk/releases/download/2.4.202508011516-signed"
+            ]
+          }
+        ]
+      },
+      "files": [
+        {
+          "origin": "github-release",
+          "path": "SHA256.sig",
+          "size": 151,
+          "checksum": {
+            "sha256": "0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"
+          }
+        },
+        {
+          "origin": "github-release",
+          "path": "SHA256",
+          "size": 559,
+          "checksum": {
+            "sha256": "4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"
+          }
+        }
+      ]
+    }
+  ]
 }
 ```
 
 is canonicalized to:
 
 ```json
-{"assets":[],"function":{"args":["first"],"envmods":["+OCAMLRUNPARAM=b"],"newthunks":false},"module_id":{"name":"example","version":{"major":1,"minor":0}},"outputs":[["hello.i"]],"precommands":{"private":["VDSo_TM=gcc"],"public":[]},"schema_version":{"major":1,"minor":0}}
+{"assets":[{"files":[{"checksum":{"sha256":"4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"},"path":"SHA256"},{"checksum":{"sha256":"0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"},"path":"SHA256.sig"}],"listing_unencrypted":{"name":"DkDistribution_Std.Asset","version":"2.4.202508011516-signed"}}],"forms":[{"function":{"args":["arg1"],"envmods":["envmod1"]},"id":{"name":"foo/bar/baz","version":"0.1.0"},"outputs":{"files":[{"paths":["outpath1"],"slots":["output1"]}]},"precommands":{"private":["private1"],"public":["public1"]}}],"schema_version":{"major":1,"minor":0}}
 ```
 
 ## Graph
