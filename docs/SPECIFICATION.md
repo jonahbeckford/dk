@@ -10,7 +10,9 @@
   - [Forms](#forms)
     - [Form Variables](#form-variables)
       - [Variable Availability](#variable-availability)
-      - [${SLOT.slotname}](#slotslotname)
+      - [${SLOT.request}](#slotrequest)
+      - [${SLOTNAME.request}](#slotnamerequest)
+      - [${SLOT.SlotName}](#slotslotname)
       - [${MOREINCLUDES}](#moreincludes)
       - [${MORECOMMANDS}](#morecommands)
       - [${/} directory separator](#-directory-separator)
@@ -33,9 +35,9 @@
   - [Values](#values)
     - [Value Shell Language (VSL)](#value-shell-language-vsl)
     - [Variables available in VSL](#variables-available-in-vsl)
-      - [get-object ID -s SLOT (-f FILE | -d DIR/)](#get-object-id--s-slot--f-file---d-dir)
-      - [install-object ID -s SLOT (-f FILE | -d DIR/)](#install-object-id--s-slot--f-file---d-dir)
-      - [pipe-object ID -s SLOT -x PIPE](#pipe-object-id--s-slot--x-pipe)
+      - [get-object ID -s REQUEST\_SLOT (-f FILE | -d DIR/)](#get-object-id--s-request_slot--f-file---d-dir)
+      - [install-object ID -s REQUEST\_SLOT (-f FILE | -d DIR/)](#install-object-id--s-request_slot--f-file---d-dir)
+      - [pipe-object ID -s REQUEST\_SLOT -x PIPE](#pipe-object-id--s-request_slot--x-pipe)
       - [get-asset-file ID FILE\_PATH (-f FILE | -d DIR/)](#get-asset-file-id-file_path--f-file---d-dir)
       - [get-asset ID (-f FILE | -d DIR/)](#get-asset-id--f-file---d-dir)
       - [Options: -f FILE and -d DIR](#options--f-file-and--d-dir)
@@ -121,13 +123,21 @@ Some variables are available in the Value Shell Language (VSL); see [Variables a
 
 All variables are available in `.forms.function.args` and `.forms.function.envmods`.
 
-#### ${SLOT.slotname}
+#### ${SLOT.request}
 
-The output directory for the form function.
+The output directory for the *request slot*. The `-s REQUEST_SLOT` option (ex. `get-object ID@VERSION -s REQUEST_SLOT`) is the request slot.
 
-User-specified types are registered with a build system while built-in types are recognized by build systems.
+If the command has no request slot (ex. `get-asset ID@VERSION`) and you use `${SLOT.request}`, an error is reported.
 
-As of August 2025 the only built-in type is the `File.Agnostic` and `File._abi_` types.
+#### ${SLOTNAME.request}
+
+The name of the *request slot*. The `-s REQUEST_SLOT` option (ex. `get-object ID@VERSION -s REQUEST_SLOT`) is the request slot.
+
+If the command has no request slot (ex. `get-asset ID@VERSION`) and you use `${SLOT.request}`, an error is reported.
+
+#### ${SLOT.SlotName}
+
+The output directory for the form function for the slot named `SlotName`.
 
 Output directories for the build system in install mode are the end-user installation directories, while for other modes the output directory may be a sandbox temporary directory.
 
@@ -299,11 +309,11 @@ That is the subject of the next [Saving and Loading Objects](#saving-and-loading
 ### Saving and Loading Objects
 
 When a value shell command reads an immutable object and saves it to a file (ex.
-[get-object -f FILE](#get-object-id--s-slot--f-file---d-dir)),
+[get-object -f FILE](#get-object-id--s-request_slot--f-file---d-dir)),
 the bytes of the immutable object are copied directly to the file.
 
 When a value shell command reads an immutable object and saves it to a directory (ex.
-[get-object -d DIR](#get-object-id--s-slot--f-file---d-dir)),
+[get-object -d DIR](#get-object-id--s-request_slot--f-file---d-dir)),
 the bytes of the immutable object are:
 
 - *when the bytes have a zip file header* uncompressed and unzipped into the directory
@@ -388,9 +398,9 @@ For security, the commands may be evaluated in a sandbox or a chroot environment
 - `${STATE}`
 - `${RUNTIME}`
 
-#### get-object ID -s SLOT (-f FILE | -d DIR/)
+#### get-object ID -s REQUEST_SLOT (-f FILE | -d DIR/)
 
-Get the contents of the slot `SLOT` for the object uniquely identified by identifier `ID`.
+Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by identifier `ID`.
 
 | Option      | Description                                                                   |
 | ----------- | ----------------------------------------------------------------------------- |
@@ -403,9 +413,9 @@ See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path r
 
 The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
-#### install-object ID -s SLOT (-f FILE | -d DIR/)
+#### install-object ID -s REQUEST_SLOT (-f FILE | -d DIR/)
 
-Install the contents of the slot `SLOT` for the object uniquely identified by identifier `ID`.
+Install the contents of the slot `REQUEST_SLOT` for the object uniquely identified by identifier `ID`.
 
 | Option      | Description                                                                                            |
 | ----------- | ------------------------------------------------------------------------------------------------------ |
@@ -420,11 +430,11 @@ See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path r
 
 The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
-#### pipe-object ID -s SLOT -x PIPE
+#### pipe-object ID -s REQUEST_SLOT -x PIPE
 
 > Deprecated. This command will be replaced by dynamic tasks.
 
-Write the contents of the slot `SLOT` for the object uniquely identified by identifier `ID` to the pipe named `PIPE`.
+Write the contents of the slot `REQUEST_SLOT` for the object uniquely identified by identifier `ID` to the pipe named `PIPE`.
 
 | Option      | Description                                  |
 | ----------- | -------------------------------------------- |
@@ -637,7 +647,7 @@ No command may write to the same file. Specifically:
 - It is an error to have more than one `get-object` or `get-asset` or `get-asset-file` or `resume-object` or `install-object` use the same `FILE`.
 - It is an error to have more than one `get-object` or `get-asset` or `get-asset-file` or `resume-object` use the same `DIR` or otherwise overlap the same `DIR`. Overlapping means one command can't write to the subdirectory of another command's `DIR`.
 
-Use [`install-object`](#install-object-id--s-slot--f-file---d-dir) when you want to write into the same directory.
+Use [`install-object`](#install-object-id--s-request_slot--f-file---d-dir) when you want to write into the same directory.
 Even so, no `install-object` may extracted the same file in the same install directory.
 
 #### Option: [-n STRIP]
