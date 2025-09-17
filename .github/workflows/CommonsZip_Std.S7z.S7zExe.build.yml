@@ -1,5 +1,7 @@
 name: CommonsZip_Std.S7z.S7zExe
-on: push
+on:
+  push:              # build on every commit
+  workflow_dispatch: # allow manual triggering from GitHub page
 
 jobs:
     build:
@@ -40,6 +42,7 @@ jobs:
             - name: Test 7zz.exe
               run: target/Windows_x86_64.7zz.exe --help
 
+            # Create release if and only if tag is pushed
             - name: Release all slots
               uses: softprops/action-gh-release@v2
               if: github.ref_type == 'tag'
