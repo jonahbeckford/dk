@@ -18,3 +18,9 @@
 
 # mlfront-shell
 /target/
+/.mlfshell_*
+/xconfig/
+
+# maintenance
+/dune-project
+/README.corrected.md
