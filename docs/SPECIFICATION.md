@@ -317,7 +317,7 @@ When a value shell command reads an immutable object and saves it to a directory
 the bytes of the immutable object are:
 
 - *when the bytes have a zip file header* uncompressed and unzipped into the directory
-- *when the bytes do not have a zip file header* copied into the directory in a file named `THUNKOBJ`
+- *when the bytes do not have a zip file header* copied into the directory in a file named `OBJECT`
 
 When a value shell command saves a file as an immutable object, the file's bytes are saved as-is.
 
