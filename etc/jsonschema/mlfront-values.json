@@ -41,7 +41,7 @@
                 "additionalProperties": false,
                 "properties": {
                     "id": {
-                        "description": "The identifier for the form, in the format 'PACKAGE.NAME@VERSION'. The PACKAGE is optional if the build system supplies an implicit package, but best practice is to supply it. The VERSION must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system. The form may be called from a MlFront script using the function call '<PACKAGE.NAME>.form ()'.",
+                        "description": "The identifier for the form, in the format 'PACKAGE.NAME@VERSION'. It must be unique across the value store. The PACKAGE is optional if the build system supplies an implicit package, but best practice is to supply it. The VERSION must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system. The form may be called from a MlFront script using the function call '<PACKAGE.NAME>.form ()'.",
                         "type": "string"
                     },
                     "precommands": {
@@ -157,8 +157,12 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
+                    "id": {
+                        "description": "The identifier for the asset, in the format 'PACKAGE.NAME@VERSION'. It must be unique across the value store. The VERSION must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system. The asset may be called from a MlFront script using the function call '<PACKAGE.NAME>.asset ()'.",
+                        "type": "string"
+                    },
                     "listing_unencrypted": {
-                        "description": "The name and version of the asset must be unique across the value store",
+                        "description": "Deprecated. The spec_version is ignored since the schema_version field makes it redundant.",
                         "type": "object",
                         "properties": {
                             "spec_version": {
@@ -166,19 +170,10 @@
                                 "enum": [
                                     2
                                 ]
-                            },
-                            "name": {
-                                "type": "string"
-                            },
-                            "version": {
-                                "type": "string",
-                                "description": "The version must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system."
                             }
                         },
                         "required": [
-                            "spec_version",
-                            "name",
-                            "version"
+                            "spec_version"
                         ]
                     },
                     "listing": {
