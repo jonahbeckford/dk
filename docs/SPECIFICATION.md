@@ -47,7 +47,7 @@
       - [Option: \[-n STRIP\]](#option--n-strip)
       - [Option: \[-m MEMBER\]](#option--m-member)
       - [Object ID with Build Metadata](#object-id-with-build-metadata)
-    - [JSON Schema](#json-schema)
+    - [JSON Files](#json-files)
     - [JSON Canonicalization](#json-canonicalization)
   - [Graph](#graph)
     - [Nodes](#nodes)
@@ -56,7 +56,7 @@
       - [Z256 - SHA256 of Zip Archive File](#z256---sha256-of-zip-archive-file)
       - [CT - Compatibility Tag](#ct---compatibility-tag)
       - [VCI - Values Canonical ID](#vci---values-canonical-id)
-      - [ACI - Asset Canonical ID](#aci---asset-canonical-id)
+      - [VCK - Values Checksum](#vck---values-checksum)
     - [Dependencies](#dependencies)
 
 ## Introduction
@@ -770,9 +770,20 @@ Here are some example of using a monotonically increasing build number:
 # FILLMEIN ... `-n` includes leading zeroes so lexographic comparisons work
 ```
 
-### JSON Schema
+### JSON Files
 
 The schema is at [etc/jsonschema/mlfront-value.json](../etc/jsonschema/mlfront-value.json).
+
+On Windows the JSON files are expected to be terminated with LF not CRLF line endings.
+
+The build system is resilient to CRLF line endings:
+
+- The [values canonical id](#vci---values-canonical-id) normalizes the JSON with all carriage returns removed before calculating the canonical id
+- The [values checksums](#vck---values-checksum) normalizes the JSON with all carriage returns removed before conversion to an AST
+
+However, there is one limitation:
+
+- The byte positions, lines and columns are embedded by the reference implementation in the AST for error reporting. The byte positions are Unix byte positions. During error reporting, the byte positions on Windows will not be accurate if the JSON file is checked out by `git` with CRLF endings. This limitation may be fixed in the future if the reference implementation moves exclusively to lines and columns.
 
 ### JSON Canonicalization
 
@@ -903,30 +914,28 @@ Each node in the graph has a key, a value id, a value sha256 and the value itsel
 - A **value id** is a string which is a *value type* (defined below) and a set of fields, concatenated together and then SHA-256 base32-encoded. The value id serves as a unique key for the value in a value store.
   - The **value type** is a single letter that categorizes what the value is:
 
-    | Value Type | What                | Docs                        |
-    | ---------- | ------------------- | --------------------------- |
-    | `o`        | object              | [Objects](#objects)         |
-    | `a`        | asset               | [Assets](#assets)           |
-    | `p`        | asset file          | [Assets](#assets)           |
-    | `f`        | form                | [Forms](#forms)             |
-    | `v`        | values file         | [JSON Schema](#json-schema) |
-    | `w`        | values (parsed AST) | [JSON Schema](#json-schema) |
-    | `c`        | built-in constants  | [Objects](#objects)         |
-    | `d`        | debug source file   | FILLMEIN                    |
+    | Value Type | What                | Docs                      |
+    | ---------- | ------------------- | ------------------------- |
+    | `o`        | object              | [Objects](#objects)       |
+    | `a`        | asset               | [Assets](#assets)         |
+    | `p`        | asset file          | [Assets](#assets)         |
+    | `f`        | form                | [Forms](#forms)           |
+    | `v`        | values file         | [JSON Files](#json-files) |
+    | `w`        | values (parsed AST) | [JSON Files](#json-files) |
+    | `c`        | built-in constants  | [Objects](#objects)       |
+    | `d`        | debug source file   | FILLMEIN                  |
 
     All value types are *lowercase* for support on case-insensitive file systems.
 
 - A **value** is a file whose content matches the value type. A values file is a `value.json` build file itself. An object is a zip archive of the output of a [form](#forms). Form, asset and asset file value are serialized parsed abstract syntax trees.
 - A **value sha256** is a SHA-256 hex-encoded string of the value. That is, if you ran `certutil` (Windows), `sha256sum` (Linux) or `shasum -a 256` (macOS) on the value file, the *value sha256* is what you would see.
 
-| Value Type | Value Id before SHA256 and base32          | Value                                      |
-| ---------- | ------------------------------------------ | ------------------------------------------ |
-| `v`        | [V256](#v256---sha256-of-values-file)      | json `{schema_version:,forms:,assets:}`    |
-| `w`        | [VCI](#vci---values-canonical-id)          | parsed `{schema_version:,forms:,assets:}`  |
-| `a`        | [ACI](#aci---asset-canonical-id)           | parsed                                     |
-|            | + [CT](#ct---compatibility-tag)            | `{listing_unencrypted:, listing:, files:}` |
-| `o`        | [P256](#p256---sha256-of-asset-file)       | contents of asset file                     |
-| `o`        | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file               |
+| Value Type | Key                                   | Value Id before SHA256 and base32          | Value                                     |
+| ---------- | ------------------------------------- | ------------------------------------------ | ----------------------------------------- |
+| `v`        | [V256](#v256---sha256-of-values-file) | [V256](#v256---sha256-of-values-file)      | json `{schema_version:,forms:,assets:}`   |
+| `w`        | [VCI](#vci---values-canonical-id)     | [VCK](#vck---values-checksum)              | parsed `{schema_version:,forms:,assets:}` |
+| `o`        | asset file                            | [P256](#p256---sha256-of-asset-file)       | contents of asset file                    |
+| `o`        | form, asset                           | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file              |
 
 #### V256 - SHA256 of Values File
 
@@ -962,39 +971,13 @@ For example, `oc414_wd64` is OCaml 4.14 with a 64-bit word size.
 
 #### VCI - Values Canonical ID
 
-The hex-encoded SHA256 of the `values.json` *canonicalized* JSON.
+The hex-encoded SHA256 of the `values.json` *canonicalized* JSON, stripped of all carriage returns (ASCII CR 13).
 
-#### ACI - Asset Canonical ID
+#### VCK - Values Checksum
 
-The hex-encoded SHA256 of the asset's *canonicalized* JSON.
+The hex-encoded SHA256 of the marshalled AST of the carriage-return-stripped `values.json`.
 
-An example *before* removing whitespace as per [JSON Canonicalization](#json-canonicalization):
-
-```json
-{
-  "files": [
-    {
-      "checksum": {
-        "sha256": "0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"
-      },
-      "origin": "github-release",
-      "path": "SHA256.sig",
-      "size": 151
-    }
-  ],
-  "id": "DkDistribution_Std.Asset@2.4.202508011516-signed",
-  "listing": {
-    "origins": [
-      {
-        "name": "github-release",
-        "mirrors": [
-          "https://github.com/diskuv/dk/releases/download/2.4.202508011516-signed"
-        ]
-      }
-    ]
-  }
-}
-```
+The stripping of carriage returns occurs before the CST and AST parsing, so that any serialized AST uses the byte positions of the Unix-encoded JSON.
 
 ### Dependencies
 
