@@ -118,8 +118,8 @@ For unpacking the 7zip executables, we'll submit a form several times (each time
 ```sh
 $ git clone https://github.com/diskuv/dk.git dk0
 Cloning into 'dk0'...
-$ dk0/mlfront-shell -I dk0/pkgs/include -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Darwin_x86_64 -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
-[up-to-date] CommonsZip_Std.S7z.S7zExe@25.1.0+bn-20250101000000 -s File.Darwin_x86_64
+$ dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std -- get-object 'CommonsBase_Std.S7z@25.1.0' -s File.Darwin_x86_64 -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
+[up-to-date] CommonsBase_Std.S7z@25.1.0+bn-20250101000000 -s File.Darwin_x86_64
 ```
 
 which *builds* the desired files into our desired "target" directory:
@@ -151,7 +151,7 @@ so you can see the concepts in action:
 
 The objects you see above are intermediate folders, so this might be the first and only time you see them. Normally you pull files out of objects into your own target directories, like was done when we submitted the form with `dk0/mlfront-shell ... -f target/Darwin_x86_64.7zz.exe`.
 
-**Values** have unique identifiers. We used one when we submitted the form: `CommonsZip_Std.S7z.S7zExe@25.1.0`.
+**Values** have unique identifiers. We used one when we submitted the form: `CommonsBase_Std.S7z@25.1.0`.
 
 These identifiers contain versions like `25.1.0`. Making a change to a value means creating a new value with the same name but with an increased version. For example, if the text of your 2025-09-04 privacy policy is in the asset `YourOrg_Std.StringsForWebSiteAndPrograms.PrivacyPolicy@1.0.20250904`, an end-of-year update to the privacy policy could be `YourOrg_Std.StringsForWebSiteAndPrograms.PrivacyPolicy@1.0.20251231`. These *semantic* versions offer a lot of flexibility and are industry-standard: [external link: semver 2.0](https://semver.org/). The important point is that **values do not change; versions do**.
 
@@ -1119,18 +1119,18 @@ We have not yet provided an overall interface for the 7zip package. Let's do thi
           // end-users don't have to have complicated logic based on the platform.
 
           // Windows. 7z.exe -> 7zz.exe
-          "get-object CommonsZip_Std.S7z.Windows7zExe@25.1.0 -s File.Windows_arm -m ./7z.exe -f ${SLOT.File.Windows_arm}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.Windows7zExe@25.1.0 -s File.Windows_arm64 -m ./7z.exe -f ${SLOT.File.Windows_arm64}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.Windows7zExe@25.1.0 -s File.Windows_x86 -m ./7z.exe -f ${SLOT.File.Windows_x86}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.Windows7zExe@25.1.0 -s File.Windows_x86_64 -m ./7z.exe -f ${SLOT.File.Windows_x86_64}/7zz.exe",
+          "get-object CommonsZip_Std.S7z2.Windows7zExe@25.1.0 -s File.Windows_arm -m ./7z.exe -f ${SLOT.File.Windows_arm}/7zz.exe",
+          "get-object CommonsZip_Std.S7z2.Windows7zExe@25.1.0 -s File.Windows_arm64 -m ./7z.exe -f ${SLOT.File.Windows_arm64}/7zz.exe",
+          "get-object CommonsZip_Std.S7z2.Windows7zExe@25.1.0 -s File.Windows_x86 -m ./7z.exe -f ${SLOT.File.Windows_x86}/7zz.exe",
+          "get-object CommonsZip_Std.S7z2.Windows7zExe@25.1.0 -s File.Windows_x86_64 -m ./7z.exe -f ${SLOT.File.Windows_x86_64}/7zz.exe",
 
           // Unix. 7zz -> 7zz.exe
-          "get-object CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 -s File.Darwin_arm64 -m ./7zz -f ${SLOT.File.Darwin_arm64}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 -s File.Darwin_x86_64 -m ./7zz -f ${SLOT.File.Darwin_x86_64}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 -s File.Linux_arm -m ./7zz -f ${SLOT.File.Linux_arm}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 -s File.Linux_arm64 -m ./7zz -f ${SLOT.File.Linux_arm64}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 -s File.Linux_x86 -m ./7zz -f ${SLOT.File.Linux_x86}/7zz.exe",
-          "get-object CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 -s File.Linux_x86_64 -m ./7zz -f ${SLOT.File.Linux_x86_64}/7zz.exe"
+          "get-object CommonsZip_Std.S7z4.MacLinux7zExe@25.1.0 -s File.Darwin_arm64 -m ./7zz -f ${SLOT.File.Darwin_arm64}/7zz.exe",
+          "get-object CommonsZip_Std.S7z4.MacLinux7zExe@25.1.0 -s File.Darwin_x86_64 -m ./7zz -f ${SLOT.File.Darwin_x86_64}/7zz.exe",
+          "get-object CommonsZip_Std.S7z4.MacLinux7zExe@25.1.0 -s File.Linux_arm -m ./7zz -f ${SLOT.File.Linux_arm}/7zz.exe",
+          "get-object CommonsZip_Std.S7z4.MacLinux7zExe@25.1.0 -s File.Linux_arm64 -m ./7zz -f ${SLOT.File.Linux_arm64}/7zz.exe",
+          "get-object CommonsZip_Std.S7z4.MacLinux7zExe@25.1.0 -s File.Linux_x86 -m ./7zz -f ${SLOT.File.Linux_x86}/7zz.exe",
+          "get-object CommonsZip_Std.S7z4.MacLinux7zExe@25.1.0 -s File.Linux_x86_64 -m ./7zz -f ${SLOT.File.Linux_x86_64}/7zz.exe"
         ]
       },
       "outputs": {
@@ -1186,11 +1186,11 @@ We danced around the need for a Windows machine. Many developers don't have one.
 
 Now we are ready to use GitHub Actions to provide that Windows machine.
 
-Here is a GitHub Actions workflow; we have saved it as `.github/workflows/CommonsZip_Std.S7z.S7zExe.build.yml`:
+Here is a GitHub Actions workflow; we have saved it as `.github/workflows/CommonsBase_Std.S7z.build.yml`:
 
-<!-- $MDX file=.github/workflows/CommonsZip_Std.S7z.S7zExe.build.yml -->
+<!-- $MDX file=.github/workflows/CommonsBase_Std.S7z.build.yml -->
 ```yaml
-name: CommonsZip_Std.S7z.S7zExe
+name: CommonsBase_Std.S7z # we'll build this object
 on:
   push:              # build on every commit
   workflow_dispatch: # allow manual triggering from GitHub page
@@ -1216,21 +1216,21 @@ jobs:
                   restore-keys: dk-stores-and-keys             # use latest cache
                   key: dk-stores-and-keys-${{ github.run_id }} # update cache on every run
 
-            - name: Build pkgs/include/CommonsZip_Std.S7z.S7zExe
+            - name: Build ${{ github.workflow }}
               env:
                   # Cross-platform CI caches behave best when the cached data is under the project directory
                   XDG_CONFIG_HOME: ${{ github.workspace }}/target/config
                   XDG_DATA_HOME: ${{ github.workspace }}/target/data
               run: |
                 git clone --branch V2_4 https://github.com/diskuv/dk.git dk0
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Darwin_arm64   -m ./7zz.exe -f target/Darwin_arm64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Darwin_x86_64  -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_arm      -m ./7zz.exe -f target/Linux_arm.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_arm64    -m ./7zz.exe -f target/Linux_arm64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_x86      -m ./7zz.exe -f target/Linux_x86.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_x86_64   -m ./7zz.exe -f target/Linux_x86_64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Windows_x86    -m ./7zz.exe -f target/Windows_x86.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Windows_x86_64 -m ./7zz.exe -f target/Windows_x86_64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Darwin_arm64   -m ./7zz.exe -f target/Darwin_arm64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Darwin_x86_64  -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_arm      -m ./7zz.exe -f target/Linux_arm.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_arm64    -m ./7zz.exe -f target/Linux_arm64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_x86      -m ./7zz.exe -f target/Linux_x86.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_x86_64   -m ./7zz.exe -f target/Linux_x86_64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Windows_x86    -m ./7zz.exe -f target/Windows_x86.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Windows_x86_64 -m ./7zz.exe -f target/Windows_x86_64.7zz.exe
 
             - name: Test 7zz.exe
               run: target/Windows_x86_64.7zz.exe --help
@@ -1253,7 +1253,7 @@ jobs:
 
 It uses the community 7zip package (links provided in the next section) rather than the one we built in this tutorial.
 
-You can see it in action at <https://github.com/diskuv/dk/actions/workflows/CommonsZip_Std.S7z.S7zExe.build.yml>
+You can see it in action at <https://github.com/diskuv/dk/actions/workflows/CommonsBase_Std.S7z.build.yml>
 
 Today, there is no mechanism to pull the data from GitHub Actions into your local machine. That feature can be added; file a issue to express interest.
 

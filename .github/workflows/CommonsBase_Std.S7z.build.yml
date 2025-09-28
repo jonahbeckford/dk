@@ -1,4 +1,4 @@
-name: CommonsZip_Std.S7z.S7zExe
+name: CommonsBase_Std.S7z # we'll build this object
 on:
   push:              # build on every commit
   workflow_dispatch: # allow manual triggering from GitHub page
@@ -24,21 +24,21 @@ jobs:
                   restore-keys: dk-stores-and-keys             # use latest cache
                   key: dk-stores-and-keys-${{ github.run_id }} # update cache on every run
 
-            - name: Build pkgs/include/CommonsZip_Std.S7z.S7zExe
+            - name: Build ${{ github.workflow }}
               env:
                   # Cross-platform CI caches behave best when the cached data is under the project directory
                   XDG_CONFIG_HOME: ${{ github.workspace }}/target/config
                   XDG_DATA_HOME: ${{ github.workspace }}/target/data
               run: |
                 git clone --branch V2_4 https://github.com/diskuv/dk.git dk0
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Darwin_arm64   -m ./7zz.exe -f target/Darwin_arm64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Darwin_x86_64  -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_arm      -m ./7zz.exe -f target/Linux_arm.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_arm64    -m ./7zz.exe -f target/Linux_arm64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_x86      -m ./7zz.exe -f target/Linux_x86.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Linux_x86_64   -m ./7zz.exe -f target/Linux_x86_64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Windows_x86    -m ./7zz.exe -f target/Windows_x86.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include --verbose -- get-object 'CommonsZip_Std.S7z.S7zExe@25.1.0' -s File.Windows_x86_64 -m ./7zz.exe -f target/Windows_x86_64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Darwin_arm64   -m ./7zz.exe -f target/Darwin_arm64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Darwin_x86_64  -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_arm      -m ./7zz.exe -f target/Linux_arm.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_arm64    -m ./7zz.exe -f target/Linux_arm64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_x86      -m ./7zz.exe -f target/Linux_x86.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Linux_x86_64   -m ./7zz.exe -f target/Linux_x86_64.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Windows_x86    -m ./7zz.exe -f target/Windows_x86.7zz.exe
+                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@25.1.0' -s File.Windows_x86_64 -m ./7zz.exe -f target/Windows_x86_64.7zz.exe
 
             - name: Test 7zz.exe
               run: target/Windows_x86_64.7zz.exe --help
