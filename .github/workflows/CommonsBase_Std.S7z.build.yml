@@ -5,7 +5,7 @@ on:
 
 jobs:
     build:
-        # Your job will be different, but this job needs Windows since CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 has OSFamily=windows.
+        # Your job will be different, but this job needs Windows since CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 has OSFamily=windows.
         runs-on: windows-2022
         steps:
             - name: Checkout

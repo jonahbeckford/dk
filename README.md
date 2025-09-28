@@ -1197,7 +1197,7 @@ on:
 
 jobs:
     build:
-        # Your job will be different, but this job needs Windows since CommonsZip_Std.S7z.MacLinux7zExe@25.1.0 has OSFamily=windows.
+        # Your job will be different, but this job needs Windows since CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 has OSFamily=windows.
         runs-on: windows-2022
         steps:
             - name: Checkout
@@ -1281,11 +1281,11 @@ And we saw how to leverage an operating system (in our example Windows) to provi
 
 Finally, the community 7zip package is available for comparison at:
 
-- [pkgs/include/CommonsZip_Std.S7z.S7zr.values.jsonc](pkgs/include/CommonsZip_Std.S7z.S7zr.values.jsonc)
-- [pkgs/include/CommonsZip_Std.S7z.Windows7zExe.values.jsonc](pkgs/include/CommonsZip_Std.S7z.Windows7zExe.values.jsonc)
-- [pkgs/include/CommonsZip_Std.S7z.MacLinux7zTar.values.jsonc](pkgs/include/CommonsZip_Std.S7z.MacLinux7zTar.values.jsonc)
-- [pkgs/include/CommonsZip_Std.S7z.MacLinux7zExe.values.jsonc](pkgs/include/CommonsZip_Std.S7z.MacLinux7zExe.values.jsonc)
-- [pkgs/include/CommonsZip_Std.S7z.values.jsonc](pkgs/include/CommonsZip_Std.S7z.values.jsonc)
+- [pkgs/include/CommonsBase_Std/S7z.Assets.values.jsonc](pkgs/include/CommonsBase_Std/S7z.Assets.values.jsonc)
+- [pkgs/include/CommonsBase_Std/S7z.Windows7zExe.values.jsonc](pkgs/include/CommonsBase_Std/S7z.Windows7zExe.values.jsonc)
+- [pkgs/include/CommonsBase_Std/S7z.MacLinux7zTar.values.jsonc](pkgs/include/CommonsBase_Std/S7z.MacLinux7zTar.values.jsonc)
+- [pkgs/include/CommonsBase_Std/S7z.MacLinux7zExe.values.jsonc](pkgs/include/CommonsBase_Std/S7z.MacLinux7zExe.values.jsonc)
+- [pkgs/include/CommonsBase_Std/S7z.values.jsonc](pkgs/include/CommonsBase_Std/S7z.values.jsonc)
 
 ## Using the Build Tool to debug a failed form
 
