@@ -6,14 +6,14 @@
   },
   "forms": [
     {
-      "id": "CommonsZip_Std.S7z9.Debug@25.1.0",
+      "id": "TeachMe_Std.S7z9.Debug@25.1.0",
       "precommands": {
         "private": [
           // we'll use the community 7zip package, not the tutorial 7zip package
-          "get-object CommonsZip_Std.S7z.S7zExe@25.1.0 -s File.Linux_arm -d linuxarm_stuff",
-          "get-object CommonsZip_Std.S7z.S7zExe@25.1.0 -s File.Windows_x86 -d win32_stuff",
+          "get-object TeachMe_Std.S7z.S7zExe@25.1.0 -s File.Linux_arm -d linuxarm_stuff",
+          "get-object TeachMe_Std.S7z.S7zExe@25.1.0 -s File.Windows_x86 -d win32_stuff",
           // all forms, even ones designed to fail, must have at least one slot
-          "get-object CommonsZip_Std.S7z.S7zExe@25.1.0 -s File.Linux_arm64 -d ${SLOT.File.Linux_arm64}"
+          "get-object TeachMe_Std.S7z.S7zExe@25.1.0 -s File.Linux_arm64 -d ${SLOT.File.Linux_arm64}"
         ]
       },
       "function": {
