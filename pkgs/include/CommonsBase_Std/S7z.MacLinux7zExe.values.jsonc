@@ -3,9 +3,9 @@
 Steps
 =============================================
 
-1. [CommonsBase_Std.S7z.Assets] Obtain 7zr.exe that only works on Windows.
-   See "Binary assets" in [CommonsBase_Std.S7z.Assets].
-   Test with: `get-object 'CommonsBase_Std.S7z.Assets@25.1.0' -s File.Windows_x86_64 -d target/s7zr`
+0. [CommonsBase_Std.S7z.Assets] See "Binary assets" in CommonsBase_Std.S7z.Assets.
+1. [CommonsBase_Std.S7z.S7zr] Obtain 7zr.exe that only works on Windows.
+   Test with: `get-object 'CommonsBase_Std.S7z.S7zr@25.1.0' -s File.Windows_x86_64 -d target/s7zr`
 2. [CommonsBase_Std.S7z.Windows7zExe] Use 7zr.exe to extract the Window-specific binaries from the installers.
    Test with: `get-object 'CommonsBase_Std.S7z.Windows7zExe@25.1.0' -s File.Windows_x86_64 -d target/win7z`
 3. [CommonsBase_Std.S7z.MacLinux7zTar] Use 7zr.exe to extract the Mac and Linux-specific tar files from the installers.

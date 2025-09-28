@@ -1282,6 +1282,7 @@ And we saw how to leverage an operating system (in our example Windows) to provi
 Finally, the community 7zip package is available for comparison at:
 
 - [pkgs/include/CommonsBase_Std/S7z.Assets.values.jsonc](pkgs/include/CommonsBase_Std/S7z.Assets.values.jsonc)
+- [pkgs/include/CommonsBase_Std/S7z.S7zr.values.jsonc](pkgs/include/CommonsBase_Std/S7z.S7zr.values.jsonc)
 - [pkgs/include/CommonsBase_Std/S7z.Windows7zExe.values.jsonc](pkgs/include/CommonsBase_Std/S7z.Windows7zExe.values.jsonc)
 - [pkgs/include/CommonsBase_Std/S7z.MacLinux7zTar.values.jsonc](pkgs/include/CommonsBase_Std/S7z.MacLinux7zTar.values.jsonc)
 - [pkgs/include/CommonsBase_Std/S7z.MacLinux7zExe.values.jsonc](pkgs/include/CommonsBase_Std/S7z.MacLinux7zExe.values.jsonc)
