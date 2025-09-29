@@ -39,16 +39,16 @@ jobs:
                   XDG_CONFIG_HOME: ${{ github.workspace }}/target/config
                   XDG_DATA_HOME: ${{ github.workspace }}/target/data
               run: |
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Darwin_arm64   -m ./LICENSE -f target/LICENSE
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Darwin_arm64   -m ./LICENSE -f target/LICENSE
 
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Darwin_arm64   -m ./7zz.exe -f target/File.Darwin_arm64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Darwin_x86_64  -m ./7zz.exe -f target/File.Darwin_x86_64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_arm      -m ./7zz.exe -f target/File.Linux_arm.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_arm64    -m ./7zz.exe -f target/File.Linux_arm64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_x86      -m ./7zz.exe -f target/File.Linux_x86.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_x86_64   -m ./7zz.exe -f target/File.Linux_x86_64.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Windows_x86    -m ./7zz.exe -f target/File.Windows_x86.7zz.exe
-                dk0/mlfront-shell -I dk0/pkgs/include/CommonsBase_Std --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Windows_x86_64 -m ./7zz.exe -f target/File.Windows_x86_64.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Darwin_arm64   -m ./7zz.exe -f target/File.Darwin_arm64.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Darwin_x86_64  -m ./7zz.exe -f target/File.Darwin_x86_64.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_arm      -m ./7zz.exe -f target/File.Linux_arm.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_arm64    -m ./7zz.exe -f target/File.Linux_arm64.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_x86      -m ./7zz.exe -f target/File.Linux_x86.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Linux_x86_64   -m ./7zz.exe -f target/File.Linux_x86_64.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Windows_x86    -m ./7zz.exe -f target/File.Windows_x86.7zz.exe
+                dk0/mlfront-shell --verbose -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s File.Windows_x86_64 -m ./7zz.exe -f target/File.Windows_x86_64.7zz.exe
 
             - name: Test ${{ github.workflow }}
               run: target/${{ env.TEST_SLOT }}.7zz.exe --help
