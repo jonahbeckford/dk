@@ -38,15 +38,18 @@
     - [Value Shell Language (VSL)](#value-shell-language-vsl)
     - [VSL Lexical Rules](#vsl-lexical-rules)
     - [Variables available in VSL](#variables-available-in-vsl)
-      - [get-object ID -s REQUEST\_SLOT (-f FILE | -d DIR/)](#get-object-id--s-request_slot--f-file---d-dir)
-      - [install-object ID -s REQUEST\_SLOT (-f FILE | -d DIR/)](#install-object-id--s-request_slot--f-file---d-dir)
-      - [pipe-object ID -s REQUEST\_SLOT -x PIPE](#pipe-object-id--s-request_slot--x-pipe)
-      - [get-asset-file ID FILE\_PATH (-f FILE | -d DIR/)](#get-asset-file-id-file_path--f-file---d-dir)
-      - [get-asset ID (-f FILE | -d DIR/)](#get-asset-id--f-file---d-dir)
-      - [Options: -f FILE and -d DIR](#options--f-file-and--d-dir)
-      - [Option: \[-n STRIP\]](#option--n-strip)
-      - [Option: \[-m MEMBER\]](#option--m-member)
-      - [Object ID with Build Metadata](#object-id-with-build-metadata)
+    - [get-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/) -- CLI\_FORM\_DOC](#get-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)
+    - [enter-object MODULE@VERSION -s REQUEST\_SLOT -- CLI\_FORM\_DOC](#enter-object-moduleversion--s-request_slot----cli_form_doc)
+    - [install-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/) -- CLI\_FORM\_DOC](#install-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)
+    - [pipe-object MODULE@VERSION -s REQUEST\_SLOT -x PIPE](#pipe-object-moduleversion--s-request_slot--x-pipe)
+    - [get-asset-file MODULE@VERSION FILE\_PATH (-f FILE | -d DIR/)](#get-asset-file-moduleversion-file_path--f-file---d-dir)
+    - [get-asset ID (-f FILE | -d DIR/)](#get-asset-id--f-file---d-dir)
+    - [Options: -f FILE and -d DIR](#options--f-file-and--d-dir)
+    - [Option: \[-n STRIP\]](#option--n-strip)
+    - [Option: \[-m MEMBER\]](#option--m-member)
+    - [Object ID with Build Metadata](#object-id-with-build-metadata)
+    - [Form Document](#form-document)
+      - [Option Groups](#option-groups)
     - [JSON Files](#json-files)
     - [JSON Canonicalization](#json-canonicalization)
   - [Distributions](#distributions)
@@ -97,7 +100,7 @@ As these limits are removed, this specification document may be updated.
 
 Assets are remote or local files that are inputs to a build. All assets have SHA-256 checksums.
 
-Assets are accessed with the [get-asset](#get-asset-id--f-file---d-dir) and [get-asset-file](#get-asset-file-id-file_path--f-file---d-dir) commands described in a later section of the document.
+Assets are accessed with the [get-asset](#get-asset-id--f-file---d-dir) and [get-asset-file](#get-asset-file-moduleversion-file_path--f-file---d-dir) commands described in a later section of the document.
 
 ### Local Paths
 
@@ -155,15 +158,15 @@ All variables are available in `.forms.function.args` and `.forms.function.envmo
 
 #### ${SLOT.request}
 
-The output directory for the *request slot*. The `-s REQUEST_SLOT` option (ex. `get-object ID@VERSION -s REQUEST_SLOT`) is the request slot.
+The output directory for the *request slot*. The `-s REQUEST_SLOT` option (ex. `get-object MODULE@VERSION -s REQUEST_SLOT`) is the request slot.
 
-If the command has no request slot (ex. `get-asset ID@VERSION`) and you use `${SLOT.request}`, an error is reported.
+If the command has no request slot (ex. `get-asset MODULE@VERSION`) and you use `${SLOT.request}`, an error is reported.
 
 #### ${SLOTNAME.request}
 
-The name of the *request slot*. The `-s REQUEST_SLOT` option (ex. `get-object ID@VERSION -s REQUEST_SLOT`) is the request slot.
+The name of the *request slot*. The `-s REQUEST_SLOT` option (ex. `get-object MODULE@VERSION -s REQUEST_SLOT`) is the request slot.
 
-If the command has no request slot (ex. `get-asset ID@VERSION`) and you use `${SLOT.request}`, an error is reported.
+If the command has no request slot (ex. `get-asset MODULE@VERSION`) and you use `${SLOT.request}`, an error is reported.
 
 #### ${SLOT.SlotName}
 
@@ -339,11 +342,11 @@ That is the subject of the next [Saving and Loading Objects](#saving-and-loading
 ### Saving and Loading Objects
 
 When a value shell command reads an immutable object and saves it to a file (ex.
-[get-object -f FILE](#get-object-id--s-request_slot--f-file---d-dir)),
+[get-object -f FILE](#get-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)),
 the bytes of the immutable object are copied directly to the file.
 
 When a value shell command reads an immutable object and saves it to a directory (ex.
-[get-object -d DIR](#get-object-id--s-request_slot--f-file---d-dir)),
+[get-object -d DIR](#get-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)),
 the bytes of the immutable object are:
 
 - *when the bytes have a zip file header* uncompressed and unzipped into the directory
@@ -435,9 +438,9 @@ The `$` is a special character which introduces variables (described next sectio
 - `${STATE}`
 - `${RUNTIME}`
 
-#### get-object ID -s REQUEST_SLOT (-f FILE | -d DIR/)
+### get-object MODULE@VERSION -s REQUEST_SLOT (-f FILE | -d DIR/) -- CLI_FORM_DOC
 
-Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by identifier `ID`.
+Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
 
 | Option      | Description                                                                   |
 | ----------- | ----------------------------------------------------------------------------- |
@@ -448,11 +451,23 @@ Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified b
 
 See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
 
+See [Form Document](#form-document) for form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
+
 The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
-#### install-object ID -s REQUEST_SLOT (-f FILE | -d DIR/)
+### enter-object MODULE@VERSION -s REQUEST_SLOT -- CLI_FORM_DOC
 
-Install the contents of the slot `REQUEST_SLOT` for the object uniquely identified by identifier `ID`.
+Enter a shell like PowerShell or `/bin/bash` that has the contents of the slot `REQUEST_SLOT` for the object uniquely identified by identifier `ID`.
+
+The shell is meant only for debugging problems, and may not appear if the object `ID` has been successfully built.
+
+See [Form Document](#form-document) for form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
+
+The object `MODULE@VERSION` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
+
+### install-object MODULE@VERSION -s REQUEST_SLOT (-f FILE | -d DIR/) -- CLI_FORM_DOC
+
+Install the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
 
 | Option      | Description                                                                                            |
 | ----------- | ------------------------------------------------------------------------------------------------------ |
@@ -465,19 +480,21 @@ Install the contents of the slot `REQUEST_SLOT` for the object uniquely identifi
 
 See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
 
-The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
+See [Form Document](#form-document) for form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
 
-#### pipe-object ID -s REQUEST_SLOT -x PIPE
+The object `MODULE@VERSION` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
+
+### pipe-object MODULE@VERSION -s REQUEST_SLOT -x PIPE
 
 > Deprecated. This command will be replaced by dynamic tasks.
 
-Write the contents of the slot `REQUEST_SLOT` for the object uniquely identified by identifier `ID` to the pipe named `PIPE`.
+Write the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION` to the pipe named `PIPE`.
 
 | Option      | Description                                  |
 | ----------- | -------------------------------------------- |
 | `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)] |
 
-The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
+The object `MODULE@VERSION` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
 No two `pipe-object` commands may write to the same pipe `PIPE`.
 
@@ -638,11 +655,9 @@ size=$(wc -c "$datafile")
 echo "Size of data file is $size bytes" > "$outputfile"
 ```
 
-#### get-asset-file ID FILE_PATH (-f FILE | -d DIR/)
+### get-asset-file MODULE@VERSION FILE_PATH (-f FILE | -d DIR/)
 
-Get the contents of the asset file at `FILE_PATH` for the asset with identifier `ID`.
-
-NOTE: If the version of the asset's `ID` is just a `MAJOR.MINOR` then the **latest** asset patch number for that major, minor combination is fetched.
+Get the contents of the asset file at `FILE_PATH` for the asset `MODULE@VERSION`.
 
 | Option      | Description                                                                       |
 | ----------- | --------------------------------------------------------------------------------- |
@@ -653,11 +668,9 @@ NOTE: If the version of the asset's `ID` is just a `MAJOR.MINOR` then the **late
 
 See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
 
-#### get-asset ID (-f FILE | -d DIR/)
+### get-asset ID (-f FILE | -d DIR/)
 
-Get the archive file for the asset with identifier `ID`.
-
-NOTE: If the version of the asset's `ID` is just a `MAJOR.MINOR` then the **latest** asset patch number for that major, minor combination is fetched.
+Get the archive file for the asset with `MODULE@VERSION`.
 
 | Option     | Description                                                                       |
 | ---------- | --------------------------------------------------------------------------------- |
@@ -669,21 +682,22 @@ See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path r
 
 *What about the `-m MEMBER` option?*
 
-Use [get-asset-file](#get-asset-file-id-file_path--f-file---d-dir) to get a specific asset file.
+Use [get-asset-file](#get-asset-file-moduleversion-file_path--f-file---d-dir) to get a specific asset file.
 Having a `-m MEMBER` option would be equivalent but redundant and slightly confusing since
 not much about assets implies they are stored as archives.
 
-#### Options: -f FILE and -d DIR
+### Options: -f FILE and -d DIR
 
 No command may write to the same file. Specifically:
 
 - It is an error to have more than one `get-object` or `get-asset` or `get-asset-file` or `resume-object` or `install-object` use the same `FILE`.
 - It is an error to have more than one `get-object` or `get-asset` or `get-asset-file` or `resume-object` use the same `DIR` or otherwise overlap the same `DIR`. Overlapping means one command can't write to the subdirectory of another command's `DIR`.
 
-Use [`install-object`](#install-object-id--s-request_slot--f-file---d-dir) when you want to write into the same directory.
+Use [`install-object`](#install-
+--s-request_slot--f-file---d-dir----cli_form_doc) when you want to write into the same directory.
 Even so, no `install-object` may extracted the same file in the same install directory.
 
-#### Option: [-n STRIP]
+### Option: [-n STRIP]
 
 `-n STRIP` defaults to zero.
 
@@ -698,18 +712,18 @@ llvmorg-19.1.3-win32/
 
 To leave the directory structure as-is, set `STRIP` to `0`. To strip away the top level `llvmorg-19.1.3-win32` directory, set `STRIP` to `1`.
 
-#### Option: [-m MEMBER]
+### Option: [-m MEMBER]
 
 Gets the zip file member from the object or asset file, which must be a zip archive.
 
-#### Object ID with Build Metadata
+### Object ID with Build Metadata
 
 These rules apply to the `*-object` commands **only**:
 
-- `get-object ID@VERSION ...`
-- `install-object ID@VERSION ...`
-- `pipe-object ID@VERSION ...`
-- `enter-objectID@VERSION ...`
+- `get-object MODULE@VERSION ...`
+- `install-object MODULE@VERSION ...`
+- `pipe-object MODULE@VERSION ...`
+- `enter-object MODULE@VERSION ...`
 
 The purpose of these rules is to ensure that unique builds can be uniquely and deterministically identified.
 
@@ -770,6 +784,66 @@ Here are some example of using a monotonically increasing build number:
 # FILLMEIN ... wait for `-n RUN_NUMBER` option to complement `-t TIMESTAMP`
 # FILLMEIN ... `-n` includes leading zeroes so lexographic comparisons work
 ```
+
+### Form Document
+
+A form has a [request slot](#slotrequest) that must always be specified by the user as a parameter.
+
+More information can be supplied to the form as a JSON document.
+
+The primary way today to supply this JSON document is through the command line syntax `get-object MODULE@VERSION -s SLOT -- CLI_FORM_DOC`, where **CLI_FORM_DOC** is a CLI-based recipe to construct a JSON document.
+
+The `CLI_FORM_DOC` is a command-line analog to <https://www.w3.org/TR/html-json-forms/>:
+
+- `... -- name=Jane` creates the form document `{"name":"Jane"}`
+- `... -- pet[species]=Dahut kids[0]=Ashley` creates the form document `{"pets":{"species":"Dahut"},"kids":["Ashley"]}`
+- `... -- +customer=customer.json` creates the form document `{"customer":...}` where the `...` is the JSON contents of `customer.json` (this is an extension to the W3C HTML JSON Forms specification)
+
+While the reference implementation does not do this, other build systems are free to accept the form document directly from a HTML form as defined in <https://www.w3.org/TR/html-json-forms/>, or directly from a JSON document.
+
+The form has a `options` JSON object to describe how the JSON document submitted to a form maps to command line options, arguments and variables.
+
+The top-level fields of the form document are available in variables:
+
+- `${PARAM.fieldname}` is the text of the form field named `fieldname`, but it will error if the field is not a JSON string
+- `${PARAMFILE.fieldname}` is the file path to the JSON value of the form field named `fieldname`
+
+The form document also contributes to the command line invocation of the form's `function`, if it has one.
+
+> Key Concept: The **group** is a layout of command line options and arguments that covers both the order of options and arguments, and also breaks like `--` or subcommand names in the command line.
+
+The command line, if a form has a `function`, is constructed as the concatenation of:
+
+1. The function arguments in `"function": { "args": ... }`
+2. The `{"options": "fields": [...]}` without any `group` field
+3. The arguments in `groups[0]` (if any)
+4. The `{"options": "fields": [...]}` with a `group: 0` field (if any)
+5. The arguments in `groups[1]` (if any)
+6. The `{"options": "fields": [...]}` with a `group: 1` field (if any)
+7. ... and so on up to and including group 9
+8. If `{"options": "document": {...}}` is present, an option and a location of a file containing the entire JSON form document
+
+#### Option Groups
+
+Groups are necessary when you want some options and arguments to go before or after a `--` seperator:
+
+```sh
+cmake -E rm -f -- file1 file2
+```
+
+or if you want some options and arguments to go before or after a subcommand:
+
+```sh
+git -C some_directory log --oneline
+```
+
+or if you need to order some options like how `-L` is required to be first:
+
+```sh
+find /home/user -L -name "*.log" -type f -exec rm {} \;
+```
+
+Since Windows especially but all operating systems have limits on the size of the command line arguments, the schema may specify a `responsefile` which consolidates all of the command line arguments at the end into a single file that can be read by the program (the first argument of the function `args`). Both MSVC and clang support these responsefiles.
 
 ### JSON Files
 

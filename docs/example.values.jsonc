@@ -80,23 +80,23 @@
   "forms": [
     {
       "id": "DkExe_Std.Form@1.0.202501010000",
-      // the parameters are supplied to the `function` or a precommand `get-object` as a JSON document.
+      // the options are supplied to the `function` or a precommand `get-object` as a JSON document.
       //
       // *types* the JSON document may have its type validated upstream of being given to the function;
       // ie. a Pkl document can be validated against a Pkl schema, and then converted to a JSON document.
       // that is done at the CST level so that a .values.jsonc does no type validation while
       // a hypothetical .values.pkl might.
       //
-      // *command line*. the `parameters` field below describe how to "splat" a JSON document into
+      // *command line*. the `options` field below describe how to "splat" a JSON document into
       // command line arguments.
       //
       // *get-object*. how to lift a command line into a JSON document? use the https://www.w3.org/TR/html-json-forms/ spec.
       // so `get-object DkExe_Std.Form@1.0.202501010000 -s File.Darwin_arm64 -f dk.exe -- pet[species]=dog pet[name]=fido` would
-      // pass `{"pet":{"species":"dog","name":"fido"}}` to the form (which would be interpreted by the `parameters` field below).
+      // pass `{"pet":{"species":"dog","name":"fido"}}` to the form (which would be interpreted by the `options` field below).
       //
       // the "+field=jsonfile" syntax is an extension to the JSON forms spec that reads the JSON file `jsonfile` and sets
       // the `field` to the JSON value from the file.
-      "parameters": {
+      "options": {
         "fields": {
           // `type` can be:
           //    long-opt: --name stringified_json_value (for GNU)
@@ -111,23 +111,14 @@
           //    "+": if JSON value is an array, the option is given once with all elements
           //         (ex. --name elem1 elem2 elem3) (for PowerShell)
           // `name` is optional. If not specified, the field name is used as the option name.
-          // `doc` is optional documentation for the parameter.
+          // `description` is optional documentation for the parameter.
           // `group` is optional. If specified and between 0 and 9, it is the index into the `groups` array.
           "arg1": {
             "type": "long-opt",
-            "doc": "An example parameter",
+            "description": "An example parameter",
             "group": 0
           }
         },
-        // Sometimes command line options have to be separated with `--`, and sometimes a
-        // global option must come before a subcommand. the command line is constructed as
-        // follows:
-        // 1. parameters without any `group` are listed first
-        // 2. `groups[0]` are listed next (if any)
-        // 3. parameters with `group: 0` are listed next (if any)
-        // 4. `groups[1]` are listed next (if any)
-        // 5. parameters with `group: 1` are listed next (if any)
-        // ... and so on
         "groups": [["--", "subcommand"]],
         // optional. If specified, _all_ parameters above (but not the document argument below)
         // will be written to a response file.
@@ -136,23 +127,23 @@
         "responsefile": {
           // must be relative subpath
           // creates argument: `@my_msvc_cl_options.rsp`
-          "path": "my_msvc_cl_options.rsp",
+          "subpath": "my_msvc_cl_options.rsp",
           // "windows" or "posix"; same as `clang --rsp-quoting`
           "quoting": {
             "default": "posix",
-            "windows": ["File.Windows_x86_64"]
+            "windows_slots": ["File.Windows_x86_64"]
           },
           // optional. If specified, the response file will only be created if
           // the command line length exceeds this value. but all options that
           // preceeded the limit will still be passed on the command line, so
           // visual command line is simple in the common case.
-          "if_greater_than": 1024
+          "threshold": 1024
         },
         // optional. If specified, the form will add the full JSON document to the command line.
         "document": {
           "type": "long-opt",
           // ex. `--doc-file path-to-JSON-file`
-          "name": "doc-file"
+          "optname": "doc-file"
         }
       },
       "precommands": {

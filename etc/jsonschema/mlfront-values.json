@@ -357,6 +357,135 @@
                         "description": "The identifier for the form, in the format 'PACKAGE.NAME@VERSION'. It must be unique across the value store. The PACKAGE is optional if the build system supplies an implicit package, but best practice is to supply it. The VERSION must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system. The form may be called from a MlFront script using the function call '<PACKAGE.NAME>.form ()'.",
                         "type": "string"
                     },
+                    "options": {
+                        "type": "object",
+                        "description": "A mapping from the JSON document given when invoking the form to command line options and variables. The JSON document has an effect on .function.args. Also, the JSON document's top-level fields can be referenced in the .precommands and .function.envmods using the syntax `${PARAM.name}`.",
+                        "additionalProperties": false,
+                        "properties": {
+                            "fields": {
+                                "type": "object",
+                                "properties": {},
+                                "additionalProperties": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "description": "The type of the parameter. Options are: long-opt (ex. --opt stringy_json), short-opt (ex. -o stringy_json), dos-opt (ex. /opt:stringy_json), long-flag (ex. --flag), short-flag (ex. -f), dos-flag (ex. /f) and arg (a positional argument).",
+                                            "enum": [
+                                                "long-opt",
+                                                "short-opt",
+                                                "dos-opt",
+                                                "long-flag",
+                                                "short-flag",
+                                                "dos-flag",
+                                                "arg"
+                                            ]
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "description": "A description of the parameter."
+                                        },
+                                        "group": {
+                                            "type": "integer",
+                                            "description": "If specified and between 0 and 9, it is the index into the `groups` array."
+                                        }
+                                    },
+                                    "required": [
+                                        "type"
+                                    ]
+                                }
+                            },
+                            "groups": {
+                                "type": "array",
+                                "description": "An optional array of up to 10 groups of leading command line arguments.",
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "maxItems": 10
+                            },
+                            "responsefile": {
+                                "type": "object",
+                                "description": "If specified, the command line arguments will be written to a temporary file and the form executable will be passed a reference to the temporary file. This is useful when the command line arguments are too long for the operating system to handle.",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "subpath": {
+                                        "type": "string",
+                                        "description": "The literal, relative subpath to a temporary file that will contain the command line arguments. The path must be a subpath (it cannot contain any `..` segments) and does not expand any variables."
+                                    },
+                                    "quoting": {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                            "default": {
+                                                "type": "string",
+                                                "description": "The default quoting style to use for arguments in the response file. Options are `windows` and `posix`.",
+                                                "enum": [
+                                                    "windows",
+                                                    "posix"
+                                                ]
+                                            },
+                                            "windows_slots": {
+                                                "type": "array",
+                                                "description": "The slots that will always use the 'windows' quoting style.",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "posix_slots": {
+                                                "type": "array",
+                                                "description": "The slots that will always use the 'posix' quoting style.",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "default"
+                                        ]
+                                    },
+                                    "threshold": {
+                                        "type": "integer",
+                                        "description": "If specified, the response file will only be created if the command line length exceeds this value."
+                                    }
+                                },
+                                "required": [
+                                    "subpath",
+                                    "quoting"
+                                ]
+                            },
+                            "document": {
+                                "type": "object",
+                                "description": "If specified, the form will add the full JSON document to the command line.",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "description": "The type of command line option that declares the JSON document on the command line. For example, if `type` is `long-opt` and `name` is `form-file`, then the command line will include `--form-file <location-of-json-form-document>`.",
+                                        "enum": [
+                                            "long-opt",
+                                            "short-opt",
+                                            "dos-opt",
+                                            "long-flag",
+                                            "short-flag",
+                                            "dos-flag",
+                                            "arg"
+                                        ]
+                                    },
+                                    "optname": {
+                                        "type": "string",
+                                        "description": "The name of the option. Ignored if the `type` is `arg`"
+                                    }
+                                },
+                                "required": [
+                                    "type"
+                                ]
+                            }
+                        }
+                    },
                     "precommands": {
                         "description": "The commands used to fetch objects that must be available to execute the form. The commands are written in the Value Shell Language (VSL). For example, 'get-object VGKot5hBsd81kMupNCXHaqbhv3huEbxAFMLnpcX2hniwn File.Agnostic > gcc'.",
                         "type": "object",
