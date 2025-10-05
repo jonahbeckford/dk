@@ -48,7 +48,7 @@
           },
           // the asset files (asset_id + [traces.path, values.path]) must be attested
           "github_slsa_v1_l3": {
-            "attestation-doc": {
+            "doc": {
               /* ... */
             }
           }
