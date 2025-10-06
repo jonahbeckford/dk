@@ -41,8 +41,12 @@
                     "type": "object",
                     "additionalProperties": false,
                     "properties": {
+                        "organization": {
+                            "description": "The GitHub organization that produced the values. Ex. <owner>",
+                            "type": "string"
+                        },
                         "signer-workflow": {
-                            "description": "The GitHub workflow path that produced the values. Ex. <owner>/<repository>/.github/workflows/sign-artifact.yml",
+                            "description": "The re-usable GitHub workflow path that produced the values. Ex. <owner>/<repository>/.github/workflows/sign-artifact.yml",
                             "type": "string"
                         }
                     },
