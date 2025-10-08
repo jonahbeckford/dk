@@ -318,13 +318,17 @@
                                         }
                                     },
                                     "values": {
-                                        "type": "object",
-                                        "description": "A zip snapshot of the valuestore that was populated after the distributions' builds completed. Entries in the zipfile must be `./{value_id}` like `./vnmfdhn7lw4wepx2qiunrmgm4o5lx4wwsf2yfj7xyxggkg5kdsltq`.",
-                                        "additionalProperties": false,
-                                        "properties": {
-                                            "path": {
-                                                "type": "string",
-                                                "description": "The path within the asset to the zipped value store."
+                                        "type": "array",
+                                        "description": "Snapshots of the valuestores that were populated after the distributions' builds completed.",
+                                        "items": {
+                                            "type": "object",
+                                            "description": "A zip snapshot of the valuestore that was populated after the distributions' builds completed. Entries in the zipfile must be `./{value_id}` like `./vnmfdhn7lw4wepx2qiunrmgm4o5lx4wwsf2yfj7xyxggkg5kdsltq`.",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "The path within the asset to the zipped value store."
+                                                }
                                             }
                                         }
                                     }

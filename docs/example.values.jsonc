@@ -71,9 +71,7 @@
           // Then sign the entire builds:[] with your public key in `signature` above
           "asset_id_canonical": "...",
           "traces": [{ "tag": "oc414_wd64", "path": "oc414_wd64.traces" }],
-          "values": {
-            "path": "valuestore.zip"
-          }
+          "values": [{ "path": "valuestore.zip" }]
         }
       }
     }
