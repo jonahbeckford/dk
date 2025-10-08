@@ -12,7 +12,7 @@
         // https://github.blog/enterprise-software/devsecops/enhance-build-security-and-reach-slsa-level-3-with-github-artifact-attestations/
         "github_slsa_v1_l3": {
           "organization": "<owner>",
-          "signer-workflow": "<owner>/<repository>/.github/workflows/sign-artifact.yml"
+          "signer_workflow": "<owner>/<repository>/.github/workflows/sign-artifact.yml"
         }
         // https://docs.gitlab.com/ci/runners/configure_runners/#artifact-provenance-metadata
         // only Level 1 since GitLab has no in-toto attestations. That means no verification (kinda useless!)

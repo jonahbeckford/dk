@@ -45,14 +45,14 @@
                             "description": "The GitHub organization that produced the values. Ex. <owner>",
                             "type": "string"
                         },
-                        "signer-workflow": {
+                        "signer_workflow": {
                             "description": "The re-usable GitHub workflow path that produced the values. Ex. <owner>/<repository>/.github/workflows/sign-artifact.yml",
                             "type": "string"
                         }
                     },
                     "required": [
                         "organization",
-                        "signer-workflow"
+                        "signer_workflow"
                     ]
                 }
             },
