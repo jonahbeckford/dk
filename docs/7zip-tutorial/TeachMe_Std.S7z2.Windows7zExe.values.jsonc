@@ -30,7 +30,7 @@
           }
         ],
         "args": [
-          // extract assetfile [7z2501-arm.exe] with [7zr.exe] to the output directory
+          // extract asset [7z2501-arm.exe] with [7zr.exe] to the output directory
           // for slot [Release.Windows_arm], etc.
           "bin/${SLOTNAME.request}/7zr.exe",
           "x",

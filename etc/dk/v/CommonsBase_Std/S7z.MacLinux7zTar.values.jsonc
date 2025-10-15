@@ -49,7 +49,7 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
           }
         ],
         "args": [
-          // uncompress assetfile [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
+          // uncompress asset [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           // with [7zr.exe] ...
           "bin/Release.Windows_x86/7zr.exe",

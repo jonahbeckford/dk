@@ -29,7 +29,7 @@
           }
         ],
         "args": [
-          // uncompress assetfile [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
+          // uncompress asset [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           "bin/Release.Windows_x86/7zr.exe",
           "x",

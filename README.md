@@ -786,7 +786,7 @@ Whenever we run a command we need a form with a `function`.
           }
         ],
         "args": [
-          // extract assetfile [7z2501-arm.exe] with [7zr.exe] to the output directory
+          // extract asset [7z2501-arm.exe] with [7zr.exe] to the output directory
           // for slot [Release.Windows_arm], etc.
           "bin/${SLOTNAME.request}/7zr.exe",
           "x",
@@ -927,7 +927,7 @@ This is a new form with a function that will call `7z.exe` with the right parame
           }
         ],
         "args": [
-          // uncompress assetfile [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
+          // uncompress asset [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           "bin/Release.Windows_x86/7zr.exe",
           "x",
