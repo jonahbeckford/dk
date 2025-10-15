@@ -8,7 +8,7 @@
     - [Local Paths](#local-paths)
     - [Zip Archive Reproducibility](#zip-archive-reproducibility)
     - [Remote Paths](#remote-paths)
-    - [Saving Assets](#saving-assets)
+    - [Saving Bundles](#saving-bundles)
   - [Forms](#forms)
     - [Form Variables](#form-variables)
       - [Variable Availability](#variable-availability)
@@ -44,7 +44,7 @@
     - [install-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/) -- CLI\_FORM\_DOC](#install-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)
     - [pipe-object MODULE@VERSION -s REQUEST\_SLOT -x PIPE](#pipe-object-moduleversion--s-request_slot--x-pipe)
     - [get-asset MODULE@VERSION FILE\_PATH (-f FILE | -d DIR/)](#get-asset-moduleversion-file_path--f-file---d-dir)
-    - [get-bundle ID (-f FILE | -d DIR/)](#get-bundle-id--f-file---d-dir)
+    - [get-bundle MODULE@VERSION (-f FILE | -d DIR/)](#get-bundle-moduleversion--f-file---d-dir)
     - [Options: -f FILE and -d DIR](#options--f-file-and--d-dir)
     - [Option: \[-n STRIP\]](#option--n-strip)
     - [Option: \[-m MEMBER\]](#option--m-member)
@@ -101,7 +101,9 @@ As these limits are removed, this specification document may be updated.
 
 Assets are remote or local files that are inputs to a build. All assets have SHA-256 checksums.
 
-Assets are accessed with the [get-bundle](#get-bundle-id--f-file---d-dir) and [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir) commands described in a later section of the document.
+Bundles are a named collection of assets.
+
+Assets are accessed with the [get-bundle](#get-bundle-moduleversion--f-file---d-dir) and [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir) commands described in a later section of the document.
 
 ### Local Paths
 
@@ -130,15 +132,15 @@ The [Zip Archive Reproducibility (next section)](#zip-archive-reproducibility) s
 
 A path, if it starts with `https://` or `http://` is a *remote* path.
 
-### Saving Assets
+### Saving Bundles
 
 When a value shell command reads an bundle and saves it to a file (ex.
-[get-bundle -f FILE](#get-bundle-id--f-file---d-dir)),
+[get-bundle -f FILE](#get-bundle-moduleversion--f-file---d-dir)),
 the members of the bundle are zipped and the zip archive bytes are copied directly to the file.
 The standards of [Zip Archive Reproducibility](#zip-archive-reproducibility) will be followed.
 
 When a value shell command reads an bundle and saves it to a directory (ex.
-[get-bundle -d DIR](#get-bundle-id--f-file---d-dir)),
+[get-bundle -d DIR](#get-bundle-moduleversion--f-file---d-dir)),
 the members of the bundle are copied into the directory tree.
 
 That sounds inefficient, but the build system is allowed to optimize a set of value shell commands.
@@ -591,13 +593,13 @@ Here is an example use of a pipe:
       "${SLOT.Release.Agnostic}"
     ]
   },
-  "assets": [
+  "bundles": [
     {
       "id": "MyAssets_Std.Scripts@1.0.0",
       "listing": {
         "origins": [ { "name": "project-tree", "mirrors": [ "." ] } ]
       },
-      "files": [
+      "assets": [
         {
           "origin": "project-tree",
           "path": "script/get-size.cmd",
@@ -717,9 +719,9 @@ Get the contents of the asset at `FILE_PATH` for the bundle `MODULE@VERSION`.
 
 See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
 
-### get-bundle ID (-f FILE | -d DIR/)
+### get-bundle MODULE@VERSION (-f FILE | -d DIR/)
 
-Get the archive file for the bundle with `MODULE@VERSION`.
+Get the archive file for the bundle `MODULE@VERSION`.
 
 | Option     | Description                                                                       |
 | ---------- | --------------------------------------------------------------------------------- |
@@ -971,7 +973,7 @@ For example, the form:
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": [
               "outpath1"
@@ -984,7 +986,7 @@ For example, the form:
       }
     }
   ],
-  "assets": [
+  "bundles": [
     {
       "id": "DkDistribution_Std.Bundle@2.4.202508011516-signed",
       "listing": {
@@ -997,7 +999,7 @@ For example, the form:
           }
         ]
       },
-      "files": [
+      "assets": [
         {
           "origin": "github-release",
           "path": "SHA256.sig",
@@ -1023,7 +1025,7 @@ For example, the form:
 is canonicalized to:
 
 ```json
-{"assets":[{"files":[{"checksum":{"sha256":"4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"},"path":"SHA256"},{"checksum":{"sha256":"0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"},"path":"SHA256.sig"}],"id":"DkDistribution_Std.Bundle@2.4.202508011516-signed"}],"forms":[{"function":{"args":["arg1"],"envmods":["envmod1"]},"id":"FooBar_Baz@0.1.0","outputs":{"files":[{"paths":["outpath1"],"slots":["output1"]}]},"precommands":{"private":["private1"],"public":["public1"]}}],"schema_version":{"major":1,"minor":0}}
+{"bundles":[{"assets":[{"checksum":{"sha256":"4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"},"path":"SHA256"},{"checksum":{"sha256":"0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"},"path":"SHA256.sig"}],"id":"DkDistribution_Std.Bundle@2.4.202508011516-signed"}],"forms":[{"function":{"args":["arg1"],"envmods":["envmod1"]},"id":"FooBar_Baz@0.1.0","outputs":{"assets":[{"paths":["outpath1"],"slots":["output1"]}]},"precommands":{"private":["private1"],"public":["public1"]}}],"schema_version":{"major":1,"minor":0}}
 ```
 
 ## Distributions

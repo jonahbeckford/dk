@@ -284,11 +284,11 @@ We'll make a JSON file to download `7zr.exe`.
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/mlfront-values.json",
   "schema_version": { "major": 1, "minor": 0 },  
-  "assets": [
+  "bundles": [
     {
       "listing_unencrypted": {
         "name": "TeachMe_Std.S7z1a.Assets",
-        "spec_version": 2,
+        "spec_version": 3,
         // 25.01
         "version": "25.1.0"
       },
@@ -300,7 +300,7 @@ We'll make a JSON file to download `7zr.exe`.
           }
         ]
       },
-      "files": [
+      "assets": [
         {
           "origin": "7zip-org",
           "path": "7zr.exe",
@@ -320,7 +320,7 @@ Make a folder `7zip-project/` and **save the file** as `7zip-project/TeachMe_Std
 Some of JSON file is fairly straightforward, but let's go through six (6) fields that deserve mention:
 
 1. The `$schema` is a reserved field for VS Code to store the location of the JSON schema. You get auto-complete and documentation from the JSON schema. Use it!
-2. The `assets.listing_unencrypted.spec_version` must be 2 unless there is a change to the [specification](docs/SPECIFICATION.md).
+2. The `assets.listing_unencrypted.spec_version` must be 3 unless there is a change to the [specification](docs/SPECIFICATION.md).
 3. The `assets.listing_unencrypted.name` field gives *part* of a unique identifier for the `7zr.exe` asset. It has syntax borrowed and hacked from the OCaml programming language.
 
    The first part of the name, before the first period, is the **library identifier**. For example, `TeachMe_Std` is the library identifier for `TeachMe_Std.S7z.Bundle`. The library id visually has at least three bumps, with an underscore separating the second and third bump. It was designed to be visually recognizable (and recognizable from a lexer) while different enough from other identifiers that there was no accidental overlap. The following picture may help you remember the `BumpBump_Bump` shape:
@@ -428,7 +428,7 @@ We'll create a new JSON file containing the form.
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7zr.exe"],
             "slots": [
@@ -561,7 +561,7 @@ Now that we have seen how to specify one asset, let's do all of the Windows inst
     "major": 1,
     "minor": 0
   },  
-  "assets": [
+  "bundles": [
     {
       "id": "TeachMe_Std.S7z1c.Assets@25.1.0",
       "listing": {
@@ -574,7 +574,7 @@ Now that we have seen how to specify one asset, let's do all of the Windows inst
           }
         ]
       },
-      "files": [
+      "assets": [
         {
           "origin": "7zip-org",
           "path": "7zr.exe",
@@ -797,7 +797,7 @@ Whenever we run a command we need a form with a `function`.
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7z.exe"],
             "slots": [
@@ -937,7 +937,7 @@ This is a new form with a function that will call `7z.exe` with the right parame
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7z-Release.Darwin_arm64.tar"],
             "slots": ["Release.Darwin_arm64"]
@@ -1039,7 +1039,7 @@ This is a new form with a function that will call `7z.exe` with the right parame
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7zz"],
             "slots": ["Release.Darwin_arm64"]
@@ -1134,7 +1134,7 @@ We have not yet provided an overall interface for the 7zip package. Let's do thi
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7zz.exe"],
             "slots": [
@@ -1278,7 +1278,7 @@ We introduced the following commands:
 
 and explained how to specify:
 
-- `"assets": ...`
+- `"bundles": ...`
 - `"forms": ...`
 
 and explained how to run the reference implementation's `dk0/mlfront-shell`.
@@ -1338,7 +1338,7 @@ The always-failing form is the following (you don't need to create your own copy
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7zz.exe"],
             "slots": ["Release.Linux_arm64"]

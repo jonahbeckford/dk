@@ -61,7 +61,7 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7zz.exe", "LICENSE"],
             "slots": [

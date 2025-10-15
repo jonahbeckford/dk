@@ -47,7 +47,7 @@
             // sign(pubkey,sha256({build_to_sign:[...]}))
             "signature": "untrusted comment: signature from signify secret key\nRWTAeKJJ1MTF3UpxzBCu6NaM6HPJNTj5CZ+M5XNJKNeEHBLQSsstzHGbSo8rPYNgw3Z98pN7WKiIwBIyRrKuIdKBRA6qlaci6wI="
           },
-          // the bundle files (asset_id + [traces.path, values.path]) must be attested
+          // the bundle files (bundle_id + [traces.path, values.path]) must be attested
           "github_slsa_v1_l3": {
             "doc": {
               /* ... */
@@ -66,10 +66,10 @@
           // module versions can be anything, unrelated to the distribution `id` version.
           "modules": ["DkExe_Std.Form@1.0.202501010000"],
           // 1. Use CI like GitHub Actions to publish an bundle
-          "asset_id": "DkExe_Std.Bundle@2.4.202508011516-signed",
+          "bundle_id": "DkExe_Std.Bundle@2.4.202508011516-signed",
           // Outside of CI, verify the bundle and adds its canonical ID here (nit: need a tool to compute this)
           // Then sign the entire builds:[] with your public key in `signature` above
-          "asset_id_canonical": "...",
+          "bundle_canonical": "...",
           "traces": [{ "tag": "oc414_wd64", "path": "oc414_wd64.traces" }],
           "values": [{ "path": "valuestore.zip" }]
         }
@@ -163,7 +163,7 @@
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "slots": ["Release.Darwin_arm64"],
             "paths": ["dk"]
@@ -192,7 +192,7 @@
       }
     }
   ],
-  "assets": [
+  "bundles": [
     {
       "id": "DkExe_Std.Bundle@2.4.202508011516-signed",
       "listing": {
@@ -205,7 +205,7 @@
           }
         ]
       },
-      "files": [
+      "assets": [
         {
           "origin": "github-release",
           "path": "SHA256.sig",

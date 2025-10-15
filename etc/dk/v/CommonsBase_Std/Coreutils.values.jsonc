@@ -45,7 +45,7 @@
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "slots": [
               "Release.Darwin_arm64",

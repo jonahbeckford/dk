@@ -4,7 +4,7 @@
     "major": 1,
     "minor": 0
   },  
-  "assets": [
+  "bundles": [
     {
       "id": "TeachMe_Std.S7z1c.Assets@25.1.0",
       "listing": {
@@ -17,7 +17,7 @@
           }
         ]
       },
-      "files": [
+      "assets": [
         {
           "origin": "7zip-org",
           "path": "7zr.exe",

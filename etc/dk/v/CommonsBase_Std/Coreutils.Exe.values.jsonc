@@ -43,7 +43,7 @@
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": [
               "coreutils",

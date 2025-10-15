@@ -45,7 +45,7 @@ will make the "dk-darwin_arm64" executable from version
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "slots": [
               "Release.Darwin_arm64",
@@ -61,7 +61,7 @@ will make the "dk-darwin_arm64" executable from version
       }
     }
   ],
-  "assets": [
+  "bundles": [
     {
       "id": "DkExe_Std.Bundle@2.4.202508302258-signed",
       "listing": {
@@ -74,7 +74,7 @@ will make the "dk-darwin_arm64" executable from version
           }
         ]
       },
-      "files": [
+      "assets": [
         {
           "origin": "github-release",
           "path": "SHA256.sig",

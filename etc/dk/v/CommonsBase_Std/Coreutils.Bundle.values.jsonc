@@ -1,7 +1,7 @@
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/mlfront-values.json",
   "schema_version": { "major": 1, "minor": 0 },
-  "assets": [
+  "bundles": [
     {
       "id": "CommonsBase_Std.Coreutils.Bundle@0.2.2",
       "listing": {
@@ -14,7 +14,7 @@
           }
         ]
       },
-      "files": [
+      "assets": [
         {"origin": "gh-uutils", "checksum": {"sha256": "7a48b23626bce2e114a2be674fae8af857438d96633bf6f6e9b80b0d4c18d69b"}, "path": "coreutils-0.2.2-aarch64-apple-darwin.tar.gz", "size": 4418677},
         {"origin": "gh-uutils", "checksum": {"sha256": "c248ac5c0f0dca0971dfda1042c3db6b9e0d498d0666192922c51f358ccbff4a"}, "path": "coreutils-0.2.2-aarch64-pc-windows-msvc.zip", "size": 4554582},
         {"origin": "gh-uutils", "checksum": {"sha256": "71421091b172c15c33599a90f1f6df480fb5da35882f07f6bd9a87aa084e68a2"}, "path": "coreutils-0.2.2-aarch64-unknown-linux-gnu.tar.gz", "size": 5211158},

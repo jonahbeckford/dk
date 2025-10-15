@@ -39,7 +39,7 @@
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7z-Release.Darwin_arm64.tar"],
             "slots": ["Release.Darwin_arm64"]

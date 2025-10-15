@@ -82,7 +82,7 @@ The complication is that we need 7z to extract the macOS 7z binary.
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7zr.exe"],
             "slots": [

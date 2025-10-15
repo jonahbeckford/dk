@@ -44,7 +44,7 @@
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["coreutils.Release.Darwin_arm64.tar"],
             "slots": ["Release.Darwin_arm64"]

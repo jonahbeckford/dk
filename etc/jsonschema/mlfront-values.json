@@ -289,7 +289,7 @@
                                 "type": "object",
                                 "additionalProperties": false,
                                 "properties": {
-                                    "asset_id": {
+                                    "bundle_id": {
                                         "type": "string",
                                         "description": "The identifier for the bundle containing the trace and value stores, in the format 'PACKAGE.NAME@VERSION'. The VERSION must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system."
                                     },
@@ -308,7 +308,7 @@
                                             "description": "The SPDX identifier of the license from https://spdx.org/licenses/, or the lowercase hex-encoded SHA-256 of the license text."
                                         }
                                     },
-                                    "asset_id_canonical": {
+                                    "bundle_canonical": {
                                         "type": "string",
                                         "description": "The canonical identifier for the bundle, a lowercase hex-encoded SHA-256 of the critical fields of an bundle JSON document."
                                     },
@@ -353,8 +353,8 @@
                                 },
                                 "required": [
                                     "producer_accepts",
-                                    "asset_id",
-                                    "asset_id_canonical",
+                                    "bundle_id",
+                                    "bundle_canonical",
                                     "traces",
                                     "modules"
                                 ]
@@ -534,7 +534,7 @@
                         }
                     },
                     "function": {
-                        "description": "The command line invocation that will execute the form. If no .function is specified, the \"identity\" function which does nothing will be used instead; the identity function is useful when combined with one or more .assets that are redirected in .objects to the out/ folder.",
+                        "description": "The command line invocation that will execute the form. If no .function is specified, the \"identity\" function which does nothing will be used instead.",
                         "type": "object",
                         "additionalProperties": false,
                         "properties": {
@@ -577,7 +577,7 @@
                     "outputs": {
                         "type": "object",
                         "properties": {
-                            "files": {
+                            "assets": {
                                 "description": "These files will be assigned and validated as output after the form executable is finished running.",
                                 "type": "array",
                                 "items": {
@@ -618,7 +618,7 @@
                 ]
             }
         },
-        "assets": {
+        "bundles": {
             "description": "The assets, possibly remote, defined in this values document. The assets are arranged in \"listings\" that follow the specification in https://diskuv.com/dk/help/latest/manual/DkAssets_Capture-Spec-1/.",
             "type": "array",
             "items": {
@@ -636,7 +636,7 @@
                             "spec_version": {
                                 "type": "integer",
                                 "enum": [
-                                    2
+                                    3
                                 ]
                             }
                         },
@@ -674,7 +674,7 @@
                             }
                         }
                     },
-                    "files": {
+                    "assets": {
                         "type": "array",
                         "items": {
                             "type": "object",

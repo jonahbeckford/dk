@@ -16,13 +16,13 @@ crossover lets anyone build the package.
     "major": 1,
     "minor": 0
   },
-  "assets": [
+  "bundles": [
     {
       "id": "CommonsGit_Std.Git@17.6.0",
       "listing": {
         "origins": []
       },
-      "files": []
+      "assets": []
     }
   ]
 }

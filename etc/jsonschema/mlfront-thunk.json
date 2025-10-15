@@ -119,7 +119,7 @@
                 }
             }
         },
-        "assets": {
+        "bundles": {
             "description": "The assets, possibly remote, that must be available to execute the thunk. The assets are arranged in \"listings\" that follow the specification in https://diskuv.com/dk/help/latest/manual/DkAssets_Capture-Spec-1/.",
             "type": "array",
             "items": {
@@ -180,7 +180,7 @@
                             }
                         }
                     },
-                    "files": {
+                    "assets": {
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -222,7 +222,7 @@
         "outputs": {
             "type": "object",
             "properties": {
-                "files": {
+                "assets": {
                     "description": "These files will be assigned and validated as output after the thunk executable is finished running.",
                     "type": "array",
                     "items": {

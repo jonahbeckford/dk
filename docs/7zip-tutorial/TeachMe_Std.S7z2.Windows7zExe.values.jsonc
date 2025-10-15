@@ -41,7 +41,7 @@
         ]
       },
       "outputs": {
-        "files": [
+        "assets": [
           {
             "paths": ["7z.exe"],
             "slots": [
