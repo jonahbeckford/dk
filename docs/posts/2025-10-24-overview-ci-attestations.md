@@ -2,7 +2,7 @@
 
 This article reviews how you can trust binary packages produced by CI systems through a mechanism called "attestations". The audience is software engineers who want a level of trust in the build packages they import.
 I'll briefly describe the product `dk` for context, but the focus is on attestations.
-There is a large set of technical references at the end for further reading.
+There is a large set of technical references at the end for further reading on topics like reproducible builds.
 
 TLDR:
 
@@ -215,14 +215,32 @@ Also, if you work for / have influence with the following CI providers, please n
 
 ## Technical References
 
+Attestable Builds and Reproducible Builds
+
+- Building Secure and Reliable Systems - a book by Google. Chapter 14: Deploying Code. <https://google.github.io/building-secure-and-reliable-systems/raw/ch14.html>
+- SLSA security levels: <https://slsa.dev/spec/v1.0/levels>
+- SLSA Build Environment track. <https://slsa.dev/spec/draft/build-env-track-basics>
+
+Mechanisms
+
 - Attestable Builds: compiling verifiable binaries on untrusted systems using trusted execution environments: <https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-1002.pdf>
 - OpenBSD signify key: <https://www.openbsd.org/papers/bsdcan-signify.html>
-- SLSA security levels: <https://slsa.dev/spec/v1.0/levels>
+
+CI Systems
+
 - GitHub SLSA Level 2: <https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations#generating-artifact-attestations-for-your-builds>
 - GitHub SLSA Level 3: <https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/increase-security-rating>
 - GitLab SLSA Level 2 gaps: <https://gitlab.com/groups/gitlab-org/-/epics/15859#note_2540189548>
+- Safeguarding builds on Google Cloud Build with SLSA: <https://slsa.dev/blog/2022/12/gcb-slsa-verification>
+
+Build Systems
+
 - `gg` build system paper: <https://www.usenix.org/system/files/atc19-fouladi.pdf>
 - Build systems à la carte paper: <https://www.cambridge.org/core/journals/journal-of-functional-programming/article/build-systems-a-la-carte-theory-and-practice/097CE52C750E69BD16B78C318754C7A4>
-- Safeguarding builds on Google Cloud Build with SLSA: <https://slsa.dev/blog/2022/12/gcb-slsa-verification>
+
+## Log
+
+- 2025/10/27. Added this section. Added subsection titles to Technical References. Amended intro sentence to add reproducible builds as further reading. Added "Building Secure and Reliable Systems" and "SLSA Build Environment track" references.
+- 2025/10/25. <https://lobste.rs/s/vflxfb/overview_attestations_ci>
 
 -- Jonah
