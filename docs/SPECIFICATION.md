@@ -331,8 +331,8 @@ like `PATH+=${CACHE}${/}bin` so the modification is portable across operating sy
 
 The order of processing is as follows:
 
-1. The form's precommands are executed, in parallel if supported by the build system.
-2. The form's subshells in the function `args` and `envmods` (if any) are executed, in parallel if supported by the build system.
+1. The form's subshells in the function `args` and `envmods` (if any) are executed, in parallel if supported by the build system.
+2. The form's precommands are executed, in parallel if supported by the build system.
 3. If there is a breakpoint from the `enter-object` command, a system shell (PowerShell, bash, etc.) is invoked.
 4. The form's function is executed.
 5. If [${MORECOMMANDS}](#morecommands) is part of the form's arguments or precommands, then:
