@@ -12,7 +12,6 @@
   - [Forms](#forms)
     - [Form Variables](#form-variables)
       - [Variable Availability](#variable-availability)
-      - [$(subcommand)](#subcommand)
       - [${SLOT.request}](#slotrequest)
       - [${SLOT.SlotName}](#slotslotname)
       - [${SLOTNAME.\*}](#slotname)
@@ -51,6 +50,12 @@
     - [Options: -f FILE and -d DIR](#options--f-file-and--d-dir)
     - [Option: \[-n STRIP\]](#option--n-strip)
     - [Option: \[-m MEMBER\]](#option--m-member)
+  - [Subshells](#subshells)
+    - [subshell: get-object MODULE@VERSION -s REQUEST\_SLOT -- CLI\_FORM\_DOC](#subshell-get-object-moduleversion--s-request_slot----cli_form_doc)
+    - [subshell: get-asset MODULE@VERSION FILE\_PATH](#subshell-get-asset-moduleversion-file_path)
+    - [Anonymous Regular Files: `-f :file`](#anonymous-regular-files--f-file)
+    - [Anonymous Executable Files: `-f :exe`](#anonymous-executable-files--f-exe)
+    - [Anonymous Directories: `-d :`](#anonymous-directories--d-)
     - [Object ID with Build Metadata](#object-id-with-build-metadata)
     - [Form Document](#form-document)
       - [Option Groups](#option-groups)
@@ -162,18 +167,6 @@ the build system can give the second shell command a symlink to the first direct
 Some variables are available in the Value Shell Language (VSL); see [Variables available in VSL](#variables-available-in-vsl)
 
 All variables are available in `.forms.function.args` and `.forms.function.envmods`.
-
-#### $(subcommand)
-
-The result of a subcommand. The subcommand can be one of two things:
-
-- `get-object MODULE@VERSION -s REQUEST_SLOT (-f :file | -f :exe | -d :) -- CLI_FORM_DOC` which is the same as a normal [get-object (described in the Values section)](#get-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc) except the destination must be `-f :file` or `-f :exe` or `-d :`.
-- `get-asset MODULE@VERSION FILE_PATH (-f :file | -f :exe | -d :)` which is the same as a normal [get-asset (described in the Values section)](#get-asset-moduleversion-file_path--f-file---d-dir) except the destination must be `-f :file` or `-f :exe` or `-d :`.
-
-When the destination `-f` is `:exe`, the file that will be created will be executable:
-
-- it will have the executable bit set for running on Unix
-- it will end in a `.exe` for running on Windows
 
 #### ${SLOT.request}
 
@@ -401,6 +394,8 @@ The order of processing is as follows:
 The trace and value store are updated as normal during the MORECOMMANDS, so if the same form id, form slot and form document are submitted the build system can re-use the cached values.
 
 ### Dynamic Functions
+
+> Dynamic functions have not been implemented in the reference implementation as of 2025-11-08.
 
 Use the [MOREINCLUDES](#moreincludes) and [MORECOMMANDS](#morecommands) to create a function which perform `get-object`, `get-bundle` and other commands dynamically.
 You'll want to do this in the following scenarios:
@@ -935,6 +930,60 @@ To leave the directory structure as-is, set `STRIP` to `0`. To strip away the to
 ### Option: [-m MEMBER]
 
 Gets the zip file member from the object or asset, which must be a zip archive.
+
+## Subshells
+
+### subshell: get-object MODULE@VERSION -s REQUEST_SLOT -- CLI_FORM_DOC
+
+Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
+
+| Option      | Description                                                                                                                 |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `-f :file`  | Place object in an [anonymous regular file](#anonymous-regular-files--f-file) and return its filepath                       |
+| `-f :exe`   | Place object in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
+| `-d :`      | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
+| `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+
+If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+
+- the content may not exceed 1024 bytes
+- no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
+- the byte 0 (ASCII NUL) may not be in the content as a security measure
+
+### subshell: get-asset MODULE@VERSION FILE_PATH
+
+Get the contents of the asset at `FILE_PATH` for the bundle `MODULE@VERSION`.
+
+| Option      | Description                                                                                                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `-f :file`  | Place asset in an [anonymous regular file](#anonymous-regular-files--f-file) and return its filepath                       |
+| `-f :exe`   | Place asset in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
+| `-d :`      | The asset must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                                                 |
+| `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                                               |
+
+If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+
+- the content may not exceed 1024 bytes
+- no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
+- the byte 0 (ASCII NUL) may not be in the content as a security measure
+
+### Anonymous Regular Files: `-f :file`
+
+Place the object or asset in an anonymous regular file and return the file path.
+
+The file will be named `a.dat` and placed in a directory with no other files.
+
+### Anonymous Executable Files: `-f :exe`
+
+Place the object or asset in an anonymous executable file and return the file path.
+
+The file will be named `a.exe` so it can run on Windows, have its executable bit enabled on Unix platforms, and placed in a directory with no other files.
+
+### Anonymous Directories: `-d :`
+
+Place the object or asset in an anonymous directory and return the directory path.
 
 ### Object ID with Build Metadata
 
