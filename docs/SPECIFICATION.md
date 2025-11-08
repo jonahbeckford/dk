@@ -19,7 +19,8 @@
       - [${MOREINCLUDES}](#moreincludes)
       - [${MORECOMMANDS}](#morecommands)
       - [${/} directory separator](#-directory-separator)
-      - [${.exe}](#exe)
+      - [${.exe.execution}](#exeexecution)
+      - [${.exe.target}](#exetarget)
       - [${HOME}](#home)
       - [${CACHE}](#cache)
       - [${DATA}](#data)
@@ -273,14 +274,25 @@ The directory separator. Except for one edge case (below), it is always `/` even
 There is a special edge case for the build system in install mode: the build system in install mode will set the directory separator to `\` on Windows and `/` on Unix.
 This allows installation to canonicalized UNC paths for Windows like the remote file `\\Server2\Share\Test\Foo.txt` or [long-path capable](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry) `\\?\C:\Test\Foo.txt`.
 
-#### ${.exe}
+#### ${.exe.execution}
 
-The executable suffix. Except for one edge case (below), it is always `.exe` even on Unix. This:
+The executable suffix for the [execution platform](https://bazel.build/extending/platforms).
+
+On a Windows execution platform it is `.exe`; otherwise it is empty.
+
+#### ${.exe.target}
+
+The executable suffix for the [target platform](https://bazel.build/extending/platforms).
+
+When the build system is running in "install" mode, the executable suffix will be:
+
+- `.exe` on Windows
+- `` on Unix
+
+When the build system is running normally, the executable suffix will be `.exe` even on Unix. This behavior:
 
 - reduces the need for seperate `.precommands` for Windows and Unix, and separate `.function.args`
 - is a performance and space optimization since a common executable suffix increases the chances that non-ABI specific artifacts share the same hash across Windows and Unix.
-
-There is a special edge case for the build system in install mode: the build system in install mode will set the executable suffix to `.exe` on Windows and `` on Unix.
 
 #### ${HOME}
 
