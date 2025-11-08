@@ -1,0 +1,29 @@
+// Tests / Autofix edits:
+// ./mlfront-shell -I etc/dk/v --trust-local-package CommonsBase_Dotnet --verbose --autofix -- get-bundle CommonsBase_Dotnet.Lookup@1.0.0 -d target/dotnetlookup
+{
+  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/mlfront-values.json",
+  "schema_version": { "major": 1, "minor": 0 },
+  "bundles": [
+    {
+      "id": "CommonsBase_Dotnet.Lookup@1.0.0",
+      "listing": {
+        "origins": [
+          {
+            "name": "etc-table-dotnet",
+            "mirrors": ["etc/table/dotnet"]
+          }
+        ]
+      },
+      "assets": [
+        {
+          "path": "arch",
+          "origin": "etc-table-dotnet",
+          "size": 908,
+          "checksum": {
+            "sha256": "c2bd4746b2e6fd45115a9f4ee0d91d85c27514beab50204f9376e4a9ee979665"
+          }
+        }
+      ]
+    }
+  ]
+}

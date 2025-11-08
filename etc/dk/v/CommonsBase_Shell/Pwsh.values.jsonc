@@ -109,6 +109,8 @@
           "tool",
           "install",
           "PowerShell",
+          "--arch",
+          "$(get-asset CommonsBase_Dotnet.Lookup@1.0.0 -p arch -m ./${SLOTNAME.request})",
           "--tool-path",
           "${SLOT.request}",
           "--version",
@@ -120,7 +122,14 @@
       "outputs": {
         "assets": [
           {
-            "slots": ["Release.Windows_x86_64", "Release.Windows_x86"],
+            "slots": [
+              "Release.Windows_x86_64",
+              "Release.Windows_x86",
+              "Release.Linux_x86_64",
+              "Release.Linux_arm64",
+              "Release.Darwin_x86_64",
+              "Release.Darwin_arm64"
+            ],
             "paths": [
               ".store/powershell/7.5.4/powershell/7.5.4/.nupkg.metadata",
               ".store/powershell/7.5.4/powershell/7.5.4/.signature.p7s",
