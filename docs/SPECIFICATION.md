@@ -26,6 +26,7 @@
       - [${CONFIG}](#config)
       - [${STATE}](#state)
       - [${RUNTIME}](#runtime)
+    - [Execution Constraints](#execution-constraints)
     - [Precommands](#precommands)
     - [Environment Modifications](#environment-modifications)
       - [+NAME=VALUE](#namevalue)
@@ -323,9 +324,85 @@ A temporary directory for the form function.
 
 There is a special edge case for the build system in install mode: the build system in install mode will set the runtime directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant runtime directory in Unix).
 
+### Execution Constraints
+
+Form functions may have execution constraints like the following that restricts the function to only run on a Windows execution platform:
+
+```json
+        "execution": [
+          {
+            "name": "OSFamily",
+            "value": "windows"
+          }
+        ]
+```
+
+These names and values follow the *Platform Lexicon* defined by the Bazel build tool: <https://github.com/bazelbuild/remote-apis/blob/main/build/bazel/remote/execution/v2/platform.md/>.
+
+The reference implementation, as of 2025-11-09, only recognizes the `OSFamily` property and can detect the execution's platform if it is one of the following: `windows`, `macos`, `linux` (includes Android), `netbsd`, `freebsd` (includes DragonFly BSD), and `openbsd`.
+
+> Tip: be careful! If you specify the `ISA` property pair, it may be ignored today but recognized in a future version.
+
+**If** there is a need to constrain the execution, it is conventional to use a lookup table to map slots to execution values.
+The use of `get-asset` and the `$(...)` subshell will be explained in later sections. But for now, here is the convention
+that will restrict the execution of each of your slots to a specific OSFamily:
+
+```json
+  "forms": [
+    {
+      // ...
+      "function": {
+        "execution": [
+          {
+            "name": "OSFamily",
+            "value": "$(get-asset SomeWhere_Std.Lookup@1.0.0 -p osfamily -m ./${SLOTNAME.request})"
+          }
+        ],
+        // ...
+      },
+      // ...
+    }
+  ],
+  "bundles": [
+    {
+      "id": "SomeWhere_Std.Lookup@1.0.0",
+      "listing": {
+        "origins": [
+          {
+            "name": "table-pwsh",
+            "mirrors": ["some-project-path/table"]
+          }
+        ]
+      },
+      "assets": [
+        {
+          "path": "osfamily",
+          "origin": "table-pwsh",
+          "size": 13980,
+          "checksum": {
+            "sha256": "5b59b7adbd5d4ccf24c51ac26e144754f0089f8c94de3b44a8bcf60ea81fb029"
+          }
+        }
+      ]
+    }
+  ]
+```
+
+and then define in your project a folder `some-project-path/table` with files having the names of your slots:
+
+- `Release.Windows_x86_64` - the contents should be the OSFamily value `windows`
+- `Release.Darwin_arm64` - the contents should be `macos`
+- etc.
+
+Finally, use the `--autofix` flag to set the `size` and `checksum` fields automatically.
+
+This is slightly complex on purpose ... we discourage the use of execution constraints. Instead, try to make your package cross-platform.
+
+Tip: In the future, remote execution platforms will be supported using most of the same mechanisms as [distributions](#distributions).
+
 ### Precommands
 
-The `precommands` are a **set** of commands run *before* an object's `function`. It is not a sequence of commands since you
+The `precommands` are a **set** of commands run *before* an form's `function`. It is not a sequence of commands since you
 cannot make assumptions about the order of the precommands.
 
 The following optimizations are allowed:
@@ -1187,7 +1264,7 @@ For example, the form:
           "arg1"
         ],
         "envmods": [
-          "envmod1"
+          "-PATH"
         ]
       },
       "outputs": {
@@ -1243,7 +1320,7 @@ For example, the form:
 is canonicalized to:
 
 ```json
-{"bundles":[{"assets":[{"checksum":{"sha256":"4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"},"path":"SHA256"},{"checksum":{"sha256":"0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"},"path":"SHA256.sig"}],"id":"DkDistribution_Std.Bundle@2.4.202508011516-signed"}],"forms":[{"function":{"args":["arg1"],"envmods":["envmod1"]},"id":"FooBar_Baz@0.1.0","outputs":{"assets":[{"paths":["outpath1"],"slots":["output1"]}]},"precommands":{"private":["private1"],"public":["public1"]}}],"schema_version":{"major":1,"minor":0}}
+{"bundles":[{"assets":[{"checksum":{"sha256":"4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"},"path":"SHA256"},{"checksum":{"sha256":"0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"},"path":"SHA256.sig"}],"id":"DkDistribution_Std.Bundle@2.4.202508011516-signed"}],"forms":[{"function":{"args":["arg1"],"envmods":["-PATH"]},"id":"FooBar_Baz@0.1.0","outputs":{"assets":[{"paths":["outpath1"],"slots":["output1"]}]},"precommands":{"private":["private1"],"public":["public1"]}}],"schema_version":{"major":1,"minor":0}}
 ```
 
 ## Distributions
