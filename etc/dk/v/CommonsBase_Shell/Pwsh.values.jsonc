@@ -5,6 +5,12 @@
     {
       "id": "CommonsBase_Shell.Pwsh@7.5.4",
       "function": {
+        "execution": [
+          {
+            "name": "OSFamily",
+            "value": "$(get-asset CommonsBase_Shell.Pwsh.Lookup@1.0.0 -p osfamily -m ./${SLOTNAME.request})"
+          }
+        ],
         "envmods": [
           // Remove PATH so mostly hermetic wrt filesystem on Windows. The registry is still read though, and can't be avoided.
           "-PATH",
@@ -124,8 +130,11 @@
           {
             "slots": [
               "Release.Windows_x86_64",
+              // test: x86 may not be supported by .NET anymore
               "Release.Windows_x86",
               "Release.Linux_x86_64",
+              // test: x86 may not be supported by .NET anymore
+              "Release.Linux_x86",
               "Release.Linux_arm64",
               "Release.Darwin_x86_64",
               "Release.Darwin_arm64"
@@ -1195,6 +1204,28 @@
           "size": 228,
           "checksum": {
             "sha256": "e3f1009a23a634b401f42cd04634c6f376b2196e64e8e60bb8cbb596dd6d2b7f"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "CommonsBase_Shell.Pwsh.Lookup@1.0.0",
+      "listing": {
+        "origins": [
+          {
+            "name": "table-pwsh",
+            "mirrors": ["etc/dk/v/CommonsBase_Shell/Pwsh/table"]
+          }
+        ]
+      },
+      "assets": [
+        {
+          "path": "osfamily",
+          "origin": "table-pwsh",
+          "size": 1398,
+          "checksum": {
+            "sha256": "5b59b7adbd5d4ccf24c51ac26e144754f0089f8c94de3b44a8bcf60ea81fb029"
           }
         }
       ]
