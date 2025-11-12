@@ -1530,17 +1530,19 @@ Each node in the graph has a key, a value id, a value sha256 and the value itsel
 - A **value id** is a string which is a *value type* (defined below) and a set of fields, concatenated together and then SHA-256 base32-encoded. The value id serves as a unique key for the value in a value store.
   - The **value type** is a single letter that categorizes what the value is:
 
-    | Value Type | What                | Docs                      |
-    | ---------- | ------------------- | ------------------------- |
-    | `o`        | object              | [Objects](#objects)       |
-    | `b`        | bundle              | [Assets](#assets)         |
-    | `a`        | asset               | [Assets](#assets)         |
-    | `j`        | values.json file    | [JSON Files](#json-files) |
-    | `v`        | values (parsed AST) | [JSON Files](#json-files) |
-    | `c`        | built-in constants  | [Objects](#objects)       |
-    | `s`        | source file         | FILLMEIN                  |
+    | Value Type | What                      | Docs                      |
+    | ---------- | ------------------------- | ------------------------- |
+    | `o`        | object                    | [Objects](#objects)       |
+    | `b`        | bundle                    | [Assets](#assets)         |
+    | `a`        | asset                     | [Assets](#assets)         |
+    | `j`        | values.json file          | [JSON Files](#json-files) |
+    | `v`        | (cache) parsed values AST | [JSON Files](#json-files) |
+    | `c`        | built-in constants        | [Objects](#objects)       |
+    | `s`        | source file               | FILLMEIN                  |
 
     All value types are *lowercase* for support on case-insensitive file systems.
+
+    Any value types with `(cache)` are stored in the local cache rather than the valuestore.
 
 - A **value** is a file whose content matches the value type. A values file is a `value.json` build file itself. An object is a zip archive of the output of a [form](#forms). Form, bundle and asset value are serialized parsed abstract syntax trees.
 - A **value sha256** is a SHA-256 hex-encoded string of the value. That is, if you ran `certutil` (Windows), `sha256sum` (Linux) or `shasum -a 256` (macOS) on the value file, the *value sha256* is what you would see.
@@ -1551,6 +1553,12 @@ Each node in the graph has a key, a value id, a value sha256 and the value itsel
 | `v`        | [VCI](#vci---values-canonical-id)     | [VCK](#vck---values-checksum)              | parsed `{schema_version:,forms:,assets:}` |
 | `a`        | asset                                 | [P256](#p256---sha256-of-asset)            | contents of asset                         |
 | `b`        | bundle                                | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file              |
+
+TODO: Combine the following with earlier table. These are from BuildCore.
+
+| Value Type | Key Kind    | Value Kind     |
+| ---------- | ----------- | -------------- |
+| `j`        | ChecksumKey | ValuesJsonFile |
 
 #### Values Nodes
 
@@ -1634,10 +1642,11 @@ The stripping of carriage returns occurs before the CST and AST parsing, so that
 | COMMANDPARSE | Parse the get-object, etc. command                  |
 | STATERESTORE | (3) Initialize state from traces                    |
 | VALUESCAN    | Scan values.json/.lua in include dirs               |
-|              | Add parse-AST `v` tasks                             |
+|              | Add parse-CST `j` tasks                             |
 |              | Add built-in tasks                                  |
 | VALUELOAD    | (4) Full value store integrity check.               |
-|              | Run `v` tasks.                                      |
+|              | Run `j` tasks to get CST.                           |
+|              | Parse CST into AST; validate; place in cache        |
 |              | From ASTs add `d`,`f`,`b`,`a` tasks                 |
 |              | Run `d` distribution tasks                          |
 | USER         | Find command in task graph. Run user task.          |
