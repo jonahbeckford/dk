@@ -81,11 +81,38 @@
     - [Lua string library](#lua-string-library)
       - [string.byte](#stringbyte)
       - [string.find](#stringfind)
+      - [string.format](#stringformat)
       - [string.len](#stringlen)
       - [string.lower](#stringlower)
       - [string.rep](#stringrep)
       - [string.sub](#stringsub)
       - [string.upper](#stringupper)
+    - [Lua math library](#lua-math-library)
+      - [math.abs](#mathabs)
+      - [math.acos](#mathacos)
+      - [math.asin](#mathasin)
+      - [math.atan](#mathatan)
+      - [math.ceil](#mathceil)
+      - [math.cos](#mathcos)
+      - [math.deg](#mathdeg)
+      - [math.exp](#mathexp)
+      - [math.floor](#mathfloor)
+      - [math.fmod](#mathfmod)
+      - [math.huge](#mathhuge)
+      - [math.log](#mathlog)
+      - [math.max](#mathmax)
+      - [math.maxinteger](#mathmaxinteger)
+      - [math.min](#mathmin)
+      - [math.mininteger](#mathmininteger)
+      - [math.modf](#mathmodf)
+      - [math.pi](#mathpi)
+      - [math.rad](#mathrad)
+      - [math.sin](#mathsin)
+      - [math.sqrt](#mathsqrt)
+      - [math.tan](#mathtan)
+      - [math.tointeger](#mathtointeger)
+      - [math.type](#mathtype)
+      - [math.ult](#mathult)
     - [Lua Modules](#lua-modules)
     - [Lua Rules](#lua-rules)
   - [Graph](#graph)
@@ -1638,6 +1665,12 @@ Lua 5.1+ compatibility: The "level" argument in `error (message, [level])` is ig
 
 ### Lua string library
 
+This Lua 5.4 compatible library provides generic functions for string manipulation, such as finding and extracting substrings, and pattern matching. When indexing a string in Lua, the first character is at position 1 (not at 0, as in C). Indices are allowed to be negative and are interpreted as indexing backwards, from the end of the string. Thus, the last character is at position -1, and so on.
+
+The string library provides all its functions inside the table `string`. Unlike Lua 5.1+, it does *not* sets a metatable for strings where the __index field points to the string table. Therefore, you *cannot* use the string functions in object-oriented style. For instance, string.byte(s,i) *cannot* be written as s:byte(i).
+
+The string library assumes one-byte character encodings.
+
 #### string.byte
 
 `string.byte (s [, i [, j]])`
@@ -1653,6 +1686,33 @@ Numeric codes are not necessarily portable across platforms.
 Looks for the first match of pattern (see [§6.4.1](https://www.lua.org/manual/5.4/manual.html)) in the string s. If it finds a match, then find returns the indices of s where this occurrence starts and ends; otherwise, it returns fail. A third, optional numeric argument init specifies where to start the search; its default value is 1 and can be negative. A true as a fourth, optional argument plain turns off the pattern matching facilities, so the function does a plain "find substring" operation, with no characters in pattern being considered magic.
 
 If the pattern has captures, then in a successful match the captured values are also returned, after the two indices.
+
+#### string.format
+
+`string.format (formatstring, ···)`
+
+Returns a formatted version of its variable number of arguments following the description given in its first argument, which must be a string. The format string follows the same rules as the ISO C function `sprintf`. The only differences are that the conversion specifiers and modifiers `F`, `n`, `*`, `h`, `L`, and `l` are not supported and that there is an extra specifier, `q`. Both width and precision, when present, are limited to two digits.
+
+The specifier `q` formats booleans, nil, numbers, and strings in a way that the result is a valid constant in Lua source code. Booleans and nil are written in the obvious way (true, false, nil). Floats are written in hexadecimal, to preserve full precision. A string is written between double quotes, using escape sequences when necessary to ensure that it can safely be read back by the Lua interpreter. For instance, the call
+
+```lua
+     string.format('%q', 'a string with "quotes" and \n new line')
+```
+
+may produce the string:
+
+```text
+     "a string with \"quotes\" and \
+      new line"
+```
+
+This specifier does not support modifiers (flags, width, precision).
+
+The conversion specifiers `A`, `a`, `E`, `e`, `f`, `G`, and `g` all expect a number as argument. The specifiers `c`, `d`, `i`, `o`, `u`, `X`, and `x` expect an integer.
+
+The specifier `s` expects a string; if its argument is not a string, it is converted to one following the same rules of [tostring](#lua-global-variable---tostring). If the specifier has any modifier, the corresponding string argument should not contain embedded zeros.
+
+The specifier `p` formats the pointer returned by `lua_topointer` in Lua 5.1+, but in this specification an error is raised.
 
 #### string.len
 
@@ -1689,6 +1749,164 @@ If, after the translation of negative indices, `i` is less than `1`, it is corre
 `string.upper (s)`
 
 Receives a string and returns a copy of this string with all ASCII lowercase letters changed to uppercase. All other characters are left unchanged.
+
+### Lua math library
+
+This Lua 5.4 compatible library provides basic mathematical functions. It provides all its functions and constants inside the table `math`.
+Functions with the annotation "integer/float" give integer results for integer arguments and float results for non-integer arguments.
+The rounding functions `math.ceil`, `math.floor`, and `math.modf` return an integer when the result fits in the range of an integer, or a float otherwise.
+
+#### math.abs
+
+`math.abs (x)`
+
+Returns the maximum value between x and -x. (integer/float)
+
+#### math.acos
+
+`math.acos (x)`
+
+Returns the arc cosine of x (in radians).
+
+#### math.asin
+
+`math.asin (x)`
+
+Returns the arc sine of x (in radians).
+
+#### math.atan
+
+`math.atan (y [, x])`
+
+Returns the arc tangent of y/x (in radians), using the signs of both arguments to find the quadrant of the result. It also handles correctly the case of x being zero.
+
+The default value for x is 1, so that the call math.atan(y) returns the arc tangent of y.
+
+#### math.ceil
+
+`math.ceil (x)`
+
+Returns the smallest integral value greater than or equal to x.
+
+#### math.cos
+
+`math.cos (x)`
+
+Returns the cosine of x (assumed to be in radians).
+
+#### math.deg
+
+`math.deg (x)`
+
+Converts the angle x from radians to degrees.
+
+#### math.exp
+
+`math.exp (x)`
+
+Returns the value `eˣ` (where `e` is the base of natural logarithms).
+
+#### math.floor
+
+`math.floor (x)`
+
+Returns the largest integral value less than or equal to x.
+
+#### math.fmod
+
+`math.fmod (x, y)`
+
+Returns the remainder of the division of `x` by `y` that rounds the quotient towards zero. (integer/float)
+
+#### math.huge
+
+`math.huge`
+
+The float value `HUGE_VAL`, a value greater than any other numeric value.
+
+#### math.log
+
+`math.log (x [, base])`
+
+Returns the logarithm of `x` in the given base. The default for base is `e` (so that the function returns the natural logarithm of `x`).
+
+#### math.max
+
+`math.max (x, ···)`
+
+Returns the argument with the maximum value according to the Lua operator `<`.
+
+#### math.maxinteger
+
+`math.maxinteger`
+
+An integer with the maximum value for an integer.
+
+#### math.min
+
+`math.min (x, ···)`
+
+Returns the argument with the minimum value, according to the Lua operator <.
+
+#### math.mininteger
+
+`math.mininteger`
+
+An integer with the minimum value for an integer.
+
+#### math.modf
+
+`math.modf (x)`
+
+Returns the integral part of x and the fractional part of x. Its second result is always a float.
+
+#### math.pi
+
+`math.pi`
+
+The value of π.
+
+#### math.rad
+
+`math.rad (x)`
+
+Converts the angle x from degrees to radians.
+
+#### math.sin
+
+`math.sin (x)`
+
+Returns the sine of x (assumed to be in radians).
+
+#### math.sqrt
+
+`math.sqrt (x)`
+
+Returns the square root of x. (You can also use the expression x^0.5 to compute this value.)
+
+#### math.tan
+
+`math.tan (x)`
+
+Returns the tangent of x (assumed to be in radians).
+
+#### math.tointeger
+
+`math.tointeger (x)`
+
+If the value x is convertible to an integer, returns that integer. Otherwise, returns fail.
+
+#### math.type
+
+`math.type (x)`
+
+Returns "integer" if x is an integer, "float" if it is a float, or fail if x is not a number.
+
+#### math.ult
+
+`math.ult (m, n)`
+
+Returns the string `t` (ie. a boolean `true`) if and only if integer `m` is below integer n when they are compared as unsigned integers.
 
 ### Lua Modules
 
