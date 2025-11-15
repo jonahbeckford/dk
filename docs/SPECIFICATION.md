@@ -67,9 +67,19 @@
     - [OpenBSD signify keys](#openbsd-signify-keys)
     - [GitHub SLSA Level 2](#github-slsa-level-2)
     - [GitHub SLSA Level 3](#github-slsa-level-3)
-  - [Rules](#rules)
+  - [Scripts](#scripts)
     - [Lua Specification](#lua-specification)
-    - [Lua Rule Declarations](#lua-rule-declarations)
+    - [Lua Global Variables](#lua-global-variables)
+      - [Lua Global Variable - build](#lua-global-variable---build)
+      - [Lua Global Variable - next](#lua-global-variable---next)
+      - [Lua Global Variable - tostring](#lua-global-variable---tostring)
+      - [Lua Global Variable - print](#lua-global-variable---print)
+      - [Lua Global Variable - tonumber](#lua-global-variable---tonumber)
+      - [Lua Global Variable - type](#lua-global-variable---type)
+      - [Lua Global Variable - assert](#lua-global-variable---assert)
+      - [Lua Global Variable - error](#lua-global-variable---error)
+    - [Lua Modules](#lua-modules)
+    - [Lua Rules](#lua-rules)
   - [Graph](#graph)
     - [Nodes](#nodes)
       - [Values Nodes](#values-nodes)
@@ -477,7 +487,7 @@ The trace and value store are updated as normal during the MORECOMMANDS, so if t
 ### Dynamic Functions
 
 > Dynamic functions have not been implemented in the reference implementation as of 2025-11-08.
-> They have been mostly been subsumed by [Lua rules](#rules), although the alpha conversion from this Dynamic Function section may eventually be ported to Lua rules.
+> They have been mostly been subsumed by [Lua scripts](#scripts), although the alpha conversion from this Dynamic Function section may eventually be ported to Lua rules.
 
 Use the [MOREINCLUDES](#moreincludes) and [MORECOMMANDS](#morecommands) to create a function which perform `get-object`, `get-bundle` and other commands dynamically.
 You'll want to do this in the following scenarios:
@@ -1478,33 +1488,220 @@ When accepting a known, vetted GitHub Actions script (SLSA Level 3), the:
 
 The build system will download the GitHub CLI (using the default trusted `CommonsBase_Std` library) to do verification of the builds.
 
-## Rules
+## Scripts
 
-Rules are Lua functions that dynamically build other values.
+The build system has first-class support for Lua as a scripting language.
+
+Lua scripts are processed by the build system in a couple places:
+
+- REGULAR SCRIPT: In `values.lua` or `*.values.lua` files in the same include directories (`-I`) as the [Values](#values) (`values.json[c]` and `*.values.json[c]`) files
+- EMBEDDED SCRIPT: Embedded in comments at the top of **single-file** scripts. The reference implementation supports `*.ml` single-file scripts; more will be added.
+
+For example, a regular script may be:
+
+```lua
+-- file: values.lua
+SomeRule = require('SomeLibrary_Std.SomeRule').using('1.0.0', build)
+SomeRule:Executable {
+  id='OurTest_Std.OurMain@2.3.4',
+  files={
+    glob={
+      origin='someorigin',
+      patterns={'**/*.ml', '**/*.mli'},
+      exclude={'tests/**'}
+    }
+  }
+}
+```
+
+while embedded in an OCaml single-file script the Lua script is inside the `!dk` comment:
+
+```ocaml
+#!/usr/bin/env
+(*!dk
+
+  SomeRule = require('SomeLibrary_Std.SomeRule').using('1.0.0', build)
+  SomeRule:Executable {
+    id=build.me.id,
+    files=build.me.asset
+  }
+*)
+
+let () = print_endline "We ran this inside our executable."
+```
 
 ### Lua Specification
 
-Lua 2.5 is the version of Lua used for the specification.
+The build system uses Lua 2.5 for its syntax (no `for` loops) and its data model (no metatables), but uses functions available from Lua 5.1+ (ex. `require`).
 
-> Historical note: Lua 2.5 was published in 1996 and lacks several features of modern-day Lua: `for` loops, metaprogramming for metatables, modules and coroutines. However, rules are a form of configuration, and a full programming language makes hermetic, bounded-time builds difficult or impossible. So even if a future specification uses a later Lua version, several features will be disabled.
+> Historical note: Lua 2.5 was published in 1996 and lacks several features of modern-day Lua: `for` loops, metaprogramming for metatables, and coroutines. However, rules are a form of configuration, and a full programming language makes hermetic, bounded-time builds difficult or impossible. So even if a future specification uses a later Lua version, several features will be disabled.
 
 The reference implementation uses a pure OCaml version of Lua (`lua-ml`) which has full type-safety, is re-entrant, and, if needed, can have Lua evaluations bounded in time and sandboxed to the project directories.
 
-### Lua Rule Declarations
+To support Lua IDEs, the build system integration with Lua tries as much as possible to maintain conventional Lua behavior. That means:
 
-A `values.lua` file exports its own rules with the statements like the following:
+- Lua 5.1+: unlike `value.json[c]`, one `values.lua` script is one module. To export functions and rules from the module, the module returns a Lua table per the Lua 5.2+ convention (and compatible with Lua 5.1).
+
+Lua names (aka identifiers), for maximum portability, use the Lua 2.5 lexical conventions:
+
+> Identifiers can be any string of letters, digits, and underscores, not beginning with a digit.
+
+and the Lua 5.4 reserved words:
+
+- and
+- break
+- do
+- else
+- elseif
+- end
+- false
+- for
+- function
+- goto
+- if
+- in
+- local
+- nil
+- not
+- or
+- repeat
+- return
+- then
+- true
+- until
+- while
+
+### Lua Global Variables
+
+#### Lua Global Variable - build
+
+`build` is a Lua table with access to the running build.
+
+#### Lua Global Variable - next
+
+`next (table, index)`
+
+This function allows a program to traverse all fields of a table. Its first argument is a table and its second argument is an index in this table. It returns the next index of the table and the value associated with the index. When called with nil as its second argument, the function returns the first index of the table (and its associated value). When called with the last index, or with nil in an empty table, it returns nil.
+In Lua there is no declaration of fields; semantically, there is no difference between a field not present in a table or a field with value nil. Therefore, the function only considers fields with non nil values. The order in which the indices are enumerated is not specified, even for numeric indices. If the table is modified in any way during a traversal, the semantics of next is undefined.
+
+#### Lua Global Variable - tostring
+
+`tostring (e)`
+
+This function receives an argument of any type and converts it to a string in a reasonable format.
+
+#### Lua Global Variable - print
+
+`print (e1, e2, ...)`
+
+This function receives any number of arguments, and prints their values in a reasonable format. Each value is printed in a new line. This function is not intended for formatted output, but as a quick way to show a value, for instance for error messages or debugging. See Section 6.4 for functions for formatted output.
+
+#### Lua Global Variable - tonumber
+
+`tonumber (e)`
+
+This function receives one argument, and tries to convert it to a number. If the argument is already a number or a string convertible to a number (see Section 4.2), then it returns that number; otherwise, it returns nil.
+
+#### Lua Global Variable - type
+
+`type (v)`
+
+This function allows Lua to test the type of a value. It receives one argument, and returns its type, coded as a string. The possible results of this function are "nil" (a string, not the value nil), "number", "string", "table", "function" (returned both for C functions and Lua functions), and "userdata".
+
+Lua 5.1+ compatibility: Unlike Lua 2.5, the `type` function does *not* return a "tag" as a second result.
+
+#### Lua Global Variable - assert
+
+`assert (v [, message])`
+
+Raises an error if the value of its argument v is false (i.e., `nil` or in a future specification `false`); otherwise, returns all its arguments.
+In case of error, `message` is the error object; when absent, it defaults to `assertion failed!`
+
+Lua 5.1+ compatibility: The `message` argument is supported.
+
+#### Lua Global Variable - error
+
+`error (message)`
+
+This function issues an error message and terminates the last called function from the library.
+It never returns.
+
+Lua 5.1+ compatibility: The "level" argument in `error (message, [level])` is ignored.
+
+### Lua Modules
+
+Any Lua script that returns a table is a Lua module that can be imported by other Lua scripts.
+
+The simplest module is:
 
 ```lua
-MyRule = build.define_rule("MyLibrary_Std.MyRule@1.0.0", {
-    -- rule options (described later)
-})
+-- values.lua
+M = { id='MyLibrary_Std.MyModule@1.0.0' }
+function M.somefunc()
+  print('ok')
+end
+return M
 ```
 
-and expresses dependencies in statements like the following:
+The `id` field is required, and is the same `MODULE@VERSION` used throughout the build system.
+
+The module above can be imported in another `values.lua` script as follows:
 
 ```lua
-SomeRule = build.import_rule("SomeLibrary_Std.SomeRule@1.0.0")
+MyModule = require('MyLibrary_Std.MyModule').using('1.0.0', build)
+MyModule.somefunc()
 ```
+
+### Lua Rules
+
+Rules are Lua functions inside modules that dynamically build other values.
+
+The simplest rule is:
+
+```lua
+-- values.lua
+rules = {}
+M = { id='MyLibrary_Std.MyModule@1.0.0', rules=rules }
+function rules.MyRule(build, options)
+  print('ok')
+end
+return M
+```
+
+The `id` field is required for all modules, and the `rules` field is
+required for all modules that export rules.
+
+The rule above can be run from the command line:
+
+```sh
+mlfront-shell -- get-object MyLibrary_Std.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
+```
+
+or from a subshell in a `values.json` build file:
+
+```json
+{
+  // ...
+  "args": [
+    "echo",
+    "$(get-object MyLibrary_Std.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2)"
+  ]
+}
+```
+
+or imported from another `values.lua` script:
+
+```lua
+MyModule = require('MyLibrary_Std.MyModule').using('1.0.0', build)
+MyModule:MyRule { a=1, b=2 }
+```
+
+The imported rule is a Lua object which is bound to the `build` global object.
+That is why the code has `MyModule:MyRule` rather than `MyModule.MyRule`.
+
+---
+
+> todo: This section is out-of-date. It needs clarification that the `define_rule` equivalent (module with `id` and `rules`) are all that is needed since `import_rule` is done monadically (dynamically) just like a subshell.
 
 Both the `define_rule` and `import_rule` statements are **rule declarations** that participate in the task graph.
 Specifically, the `define_rule` establishes rule task nodes in the task graph, and `import_rule` establishes edges between rule task nodes in the task graph.
@@ -1516,7 +1713,7 @@ During the [`VALUESCAN` phase](#evaluation) the `values.lua` files are scanned f
 - create a Lua interpreter that has no globals except `build`. The `build` global (a Lua table) has entries for the `import_rule` and `define_rule` function that capture the rule identifiers (ex. `SomeLibrary_Std.SomeRule@1.0.0`) but do not evaluate options. For compilability, other `build` entries like `build.glob` are defined but are no-ops.
 - run the Lua interpreter on the `values.lua` file to collect the rule identifiers given to the `import_rule` and `define_rule` function
 
-The reference implementation has the `mlfront-shell inspect lua-file` command to show the rule declarations.
+The reference implementation has the `mlfront-shell -- inspect lua-file` command to show the rule declarations.
 
 ## Graph
 
