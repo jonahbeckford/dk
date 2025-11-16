@@ -1618,6 +1618,8 @@ In Lua there is no declaration of fields; semantically, there is no difference b
 
 This function receives an argument of any type and converts it to a string in a reasonable format.
 
+Table contents are not converted. See [json.encode](#jsonencode) to show inside of a table.
+
 #### Lua Global Variable - print
 
 `print (e1, e2, ...)`
@@ -1626,6 +1628,8 @@ This function receives any number of arguments, and prints their values in a rea
 This function is not intended for formatted output, but as a quick way to show a value, for instance for error messages or debugging.
 
 See [printf](#lua-global-variable---printf) for functions for formatted output.
+
+See [json.encode](#jsonencode) to print tables.
 
 #### Lua Global Variable - printf
 
