@@ -121,6 +121,9 @@
       - [math.ult](#mathult)
     - [Lua table library](#lua-table-library)
       - [table.unpack](#tableunpack)
+    - [Lua json library](#lua-json-library)
+      - [json.encode](#jsonencode)
+      - [json.decode](#jsondecode)
     - [Custom Lua Modules](#custom-lua-modules)
     - [Custom Lua Rules](#custom-lua-rules)
     - [Form Document](#form-document)
@@ -1619,7 +1622,10 @@ This function receives an argument of any type and converts it to a string in a 
 
 `print (e1, e2, ...)`
 
-This function receives any number of arguments, and prints their values in a reasonable format. Each value is printed in a new line. This function is not intended for formatted output, but as a quick way to show a value, for instance for error messages or debugging. See Section 6.4 for functions for formatted output.
+This function receives any number of arguments, and prints their values in a reasonable format. Each value is printed in a new line.
+This function is not intended for formatted output, but as a quick way to show a value, for instance for error messages or debugging.
+
+See [printf](#lua-global-variable---printf) for functions for formatted output.
 
 #### Lua Global Variable - printf
 
@@ -2002,6 +2008,50 @@ Returns the elements from the given list. This function is equivalent to
 ```
 
 By default, `i` is 1 and `j` is #list.
+
+### Lua json library
+
+#### json.encode
+
+```lua
+tbl = {
+  animals = { "dog", "cat", "aardvark" },
+  instruments = { "violin", "trombone", "theremin" }
+}
+
+str = json.encode (tbl, { indent = true })
+
+-- or
+str = json.encode (tbl)
+```
+
+Converts a Lua value to JSON:
+
+- `nil` values are not printed
+
+If `indent` is truthy then the JSON is pretty-printed.
+
+#### json.decode
+
+```lua
+json.decode (str)
+
+-- or
+value, errmsg, sb, sl, sc, eb, el, ec = json.decode (str)
+```
+
+Converts JSON to a Lua value:
+
+- Large numbers are converted to floating-point numbers with a possible loss of precision. If outside the floating-point range, an error is raised.
+
+If the JSON could be converted, the result is the first return value.
+
+Otherwise:
+
+- `value` is `nil`
+- `errmsg` is the error message
+- `sb`, `sl`, and `sc` are the starting byte offset (zero-based), line and column (1-based)
+- `eb`, `el`, and `ec` are the ending byte offset (zero-based), line and column (1-based)
 
 ### Custom Lua Modules
 
