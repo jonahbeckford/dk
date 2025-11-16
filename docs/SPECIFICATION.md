@@ -42,9 +42,10 @@
     - [VSL Lexical Rules](#vsl-lexical-rules)
       - [Types of Words](#types-of-words)
     - [Variables available in VSL](#variables-available-in-vsl)
-    - [get-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/) -- CLI\_FORM\_DOC](#get-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)
+    - [get-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/)](#get-object-moduleversion--s-request_slot--f-file---d-dir)
+    - [post-object MODULE@VERSION -- CLI\_FORM\_DOC](#post-object-moduleversion----cli_form_doc)
     - [enter-object MODULE@VERSION -s REQUEST\_SLOT -- CLI\_FORM\_DOC](#enter-object-moduleversion--s-request_slot----cli_form_doc)
-    - [install-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/) -- CLI\_FORM\_DOC](#install-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)
+    - [install-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/)](#install-object-moduleversion--s-request_slot--f-file---d-dir)
     - [pipe-object MODULE@VERSION -s REQUEST\_SLOT -x PIPE](#pipe-object-moduleversion--s-request_slot--x-pipe)
     - [get-asset MODULE@VERSION FILE\_PATH (-f FILE | -d DIR/)](#get-asset-moduleversion-file_path--f-file---d-dir)
     - [get-bundle MODULE@VERSION (-f FILE | -d DIR/)](#get-bundle-moduleversion--f-file---d-dir)
@@ -52,14 +53,13 @@
     - [Option: \[-n STRIP\]](#option--n-strip)
     - [Option: \[-m MEMBER\]](#option--m-member)
   - [Subshells](#subshells)
-    - [subshell: get-object MODULE@VERSION -s REQUEST\_SLOT -- CLI\_FORM\_DOC](#subshell-get-object-moduleversion--s-request_slot----cli_form_doc)
+    - [subshell: get-object MODULE@VERSION -s REQUEST\_SLOT](#subshell-get-object-moduleversion--s-request_slot)
+    - [subshell: post-object MODULE@VERSION -- CLI\_FORM\_DOC](#subshell-post-object-moduleversion----cli_form_doc)
     - [subshell: get-asset MODULE@VERSION FILE\_PATH](#subshell-get-asset-moduleversion-file_path)
     - [Anonymous Regular Files: `-f :file`](#anonymous-regular-files--f-file)
     - [Anonymous Executable Files: `-f :exe`](#anonymous-executable-files--f-exe)
     - [Anonymous Directories: `-d :`](#anonymous-directories--d-)
     - [Object ID with Build Metadata](#object-id-with-build-metadata)
-    - [Form Document](#form-document)
-      - [Option Groups](#option-groups)
     - [JSON Files](#json-files)
     - [JSON Canonicalization](#json-canonicalization)
   - [Distributions](#distributions)
@@ -70,7 +70,6 @@
   - [Scripts](#scripts)
     - [Lua Specification](#lua-specification)
     - [Lua Global Variables](#lua-global-variables)
-      - [Lua Global Variable - build](#lua-global-variable---build)
       - [Lua Global Variable - next](#lua-global-variable---next)
       - [Lua Global Variable - tostring](#lua-global-variable---tostring)
       - [Lua Global Variable - print](#lua-global-variable---print)
@@ -78,6 +77,9 @@
       - [Lua Global Variable - type](#lua-global-variable---type)
       - [Lua Global Variable - assert](#lua-global-variable---assert)
       - [Lua Global Variable - error](#lua-global-variable---error)
+    - [Lua build library](#lua-build-library)
+      - [build.new\_rules](#buildnew_rules)
+      - [build.glob](#buildglob)
     - [Lua string library](#lua-string-library)
       - [string.byte](#stringbyte)
       - [string.find](#stringfind)
@@ -113,8 +115,14 @@
       - [math.tointeger](#mathtointeger)
       - [math.type](#mathtype)
       - [math.ult](#mathult)
-    - [Lua Modules](#lua-modules)
-    - [Lua Rules](#lua-rules)
+    - [Lua package library](#lua-package-library)
+      - [require](#require)
+      - [package.registry\_key](#packageregistry_key)
+    - [Custom Lua Modules](#custom-lua-modules)
+    - [Custom Lua Rules](#custom-lua-rules)
+    - [Form Document](#form-document)
+      - [Form Command Line](#form-command-line)
+      - [Option Groups](#option-groups)
   - [Graph](#graph)
     - [Nodes](#nodes)
       - [Values Nodes](#values-nodes)
@@ -209,6 +217,8 @@ the build system can give the second shell command a symlink to the first direct
 **without** using a zip archive as an intermediate artifact.
 
 ## Forms
+
+A form has a [request slot](#slotrequest) that must always be specified by the user as a parameter.
 
 ### Form Variables
 
@@ -508,8 +518,8 @@ The order of processing is as follows:
 1. The form's subshells in the function `args` and `envmods` (if any) are executed, in parallel if supported by the build system.
 2. The form's precommands are executed, in parallel if supported by the build system.
 3. If there is a breakpoint from the `enter-object` command, a system shell (PowerShell, bash, etc.) is invoked.
-4. The form's function is executed.
-5. If [${MORECOMMANDS}](#morecommands) is part of the form's arguments or precommands, then:
+4. The form's function command line is executed. The command line is the concatenation of the function arguments in `"function": { "args": ... }`.
+5. (tbd) If [${MORECOMMANDS}](#morecommands) is part of the form's arguments or precommands, then:
    1. The [${MOREINCLUDES}](#moreincludes) directory is scanned for `values.json[c]` and `*.values.json[c]` values files. However, the values files are *not* imported in the value store.
    2. The [${MOREINCLUDES}](#moreincludes) values files are [alpha-converted](#dynamic-functions) and imported as `valuesfile` values.
    3. The module ids in the [${MORECOMMANDS}](#morecommands) are [alpha-converted](#dynamic-functions) using `BOUND_MODULES` from the last step.
@@ -587,11 +597,11 @@ That is the subject of the next [Saving and Loading Objects](#saving-and-loading
 ### Saving and Loading Objects
 
 When a value shell command reads an immutable object and saves it to a file (ex.
-[get-object -f FILE](#get-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)),
+[get-object -f FILE](#get-object-moduleversion--s-request_slot--f-file---d-dir)),
 the bytes of the immutable object are copied directly to the file.
 
 When a value shell command reads an immutable object and saves it to a directory (ex.
-[get-object -d DIR](#get-object-moduleversion--s-request_slot--f-file---d-dir----cli_form_doc)),
+[get-object -d DIR](#get-object-moduleversion--s-request_slot--f-file---d-dir)),
 the bytes of the immutable object are:
 
 - *when the bytes have a zip file header* uncompressed and unzipped into the directory
@@ -770,7 +780,7 @@ Within double-quotes, you should escape:
 - `${STATE}`
 - `${RUNTIME}`
 
-### get-object MODULE@VERSION -s REQUEST_SLOT (-f FILE | -d DIR/) -- CLI_FORM_DOC
+### get-object MODULE@VERSION -s REQUEST_SLOT (-f FILE | -d DIR/)
 
 Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
 
@@ -783,7 +793,24 @@ Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified b
 
 See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
 
-See [Form Document](#form-document) for form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
+The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
+
+### post-object MODULE@VERSION -- CLI_FORM_DOC
+
+Submit the JSON constructed from `CLI_FORM_DOC` to the [Lua rule](#custom-lua-rules) uniquely identified by `MODULE@VERSION`.
+
+| Option      | Description                                                                   |
+| ----------- | ----------------------------------------------------------------------------- |
+| `-f FILE`   | Place object in `FILE`                                                        |
+| `-d DIR/`   | The object must be a zip archive, and its contents are extracted into `DIR/`. |
+| `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                    |
+| `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                  |
+
+If no `-f` or `-d` option is given, the object is dumped to the standard output (ie. your console).
+
+See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
+
+See [Form Document](#form-document) for the `CLI_FORM_DOC` form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
 
 The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
@@ -797,7 +824,7 @@ See [Form Document](#form-document) for form parameters. If there are none, the 
 
 The object `MODULE@VERSION` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
-### install-object MODULE@VERSION -s REQUEST_SLOT (-f FILE | -d DIR/) -- CLI_FORM_DOC
+### install-object MODULE@VERSION -s REQUEST_SLOT (-f FILE | -d DIR/)
 
 Install the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
 
@@ -811,8 +838,6 @@ Install the contents of the slot `REQUEST_SLOT` for the object uniquely identifi
 **More than one `install-object` can use the same install directory `DIR`**.
 
 See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
-
-See [Form Document](#form-document) for form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
 
 The object `MODULE@VERSION` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
@@ -1060,7 +1085,7 @@ Gets the zip file member from the object or asset, which must be a zip archive.
 
 ## Subshells
 
-### subshell: get-object MODULE@VERSION -s REQUEST_SLOT -- CLI_FORM_DOC
+### subshell: get-object MODULE@VERSION -s REQUEST_SLOT
 
 Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
 
@@ -1071,6 +1096,26 @@ Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified b
 | `-d :`      | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
 | `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
 | `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+
+If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+
+- the content may not exceed 1024 bytes
+- no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
+- the byte 0 (ASCII NUL) may not be in the content as a security measure
+
+### subshell: post-object MODULE@VERSION -- CLI_FORM_DOC
+
+Submit the JSON constructed from `CLI_FORM_DOC` to the rule uniquely identified by `MODULE@VERSION`.
+
+| Option      | Description                                                                                                                 |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `-f :file`  | Place object in an [anonymous regular file](#anonymous-regular-files--f-file) and return its filepath                       |
+| `-f :exe`   | Place object in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
+| `-d :`      | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
+| `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+
+See [Form Document](#form-document) for the `CLI_FORM_DOC` form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
 
 If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
 
@@ -1180,66 +1225,6 @@ Here are some example of using a monotonically increasing build number:
 # FILLMEIN ... wait for `-n RUN_NUMBER` option to complement `-t TIMESTAMP`
 # FILLMEIN ... `-n` includes leading zeroes so lexographic comparisons work
 ```
-
-### Form Document
-
-A form has a [request slot](#slotrequest) that must always be specified by the user as a parameter.
-
-More information can be supplied to the form as a JSON document.
-
-The primary way today to supply this JSON document is through the command line syntax `get-object MODULE@VERSION -s SLOT -- CLI_FORM_DOC`, where **CLI_FORM_DOC** is a CLI-based recipe to construct a JSON document.
-
-The `CLI_FORM_DOC` is a command-line analog to <https://www.w3.org/TR/html-json-forms/>:
-
-- `... -- name=Jane` creates the form document `{"name":"Jane"}`
-- `... -- pet[species]=Dahut kids[0]=Ashley` creates the form document `{"pets":{"species":"Dahut"},"kids":["Ashley"]}`
-- `... -- +customer=customer.json` creates the form document `{"customer":...}` where the `...` is the JSON contents of `customer.json` (this is an extension to the W3C HTML JSON Forms specification)
-
-While the reference implementation does not do this, other build systems are free to accept the form document directly from a HTML form as defined in <https://www.w3.org/TR/html-json-forms/>, or directly from a JSON document.
-
-The form has a `options` JSON object to describe how the JSON document submitted to a form maps to command line options, arguments and variables.
-
-The top-level fields of the form document are available in variables:
-
-- `${PARAM.fieldname}` is the text of the form field named `fieldname`, but it will error if the field is not a JSON string
-- `${PARAMFILE.fieldname}` is the file path to the JSON value of the form field named `fieldname`
-
-The form document also contributes to the command line invocation of the form's `function`, if it has one.
-
-> Key Concept: The **group** is a layout of command line options and arguments that covers both the order of options and arguments, and also breaks like `--` or subcommand names in the command line.
-
-The command line, if a form has a `function`, is constructed as the concatenation of:
-
-1. The function arguments in `"function": { "args": ... }`
-2. The `{"options": "fields": [...]}` without any `group` field
-3. The arguments in `groups[0]` (if any)
-4. The `{"options": "fields": [...]}` with a `group: 0` field (if any)
-5. The arguments in `groups[1]` (if any)
-6. The `{"options": "fields": [...]}` with a `group: 1` field (if any)
-7. ... and so on up to and including group 9
-8. If `{"options": "document": {...}}` is present, an option and a location of a file containing the entire JSON form document
-
-#### Option Groups
-
-Groups are necessary when you want some options and arguments to go before or after a `--` seperator:
-
-```sh
-cmake -E rm -f -- file1 file2
-```
-
-or if you want some options and arguments to go before or after a subcommand:
-
-```sh
-git -C some_directory log --oneline
-```
-
-or if you need to order some options like how `-L` is required to be first:
-
-```sh
-find /home/user -L -name "*.log" -type f -exec rm {} \;
-```
-
-Since Windows especially but all operating systems have limits on the size of the command line arguments, the schema may specify a `responsefile` which consolidates all of the command line arguments at the end into a single file that can be read by the program (the first argument of the function `args`). Both MSVC and clang support these responsefiles.
 
 ### JSON Files
 
@@ -1536,7 +1521,8 @@ For example, a regular script may be:
 
 ```lua
 -- file: values.lua
-SomeRule = require('SomeLibrary_Std.SomeRule').using('1.0.0', build)
+SomeRule = require('SomeLibrary_Std.SomeRule')
+SomeRule = SomeRule.at('1.0.0') -- this should be on the same line except bug with OCaml Lua parser
 SomeRule:Executable {
   id='OurTest_Std.OurMain@2.3.4',
   files={
@@ -1555,7 +1541,8 @@ while embedded in an OCaml single-file script the Lua script is inside the `!dk`
 #!/usr/bin/env
 (*!dk
 
-  SomeRule = require('SomeLibrary_Std.SomeRule').using('1.0.0', build)
+  SomeRule = require('SomeLibrary_Std.SomeRule')
+  SomeRule = SomeRule.at('1.0.0')
   SomeRule:Executable {
     id=build.me.id,
     files=build.me.asset
@@ -1573,9 +1560,13 @@ The build system uses Lua 2.5 for its syntax (no `for` loops) and its data model
 
 The reference implementation uses a pure OCaml version of Lua (`lua-ml`) which has full type-safety, is re-entrant, and, if needed, can have Lua evaluations bounded in time and sandboxed to the project directories.
 
+---
+
 To support Lua IDEs, the build system integration with Lua tries as much as possible to maintain conventional Lua behavior. That means:
 
-- Lua 5.1+: unlike `value.json[c]`, one `values.lua` script is one module. To export functions and rules from the module, the module returns a Lua table per the Lua 5.2+ convention (and compatible with Lua 5.1).
+- Lua 5.1+: The Lua convention is one module exported by script. So unlike `value.json[c]`, a `[*.]values.lua` script only has one module. To export functions and rules from the module, the module returns a Lua table per the Lua 5.2+ convention (and compatible with Lua 5.1).
+
+---
 
 Lua names (aka identifiers), for maximum portability, use the Lua 2.5 lexical conventions:
 
@@ -1607,10 +1598,6 @@ and the Lua 5.4 reserved words:
 - while
 
 ### Lua Global Variables
-
-#### Lua Global Variable - build
-
-`build` is a Lua table with access to the running build.
 
 #### Lua Global Variable - next
 
@@ -1662,6 +1649,34 @@ This function issues an error message and terminates the last called function fr
 It never returns.
 
 Lua 5.1+ compatibility: The "level" argument in `error (message, [level])` is ignored.
+
+### Lua build library
+
+`build` is a Lua **object** with access to the project source code and the running build.
+
+#### build.new_rules
+
+```lua
+M = { id = '...' }
+rules = build.new_rules(M)
+function rules.SomeRule(command,options)
+-- ...
+end
+return M
+```
+
+`build.new_rules(M)` creates a `rules` field inside the module table `M`. The field will be an empty table,
+and the empty table is returned.
+
+#### build.glob
+
+```lua
+build.glob {
+  origin = "...",
+  patterns = "...",
+  [excludes = "...",]
+}
+```
 
 ### Lua string library
 
@@ -1908,7 +1923,46 @@ Returns "integer" if x is an integer, "float" if it is a float, or fail if x is 
 
 Returns the string `t` (ie. a boolean `true`) if and only if integer `m` is below integer n when they are compared as unsigned integers.
 
-### Lua Modules
+### Lua package library
+
+The package library provides basic facilities for loading modules in Lua.
+It exports one function directly in the global environment: `require`.
+Everything else is exported in the `table` package.
+
+#### require
+
+`require (modname)`
+
+Loads the given module.
+
+If the `modname` is a **standard module id** (ex. `MyLibrary_Std.A.B.MyModule` - *tbd: document this*) a task is added to the [task graph](#graph) to search for it.
+The section [Custom Lua Modules](#custom-lua-modules) describes how to create your own modules.
+
+As of the writing of this specification, only standard modules may be loaded.
+
+Once imported with `require`, standard modules are enriched with constants as per
+[Lua 5.1 module() convention](https://www.lua.org/manual/5.1/manual.html#pdf-module) and
+[Lua module versioning conventions](http://lua-users.org/wiki/ModuleVersioning) and a `_build` field:
+
+| Field      | Example                                                               |
+| ---------- | --------------------------------------------------------------------- |
+| `_NAME`    | `MyModule._NAME` would be `MyLibrary_Std.A.B.MyModule`                |
+| `_PACKAGE` | `MyModule._PACKAGE` would be `MyLibrary_Std.A.B`                      |
+| `_VERSION` | `MyModule._VERSION` would be `1.0.0`                                  |
+| `_M`       | (may be removed) `MyModule._M` would be a Lua reference to `MyModule` |
+| `_build`   | *described later in [Custom Lua Rules](#custom-lua-rules)*            |
+
+> Historical note: Even though the implementation of `module()` is deprecated after Lua 5.1, its conventions were never deprecated.
+
+#### package.registry_key
+
+`package.registry_key`
+
+A opaque variable holding a key to an internal table of packages that are loaded.
+
+In the reference implementation, the internal table of packages is stored in an OCaml analog of the [Lua C registry](https://www.lua.org/manual/5.4/manual.html#4.3).
+
+### Custom Lua Modules
 
 Any Lua script that returns a table is a Lua module that can be imported by other Lua scripts.
 
@@ -1916,7 +1970,7 @@ The simplest module is:
 
 ```lua
 -- values.lua
-M = { id='MyLibrary_Std.MyModule@1.0.0' }
+M = { id='MyLibrary_Std.A.B.MyModule@1.0.0' }
 function M.somefunc()
   print('ok')
 end
@@ -1928,11 +1982,17 @@ The `id` field is required, and is the same `MODULE@VERSION` used throughout the
 The module above can be imported in another `values.lua` script as follows:
 
 ```lua
-MyModule = require('MyLibrary_Std.MyModule').using('1.0.0', build)
+MyModule = require('MyLibrary_Std.A.B.MyModule')
+MyModule = MyModule.at('1.0.0')
 MyModule.somefunc()
 ```
 
-### Lua Rules
+To avoid conflicts with other modules, an error will be raised if a field is exported that is
+a standard namespace term (ex. `SomeModule`).
+
+Keeping your exports lowercased (or at least the first letter is lowercase) is sufficient to satify this restriction.
+
+### Custom Lua Rules
 
 Rules are Lua functions inside modules that dynamically build other values.
 
@@ -1940,21 +2000,26 @@ The simplest rule is:
 
 ```lua
 -- values.lua
-rules = {}
-M = { id='MyLibrary_Std.MyModule@1.0.0', rules=rules }
+M = { id='MyLibrary_Std.A.B.MyModule@1.0.0', rules=rules }
+rules = build.new_rules(M)
 function rules.MyRule(build, options)
   print('ok')
 end
 return M
 ```
 
-The `id` field is required for all modules, and the `rules` field is
-required for all modules that export rules.
+The `id` field is required for all modules, and the `rules` field which is populated by `build.new_rules` is required for all modules that export rules.
+
+Rule names must be standard namespace terms so they can be appended to
+the module id to create a new, still-valid module id.
+
+> Keeping the rule names with the first letter capitalized and
+no underscores is sufficient to satify this restriction.
 
 The rule above can be run from the command line:
 
 ```sh
-mlfront-shell -- get-object MyLibrary_Std.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
+mlfront-shell -- post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
 ```
 
 or from a subshell in a `values.json` build file:
@@ -1964,7 +2029,7 @@ or from a subshell in a `values.json` build file:
   // ...
   "args": [
     "echo",
-    "$(get-object MyLibrary_Std.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2)"
+    "$(post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2)"
   ]
 }
 ```
@@ -1972,12 +2037,14 @@ or from a subshell in a `values.json` build file:
 or imported from another `values.lua` script:
 
 ```lua
-MyModule = require('MyLibrary_Std.MyModule').using('1.0.0', build)
-MyModule:MyRule { a=1, b=2 }
+MyRule = require('MyLibrary_Std.A.B.MyModule.MyRule')
+MyRule = MyRule.at('1.0.0')
+MyRule.use { a=1, b=2 }
 ```
 
-The imported rule is a Lua object which is bound to the `build` global object.
-That is why the code has `MyModule:MyRule` rather than `MyModule.MyRule`.
+---
+
+Rules **must be fast** as they block the build system. Use continuations to delegate all the I/O intensive work to the build system.
 
 ---
 
@@ -1994,6 +2061,68 @@ During the [`VALUESCAN` phase](#evaluation) the `values.lua` files are scanned f
 - run the Lua interpreter on the `values.lua` file to collect the rule identifiers given to the `import_rule` and `define_rule` function
 
 The reference implementation has the `mlfront-shell -- inspect lua-file` command to show the rule declarations.
+
+### Form Document
+
+> 🚧 This section is still under construction.
+
+Information is supplied to a rule as a JSON document.
+
+The primary way today to supply this JSON document is through the command line syntax `post-object MODULE@VERSION -- CLI_FORM_DOC`, where **CLI_FORM_DOC** is a CLI-based recipe to construct a JSON document.
+
+The `CLI_FORM_DOC` is a command-line analog to <https://www.w3.org/TR/html-json-forms/>:
+
+- `... -- name=Jane` creates the form document `{"name":"Jane"}`
+- `... -- pet[species]=Dahut kids[0]=Ashley` creates the form document `{"pets":{"species":"Dahut"},"kids":["Ashley"]}`
+- `... -- +customer=customer.json` creates the form document `{"customer":...}` where the `...` is the JSON contents of `customer.json` (this is an extension to the W3C HTML JSON Forms specification)
+
+While the reference implementation does not do this, other build systems are free to accept the form document directly from a HTML form as defined in <https://www.w3.org/TR/html-json-forms/>, or directly from a JSON document.
+
+The form has a `options` JSON object to describe how the JSON document submitted to a form maps to command line options, arguments and variables.
+
+The top-level fields of the form document are available in variables:
+
+- `${PARAM.fieldname}` is the text of the form field named `fieldname`, but it will error if the field is not a JSON string
+- `${PARAMFILE.fieldname}` is the file path to the JSON value of the form field named `fieldname`
+
+The form document also contributes to the command line invocation of the form's `function`, if it has one.
+
+> Key Concept: The **group** is a layout of command line options and arguments that covers both the order of options and arguments, and also breaks like `--` or subcommand names in the command line.
+
+#### Form Command Line
+
+The *command line*, if a form has a `function`, is constructed as the concatenation of:
+
+1. The function arguments in `"function": { "args": ... }`
+2. The `{"options": "fields": [...]}` without any `group` field
+3. The arguments in `groups[0]` (if any)
+4. The `{"options": "fields": [...]}` with a `group: 0` field (if any)
+5. The arguments in `groups[1]` (if any)
+6. The `{"options": "fields": [...]}` with a `group: 1` field (if any)
+7. ... and so on up to and including group 9
+8. If `{"options": "document": {...}}` is present, an option and a location of a file containing the entire JSON form document
+
+#### Option Groups
+
+Groups are necessary when you want some options and arguments to go before or after a `--` seperator:
+
+```sh
+cmake -E rm -f -- file1 file2
+```
+
+or if you want some options and arguments to go before or after a subcommand:
+
+```sh
+git -C some_directory log --oneline
+```
+
+or if you need to order some options like how `-L` is required to be first:
+
+```sh
+find /home/user -L -name "*.log" -type f -exec rm {} \;
+```
+
+Since Windows especially but all operating systems have limits on the size of the command line arguments, the schema may specify a `responsefile` which consolidates all of the command line arguments at the end into a single file that can be read by the program (the first argument of the function `args`). Both MSVC and clang support these responsefiles.
 
 ## Graph
 
