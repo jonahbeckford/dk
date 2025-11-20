@@ -1821,7 +1821,10 @@ Care is needed so that the script completes without errors in the sandbox of the
 1. `require(dependency).at(version)` will capture the name and version of the dependency, but not load the dependency.
 2. `assert(...)` and `error(...)` continue to do Lua conventional error checking
 3. `build.is_building` will return a false-y value (ie. `nil`, or `false` if the Lua implementation version is modern)
-4. All other functions (ex. `print()`, `table.unpack`) are defined to return a sensible Lua value but do nothing.
+4. All other built-in functions (ex. `print()`, `table.unpack`) are defined to return a sensible Lua value but do nothing.
+5. The fallback for reading an unknown key from a table (ex. `print(a.b.some_unknown_field)`) is to return `nil` (conventionally it would error).
+6. The fallback for writing an unknown key to a table (ex. `a.b.some_unknown_field = 1`) is to return `nil` (conventionally it would error).
+7. The fallback for unknown functions (ex. `some_unknown_function()`) is a function that returns `nil` (conventionally it would error).
 
 The practical implications are that the global scope should only be used for:
 
