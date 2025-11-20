@@ -1848,6 +1848,10 @@ end
 
 ### Lua Specification
 
+The overall design goal is to maintain conventional Lua behavior as much as possible. The end user, to the extent possible, should be able to use their favorite Lua IDEs to edit their Lua build scripts.
+
+---
+
 The build system uses Lua 2.5 for its syntax (no `for` loops) and its data model (no metatables), but uses functions available from Lua 5.1+ (ex. `require`).
 
 > Historical note: Lua 2.5 was published in 1996 and lacks several features of modern-day Lua: `for` loops, metaprogramming for metatables, and coroutines. However, rules are a form of configuration, and a full programming language makes hermetic, bounded-time builds difficult or impossible. So even if a future specification uses a later Lua version, several features will be disabled.
@@ -1856,7 +1860,7 @@ The reference implementation uses a pure OCaml version of Lua (`lua-ml`) which h
 
 ---
 
-To support Lua IDEs, the build system integration with Lua tries as much as possible to maintain conventional Lua behavior. That means:
+To support Lua IDEs:
 
 - Lua 5.1+: The Lua convention is one module exported by script. So unlike `value.json[c]`, a `[*.]values.lua` script only has one module. To export functions and rules from the module, the module returns a Lua table per the Lua 5.2+ convention (and compatible with Lua 5.1).
 
@@ -2304,6 +2308,9 @@ By default, `i` is 1 and `j` is #list.
 
 ### Lua json library
 
+Although the `json` library is embedded into the build system, it must be accessed through `json = require('json')`.
+That keeps with the [design goal to maintain Lua conventions](#lua-specification).
+
 #### json.encode
 
 ```lua
@@ -2312,9 +2319,11 @@ tbl = {
   instruments = { "violin", "trombone", "theremin" }
 }
 
+json = require('json')
 str = json.encode (tbl, { indent = true })
 
 -- or
+json = require('json')
 str = json.encode (tbl)
 ```
 
@@ -2327,9 +2336,11 @@ If `indent` is truthy then the JSON is pretty-printed.
 #### json.decode
 
 ```lua
+json = require('json')
 json.decode (str)
 
 -- or
+json = require('json')
 value, errmsg, errrendered, sb, sl, sc, eb, el, ec = json.decode (str)
 ```
 
