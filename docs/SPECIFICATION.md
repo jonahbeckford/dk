@@ -1854,7 +1854,7 @@ The overall design goal is to maintain conventional Lua behavior as much as poss
 
 The build system uses Lua 2.5 for its syntax (no `for` loops) and its data model (no metatables), but uses functions available from Lua 5.1+ (ex. `require`).
 
-> Historical note: Lua 2.5 was published in 1996 and lacks several features of modern-day Lua: `for` loops, metaprogramming for metatables, and coroutines. However, rules are a form of configuration, and a full programming language makes hermetic, bounded-time builds difficult or impossible. So even if a future specification uses a later Lua version, several features will be disabled.
+> Historical note: Lua 2.5 was published in 1996 and lacks several features of modern-day Lua: `for` loops, metaprogramming for metatables, and coroutines. However, rules are mostly configuration, and a full programming language makes hermetic, bounded-time builds difficult or impossible. So even if a future specification uses a later Lua version, several features will be disabled.
 
 The reference implementation uses a pure OCaml version of Lua (`lua-ml`) which has full type-safety, is re-entrant, and, if needed, can have Lua evaluations bounded in time and sandboxed to the project directories.
 
@@ -1984,14 +1984,31 @@ Lua 5.1+ compatibility: The "level" argument in `error (message, [level])` is ig
 M = { id = '...' }
 rules = build.new_rules(M)
 function rules.SomeRule(command,options)
--- ...
+  -- ...
+end
+return M
+
+-- or if interactive user interface rules are needed ...
+
+M = { id = '...' }
+rules, ui_rules = build.new_rules(M)
+function rules.SomeRule(command,options)
+  -- ...
+end
+function ui_rules.SomeRuleThatCanTakeOverConsole(command,options)
+  -- ...
 end
 return M
 ```
 
-`build.new_rules(M)` creates a `rules` field inside the module table `M`.
+`build.new_rules(M)` creates a `free_rules` and `ui_rules` field inside the module table `M`.
 
-The `rules` field will be an empty table, and that empty table is returned.
+The `free_rules` and `ui_rules` fields will both be empty tables, and those empty tables are returned.
+
+- `free_rules` are *free* rules that can be used in `values.json[c]` files or invoked by the end-user.
+- `ui_rules` are *interactive* rules that can only be invoked by the end-user.
+
+See [Custom Lua Rules](#custom-lua-rules) for a longer explanation of the difference between `free_rules` and `ui_rules`.
 
 #### build.glob
 
@@ -2399,14 +2416,27 @@ The simplest rule is:
 ```lua
 -- values.lua
 M = { id='MyLibrary_Std.A.B.MyModule@1.0.0', rules=rules }
-rules = build.new_rules(M)
+rules, _ignore_ui_rules = build.new_rules(M)
 function rules.MyRule(build, options)
   print('ok')
 end
 return M
 ```
 
-The `id` field is required for all modules, and the `rules` field which is populated by `build.new_rules` is required for all modules that export rules.
+The `id` field is required for all modules.
+
+The `free_rules` field is populated by `build.new_rules`, and is required for all modules that export *free* rules.
+By convention the local variable is named "rules"
+
+Likewise, the `ui_rules` field is populated by `build.new_rules`, and is required for all modules that export *interactive* rules.
+
+Free rules (ie. `free_rules`) are rules that are free to be used everywhere: in `values.json` files and directly by the end-user.
+
+Interactive rules (ie. `ui_rules`) are rules that:
+
+- only an end-user can run these rules; using UI rules inside a `values.json[c]` file will fail the build
+- interact with the end-user through a console or a graphical user interface
+- only one UI rule may run at a time even if the build system implementation parallelizes noninteractive rules
 
 Rule names must be standard namespace terms so they can be appended to
 the module id to create a new, still-valid module id.
