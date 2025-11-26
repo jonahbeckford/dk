@@ -4,6 +4,65 @@
     "title": "Schema for the response of a rule function to build system commands",
     "type": "object",
     "properties": {
+        "declareoutput": {
+            "description": "The response to the build system command 'queryreturn' describing the value that would be returned from the rule function without actually performing any work.",
+            "type": "object",
+            "properties": {
+                "$schema": {
+                    "description": "The dk build system schema for responses from rule functions. Used by VS Code for auto-completions, but otherwise ignored.",
+                    "type": "string",
+                    "default": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json"
+                },
+                "return_form": {
+                    "description": "The form value that will be returned from the rule function.",
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [valuesjson].",
+                            "type": "string"
+                        },
+                        "slot": {
+                            "description": "The slot of the form to return.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "slot"
+                    ]
+                },
+                "return_asset": {
+                    "description": "The asset value that will be returned from the rule function.",
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [valuesjson].",
+                            "type": "string"
+                        },
+                        "path": {
+                            "description": "The path of the asset to return.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "path"
+                    ]
+                }
+            },
+            "oneOf": [
+                {
+                    "required": [
+                        "return_form"
+                    ]
+                },
+                {
+                    "required": [
+                        "return_asset"
+                    ]
+                }
+            ]
+        },
         "submit": {
             "description": "The response to the build system command 'submit'. First the values in the [valuejson] field will be added to the valuestore. Then the [expressions] will be evaluated. Finally the [andthen] logic is performed.",
             "type": "object",
@@ -20,7 +79,7 @@
                 },
                 "expressions": {
                     "type": "object",
-                    "description": "Expressions (literal strings, variable references and/or subshells) to be evaluated after [valuejson] is added to the build system.",
+                    "description": "Expressions to be added to [request.continued] after [valuesjson] is added to the valuestore and task graph. Expressions can be literal strings, variable references and/or subshells.",
                     "properties": {
                         "paths": {
                             "type": "object",
@@ -39,86 +98,24 @@
                         "additionalProperties": false
                     }
                 },
-                "andthen": {
+                "continue_": {
                     "type": "object",
-                    "description": "Logic to be performed after the [valuesjson] have been added and the [expressions] evaluated. Either continue to the next state by specifying [continue_] or return a value with [return_].",
+                    "description": "Logic to be performed after the [valuesjson] have been added and the [expressions] evaluated. Either continue to the next state by specifying [continue_] or return a value by not specifying a [continue_].",
                     "properties": {
-                        "continue_": {
-                            "type": "object",
-                            "description": "This choice tells the build system to transition to the next state.",
-                            "properties": {
-                                "state": {
-                                    "description": "The state to transition to.",
-                                    "type": "string"
-                                },
-                                "passthrough": {
-                                    "description": "Properties to pass through to the next state in its [request] parameter.",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "state"
-                            ]
+                        "state": {
+                            "description": "The state to transition to.",
+                            "type": "string"
                         },
-                        "return_form": {
-                            "description": "The form value that will be returned from the rule function.",
-                            "type": "object",
-                            "properties": {
-                                "id": {
-                                    "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [valuesjson].",
-                                    "type": "string"
-                                },
-                                "slot": {
-                                    "description": "The slot of the form to return.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "id",
-                                "slot"
-                            ]
-                        },
-                        "return_asset": {
-                            "description": "The asset value that will be returned from the rule function.",
-                            "type": "object",
-                            "properties": {
-                                "id": {
-                                    "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [valuesjson].",
-                                    "type": "string"
-                                },
-                                "path": {
-                                    "description": "The path of the asset to return.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "id",
-                                "path"
-                            ]
+                        "passthrough": {
+                            "description": "Properties to pass through to the next state in its [request.continued] parameter.",
+                            "type": "object"
                         }
                     },
-                    "oneOf": [
-                        {
-                            "required": [
-                                "continue_"
-                            ]
-                        },
-                        {
-                            "required": [
-                                "return_form"
-                            ]
-                        },
-                        {
-                            "required": [
-                                "return_asset"
-                            ]
-                        }
+                    "required": [
+                        "state"
                     ]
                 }
             },
-            "required": [
-                "andthen"
-            ],
             "additionalProperties": false
         },
         "schema": {

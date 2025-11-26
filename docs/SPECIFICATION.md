@@ -84,7 +84,8 @@
       - [Lua Global Variable - error](#lua-global-variable---error)
     - [Lua build library](#lua-build-library)
       - [build.newrules](#buildnewrules)
-      - [build.generateid](#buildgenerateid)
+    - [Lua declareoutput library](#lua-declareoutput-library)
+      - [request.declareoutput.generatesymbol](#requestdeclareoutputgeneratesymbol)
     - [Lua project library](#lua-project-library)
       - [project.glob](#projectglob)
     - [Lua package library](#lua-package-library)
@@ -135,9 +136,15 @@
     - [Introduction to Custom Lua Rules](#introduction-to-custom-lua-rules)
     - [Free Rule Functions](#free-rule-functions)
       - [rules - command argument](#rules---command-argument)
+      - [rules - command - declareoutput](#rules---command---declareoutput)
+      - [rules - command - submit](#rules---command---submit)
       - [rules - request argument](#rules---request-argument)
       - [rules - continue\_ argument](#rules---continue_-argument)
     - [UI Rule Functions](#ui-rule-functions)
+      - [uirules - command argument](#uirules---command-argument)
+      - [uirules - command - submit](#uirules---command---submit)
+      - [uirules - request argument](#uirules---request-argument)
+      - [uirules - continue\_ argument](#uirules---continue_-argument)
       - [uirules - project argument](#uirules---project-argument)
     - [Rule Request Documents](#rule-request-documents)
       - [Embedding Fields](#embedding-fields)
@@ -1833,29 +1840,48 @@ The `freerules` and `uirules` fields will both be empty tables, and those empty 
 
 See [Custom Lua Rules](#introduction-to-custom-lua-rules) for a detailed explanation of the difference between `freerules` and `uirules`.
 
-#### build.generateid
+### Lua declareoutput library
+
+This library is available to [free rule functions](#free-rule-functions) through the `request.declareoutput` field.
+
+For example:
 
 ```lua
-build.generateid(request, arg1, arg2, ...)
+M = { id = '...' }
+rules = build.newrules(M)
+function rules.SomeRule(command,request)
+  if command == "declareoutput" then
+    -- use the [declareoutput] library
+    local id = request.declareoutput.generatesymbol()
+  end
+end
+return M
 ```
 
-Generates a deterministic module identifier suitable as a standard namespace term. For example, it may generate  `MyLibrary_Std.A.B.MyModule.MyFreeRule.Zz12345678@1.0.0` from:
+#### request.declareoutput.generatesymbol
 
-- The namespace (ex. `MyLibrary_Std.A.B.MyModule.MyFreeRule`) comes from the `request`.
-- The namespace tail (ex. `Zz12345678`) is `Zz` followed by a base32-encoding of the BLAKE2B 256-bit digest of the arguments `request, arg1, arg2, ...`.
-- The version comes from the `request`.
+```lua
+request.declareoutput.generatesymbol(arg1, arg2, ...)
+```
 
-The `request` is expected to have the following internal fields:
+Generates a deterministic standard namespace term. For example, it may generate `Xzd6vwarhlrgmpnhlbjb5orkstd` from `X` followed by a lowercase base32-encoding of the BLAKE2s 128-bit digest of:
 
-- `__rule_module_id`. The standard module id for the rule. Example: `MyLibrary_Std.A.B.MyModule.MyFreeRule`
-- `__rule_module_version`. The version of the rule. Example: `1.0.0`
-- `__rule_continue`. The current state of the continuation state machine. Example: `start`
+1. The rule's `MODULE` string from its `id = "MODULE@VERSION"`
+2. The rule's `VERSION` string from its `id = "MODULE@VERSION"`
+3. The `request.user` table
+4. The arguments `arg1, arg2, ...`
 
-Each argument in `request, arg1, arg2, ...` must be either:
+Each Lua value has its digest calculated according to:
 
-- a number. Its digest is on the IEEE 754 double-precision float representation of the number (even for integers).
-- a string. Its digest is on the bytes of the string.
-- a table with string keys. The table values can be anything that satisfies this list of "argument" requirements. The keys are lexographically sorted, and the digest is on `KEY1 || VALUE1 || KEY2 || VALUE2 || ...`.
+- `nil`: The `0x00` byte
+- number: The little-endian IEEE 754 double-precision float representation of the number (even for integers).
+- string: The bytes of the string
+- function: An error is raised.
+- userdata: An error is raised.
+- a table with number or string keys:
+  - Any number key is converted to an integer or it raises an error; then the integer is converted to a string.
+  - The keys are lexographically sorted
+  - The digest is calculated with depth-first traversal. That is the string `KEY1` then the Lua value `VALUE1`, then `KEY2` and `VALUE2`, until there are no more key values.
 
 ### Lua project library
 
@@ -1878,16 +1904,16 @@ Using the asset could look like the following, where the source code is given as
 ```lua
 function uirules.MyRule(command, request)
   if command == "submit" and continue_ == "start" then
-    local form_id = build.generateid(request)
     local source_code_asset_id, source_code_asset = project.glob {
       patterns = "**/*.c"
     }
     return {
       submit = {
-        valuesjson = {
+        values = {
           forms = {
             {
-              id = form_id,
+              -- nit: rename to modver?
+              id = request.output.id,
               -- ...
               function_ = {
                 args = {
@@ -1904,7 +1930,7 @@ function uirules.MyRule(command, request)
           }
         },
         andthen = {
-          return_ = form_id
+          return_ = request.output.id
         }
       }
     }
@@ -2379,7 +2405,7 @@ The form of a free rule function named `YourFreeRule` is:
 M = { id='MyLibrary_Std.A.B.MyModule@1.0.0' }
 rules = build.newrules(M)
 function rules.YourFreeRule(command, request, continue_)
-  -- your stuff here
+  -- your rule here
 end
 return M
 ```
@@ -2388,26 +2414,97 @@ The response to a free rule function must match the [dk-rule-response.json schem
 
 #### rules - command argument
 
-One of: `submit`, `ui`, `schema`
+The sequence of commands given to the rule is:
 
-`schema` is reserved for future expansion.
+```text
+   [command == "declareoutput"]
+             |
+             |
+             v
+     [command == "submit"]
+```
 
-`submit` is to submit a JSON request document to a rule.
+The next sections describe what each command does.
 
-If the rule is a UI rule, then the final command will be `ui`.
+#### rules - command - declareoutput
+
+The `declareoutput` command is the build system asking the free rule to declare the output key *before* the rule adds tasks to the task graph.
+
+The output key can be a [form](#forms) key:
+
+```lua
+function rules.YourFreeRule(command, request)
+  if command == "declareoutput" then
+    return {
+      -- "$schema" = "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json",
+      declareoutput = {
+        return_form = {
+          -- parse [request.user] to calculate `id` and `slot`
+          id = "UserLibrary_Std.A.B.UserModule.OutputForm@1.0.0",
+          slot = "Release.Agnostic"
+        }
+      }
+    }
+  end
+end
+```
+
+or an [asset](#assets) key:
+
+```lua
+function rules.YourFreeRule(command, request)
+  if command == "declareoutput" then
+    return {
+      -- "$schema" = "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json",
+      declareoutput = {
+        return_asset = {
+          -- parse [request.asst] to calculate `id` and `path`
+          id = "UserLibrary_Std.A.B.UserModule.OutputAsset@1.0.0",
+          path = "some/file"
+        }
+      }
+    }
+  end
+end
+```
+
+The `request` parameter will contain the following fields:
+
+- `user` is the [Rule Request Document](#rule-request-documents) submitted by the user or given to a [precommand](#precommands)
+- `declareoutput` is the [declareoutput library](#lua-declareoutput-library)
+
+Historical Note: This pattern of declaring the output *before* doing the building was inspired by [Buck2's dynamic dependencies](https://buck2.build/docs/rule_authors/dynamic_dependencies/).
+
+#### rules - command - submit
+
+The `submit` command is the entry point for the free rule to:
+
+- add values to the valuestore and tasks to the task graph (use `return { submit = { values = ... } }`)
+- ask the build system for more information (use `return { submit = { continue_ = ... } }`)
 
 #### rules - request argument
 
-Initially the `request` field is the rule request document that has been translated from the arguments to `post-object`.
-The request document is described later in the [Rule Request Documents](#rule-request-documents) section.
+`request` is a table with the following fields:
 
-Internal fields that start with `__` added
+- `user` is the rule request document that has been translated from the arguments to `post-object`. The request document is described later in the [Rule Request Documents](#rule-request-documents) section.
+- `continued` is a table available to continuations; see [continue_ argument](#rules---continue_-argument)
+- `singlefile_asset_id` is the asset id of the script if [Lua is embedded in it](#embedding-fields)
+- `output` is a table with:
+  - the field `id` which is the same MODULE@VERSION given by the rule function in the response to the [declareoutput command](#rules---command---declareoutput)
+
+Internal fields start with `__`; do not base any logic off these internal fields.
+
+It is important to check whether user provided arguments have been provided. Consider using expressions like the following to check that they are set:
+
+```lua
+request.user.filename or error("Please provide `filename=FILENAME`")
+```
 
 #### rules - continue_ argument
 
 Since rules block the build system, [rules must be fast](#rule-requirements) and often rules are broken into small steps using a state machine.
 
-The `continue_` argument is the state in the state machine. When `command='schema'` the `continue_` argument will be `nil`. When `command="submit"` the continue_ argument will start as `start`.
+The `continue_` argument is the state in the state machine. When `command=='schema'` the `continue_` argument will be `nil`. When `command=="submit"` the continue_ argument will start as `start`.
 
 For example, a rule may need to sort a large file. It would be terrible for performance if a build system capable of parallelism was blocked to sort a file. Instead, the following state machine can be used:
 
@@ -2423,15 +2520,15 @@ For example, a rule may need to sort a large file. It would be terrible for perf
        [done]
 ```
 
-When the rule sees `continue_="start"`, it can return [subshell](#subshells) expression to the build system to fetch a `sort` tool from the [uutils coreutils](https://uutils.github.io/coreutils/docs/utils/sort.html) project. Something like:
+When the rule sees `continue_=="start"`, it can return [subshell](#subshells) expression to the build system to fetch a `sort` tool from the [uutils coreutils](https://uutils.github.io/coreutils/docs/utils/sort.html) project. Something like:
 
 ```lua
 if continue_ == "start" then
-  local form_id = build.generateid(request)
+  local form_id = build.generatesymbol(request)
   return {
-    "$schema" = "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json",
+    -- "$schema" = "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json",
     submit = {
-      valuesjson = {
+      values = {
         forms = {
           {
             id = form_id,
@@ -2440,9 +2537,9 @@ if continue_ == "start" then
                 "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe)",
                 "sort",
                 "--output",
-                "${SLOT.request}/sorted-file",
-                -- provided by user or caller of the rule
-                options.filename
+                "${SLOT.request}/sorted-file",                
+                -- the file to sort is provided by the user
+                request.user.filename or error("provide `filename=FILENAME` on the command line")
               }
             }
           }
@@ -2456,10 +2553,7 @@ if continue_ == "start" then
       },
       andthen = {
         continue_ = {
-          state = "have-sorted-file",
-          passthrough = {
-            filename = options.filename -- provided by user
-          }
+          state = "have-sorted-file"
         },
       }
     }
@@ -2467,7 +2561,7 @@ if continue_ == "start" then
 end
 ```
 
-Here, the build system will add the `valuesjson` as if it were a new `values.json` file, evaluate all the `expressions`, and then callback the rule (ie. `andthen`) with:
+Here, the build system will add the `values` as if it were a new `values.json` file, evaluate all the `expressions`, and then callback the rule (ie. `andthen`) with:
 
 ```lua
 -- YourFreeRule(command, request, continue_)
@@ -2494,10 +2588,10 @@ For this example we just print the file.
 if continue_ == "start" then
   -- ...
 elseif continue_ == "have-sorted-file" then
-  printf("The sorted file is at: %s\n", request.sorted_file)
+  printf("The sorted file is at: %s\n", request.user.sorted_file)
   return {
     -- an empty submit table means the rule is done.
-    -- alternative: continue using "andthen" to do more callbacks.
+    -- alternative: continue using "continue_" to do more callbacks.
     submit = { }
   }
 end
@@ -2518,9 +2612,9 @@ The form of a UI rule function named `YourUiRule` is:
 
 ```lua
 M = { id='MyLibrary_Std.A.B.MyModule@1.0.0' }
-rules, uirules = build.newrules(M) -- uirules are separate from (free) rules
+rules, uirules = build.newrules(M)
 function uirules.YourUiRule(command, request, continue_, project)
-  -- your stuff here. You have access to 'project' unlike free rules
+  -- your rule here. You have access to 'project' unlike free rules
 end
 return M
 ```
@@ -2529,7 +2623,44 @@ Please see [Free Rule Functions](#free-rule-functions) for a description of the 
 
 The response to a UI rule function must match the [dk-rule-response.json schema](../etc/jsonschema/dk-rule-response.json).
 
+#### uirules - command argument
+
+The sequence of commands given to the rule is:
+
+```text
+   [command == "submit"]
+             |
+             |
+             v
+     [command == "ui"]
+```
+
+The next sections describe what each command does.
+
+#### uirules - command - submit
+
+The `submit` command is the entry point for the UI rule to:
+
+- add values to the valuestore and tasks to the task graph (use `return { submit = { values = ... } }`)
+- ask the build system for more information (use `return { submit = { continue_ = ... } }`)
+
+#### uirules - request argument
+
+`request` is a table with the following fields:
+
+- `user` is the rule request document that has been translated from the arguments to `post-object`. The request document is described later in the [Rule Request Documents](#rule-request-documents) section.
+- `continued` is a table available to continuations; see [continue_ argument](#rules---continue_-argument)
+- `singlefile_asset_id` is the asset id of the script if [Lua is embedded in it](#embedding-fields)
+
+Internal fields start with `__`; do not base any logic off these internal fields.
+
+#### uirules - continue_ argument
+
+The `continue_` argument for UI rules is identical to the [`continue_` argument for free rules](#rules---continue_-argument).
+
 #### uirules - project argument
+
+TBD
 
 ### Rule Request Documents
 
@@ -2699,7 +2830,7 @@ Information is supplied to a rule as a JSON document.
 
 The primary way today to supply this JSON document is through the command line syntax `post-object MODULE@VERSION -- CLI_FORM_DOC`, where **CLI_FORM_DOC** is a CLI-based recipe to construct a JSON document.
 
-The form has a `options` JSON object to describe how the JSON document submitted to a form maps to command line options, arguments and variables. *nit: This should be "command=schema" given to rule ... it has nothing to do with the misnamed 'form' object in values.json!*
+The form has a `options` JSON object to describe how the JSON document submitted to a form maps to command line options, arguments and variables. *nit: This should be "command==queryschema" given to rule ... it has nothing to do with the misnamed 'form' object in values.json!*
 
 The top-level fields of the form document are available in variables:
 
