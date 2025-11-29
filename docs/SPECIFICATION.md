@@ -88,6 +88,11 @@
       - [request.declareoutput.generatesymbol](#requestdeclareoutputgeneratesymbol)
     - [Lua request.submit library](#lua-requestsubmit-library)
       - [request.submit.output\_id](#requestsubmitoutput_id)
+    - [Lua request.io library](#lua-requestio-library)
+      - [request.io.open](#requestioopen)
+      - [request.io.toasset](#requestiotoasset)
+      - [request.io.write](#requestiowrite)
+      - [request.io.close](#requestioclose)
     - [Lua project library](#lua-project-library)
       - [project.glob](#projectglob)
     - [Lua package library](#lua-package-library)
@@ -574,6 +579,8 @@ At the time of writing, the list is:
 
 #### ${MOREINCLUDES}
 
+> 🚧 This variable was experimental and is now being removed.
+
 The directory that the function can place new `*.values.json` values files into. These values will be available to [MORECOMMANDS](#morecommands).
 
 There are some restrictions on the content of the values in these new ("more") `*.values.json`:
@@ -583,6 +590,8 @@ There are some restrictions on the content of the values in these new ("more") `
 See [dynamic functions](#dynamic-functions) for more information.
 
 #### ${MORECOMMANDS}
+
+> 🚧 This variable was experimental and is now being removed.
 
 A newline separated file containing [zero or more value shell commands](#value-shell-language-vsl) that the function can write into.
 
@@ -1912,6 +1921,117 @@ request.submit.output_id
 
 This string is the form or asset identifier declared in [the "declareoutput" command](#rules---command---declareoutput).
 
+It is only available to [free rule functions](#free-rule-functions).
+
+### Lua request.io library
+
+This library is available to [free rule functions](#free-rule-functions) and [UI rule functions](#ui-rule-functions) through the `request.io` field.
+
+For example:
+
+```lua
+M = { id = '...' }
+rules = build.newrules(M)
+function rules.SomeRule(command,request)
+  if command == "submit" then
+    -- use the [io] library
+    local file = request.io.open("a/b/somefile", "w")
+  end
+end
+return M
+```
+
+The only operations supported are writing to files in a directory unique to the rule and output key. The intent is to allow creating [assets](#assets) and nothing else.
+
+Some build system implementations may sandbox the I/O operations.
+
+#### request.io.open
+
+```lua
+file = request.io.open(filename, mode)
+```
+
+This function opens a file, in the mode specified in the string mode. It returns a new file descriptor, or, in case of errors, nil plus an error message.
+
+The mode string can be any of the following:
+
+- "w" write mode;
+- "a" append mode;
+
+Unlike the C library function `fopen`, the file will be opened in binary mode rather than text mode. (Text mode adds CRLF on Windows systems and is non-reproducible when cross-compiling.)
+
+The `filename` must be a *strictly* relative path:
+
+- An absolute path will raise an error.
+- After the path is normalized, any path segments that start with `..` will raise an error.
+- After the path is normalized, any path segments that contain a forward or backward slash will raise an error. For example, Unix filenames can contain backslashes, but they will raise errors.
+
+Any parent directories required by `filename` will be created.
+
+The file *may* be closed after the request is finished (ie. the `post-object` is finished), but it is the author's responsibility to close the file with [request.io.close](#requestioclose).
+
+#### request.io.toasset
+
+```lua
+local origin, asset = request.io.toasset(file, {
+  path = "some/asset/path",
+  origin_name = "..."
+})
+```
+
+Converts the file to an asset. The file will be closed.
+
+In the options only `path` is mandatory.
+
+`path`: Two assets at the same `path` is an error. Each `path` must be [strictly relative](#requestioopen) or an error will be raised.
+
+`origin_name`: The name of the origin. The origin is a label used to invalidate assets. Many assets can share the same origin.
+
+The `origin` return value will be a table unique to the request. Multiple calls to `request.io.toasset` in the same request will give the same origin table:
+
+```lua
+{
+  name = "local-SOME_IDENTIFIER",
+  mirrors = {
+    "/absolute/path/to/intermediate/assets"
+  }
+}
+```
+
+The `asset` return value will be another table:
+
+```lua
+{
+  -- from the `origin` table  
+  origin = "local-SOME_IDENTIFIER",
+  -- from the request.io.toasset(file, {path}) argument
+  path = "some/asset/path",
+  -- the rest is calculated from the file
+  size = 151,
+  checksum = {
+    sha256 = "0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"
+  }
+}
+```
+
+#### request.io.write
+
+```lua
+request.io.write(file, value1, ...)
+```
+
+Writes the value of each of its arguments to file `file`.
+The arguments must be strings or numbers. To write other values, use [tostring](#lua-global-variable---tostring)
+or [string.format](#stringformat) or [json.encode](#jsonencode).
+
+#### request.io.close
+
+```lua
+request.io.close(file)
+```
+
+Closes the file.
+
 ### Lua project library
 
 `project` is a Lua table available only to [Custom UI Rules](#ui-rule-functions).
@@ -2521,6 +2641,7 @@ The `request` parameter will contain the following fields:
 `request` is a table with the following fields:
 
 - `user` is the rule request document that has been translated from the arguments to `post-object`. The request document is described later in the [Rule Request Documents](#rule-request-documents) section.
+- `io` is the [request.io](#lua-requestio-library)
 - `continued` is a table available to continuations; see [continue_ argument](#rules---continue_-argument)
 - `singlefile_asset_id` is the asset id of the script if [Lua is embedded in it](#embedding-fields)
 - `output` is a table with:
@@ -2693,6 +2814,7 @@ The `submit` command is the entry point for the UI rule to:
 `request` is a table with the following fields:
 
 - `user` is the rule request document that has been translated from the arguments to `post-object`. The request document is described later in the [Rule Request Documents](#rule-request-documents) section.
+- `io` is the [request.io](#lua-requestio-library)
 - `continued` is a table available to continuations; see [continue_ argument](#rules---continue_-argument)
 - `singlefile_asset_id` is the asset id of the script if [Lua is embedded in it](#embedding-fields)
 
