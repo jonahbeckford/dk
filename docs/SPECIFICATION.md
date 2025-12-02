@@ -2767,7 +2767,11 @@ The details about the build request will be available as follows:
 |                           | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
 |                           | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
 |                           | [Embedded File Scripts](#embedded-file-scripts)           |                                                                                                               |
-| `request.srcfile`         | [Embedded File Scripts](#embedded-file-scripts)           | Asset id of the [Lua is embedded in it](#embedded-file-scripts), if any                                       |
+| `request.srcfile.id`      | [Embedded File Scripts](#embedded-file-scripts)           | Asset id of the [Lua is embedded in it](#embedded-file-scripts), if any                                       |
+| `request.srcfile.bundle`  | [Embedded File Scripts](#embedded-file-scripts)           | [Bundle](#assets) of the [Lua is embedded in it](#embedded-file-scripts), if any                              |
+| `request.srcfile.shell`   | [Embedded File Scripts](#embedded-file-scripts)           | The shell command [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir)                             |
+|                           |                                                           | to get the asset in `request.srcfile.bundle`.                                                                 |
+|                           |                                                           | The `-f :file` or `-f :exe` argument must be added.                                                           |
 | `request.submit.outputid` | [Free Rule submit](#free-rule-command---submit)           | `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)                       |
 
 It is important to check whether user provided arguments have been provided. Consider using expressions like the following to check that they are set:
@@ -2988,28 +2992,35 @@ The `request` table is available as:
 - `request.submit`: This table will be empty.
 - `request.user`: This table will be empty. This is in contrast to the [non-embedded UI rule](#rule-argument---request) where the command line arguments would be converted into [Rule Request Documents](#rule-request-documents).
 - `request.srcfile`: An information table about the source file that contains the embedded Lua.
-- `request.srcfile.id`: A proposed asset identifer unique to the source file. Embedded scripts do not have to use it.
-- `request.srcfile.origin`: The [origin of the asset](#assets). For example:
+- `request.srcfile.id`: An asset identifer unique to the source file.
+- `request.srcfile.bundle`: The [bundle](#assets). For example:
 
   ```lua
   {
-    name = "run",
-    mirrors = { "selfasset://SOME_IDENTIFIER" }
-  }
-  ```
-
-- `request.srcfile.asset`: The [asset file details for the asset](#assets). For example:
-
-  ```lua
-  {
-    origin = "run",
-    path = "basename_of_source_file-short_hash_of_source_file",
-    size = 151,
-    checksum = {
-      sha256 = "0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"
+    id = "... value of request.srcfile.id ...",
+    listing = {
+      origins = {
+        {
+          name = "run",
+          mirrors = { "selfasset://run" }
+        }
+      }
+    },
+    assets = {
+      {
+        origin = "run",
+        path = "<basename_of_source_file>-<short_hash_of_source_file>",
+        size = 151, -- replaced with real size
+        checksum = {
+          -- replaced with real SHA256
+          sha256 = "0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"
+        }
+      }
     }
   }
   ```
+
+- `request.src.shell`: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION -p PATH` with `MODULE@VERSION` and `PATH` replaced with real values. To use the command in subshells, the `-f :file` or (unlikely) `-f :exe` must be added to complete the value shell command.
 
 The algorithm is:
 
@@ -3023,8 +3034,7 @@ The algorithm is:
    function uirules.Run(command,request,continue_,project)
      request.srcfile = request.srcfile or {}
      request.srcfile.id = "..."
-     request.srcfile.origin = {} -- ... it is populated
-     request.srcfile.asset = {} -- ... it is populated
+     request.srcfile.bundle = {} -- ... it is populated
      -- embedded Lua goes here
    end
    return M
