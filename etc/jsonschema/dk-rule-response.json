@@ -18,7 +18,7 @@
                     "type": "object",
                     "properties": {
                         "id": {
-                            "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [valuesjson].",
+                            "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [values].",
                             "type": "string"
                         },
                         "slot": {
@@ -36,7 +36,7 @@
                     "type": "object",
                     "properties": {
                         "id": {
-                            "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [valuesjson].",
+                            "description": "The MODULE@VERSION that will be returned from the rule function. The MODULE@VERSION may come from a sibling [values].",
                             "type": "string"
                         },
                         "path": {
@@ -72,14 +72,14 @@
                     "type": "string",
                     "default": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json"
                 },
-                "valuesjson": {
+                "values": {
                     "type": "object",
                     "description": "Values to be added to the valuestore and to the task graph.",
                     "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-values.json"
                 },
                 "expressions": {
                     "type": "object",
-                    "description": "Expressions to be added to [request.continued] after [valuesjson] is added to the valuestore and task graph. Expressions can be literal strings, variable references and/or subshells.",
+                    "description": "Expressions to be added to [request.continued] after [values] is added to the valuestore and task graph. Expressions can be literal strings, variable references and/or subshells.",
                     "properties": {
                         "paths": {
                             "type": "object",
@@ -100,7 +100,7 @@
                 },
                 "continue_": {
                     "type": "object",
-                    "description": "Logic to be performed after the [valuesjson] have been added and the [expressions] evaluated. Either continue to the next state by specifying [continue_] or return a value by not specifying a [continue_].",
+                    "description": "Logic to be performed after the [values] have been added and the [expressions] evaluated. Either continue to the next state by specifying [continue_] or return a value by not specifying a [continue_].",
                     "properties": {
                         "state": {
                             "description": "The state to transition to.",
@@ -117,10 +117,6 @@
                 }
             },
             "additionalProperties": false
-        },
-        "schema": {
-            "description": "The response to the build system command 'schema' describing how the request JSON document maps to command line options, arguments and variables.",
-            "type": "object"
         }
     }
 }

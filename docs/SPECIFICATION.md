@@ -90,8 +90,9 @@
       - [request.submit.outputid](#requestsubmitoutputid)
     - [Lua request.io library](#lua-requestio-library)
       - [request.io.open](#requestioopen)
-      - [request.io.toasset](#requestiotoasset)
+      - [request.io.read](#requestioread)
       - [request.io.write](#requestiowrite)
+      - [request.io.toasset](#requestiotoasset)
       - [request.io.close](#requestioclose)
     - [Lua request.project library](#lua-requestproject-library)
       - [request.project.glob](#requestprojectglob)
@@ -2006,7 +2007,10 @@ end
 return M
 ```
 
-The only operations supported are writing to files in a directory unique to the rule and output key. The intent is to allow creating [assets](#assets) and nothing else.
+Capabilities are restricted so that:
+
+- File objects can be created only to write to files in a directory unique to the rule and output key. The intent for these writable file objects is to allow creating [assets](#assets) and nothing else.
+- File objects for reading can be obtained from value shell expressions given in response to [Free Rule Command - `submit`](#free-rule-command---submit)
 
 Some build system implementations may sandbox the I/O operations.
 
@@ -2020,8 +2024,7 @@ This function opens a file, in the mode specified in the string mode. It returns
 
 The mode string can be any of the following:
 
-- "w" write mode;
-- "a" append mode;
+- "w" write mode
 
 Unlike the C library function `fopen`, the file will be opened in binary mode rather than text mode. (Text mode adds CRLF on Windows systems and is non-reproducible when cross-compiling.)
 
@@ -2033,7 +2036,36 @@ The `filename` must be a *strictly* relative path:
 
 Any parent directories required by `filename` will be created.
 
-The file *may* be closed after the request is finished (ie. the `post-object` is finished), but it is the author's responsibility to close the file with [request.io.close](#requestioclose).
+The file *may* be closed after the request is finished (ie. the `post-object` is finished), but it is the author's responsibility to close the file with [request.io.close](#requestioclose) or with [request.io.toasset](#requestiotoasset).
+
+#### request.io.read
+
+```lua
+request.io.read(file, format1, ...)
+```
+
+Reads the file `file` according to the given formats `format1, ...` which specify what to read. For each format, the function returns a string or a number with the characters read, or `nil` if it cannot read data with the specified format. (In this latter case, the function does not read subsequent formats.) When called without arguments, it uses a default format that reads the next line (see below).
+
+The available formats are
+
+- `a`, `all` or `*all`: reads the whole file, starting at the current position. On end of file, it returns the empty string; this format never fails unless the file does not exist or is unreadable
+- `l`, `line` or `*line`: reads the next line skipping the end of line, returning `nil` on end of file. This is the default format.
+- `L`: reads the next line keeping the end-of-line character (if present), returning `nil` on end of file.
+- *number*: reads a string with up to this number of bytes, returning `nil` on end of file. If number is zero, it reads nothing and returns an empty string, or `nil` on end of file.
+
+The formats `l` and `L` should be used only for text files.
+
+This function behaves [Lua 5.4 io.read](https://www.lua.org/manual/5.4/manual.html#6.8) except the format `n` is not supported.
+
+#### request.io.write
+
+```lua
+request.io.write(file, value1, ...)
+```
+
+Writes the value of each of its arguments to file `file`.
+The arguments must be strings or numbers. To write other values, use [tostring](#lua-global-variable---tostring)
+or [string.format](#stringformat) or [json.encode](#jsonencode).
 
 #### request.io.toasset
 
@@ -2077,15 +2109,7 @@ The `asset` return value will be another table:
 }
 ```
 
-#### request.io.write
-
-```lua
-request.io.write(file, value1, ...)
-```
-
-Writes the value of each of its arguments to file `file`.
-The arguments must be strings or numbers. To write other values, use [tostring](#lua-global-variable---tostring)
-or [string.format](#stringformat) or [json.encode](#jsonencode).
+Security note: There is no protection against two `request.io.toasset` with the same `path` and `origin_name`. However, implementations are required to calculate the SHA256 checksum in the `asset` return value from the [request.io.write](#requestiowrite) rather than the filesystem. That means in a race multiple assets may be placed in the valuestore, but all will be valid assets and at most one will be the checksum recorded in the tracestore.
 
 #### request.io.close
 
@@ -2687,15 +2711,88 @@ Historical Note: This pattern of declaring the output *before* doing the buildin
 
 ### Free Rule Command - `submit`
 
-The `submit` command is the entry point for the free rule to:
+The `submit` command is the entry point for the free rule to build artifacts by:
 
-- add values to the valuestore and tasks to the task graph (use `return { submit = { values = ... } }`)
-- ask the build system for more information (use `return { submit = { continue_ = ... } }`)
+- add values to the valuestore and tasks to the task graph
+- ask the build system for more information
 
-The `request` parameter will contain the following fields:
+All responses must set the field `submit`. That is:
 
-- `user` is the [Rule Request Document](#rule-request-documents) submitted by the user or given to a [precommand](#precommands)
-- `submit` is the [request.submit library](#lua-requestsubmit-library)
+```lua
+return { submit = { values = ..., expressions = ..., andthen = ... } }
+```
+
+The fields that go into `submit.values` and `submit.andthen` are enumerated in the authoritative [dk-rule-response.json schema](../etc/jsonschema/dk-rule-response.json).
+
+Consider the following response to a `submit` command:
+
+```lua
+return {
+  submit = {
+    values = {
+      forms = {
+        {
+          id = "OurExample_Std.SomeModule@0.1.2",
+          function_ = {
+            args = {
+              "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe)",
+              "sort",
+              "--output",
+              "${SLOT.request}/sorted-file",                
+              request.user.filename or error("please provide `filename=FILENAME`")
+            }
+          }
+        }
+      }
+    },
+    expressions = {
+      paths = {
+        sorted_file =
+          "$(get-object OurExample_Std.SomeModule@0.1.2 -s ${SLOTNAME.Release.execution_abi} -m ./sorted-file -f :file)"
+      }
+    },
+    andthen = {
+      continue_ = {
+        state = "have-sorted-file",
+        passthrough = { someconstant = "the constant" }
+      },
+    }
+  }
+}
+```
+
+When the build system sees that response, the following sequence occurs:
+
+1. the `values` are treated as if it were a new `values.json` file
+2. all the `expressions.strings` are evaluated and will be made available as Lua strings in `request.continued`
+3. all the `expressions.paths` are evaluated and will be made available as readable file objects in `request.continued`
+4. the rule function will get a callback (ie. `andthen`)
+
+All three steps (`values`, `expressions`, `andthen`) were optional.
+
+The build system will perform the callback of the `andthen` with the following parameters:
+
+```lua
+-- YourFreeRule(command, request, continue_)
+YourFreeRule(
+  -- command
+  "submit",
+  -- request
+  {
+    user = ..., -- request.user table
+    io = ..., -- request.io library
+    continued = {
+      -- anything in 'andthen.continue_.passthrough' is given literally to the rule
+      someconstant = "the constant",
+      -- anything in 'expressions.paths' and `expressions.strings`
+      -- is evaluated and their responses given to the rule
+      sorted_file = "...path to sorted-file..."
+    }
+  },
+  -- continue_
+  "have-sorted-file"
+)
+```
 
 ### UI Rule Functions
 
@@ -2739,8 +2836,10 @@ The next sections describe what each command does.
 
 The `submit` command is the entry point for the UI rule to build artifacts by:
 
-- adding values to the valuestore and tasks to the task graph (use `return { submit = { values = ... } }`)
-- ask the build system for more information (use `return { submit = { continue_ = ... } }`)
+- adding values to the valuestore and tasks to the task graph
+- ask the build system for more information
+
+The responses to the command are the same as [Free Rule Command - `submit`](#free-rule-command---submit).
 
 ### UI Rule Command - `ui`
 
@@ -2827,14 +2926,13 @@ if command == "declareoutput" then
     }
   }  
 elseif command == "submit" && continue_ == "start" then
-  local form_id = build.generatesymbol(request)
   return {
     -- "$schema" = "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json",
     submit = {
       values = {
         forms = {
           {
-            id = form_id,
+            id = request.submit.outputid,
             function_ = {
               args = {
                 "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe)",
@@ -2864,37 +2962,19 @@ elseif command == "submit" && continue_ == "start" then
 end
 ```
 
-Here, the build system will add the `values` as if it were a new `values.json` file, evaluate all the `expressions`, and then callback the rule (ie. `andthen`) with:
+The [Free Rule Command - `submit` section](#free-rule-command---submit) describes in detail how the build system interprets the response.
+The salient part of the example is the `andthen` is a signal to the build system to call the rule function again.
 
-```lua
--- YourFreeRule(command, request, continue_)
-YourFreeRule(
-  -- command
-  "submit",
-  -- options
-  { 
-    -- anything in 'passthrough' is given literally to the rule
-    filename = "...user provided filename...",
-    -- anything in 'expressions.paths' and `expressions.strings`
-    -- is evaluated and their responses given to the rule
-    sorted_file = "...path to sorted-file..."
-  },
-  -- continue_
-  "have-sorted-file"
-)
-```
-
-When the rule sees `continue_ = "have-sorted-file"`, it should do something useful with the sorted file.
+The rule function will be called back with `continue_ = "have-sorted-file"`; when that happens, the rule should do something useful with the sorted file.
 For this example we just print the file.
 
 ```lua
 if continue_ == "start" then
   -- ...
 elseif continue_ == "have-sorted-file" then
-  printf("The sorted file is at: %s\n", request.user.sorted_file)
+  printf("The sorted file is at: %s\n", request.continued.sorted_file)
   return {
     -- an empty submit table means the rule is done.
-    -- alternative: continue using "continue_" to do more callbacks.
     submit = { }
   }
 end
