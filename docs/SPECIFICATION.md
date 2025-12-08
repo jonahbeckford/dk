@@ -74,6 +74,7 @@
     - [Script Phases](#script-phases)
     - [Lua Specification](#lua-specification)
     - [Lua Global Variables](#lua-global-variables)
+      - [Lua Global Variable - loadstring](#lua-global-variable---loadstring)
       - [Lua Global Variable - next](#lua-global-variable---next)
       - [Lua Global Variable - tostring](#lua-global-variable---tostring)
       - [Lua Global Variable - print](#lua-global-variable---print)
@@ -1812,6 +1813,22 @@ and the Lua 5.4 reserved words:
 
 ### Lua Global Variables
 
+#### Lua Global Variable - loadstring
+
+`loadstring (string [, chunkname])`
+
+Compiles the string.
+
+If there are no errors, returns the compiled chunk as a function; otherwise, returns `nil` plus the error message. The environment of the returned function is the global environment.
+
+```lua
+     assert(loadstring(s))()
+```
+
+When absent, `chunkname` defaults to the given string or an abbrevation of it.
+
+Compatibility: Lua 5.1, 5.2, 5.3 but removed from 5.4.
+
 #### Lua Global Variable - next
 
 `next (table, index)`
@@ -1878,7 +1895,7 @@ Lua 5.1+ compatibility: Unlike Lua 2.5, the `type` function does *not* return a 
 Raises an error if the value of its argument v is false (i.e., `nil` or in a future specification `false`); otherwise, returns all its arguments.
 In case of error, `message` is the error object; when absent, it defaults to `assertion failed!`
 
-Lua 5.1+ compatibility: The `message` argument is supported.
+Compatible with Lua 5.1.
 
 #### Lua Global Variable - error
 
@@ -2162,7 +2179,7 @@ The `asset` return value will be another table:
 
 ```lua
 {
-  -- from the `origin` table  
+  -- from the `origin` table
   origin = "SOME_IDENTIFIER",
   -- from the request.io.toasset(file, {path}) argument
   path = "some/asset/path",
@@ -2891,7 +2908,7 @@ return {
               "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe)",
               "sort",
               "--output",
-              "${SLOT.request}/sorted-file",                
+              "${SLOT.request}/sorted-file",
               request.user.filename or error("please provide `filename=FILENAME`")
             }
           }
@@ -3081,7 +3098,7 @@ if command == "declareoutput" then
         path = "SHA256.sig"
       }
     }
-  }  
+  }
 elseif command == "submit" && continue_ == "start" then
   return {
     -- "$schema" = "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/dk-rule-response.json",
@@ -3095,7 +3112,7 @@ elseif command == "submit" && continue_ == "start" then
                 "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe)",
                 "sort",
                 "--output",
-                "${SLOT.request}/sorted-file",                
+                "${SLOT.request}/sorted-file",
                 -- the file to sort is provided by the user
                 request.user.filename or error("provide `filename=FILENAME` on the command line")
               }
