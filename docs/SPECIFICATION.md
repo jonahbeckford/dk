@@ -92,6 +92,10 @@
       - [request.io.open](#requestioopen)
       - [request.io.read](#requestioread)
       - [request.io.write](#requestiowrite)
+      - [request.io.list](#requestiolist)
+      - [request.io.isfile](#requestioisfile)
+      - [request.io.isdir](#requestioisdir)
+      - [request.io.realpath](#requestiorealpath)
       - [request.io.toasset](#requestiotoasset)
       - [request.io.close](#requestioclose)
     - [Lua request.project library](#lua-requestproject-library)
@@ -1550,6 +1554,10 @@ Unfortunately, GitLab does not yet provide a [minimal level of attestation](http
 
 The build system maintains a *trust store*, with the dk OpenBSD signify key for the `CommonsBase_Std` packages as the only trusted entity by default.
 
+---
+
+🚧*missing docs*: describe the workflow performed by `prepare-version`, `distribute`, `combine` and `import-github-l2`. Much of the content can come from [posts/2025-10-24-overview-ci-attestations.md](posts/2025-10-24-overview-ci-attestations.md) and the `distribute.t` cram tests.
+
 ### Distributed Value Stores
 
 A distribution includes a `.zip` file of some or all of the value store. Entries in the zipfile must be `./{value_id}`;
@@ -2067,6 +2075,63 @@ Writes the value of each of its arguments to file `file`.
 The arguments must be strings or numbers. To write other values, use [tostring](#lua-global-variable---tostring)
 or [string.format](#stringformat) or [json.encode](#jsonencode).
 
+#### request.io.list
+
+```lua
+request.io.list(dir, format1, ...)
+```
+
+List the contents of directory `dir` according to the given formats `format1, ...` which specify what to list.
+For each format, the function returns a table (see below) with the directory contents read, or `nil` if it cannot list
+the directory with the specified format.
+(In this latter case, the function does not list with subsequent formats.) When called without arguments, it uses a default format that lists the whole directory (see below).
+
+The available formats are
+
+- `a` or `all`: list the entire directory, starting at the current position. On the end of directory, it returns the empty table; this format never fails unless the directory does not exist or is unreadable
+
+The directory contents table has:
+
+- keys that are index numbers: `1`, `2`, etc.
+- values that are lazily-opened readonly file or subdirectories. Lazy-open means you do not need to [close](#requestioclose) it unless you [read](#requestioread) from it.
+
+Use [request.io.isfile](#requestioisfile) and [request.io.isdir](#requestioisdir) to check the type of the directory entry.
+
+#### request.io.isfile
+
+```lua
+request.io.isfile(file)
+```
+
+A truthy value if and only if `file` is a file object.
+Any other Lua value will return a falsy value.
+
+#### request.io.isdir
+
+```lua
+request.io.isdir(dir)
+```
+
+A truthy-value if and only if `dir` is a directory object.
+Any other Lua value will return a falsy value.
+
+#### request.io.realpath
+
+```lua
+request.io.realpath(file)
+request.io.realpath(dir)
+```
+
+The path to the file or directory object.
+
+The validity is only guaranteed inside a [rule expression](#free-rule-command---submit) until the next [continuation](#rule-argument---continue_). In particular:
+
+- The path may not exist immediately after `request.io.realpath`. A hermetic implementation is allowed to:
+
+  1. Return dangling symlinks as the return value of `request.io.realpath`
+  2. Bind those symlinks (ex. `ln -s -f` on Unix) to correct locations after the Lua rule function is finished but immediately before running rule expressions
+  3. Bind those symlinks to dangling locations after the rule expressions are finished
+
 #### request.io.toasset
 
 ```lua
@@ -2115,9 +2180,10 @@ Security note: There is no protection against two `request.io.toasset` with the 
 
 ```lua
 request.io.close(file)
+request.io.close(directory)
 ```
 
-Closes the file.
+Closes the file or directory.
 
 ### Lua request.project library
 
@@ -2126,54 +2192,141 @@ Closes the file.
 #### request.project.glob
 
 ```lua
-asset_id, bundle = request.project.glob {
-  origin = "...",
-  patterns = "...",
-  [excludes = "...",]
+bundle, getbundle, getasset = request.project.glob {
+  patterns = {"src/**/*.c"}
+  [, origin = "project-sources"]
+  [, project = "OurProject_Std@0.1.0"]
+  [, excludes = {"src/**/test*.c"} ]
+  [, trace = 1]
 }
 ```
 
-Creates an [asset](#assets) of files from a project source directory for use when constructing a `valuejson` inside a [Custom Lua Rule](#ui-rule-functions).
+Creates a [bundle](#assets) of files from a project source directory for use when constructing a `values` inside a [Custom Lua Rule](#ui-rule-functions).
 
-Using the asset could look like the following, where the source code is given as an argument to a compiler:
+The design intent is to allow user influenced change detection and reproducibility for project files:
+
+- User-influenced change detection: In large projects (ex. monorepos), the project tree can be broken into smaller bundles. Only parts of the build that depend on smaller project bundles will be rebuilt when a project source file changes.
+- Reproducibility: A build user does not access the project files directly; the project files are always checksummed and made available through this `request.project` library.
+
+The `project` argument is the identifier and version for the **end-user's** project. It defaults to `OurProject_Std@0.1.0`. The UI rule may be used by several projects, so the `project` argument is intended to be supplied by the end-user as a [request parameter](#rule-request-documents) to the UI rule. It may be a library id and version (ex. `OurProject_Std@1.0.0`) or a standard module id and version (ex. `OurProject_Std.A.B.SomeModule@1.0.0`). The `project` must belong to the [distribution package and version](#distributions) if the project is distributed. Using the `Our` vendor namespace means the project cannot be distributed, but the project does not need to have a [distribution with keys and version ranges](#distributions).
+
+The `origin` argument distinguishes one set of assets from another set. It defaults to `project-sources`. The generated bundle identifier is `PROJECT_MODULE.Sources.Xyyyyyyy@PROJECT_VERSION` where `PROJECT_MODULE` is the module or library identifier from `project`, `PROJECT_VERSION` is the project version from `project`, and `yyyy` is the lowercase, no-padding, base32-encoded SHA256 checksum of `origin`.
+
+The `patterns` and `excludes` are glob expressions on project files that conform to [Language Server Protocol 3.18 patterns](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.18/specification/#patterns):
+
+- `*` to match zero or more characters in a path segment
+- `?` to match on one character in a path segment
+- `**` to match any number of path segments, including none
+- `{}` to group conditions (e.g. `**​/*.{ts,js}` matches all TypeScript and JavaScript files)
+- `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
+- `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`,
+  but not `example.0`)
+
+`excludes` exclude *files* after they have been found by `patterns`.
+
+The same project file may belong to different assets.
+
+The specification does not mandate how change detection is implemented. The `dk0` reference implementation scans all the globs at startup, and has optimizations to skip over directories when it can prove that the directories will never be matched by a glob expression. Other implementations may cache the globbed files and only update the globbed files when an invalidation is given to the build system (`--invalidate <origin>:subpath:` option in the reference implementation).
+
+The project directory structure will be maintained in the asset. For example, given the project:
+
+```text
+src/
+  main.c
+  media/
+    player.c
+  db/
+    sql.c
+  platforms/
+    windows.asm
+    linux.s
+    macos.s
+test/
+  test-db.c
+```
+
+and `patterns = {"src/**/*.c"}`, the asset will have the structure:
+
+```text
+src/
+  main.c
+  media/
+    player.c
+  db/
+    sql.c
+```
+
+The return values are the *bundle*, *partial get-bundle command* and the *partial get-asset command*:
+
+- *bundle*: The [bundle](#assets). For example:
+
+  ```lua
+  {
+    id = "PROJECT_MODULE.Sources.Xyyyyyyy@PROJECT_VERSION", -- derived bundle id
+    listing = {
+      origins = {
+        {
+          name = "...origin...", -- from `request.project.glob {origin}` argument
+          mirrors = { "." } -- `.` is the project directory
+        }
+      }
+    },
+    assets = {
+      -- one asset per file matched by the glob patterns
+      {
+        origin = "...origin...",
+        path = "<relative path to project file>",
+        size = 123000, -- replaced with real size of project file
+        checksum = {
+          -- replaced with real SHA256
+          sha256 = "0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"
+        }
+      }
+    }
+  }
+  ```
+
+- *partial get-bundle command*: The partially complete [value shell command](#value-shell-language-vsl) `get-bundle MODULE@VERSION` with `MODULE@VERSION` replaced with a real value. To use the command in subshells, the `-d :` must be added to complete the value shell command.
+- *partial get-asset command*: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION` with `MODULE@VERSION` replaced with a real value. To use the command in subshells, the `-p PROJECT_SOURCE_FILE -f :file` must be added to complete the value shell command.
+
+Performance consideration: Using the *partial get-asset command* will almost always be more efficient for single file access than *partial get-bundle command*, as the latter may zip up the bundle and then unzip more files than are needed.
+
+Using the bundle could look like the following, where the source code is given as an argument to a compiler:
 
 ```lua
 function uirules.MyRule(command, request)
   if command == "submit" and continue_ == "start" then
-    local source_code_asset_id, source_code_bundle = request.project.glob {
-      patterns = "**/*.c"
+    local bundle, getbundle = request.project.glob {
+      patterns = { "src/**/*.c" }
     }
     return {
       submit = {
         values = {
           forms = {
             {
-              -- nit: rename to modver?
-              id = request.output.id,
+              id = request.submit.outputid,
               -- ...
               function_ = {
                 args = {
                   "some-programming-language-compiler",
-                  -- ask compiler to compile everything in a directory
+                  -- let's pretend that there is a `-c DIR` option
+                  -- to compile everything in a directory
                   "-c",
-                  "$(get-asset " .. source_code_asset_id .. " -d :)"
+                  -- using `getbundle` will copy/link all the globbed
+                  -- files into an isolated directory
+                  "$(" .. getbundle .. " -d :)"
                 }
               }
             }
           },
           bundles = {
-            source_code_bundle
+            bundle
           }
-        },
-        andthen = {
-          return_ = request.output.id
         }
       }
     }
   end
 ```
-
-or you could use [an get-asset "expression" in a continuation](#rule-argument---continue_) to inspect the files before doing something meaningful with them.
 
 ### Lua package library
 
@@ -2746,7 +2899,7 @@ return {
       }
     },
     expressions = {
-      paths = {
+      files = {
         sorted_file =
           "$(get-object OurExample_Std.SomeModule@0.1.2 -s ${SLOTNAME.Release.execution_abi} -m ./sorted-file -f :file)"
       }
@@ -2765,8 +2918,9 @@ When the build system sees that response, the following sequence occurs:
 
 1. the `values` are treated as if it were a new `values.json` file
 2. all the `expressions.strings` are evaluated and will be made available as Lua strings in `request.continued`
-3. all the `expressions.paths` are evaluated and will be made available as readable file objects in `request.continued`
-4. the rule function will get a callback (ie. `andthen`)
+3. all the `expressions.files` are evaluated and will be made available as readable file objects in `request.continued`
+4. all the `expressions.dirs` are evaluated and will be made available as readable directory objects in `request.continued`
+5. the rule function will get a callback (ie. `andthen`)
 
 All three steps (`values`, `expressions`, `andthen`) were optional.
 
@@ -2784,7 +2938,7 @@ YourFreeRule(
     continued = {
       -- anything in 'andthen.continue_.passthrough' is given literally to the rule
       someconstant = "the constant",
-      -- anything in 'expressions.paths' and `expressions.strings`
+      -- anything in 'expressions.files', 'expresionss.dirs' and `expressions.strings`
       -- is evaluated and their responses given to the rule
       sorted_file = "...path to sorted-file..."
     }
@@ -2799,6 +2953,7 @@ YourFreeRule(
 UI rules (ie. `uirules`) are rules that:
 
 - only an end-user can run these rules; using UI rules inside a `values.json[c]` file will fail the build
+- the reference implementation has the subcommand `run` for UI rules, while `post-object` is reserved for free rules
 - interact with the end-user through a console or a graphical user interface
 - only one UI rule may run at a time even if the build system implementation parallelizes noninteractive rules
 - have access to the project source code directories
@@ -2853,25 +3008,27 @@ A typical action would be to run the built artifact or display a summary of the 
 
 The details about the build request will be available as follows:
 
-| Field                     | Commands Applicable To                                    | What                                                                                                          |
-| ------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `request.user`            | [Free Rule submit](#free-rule-command---submit)           | Rule request document translated from the arguments to `post-object`                                          |
-|                           | [UI Rule submit](#ui-rule-command---submit)               | ... The request document is described later in the [Rule Request Documents](#rule-request-documents) section. |
-|                           | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-|                           | *but not* [Embedded File Scripts](#embedded-file-scripts) |                                                                                                               |
-| `request.io`              | [Free Rule submit](#free-rule-command---submit)           | [request.io](#lua-requestio-library)                                                                          |
-|                           | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
-|                           | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-| `request.continued`       | [Free Rule submit](#free-rule-command---submit)           | The last continuation. See [continue_ argument](#rule-argument---continue_)                                   |
-|                           | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
-|                           | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-|                           | [Embedded File Scripts](#embedded-file-scripts)           |                                                                                                               |
-| `request.srcfile.id`      | [Embedded File Scripts](#embedded-file-scripts)           | Asset id of the [Lua is embedded in it](#embedded-file-scripts), if any                                       |
-| `request.srcfile.bundle`  | [Embedded File Scripts](#embedded-file-scripts)           | [Bundle](#assets) of the [Lua is embedded in it](#embedded-file-scripts), if any                              |
-| `request.srcfile.shell`   | [Embedded File Scripts](#embedded-file-scripts)           | The shell command [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir)                             |
-|                           |                                                           | to get the asset in `request.srcfile.bundle`.                                                                 |
-|                           |                                                           | The `-f :file` or `-f :exe` argument must be added.                                                           |
-| `request.submit.outputid` | [Free Rule submit](#free-rule-command---submit)           | `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)                       |
+| Field                      | Commands Applicable To                                    | What                                                                                                          |
+| -------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `request.user`             | [Free Rule submit](#free-rule-command---submit)           | Rule request document translated from the arguments to `post-object`                                          |
+|                            | [UI Rule submit](#ui-rule-command---submit)               | ... The request document is described later in the [Rule Request Documents](#rule-request-documents) section. |
+|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+|                            | *but not* [Embedded File Scripts](#embedded-file-scripts) |                                                                                                               |
+| `request.project`          | [UI Rule submit](#ui-rule-command---submit)               | [request.project](#lua-requestproject-library)                                                                |
+|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+| `request.io`               | [Free Rule submit](#free-rule-command---submit)           | [request.io](#lua-requestio-library)                                                                          |
+|                            | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
+|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+| `request.continued`        | [Free Rule submit](#free-rule-command---submit)           | The last continuation. See [continue_ argument](#rule-argument---continue_)                                   |
+|                            | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
+|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+|                            | [Embedded File Scripts](#embedded-file-scripts)           |                                                                                                               |
+| `request.srcfile.id`       | [Embedded File Scripts](#embedded-file-scripts)           | Asset id of the [Lua is embedded in it](#embedded-file-scripts), if any                                       |
+| `request.srcfile.bundle`   | [Embedded File Scripts](#embedded-file-scripts)           | [Bundle](#assets) of the [Lua is embedded in it](#embedded-file-scripts), if any                              |
+| `request.srcfile.getasset` | [Embedded File Scripts](#embedded-file-scripts)           | The shell command [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir)                             |
+|                            |                                                           | to get the asset in `request.srcfile.bundle`.                                                                 |
+|                            |                                                           | The `-f :file` or `-f :exe` argument must be added.                                                           |
+| `request.submit.outputid`  | [Free Rule submit](#free-rule-command---submit)           | `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)                       |
 
 It is important to check whether user provided arguments have been provided. Consider using expressions like the following to check that they are set:
 
@@ -2947,7 +3104,7 @@ elseif command == "submit" && continue_ == "start" then
         }
       },
       expressions = {
-        paths = {
+        files = {
           sorted_file =
             "$(get-object " .. form_id .. " -s ${SLOTNAME.Release.execution_abi} -m ./sorted-file -f :file)"
         }
@@ -3099,7 +3256,7 @@ The `request` table is available as:
   }
   ```
 
-- `request.src.shell`: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION -p PATH` with `MODULE@VERSION` and `PATH` replaced with real values. To use the command in subshells, the `-f :file` or (unlikely) `-f :exe` must be added to complete the value shell command.
+- `request.srcfile.getasset`: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION -p PATH` with `MODULE@VERSION` and `PATH` replaced with real values. To use the command in subshells, the `-f :file` or (unlikely) `-f :exe` must be added to complete the value shell command.
 
 The algorithm is:
 
