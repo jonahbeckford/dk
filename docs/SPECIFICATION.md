@@ -182,7 +182,7 @@
 
 This specification documents interoperable systems that use composition to build multi-language, repeatable software in a loosely federation of packages and implementations.
 
-- Interoperable systems: There is an open-source `mlfront-shell/dk0` *reference implementation* build system. The `dk` build system does not yet conform to this specification (as of 2025-11-17) but will change. Both are OCaml-based, and the hope is that other programming languages can have their own implementations.
+- Interoperable systems: There is an open-source `mlfront/dk0` *reference implementation* build system. The `dk` build system does not yet conform to this specification (as of 2025-11-17) but will change. Both are OCaml-based, and the hope is that other programming languages can have their own implementations.
 - Composition: This specification has four (4) different ways to take functionality provided by others and use them in your own builds (ie. composition).
 - Build multi-language, repeatable software: The domain is software that must be built with multiple programming languages. The goal is to have at least one implementation capable of opt-in, bit-by-bit reproducibility.
 - Loose federation of packages and implementations: There is a default, optional central registry of vendors who build packages themselves, using any specification-conforming implementation of the build system they desire. The registry is of vendors and their signing keys, not of the packages themselves.
@@ -996,7 +996,7 @@ will get the object with the id `OurStd_Std.Build.Clang@1.0.0` and place it in t
 
 There are two ways to run these shell commands:
 
-1. Directly from the command line with the efficient `dk` implementation or the reference implementation `mlfront-shell`. For example, `dk get-object OurStd_Std.Build.Clang@1.0.0 -s Release.Agnostic -f clang.exe`.
+1. Directly from the command line with the efficient `dk` implementation or the reference implementation `dk0`. For example, `dk get-object OurStd_Std.Build.Clang@1.0.0 -s Release.Agnostic -f clang.exe`.
 2. Embedded as "precommands" in a values file. For example,
 
    ```json
@@ -1355,7 +1355,7 @@ When the version `VERSION` has no explicit build metadata, or the version `VERSI
 
 1. If a lockfile (not available yet in the reference implementation) has a build metadata reference (ex. `1.0.0` = `bn-20250801235901+commit-054d5983`), the build metadata is used.
 2. The constructive trace store list of traces `key(i), dependencies(i), result(i)` is scanned. If there is a trace `i` where the version of `key(i)` matches the `VERSION` and where `result(i)` is an object value, then the build metadata of the *latest* such `key(i)` will be used.
-3. The build metadata will be constructed from mlfront-shell's or dk's `-t TIMESTAMP` command line option, with the `bn-YYYYMMDDhhmmss` format.
+3. The build metadata will be constructed from dk0's or dk's `-t TIMESTAMP` command line option, with the `bn-YYYYMMDDhhmmss` format.
 4. The build metadata will be `bn-20250101000000`.
 
 Important: the system clock is never consulted.
@@ -1377,7 +1377,7 @@ Here are some examples for using the source control commit timestamp:
 # CI System: GitHub Actions
 # Variable Name: github.event.head_commit-timestamp
 - name: Build project
-  run: mlfront-shell -t "${{ github.event.head_commit-timestamp }}" ...
+  run: dk0 -t "${{ github.event.head_commit-timestamp }}" ...
 ```
 
 ```yaml
@@ -1389,7 +1389,7 @@ Here are some examples for using the source control commit timestamp:
 # Variable Example: 2022-01-31T16:47:55-08:00
 job:
   script:
-    - mlfront-shell -t "$CI_COMMIT_TIMESTAMP" ...
+    - dk0 -t "$CI_COMMIT_TIMESTAMP" ...
 ```
 
 Here are some example of using a monotonically increasing build number:
@@ -2755,7 +2755,7 @@ return M
 The rule above can be run from the command line:
 
 ```sh
-mlfront-shell -- post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
+dk0 -- post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
 ```
 
 or from a subshell in a `values.json` build file:
@@ -3162,7 +3162,7 @@ That means a Lua `nil` is considered equivalent to a missing value.
 The introduction example also submitted a request to a rule through the command line:
 
 ```sh
-mlfront-shell -- post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
+dk0 -- post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
 ```
 
 Those command line arguments `a=1 b=2` get converted into the same JSON document as before:
@@ -3463,7 +3463,7 @@ if build.is_building then
 end
 ```
 
-**TIP**. The reference implementation has the `mlfront-shell -- lua --analysis somefile.lua` command to show the rules the build system thinks are defined in the Lua script.
+**TIP**. The reference implementation has the `dk0 -- lua --analysis somefile.lua` command to show the rules the build system thinks are defined in the Lua script.
 
 ### Error Handling in Rules
 
