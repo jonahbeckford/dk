@@ -98,6 +98,7 @@
       - [request.io.isdir](#requestioisdir)
       - [request.io.realpath](#requestiorealpath)
       - [request.io.toasset](#requestiotoasset)
+      - [request.io.flush](#requestioflush)
       - [request.io.close](#requestioclose)
     - [Lua request.project library](#lua-requestproject-library)
       - [request.project.glob](#requestprojectglob)
@@ -2192,6 +2193,14 @@ The `asset` return value will be another table:
 ```
 
 Security note: There is no protection against two `request.io.toasset` with the same `path` and `origin_name`. However, implementations are required to calculate the SHA256 checksum in the `asset` return value from the [request.io.write](#requestiowrite) rather than the filesystem. That means in a race multiple assets may be placed in the valuestore, but all will be valid assets and at most one will be the checksum recorded in the tracestore.
+
+#### request.io.flush
+
+```lua
+request.io.flush()
+```
+
+Flushes the standard output that was buffered from [print](#lua-global-variable---print) and [printf](#lua-global-variable---printf).
 
 #### request.io.close
 
