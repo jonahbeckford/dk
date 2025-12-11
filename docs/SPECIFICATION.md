@@ -3666,18 +3666,20 @@ Any value types with `(cache)` are stored in the local cache rather than the val
 - A **value** is a file whose content matches the value type. A values file is a `value.json` build file itself. An object is a zip archive of the output of a [form](#forms). Form, bundle and asset value are serialized parsed abstract syntax trees.
 - A **value sha256** is a SHA-256 hex-encoded string of the value. That is, if you ran `certutil` (Windows), `sha256sum` (Linux) or `shasum -a 256` (macOS) on the value file, the *value sha256* is what you would see.
 
-| Value Type | Key                                   | Value Id before SHA256 and base32          | Value                                     |
-| ---------- | ------------------------------------- | ------------------------------------------ | ----------------------------------------- |
-| `j`        | [V256](#v256---sha256-of-values-file) | [V256](#v256---sha256-of-values-file)      | json `{schema_version:,forms:,assets:}`   |
-| `v`        | [VCI](#vci---values-canonical-id)     | [VCK](#vck---values-checksum)              | parsed `{schema_version:,forms:,assets:}` |
-| `a`        | asset                                 | [P256](#p256---sha256-of-asset)            | contents of asset                         |
-| `b`        | bundle                                | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file              |
+| Value Type | Key                                   | Value Id before SHA256 and base32          | Value                                             |
+| ---------- | ------------------------------------- | ------------------------------------------ | ------------------------------------------------- |
+| `j`        | [V256](#v256---sha256-of-values-file) | [V256](#v256---sha256-of-values-file)      | dos2unix json `{schema_version:,forms:,bundles:}` |
+| `l`        | [V256](#v256---sha256-of-values-file) | [V256](#v256---sha256-of-values-file)      | dos2unix lua script                               |
+| `v`        | [VCI](#vci---values-canonical-id)     | [VCK](#vck---values-checksum)              | parsed `{schema_version:,forms:,bundles:}`        |
+| `a`        | asset                                 | [P256](#p256---sha256-of-asset)            | contents of asset                                 |
+| `b`        | bundle                                | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file                      |
 
 TODO: Combine the following with earlier table. These are from BuildCore.
 
 | Value Type | Key Kind    | Value Kind     |
 | ---------- | ----------- | -------------- |
 | `j`        | ChecksumKey | ValuesJsonFile |
+| `l`        | ChecksumKey | ValuesLuaFile |
 
 #### v - parsed values.json AST
 
