@@ -2903,6 +2903,8 @@ return { submit = { values = ..., expressions = ..., andthen = ... } }
 
 The fields that go into `submit.values` and `submit.andthen` are enumerated in the authoritative [dk-rule-response.json schema](../etc/jsonschema/dk-rule-response.json).
 
+The `forms[].function` field may be written as `forms[].function_` to avoid conflicts with the Lua `function` keyword.
+
 Consider the following response to a `submit` command:
 
 ```lua
