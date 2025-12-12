@@ -42,6 +42,13 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
         ]
       },
       "function": {
+        "execution": [
+          // 7zr.exe only runs on Windows
+          {
+            "name": "OSFamily",
+            "value": "windows"
+          }
+        ],
         "args": [
           // with [7zr.exe] ...
           "bin/${SLOTNAME.request}/7zr.exe",
