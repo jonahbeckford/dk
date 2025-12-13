@@ -90,6 +90,8 @@
       - [request.declareoutput.generatesymbol](#requestdeclareoutputgeneratesymbol)
     - [Lua request.submit library](#lua-requestsubmit-library)
       - [request.submit.outputid](#requestsubmitoutputid)
+      - [request.submit.outputmodule](#requestsubmitoutputmodule)
+      - [request.submit.outputversion](#requestsubmitoutputversion)
     - [Lua request.io library](#lua-requestio-library)
       - [request.io.open](#requestioopen)
       - [request.io.read](#requestioread)
@@ -2017,10 +2019,32 @@ return M
 
 ```lua
 request.submit.outputid
--- example: X6pro7j57evsyymo36mehvpabhy
+-- example: OurTest_Std.A.X6pro7j57evsyymo36mehvpabhy@0.1.0
 ```
 
 This string is the form or asset identifier declared in [the "declareoutput" command](#free-rule-command---declareoutput).
+
+It is only available to [free rule functions](#free-rule-functions).
+
+#### request.submit.outputmodule
+
+```lua
+request.submit.outputmodule
+-- example: OurTest_Std.A.X6pro7j57evsyymo36mehvpabhy
+```
+
+This string is the module (`MODULE`) of the form or asset `MODULE@VERSION` declared in [the "declareoutput" command](#free-rule-command---declareoutput).
+
+It is only available to [free rule functions](#free-rule-functions).
+
+#### request.submit.outputversion
+
+```lua
+request.submit.outputmodule
+-- example: 0.1.0
+```
+
+This string is the version (`VERSION`) of the form or asset `MODULE@VERSION` declared in [the "declareoutput" command](#free-rule-command---declareoutput).
 
 It is only available to [free rule functions](#free-rule-functions).
 
@@ -3101,30 +3125,32 @@ A typical action would be to run the built artifact or display a summary of the 
 
 The details about the build request will be available as follows:
 
-| Field                      | Commands Applicable To                                    | What                                                                                                          |
-| -------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `request.user`             | [Free Rule submit](#free-rule-command---submit)           | Rule request document translated from the arguments to `post-object`                                          |
-|                            | [UI Rule submit](#ui-rule-command---submit)               | ... The request document is described later in the [Rule Request Documents](#rule-request-documents) section. |
-|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-|                            | *but not* [Embedded File Scripts](#embedded-file-scripts) |                                                                                                               |
-| `request.project`          | [UI Rule submit](#ui-rule-command---submit)               | [request.project](#lua-requestproject-library)                                                                |
-|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-| `request.execution`        | [Free Rule submit](#free-rule-command---submit)           | [request.execution](#lua-requestexecution-library)                                                            |
-|                            | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
-|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-| `request.io`               | [Free Rule submit](#free-rule-command---submit)           | [request.io](#lua-requestio-library)                                                                          |
-|                            | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
-|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-| `request.continued`        | [Free Rule submit](#free-rule-command---submit)           | The last continuation. See [continue_ argument](#rule-argument---continue_)                                   |
-|                            | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
-|                            | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
-|                            | [Embedded File Scripts](#embedded-file-scripts)           |                                                                                                               |
-| `request.srcfile.id`       | [Embedded File Scripts](#embedded-file-scripts)           | Asset id of the [Lua is embedded in it](#embedded-file-scripts), if any                                       |
-| `request.srcfile.bundle`   | [Embedded File Scripts](#embedded-file-scripts)           | [Bundle](#assets) of the [Lua is embedded in it](#embedded-file-scripts), if any                              |
-| `request.srcfile.getasset` | [Embedded File Scripts](#embedded-file-scripts)           | The shell command [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir)                             |
-|                            |                                                           | to get the asset in `request.srcfile.bundle`.                                                                 |
-|                            |                                                           | The `-f :file` or `-f :exe` argument must be added.                                                           |
-| `request.submit.outputid`  | [Free Rule submit](#free-rule-command---submit)           | `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)                       |
+| Field                          | Commands Applicable To                                    | What                                                                                                          |
+| ------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `request.user`                 | [Free Rule submit](#free-rule-command---submit)           | Rule request document translated from the arguments to `post-object`                                          |
+|                                | [UI Rule submit](#ui-rule-command---submit)               | ... The request document is described later in the [Rule Request Documents](#rule-request-documents) section. |
+|                                | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+|                                | *but not* [Embedded File Scripts](#embedded-file-scripts) |                                                                                                               |
+| `request.project`              | [UI Rule submit](#ui-rule-command---submit)               | [request.project](#lua-requestproject-library)                                                                |
+|                                | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+| `request.execution`            | [Free Rule submit](#free-rule-command---submit)           | [request.execution](#lua-requestexecution-library)                                                            |
+|                                | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
+|                                | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+| `request.io`                   | [Free Rule submit](#free-rule-command---submit)           | [request.io](#lua-requestio-library)                                                                          |
+|                                | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
+|                                | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+| `request.continued`            | [Free Rule submit](#free-rule-command---submit)           | The last continuation. See [continue_ argument](#rule-argument---continue_)                                   |
+|                                | [UI Rule submit](#ui-rule-command---submit)               |                                                                                                               |
+|                                | [UI Rule ui](#ui-rule-command---ui)                       |                                                                                                               |
+|                                | [Embedded File Scripts](#embedded-file-scripts)           |                                                                                                               |
+| `request.srcfile.id`           | [Embedded File Scripts](#embedded-file-scripts)           | Asset id of the [Lua is embedded in it](#embedded-file-scripts), if any                                       |
+| `request.srcfile.bundle`       | [Embedded File Scripts](#embedded-file-scripts)           | [Bundle](#assets) of the [Lua is embedded in it](#embedded-file-scripts), if any                              |
+| `request.srcfile.getasset`     | [Embedded File Scripts](#embedded-file-scripts)           | The shell command [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir)                             |
+|                                |                                                           | to get the asset in `request.srcfile.bundle`.                                                                 |
+|                                |                                                           | The `-f :file` or `-f :exe` argument must be added.                                                           |
+| `request.submit.outputid`      | [Free Rule submit](#free-rule-command---submit)           | `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)                       |
+| `request.submit.outputmodule`  | [Free Rule submit](#free-rule-command---submit)           | `MODULE` in `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)           |
+| `request.submit.outputversion` | [Free Rule submit](#free-rule-command---submit)           | `VERSION` in `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)          |
 
 It is important to check whether user provided arguments have been provided. Consider using expressions like the following to check that they are set:
 
