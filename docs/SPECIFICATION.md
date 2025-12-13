@@ -2484,7 +2484,7 @@ In the reference implementation, the internal table of packages is stored in an 
 
 ### Lua string library
 
-This Lua 5.4 compatible library provides generic functions for string manipulation, such as finding and extracting substrings, and pattern matching. When indexing a string in Lua, the first character is at position 1 (not at 0, as in C). Indices are allowed to be negative and are interpreted as indexing backwards, from the end of the string. Thus, the last character is at position -1, and so on.
+This mostly Lua 5.4 compatible library provides generic functions for string manipulation, such as finding and extracting substrings, and pattern matching. When indexing a string in Lua, the first character is at position 1 (not at 0, as in C). Indices are allowed to be negative and are interpreted as indexing backwards, from the end of the string. Thus, the last character is at position -1, and so on.
 
 The string library provides all its functions inside the table `string`. Unlike Lua 5.1+, it does *not* sets a metatable for strings where the __index field points to the string table. Therefore, you *cannot* use the string functions in object-oriented style. For instance, string.byte(s,i) *cannot* be written as s:byte(i).
 
@@ -2502,7 +2502,9 @@ Numeric codes are not necessarily portable across platforms.
 
 `string.find (s, pattern [, init [, plain]])`
 
-Looks for the first match of pattern (see [§6.4.1](https://www.lua.org/manual/5.4/manual.html)) in the string s. If it finds a match, then find returns the indices of s where this occurrence starts and ends; otherwise, it returns fail. A third, optional numeric argument init specifies where to start the search; its default value is 1 and can be negative. A true as a fourth, optional argument plain turns off the pattern matching facilities, so the function does a plain "find substring" operation, with no characters in pattern being considered magic.
+The `pattern` is a Lua 2.5 pattern; see [Lua 2.5 §6.2 Patterns](https://www.lua.org/manual/2.5/manual.html#6.2).
+
+Looks for the first match of pattern in the string s. If it finds a match, then find returns the indices of s where this occurrence starts and ends; otherwise, it returns fail. A third, optional numeric argument init specifies where to start the search; its default value is 1 and can be negative. A true as a fourth, optional argument plain turns off the pattern matching facilities, so the function does a plain "find substring" operation, with no characters in pattern being considered magic.
 
 If the pattern has captures, then in a successful match the captured values are also returned, after the two indices.
 
