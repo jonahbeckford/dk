@@ -124,6 +124,78 @@ function CommonsBase_Std__Extract__0_1_0.untar_linux(p)
   }
 end
 
+function CommonsBase_Std__Extract__0_1_0.untargz_win32(p)
+  local sevenzexe = string.format(
+    "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.%s -d :)/7z.exe", p.abi)
+  local file_targz = p.tarfile
+  local file_tar = string.sub(file_targz, 1, -4)
+  -- /a/b/c.tar -> c.tar
+  local baseidx = assert(string.find(file_tar, "[^/][^/]*$"), "`" .. p.tarfile .. "` tarball must have a basename")
+  local file_tar_basename = string.sub(file_tar, baseidx)
+  local gzmodver = p.outputmodule .. ".Gz@" .. p.outputversion
+  return {
+    submit = {
+      values = {
+        schema_version = { major = 1, minor = 0 },
+        forms = {
+          -- extract the .tar.gz to a .tar
+          {
+            id = gzmodver,
+            function_ = {
+              execution = { { name = "OSFamily", value = "windows" } },
+              args = {
+                -- with [7z.exe] ...
+                sevenzexe,
+                -- uncompress
+                "x",
+                -- to output directory
+                "-o${SLOT.Release.Agnostic}",
+                -- the .tar.gz
+                file_targz,
+                -- select the .tar extracted output
+                file_tar_basename
+              }
+            },
+            outputs = {
+              assets = {
+                {
+                  slots = { "Release.Agnostic" },
+                  paths = { file_tar_basename }
+                }
+              }
+            }
+          },
+          -- extract the .tar
+          {
+            id = p.outputid,
+            function_ = {
+              execution = { { name = "OSFamily", value = "windows" } },
+              args = {
+                -- with [7z.exe] ...
+                sevenzexe,
+                -- uncompress
+                "x",
+                -- to output directory
+                "-o${SLOT.Release.Agnostic}",
+                -- the tarball
+                "$(get-object " .. gzmodver .. " -s Release.Agnostic -d :)/" .. file_tar_basename
+              }
+            },
+            outputs = {
+              assets = {
+                {
+                  slots = { "Release.Agnostic" },
+                  paths = p.paths
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+end
+
 function CommonsBase_Std__Extract__0_1_0.untar_win32(p)
   local sevenzexe = string.format(
     "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.%s -d :)/7z.exe", p.abi)
@@ -180,6 +252,8 @@ function rules.Untar(command, request)
     local gzip = string.find(tarfile, "%.tar%.gz$") ~= nil
     local p = {
       outputid = request.submit.outputid,
+      outputmodule = request.submit.outputmodule,
+      outputversion = request.submit.outputversion,
       tarfile = tarfile,
       paths = paths,
       abi = request.execution.ABIv3,
@@ -190,7 +264,11 @@ function rules.Untar(command, request)
     elseif request.execution.OSFamily == "linux" then
       return CommonsBase_Std__Extract__0_1_0.untar_linux(p)
     elseif request.execution.OSFamily == "windows" then
-      return CommonsBase_Std__Extract__0_1_0.untar_win32(p)
+      if gzip then
+        return CommonsBase_Std__Extract__0_1_0.untargz_win32(p)
+      else
+        return CommonsBase_Std__Extract__0_1_0.untar_win32(p)
+      end
     else
       error("unsupported OSFamily: " .. request.execution.OSFamily)
     end
