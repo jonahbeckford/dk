@@ -148,6 +148,8 @@
       - [math.type](#mathtype)
       - [math.ult](#mathult)
     - [Lua table library](#lua-table-library)
+      - [table.concat](#tableconcat)
+      - [table.pack](#tablepack)
       - [table.unpack](#tableunpack)
     - [Lua json library](#lua-json-library)
       - [json.encode](#jsonencode)
@@ -2735,6 +2737,18 @@ This library provides generic functions for table manipulation. It provides all 
 
 Remember that, whenever an operation needs the length of a table, all caveats about the length operator apply (see [§3.4.7](https://www.lua.org/manual/5.4/manual.html#3.4.7)).
 All functions ignore non-numeric keys in the tables given as arguments.
+
+#### table.concat
+
+`table.concat (list [, sep [, i [, j]]])`
+
+Given a list where all elements are strings or numbers, returns the string `list[i]..sep..list[i+1] ··· sep..list[j]`. The default value for `sep` is the empty string, the default for `i` is 1, and the default for j is the length of the list (ie. `#list` from Lua 5.1+). If `i` is greater than `j`, returns the empty string.
+
+#### table.pack
+
+`table.pack (···)`
+
+Returns a new table with all arguments stored into keys 1, 2, etc. and with a field "n" with the total number of arguments. Note that the resulting table may not be a sequence, if some arguments are `nil`.
 
 #### table.unpack
 
