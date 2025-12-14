@@ -1,92 +1,19 @@
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/mlfront-values.json",
-  "schema_version": { "major": 1, "minor": 0 },
+  "schema_version": { "major": 1, "minor": 0 }
+  ,
   "forms": [
-    // .Tar: .tar.gz -> .tar
+    // Uniz: .tar.gz -> extracted files
     {
-      "id": "CommonsBase_Dotnet.SDK.Unix.Tar@10.0.100-rc.2.25502.107",
+      "id": "CommonsBase_Dotnet.SDK.Unix@10.0.100-rc.2.25502.107",
       "precommands": {
         "private": [
           "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-linux-arm64.tar.gz -f Release.Linux_arm64.tar.gz",
           "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-linux-musl-arm64.tar.gz -f Release.Linux_arm64m.tar.gz",
           "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-linux-x64.tar.gz -f Release.Linux_x86_64.tar.gz",
           "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-linux-musl-x64.tar.gz -f Release.Linux_x86_64m.tar.gz",
-          "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-osx-arm64.tar.gz -f Release.Darwin_arm64.tar.gz",
-          "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-osx-x64.tar.gz -f Release.Darwin_x86_64.tar.gz"
-        ]
-      },
-      "function": {
-        "execution": [
-          // 7z.exe only runs on Windows
-          {
-            "name": "OSFamily",
-            "value": "windows"
-          }
-        ],
-        "args": [
-          "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -d :)/7z.exe",
-          "x",
-          "-o${SLOT.request}",
-          "${SLOTNAME.request}.tar.gz",
-          "${SLOTNAME.request}.tar"
-        ]
-      },
-      "outputs": {
-        "assets": [
-          {
-            "slots": ["Release.Linux_arm64"],
-            "paths": ["Release.Linux_arm64.tar"]
-          },
-          {
-            "slots": ["Release.Linux_arm64m"],
-            "paths": ["Release.Linux_arm64m.tar"]
-          },
-          {
-            "slots": ["Release.Linux_x86_64"],
-            "paths": ["Release.Linux_x86_64.tar"]
-          },
-          {
-            "slots": ["Release.Linux_x86_64m"],
-            "paths": ["Release.Linux_x86_64m.tar"]
-          },
-          {
-            "slots": ["Release.Darwin_arm64"],
-            "paths": ["Release.Darwin_arm64.tar"]
-          },
-          {
-            "slots": ["Release.Darwin_x86_64"],
-            "paths": ["Release.Darwin_x86_64.tar"]
-          }
-        ]
-      }
-    },
-    // Unix: .tar -> extracted files
-    {
-      "id": "CommonsBase_Dotnet.SDK.Unix@10.0.100-rc.2.25502.107",
-      "precommands": {
-        "private": [
-          // need .tar files
-          "install-object CommonsBase_Dotnet.SDK.Unix.Tar@10.0.100-rc.2.25502.107 -s Release.Linux_arm64 -d tarballs",
-          "install-object CommonsBase_Dotnet.SDK.Unix.Tar@10.0.100-rc.2.25502.107 -s Release.Linux_arm64m -d tarballs",
-          "install-object CommonsBase_Dotnet.SDK.Unix.Tar@10.0.100-rc.2.25502.107 -s Release.Linux_x86_64 -d tarballs",
-          "install-object CommonsBase_Dotnet.SDK.Unix.Tar@10.0.100-rc.2.25502.107 -s Release.Linux_x86_64m -d tarballs",
-          "install-object CommonsBase_Dotnet.SDK.Unix.Tar@10.0.100-rc.2.25502.107 -s Release.Darwin_arm64 -d tarballs",
-          "install-object CommonsBase_Dotnet.SDK.Unix.Tar@10.0.100-rc.2.25502.107 -s Release.Darwin_x86_64 -d tarballs"
-        ]
-      },
-      "function": {
-        "execution": [
-          // 7z.exe only runs on Windows
-          {
-            "name": "OSFamily",
-            "value": "windows"
-          }
-        ],
-        "args": [
-          "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -d :)/7z.exe",
-          "x",
-          "-o${SLOT.request}",
-          "tarballs/${SLOTNAME.request}.tar"
+          "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-osx-x64.tar.gz -f Release.Darwin_x86_64.tar.gz",
+          "get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-osx-arm64.tar.gz -f Release.Darwin_arm64.tar.gz"
         ]
       },
       "outputs": {
