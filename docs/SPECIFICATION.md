@@ -2937,7 +2937,7 @@ return M
 The rule above can be run from the command line:
 
 ```sh
-dk0 -- post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
+dk0 post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
 ```
 
 or from a subshell in a `values.json` build file:
@@ -3353,7 +3353,7 @@ That means a Lua `nil` is considered equivalent to a missing value.
 The introduction example also submitted a request to a rule through the command line:
 
 ```sh
-dk0 -- post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
+dk0 post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2
 ```
 
 Those command line arguments `a=1 b=2` get converted into the same JSON document as before:
@@ -3654,7 +3654,7 @@ if build.is_building then
 end
 ```
 
-**TIP**. The reference implementation has the `dk0 -- lua --analysis somefile.lua` command to show the rules the build system thinks are defined in the Lua script.
+**TIP**. The reference implementation has the `dk0 lua --analysis somefile.lua` command to show the rules the build system thinks are defined in the Lua script.
 
 ### Error Handling in Rules
 

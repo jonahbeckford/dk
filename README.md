@@ -118,7 +118,7 @@ For unpacking the 7zip executables, we'll submit a form several times (each time
 ```sh
 $ git clone https://github.com/diskuv/dk.git dksrc
 Cloning into 'dksrc'...
-$ dksrc/dk0 -- get-object 'CommonsBase_Std.S7z@25.1.0' -s Release.Darwin_x86_64 -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
+$ dksrc/dk0 get-object 'CommonsBase_Std.S7z@25.1.0' -s Release.Darwin_x86_64 -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
 [up-to-date] CommonsBase_Std.S7z@25.1.0+bn-20250101000000 -s Release.Darwin_x86_64
 ```
 
