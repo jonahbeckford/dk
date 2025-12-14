@@ -23,16 +23,16 @@ set -euf
 
 # Update within dksdk-coder:
 #   f_dk0() { ver=$1; install -d build; for i in darwin_arm64 darwin_x86_64 linux_x86 linux_x86_64 windows_x86_64 windows_x86; do extexe=; case $i in windows_*) extexe=.exe ;; esac; curl -Lo "build/dk0-$i" "https://gitlab.com/api/v4/projects/60486861/packages/generic/dk0/$ver/dk0-$i$extexe"; done }
-#   f_dk0 2.4.2.36
+#   f_dk0 2.4.2.37
 #   shasum -a 256 build/dk0-* | awk 'BEGIN{FS="[ /-]"} {printf "cksum256_%s=%s\n", $5, $1}' | sort
 #
 # Empty value if the architecture is not supported.
 # In particular, use empty instead of 9491d4737000e80bcbdd7a39e9dc13c2178ff865beff7d800d6159bfc395e8fa which is checksum for HTTP 404 error.
 # -------------------------------------
-majminpat_ver=2.4.2.36
-cksum256_darwin_arm64=be5aba31d07979ed866a530520ec8c17364c4f280684302abe7cdb0a5a48fa2e
-cksum256_darwin_x86_64=45fcfac4852e802850c1fe14d471badffe58d6438e3fb7cf6bb1d901ccac0ca7
-cksum256_linux_x86_64=129c69c4f42fa1fda0ff93859c2214008a1824426dceec3f804b02a49b99545e
+majminpat_ver=2.4.2.37
+cksum256_darwin_arm64=5c0bd8845a1a75fc141ddefcbb5d4d1cfae45d34a9ce50e0ac3922de2050fb91
+cksum256_darwin_x86_64=21d12400cfc8754ab719d5e95667b11851ac340e63e329b31d8d6e59dc351f0b
+cksum256_linux_x86_64=013900438bdd984f206601f48c69304ad7e527e942eef61fbc3dfe25343cc854
 cksum256_linux_x86=
 
 dk_pwd=$PWD
