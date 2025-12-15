@@ -81,9 +81,16 @@
                     "type": "object",
                     "description": "Expressions to be added to [request.continued] after [values] is added to the valuestore and task graph. Expressions can be literal strings, variable references and/or subshells.",
                     "properties": {
-                        "paths": {
+                        "files": {
                             "type": "object",
-                            "description": "Expressions that should be evaluated as file and directory paths.",
+                            "description": "Expressions that should be evaluated as file paths.",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        },
+                        "directories": {
+                            "type": "object",
+                            "description": "Expressions that should be evaluated as directory paths.",
                             "additionalProperties": {
                                 "type": "string"
                             }
