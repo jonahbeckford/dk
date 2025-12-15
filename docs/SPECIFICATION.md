@@ -86,42 +86,10 @@
       - [Lua Global Variable - error](#lua-global-variable---error)
     - [Lua build library](#lua-build-library)
       - [build.newrules](#buildnewrules)
-    - [Lua request.declareoutput library](#lua-requestdeclareoutput-library)
-      - [request.declareoutput.generatesymbol](#requestdeclareoutputgeneratesymbol)
-    - [Lua request.execution library](#lua-requestexecution-library)
-      - [request.execution.OSFamily](#requestexecutionosfamily)
-      - [request.execution.ABIv3](#requestexecutionabiv3)
-      - [request.execution.OSv3](#requestexecutionosv3)
-    - [Lua request.io library](#lua-requestio-library)
-      - [request.io.open](#requestioopen)
-      - [request.io.read](#requestioread)
-      - [request.io.write](#requestiowrite)
-      - [request.io.list](#requestiolist)
-      - [request.io.isfile](#requestioisfile)
-      - [request.io.isdir](#requestioisdir)
-      - [request.io.realpath](#requestiorealpath)
-      - [request.io.toasset](#requestiotoasset)
-      - [request.io.flush](#requestioflush)
-      - [request.io.close](#requestioclose)
-    - [Lua request.submit library](#lua-requestsubmit-library)
-      - [request.submit.outputid](#requestsubmitoutputid)
-      - [request.submit.outputmodule](#requestsubmitoutputmodule)
-      - [request.submit.outputversion](#requestsubmitoutputversion)
-    - [Lua request.ui library](#lua-requestui-library)
-      - [request.ui.glob](#requestuiglob)
-      - [request.ui.spawn](#requestuispawn)
-    - [Lua package library](#lua-package-library)
-      - [require](#require)
-      - [package.registrykey](#packageregistrykey)
-    - [Lua string library](#lua-string-library)
-      - [string.byte](#stringbyte)
-      - [string.find](#stringfind)
-      - [string.format](#stringformat)
-      - [string.len](#stringlen)
-      - [string.lower](#stringlower)
-      - [string.rep](#stringrep)
-      - [string.sub](#stringsub)
-      - [string.upper](#stringupper)
+    - [Lua buildjson library](#lua-buildjson-library)
+      - [buildjson.encode](#buildjsonencode)
+      - [buildjson.decode](#buildjsondecode)
+      - [buildjson.null](#buildjsonnull)
     - [Lua math library](#lua-math-library)
       - [math.abs](#mathabs)
       - [math.acos](#mathacos)
@@ -148,14 +116,46 @@
       - [math.tointeger](#mathtointeger)
       - [math.type](#mathtype)
       - [math.ult](#mathult)
+    - [Lua package library](#lua-package-library)
+      - [require](#require)
+      - [package.registrykey](#packageregistrykey)
+    - [Lua request.declareoutput library](#lua-requestdeclareoutput-library)
+      - [request.declareoutput.generatesymbol](#requestdeclareoutputgeneratesymbol)
+    - [Lua request.execution library](#lua-requestexecution-library)
+      - [request.execution.OSFamily](#requestexecutionosfamily)
+      - [request.execution.ABIv3](#requestexecutionabiv3)
+      - [request.execution.OSv3](#requestexecutionosv3)
+    - [Lua request.io library](#lua-requestio-library)
+      - [request.io.open](#requestioopen)
+      - [request.io.read](#requestioread)
+      - [request.io.write](#requestiowrite)
+      - [request.io.list](#requestiolist)
+      - [request.io.isfile](#requestioisfile)
+      - [request.io.isdir](#requestioisdir)
+      - [request.io.realpath](#requestiorealpath)
+      - [request.io.toasset](#requestiotoasset)
+      - [request.io.flush](#requestioflush)
+      - [request.io.close](#requestioclose)
+    - [Lua request.submit library](#lua-requestsubmit-library)
+      - [request.submit.outputid](#requestsubmitoutputid)
+      - [request.submit.outputmodule](#requestsubmitoutputmodule)
+      - [request.submit.outputversion](#requestsubmitoutputversion)
+    - [Lua request.ui library](#lua-requestui-library)
+      - [request.ui.glob](#requestuiglob)
+      - [request.ui.spawn](#requestuispawn)
+    - [Lua string library](#lua-string-library)
+      - [string.byte](#stringbyte)
+      - [string.find](#stringfind)
+      - [string.format](#stringformat)
+      - [string.len](#stringlen)
+      - [string.lower](#stringlower)
+      - [string.rep](#stringrep)
+      - [string.sub](#stringsub)
+      - [string.upper](#stringupper)
     - [Lua table library](#lua-table-library)
       - [table.concat](#tableconcat)
       - [table.pack](#tablepack)
       - [table.unpack](#tableunpack)
-    - [Lua buildjson library](#lua-buildjson-library)
-      - [buildjson.encode](#buildjsonencode)
-      - [buildjson.decode](#buildjsondecode)
-      - [buildjson.null](#buildjsonnull)
     - [Custom Lua Modules](#custom-lua-modules)
     - [Introduction to Custom Lua Rules](#introduction-to-custom-lua-rules)
     - [Free Rule Functions](#free-rule-functions)
@@ -1957,6 +1957,279 @@ The `freerules` and `uirules` fields will both be empty tables, and those empty 
 
 See [Custom Lua Rules](#introduction-to-custom-lua-rules) for a detailed explanation of the difference between `freerules` and `uirules`.
 
+### Lua buildjson library
+
+The `buildjson` library is embedded into the build system (nothing needs to be downloaded) but it must be accessed through `buildjson = require('buildjson')`.
+That keeps with the [design goal to maintain Lua conventions](#lua-specification).
+
+There is a popular Lua library [dkjson](https://dkolf.de/dkjson-lua/) for parsing JSON.
+The API for `buildjson` has intentionally been kept similar to `dkjson`.
+
+#### buildjson.encode
+
+```lua
+buildjson = require('buildjson')
+tbl = {
+  animals = { "dog", "cat", "aardvark" },
+  instruments = { "violin", "trombone", "theremin" }
+}
+str = buildjson.encode (tbl, { indent = true })
+
+-- or
+buildjson = require('buildjson')
+str = buildjson.encode (tbl)
+```
+
+Converts a Lua value to JSON:
+
+- `nil` values are not printed
+- `buildjson.null` values are encoded as JSON null
+
+If `indent` is truthy then the JSON is pretty-printed.
+
+#### buildjson.decode
+
+```lua
+buildjson = require('buildjson')
+str = '{"animals":["dog","cat","aardvark"],"bugs":null}'
+buildjson.decode (str)
+
+-- or
+buildjson = require('buildjson')
+value, errmsg, errrendered, sb, sl, sc, eb, el, ec = buildjson.decode (str)
+```
+
+Converts JSON to a Lua value:
+
+- Large numbers are converted to floating-point numbers with a possible loss of precision. If outside the floating-point range, an error is raised.
+- JSON nulls are converted to `buildjson.null` Lua values
+
+If the JSON could be converted, the result is the first return value.
+
+Otherwise:
+
+- `value` is `nil`
+- `errmsg` is a brief error message
+- `errrendered` is a prerendered error
+- `sb`, `sl`, and `sc` are the starting byte offset (zero-based), line and column (1-based)
+- `eb`, `el`, and `ec` are the ending byte offset (zero-based), line and column (1-based)
+
+#### buildjson.null
+
+```lua
+buildjson = require('buildjson')
+tbl = {
+  animals = { "dog", "cat", "aardvark" },
+  bugs = buildjson.null,
+  trees = nil
+}
+str = buildjson.encode (tbl)
+
+-- {
+--   "animals":["dog","cat","aardvark"],
+--   "bugs":null
+-- }
+```
+
+The `buildjson.null` Lua value represents JSON null.
+
+### Lua math library
+
+This Lua 5.4 compatible library provides basic mathematical functions. It provides all its functions and constants inside the table `math`.
+Functions with the annotation "integer/float" give integer results for integer arguments and float results for non-integer arguments.
+The rounding functions `math.ceil`, `math.floor`, and `math.modf` return an integer when the result fits in the range of an integer, or a float otherwise.
+
+#### math.abs
+
+`math.abs (x)`
+
+Returns the maximum value between x and -x. (integer/float)
+
+#### math.acos
+
+`math.acos (x)`
+
+Returns the arc cosine of x (in radians).
+
+#### math.asin
+
+`math.asin (x)`
+
+Returns the arc sine of x (in radians).
+
+#### math.atan
+
+`math.atan (y [, x])`
+
+Returns the arc tangent of y/x (in radians), using the signs of both arguments to find the quadrant of the result. It also handles correctly the case of x being zero.
+
+The default value for x is 1, so that the call math.atan(y) returns the arc tangent of y.
+
+#### math.ceil
+
+`math.ceil (x)`
+
+Returns the smallest integral value greater than or equal to x.
+
+#### math.cos
+
+`math.cos (x)`
+
+Returns the cosine of x (assumed to be in radians).
+
+#### math.deg
+
+`math.deg (x)`
+
+Converts the angle x from radians to degrees.
+
+#### math.exp
+
+`math.exp (x)`
+
+Returns the value `eˣ` (where `e` is the base of natural logarithms).
+
+#### math.floor
+
+`math.floor (x)`
+
+Returns the largest integral value less than or equal to x.
+
+#### math.fmod
+
+`math.fmod (x, y)`
+
+Returns the remainder of the division of `x` by `y` that rounds the quotient towards zero. (integer/float)
+
+#### math.huge
+
+`math.huge`
+
+The float value `HUGE_VAL`, a value greater than any other numeric value.
+
+#### math.log
+
+`math.log (x [, base])`
+
+Returns the logarithm of `x` in the given base. The default for base is `e` (so that the function returns the natural logarithm of `x`).
+
+#### math.max
+
+`math.max (x, ···)`
+
+Returns the argument with the maximum value according to the Lua operator `<`.
+
+#### math.maxinteger
+
+`math.maxinteger`
+
+An integer with the maximum value for an integer.
+
+#### math.min
+
+`math.min (x, ···)`
+
+Returns the argument with the minimum value, according to the Lua operator <.
+
+#### math.mininteger
+
+`math.mininteger`
+
+An integer with the minimum value for an integer.
+
+#### math.modf
+
+`math.modf (x)`
+
+Returns the integral part of x and the fractional part of x. Its second result is always a float.
+
+#### math.pi
+
+`math.pi`
+
+The value of π.
+
+#### math.rad
+
+`math.rad (x)`
+
+Converts the angle x from degrees to radians.
+
+#### math.sin
+
+`math.sin (x)`
+
+Returns the sine of x (assumed to be in radians).
+
+#### math.sqrt
+
+`math.sqrt (x)`
+
+Returns the square root of x. (You can also use the expression x^0.5 to compute this value.)
+
+#### math.tan
+
+`math.tan (x)`
+
+Returns the tangent of x (assumed to be in radians).
+
+#### math.tointeger
+
+`math.tointeger (x)`
+
+If the value x is convertible to an integer, returns that integer. Otherwise, returns fail.
+
+#### math.type
+
+`math.type (x)`
+
+Returns "integer" if x is an integer, "float" if it is a float, or fail if x is not a number.
+
+#### math.ult
+
+`math.ult (m, n)`
+
+Returns the string `t` (ie. a boolean `true`) if and only if integer `m` is below integer n when they are compared as unsigned integers.
+
+### Lua package library
+
+The package library provides basic facilities for loading modules in Lua.
+It exports one function directly in the global environment: `require`.
+Everything else is exported in the `table` package.
+
+#### require
+
+`require (modname)`
+
+Loads the given module.
+
+If the `modname` is a **standard module id** (ex. `MyLibrary_Std.A.B.MyModule` - *tbd: document this*) a task is added to the [task graph](#task-model) to search for it.
+The section [Custom Lua Modules](#custom-lua-modules) describes how to create your own modules.
+
+As of the writing of this specification, only standard modules may be loaded.
+
+Once imported with `require`, standard modules are enriched with constants as per
+[Lua 5.1 module() convention](https://www.lua.org/manual/5.1/manual.html#pdf-module) and
+[Lua module versioning conventions](http://lua-users.org/wiki/ModuleVersioning) and a `_build` field:
+
+| Field      | Example                                                                    |
+| ---------- | -------------------------------------------------------------------------- |
+| `_NAME`    | `MyModule._NAME` would be `MyLibrary_Std.A.B.MyModule`                     |
+| `_PACKAGE` | `MyModule._PACKAGE` would be `MyLibrary_Std.A.B`                           |
+| `_VERSION` | `MyModule._VERSION` would be `1.0.0`                                       |
+| `_M`       | (may be removed) `MyModule._M` would be a Lua reference to `MyModule`      |
+| `_build`   | *described later in [Custom Lua Rules](#introduction-to-custom-lua-rules)* |
+
+> Historical note: Even though the implementation of `module()` is deprecated after Lua 5.1, its conventions were never deprecated.
+
+#### package.registrykey
+
+`package.registrykey`
+
+A opaque variable holding a key to an internal table of packages that are loaded.
+
+In the reference implementation, the internal table of packages is stored in an OCaml analog of the [Lua C registry](https://www.lua.org/manual/5.4/manual.html#4.3).
+
 ### Lua request.declareoutput library
 
 This library is available to [free rule functions](#free-rule-functions) through the `request.declareoutput` field.
@@ -2496,45 +2769,6 @@ nil, "The program terminated due to signal 15", "signal", 15
 nil, "The program stopped due to signal 19", "stop", 19
 ```
 
-### Lua package library
-
-The package library provides basic facilities for loading modules in Lua.
-It exports one function directly in the global environment: `require`.
-Everything else is exported in the `table` package.
-
-#### require
-
-`require (modname)`
-
-Loads the given module.
-
-If the `modname` is a **standard module id** (ex. `MyLibrary_Std.A.B.MyModule` - *tbd: document this*) a task is added to the [task graph](#task-model) to search for it.
-The section [Custom Lua Modules](#custom-lua-modules) describes how to create your own modules.
-
-As of the writing of this specification, only standard modules may be loaded.
-
-Once imported with `require`, standard modules are enriched with constants as per
-[Lua 5.1 module() convention](https://www.lua.org/manual/5.1/manual.html#pdf-module) and
-[Lua module versioning conventions](http://lua-users.org/wiki/ModuleVersioning) and a `_build` field:
-
-| Field      | Example                                                                    |
-| ---------- | -------------------------------------------------------------------------- |
-| `_NAME`    | `MyModule._NAME` would be `MyLibrary_Std.A.B.MyModule`                     |
-| `_PACKAGE` | `MyModule._PACKAGE` would be `MyLibrary_Std.A.B`                           |
-| `_VERSION` | `MyModule._VERSION` would be `1.0.0`                                       |
-| `_M`       | (may be removed) `MyModule._M` would be a Lua reference to `MyModule`      |
-| `_build`   | *described later in [Custom Lua Rules](#introduction-to-custom-lua-rules)* |
-
-> Historical note: Even though the implementation of `module()` is deprecated after Lua 5.1, its conventions were never deprecated.
-
-#### package.registrykey
-
-`package.registrykey`
-
-A opaque variable holding a key to an internal table of packages that are loaded.
-
-In the reference implementation, the internal table of packages is stored in an OCaml analog of the [Lua C registry](https://www.lua.org/manual/5.4/manual.html#4.3).
-
 ### Lua string library
 
 This mostly Lua 5.4 compatible library provides generic functions for string manipulation, such as finding and extracting substrings, and pattern matching. When indexing a string in Lua, the first character is at position 1 (not at 0, as in C). Indices are allowed to be negative and are interpreted as indexing backwards, from the end of the string. Thus, the last character is at position -1, and so on.
@@ -2624,164 +2858,6 @@ If, after the translation of negative indices, `i` is less than `1`, it is corre
 
 Receives a string and returns a copy of this string with all ASCII lowercase letters changed to uppercase. All other characters are left unchanged.
 
-### Lua math library
-
-This Lua 5.4 compatible library provides basic mathematical functions. It provides all its functions and constants inside the table `math`.
-Functions with the annotation "integer/float" give integer results for integer arguments and float results for non-integer arguments.
-The rounding functions `math.ceil`, `math.floor`, and `math.modf` return an integer when the result fits in the range of an integer, or a float otherwise.
-
-#### math.abs
-
-`math.abs (x)`
-
-Returns the maximum value between x and -x. (integer/float)
-
-#### math.acos
-
-`math.acos (x)`
-
-Returns the arc cosine of x (in radians).
-
-#### math.asin
-
-`math.asin (x)`
-
-Returns the arc sine of x (in radians).
-
-#### math.atan
-
-`math.atan (y [, x])`
-
-Returns the arc tangent of y/x (in radians), using the signs of both arguments to find the quadrant of the result. It also handles correctly the case of x being zero.
-
-The default value for x is 1, so that the call math.atan(y) returns the arc tangent of y.
-
-#### math.ceil
-
-`math.ceil (x)`
-
-Returns the smallest integral value greater than or equal to x.
-
-#### math.cos
-
-`math.cos (x)`
-
-Returns the cosine of x (assumed to be in radians).
-
-#### math.deg
-
-`math.deg (x)`
-
-Converts the angle x from radians to degrees.
-
-#### math.exp
-
-`math.exp (x)`
-
-Returns the value `eˣ` (where `e` is the base of natural logarithms).
-
-#### math.floor
-
-`math.floor (x)`
-
-Returns the largest integral value less than or equal to x.
-
-#### math.fmod
-
-`math.fmod (x, y)`
-
-Returns the remainder of the division of `x` by `y` that rounds the quotient towards zero. (integer/float)
-
-#### math.huge
-
-`math.huge`
-
-The float value `HUGE_VAL`, a value greater than any other numeric value.
-
-#### math.log
-
-`math.log (x [, base])`
-
-Returns the logarithm of `x` in the given base. The default for base is `e` (so that the function returns the natural logarithm of `x`).
-
-#### math.max
-
-`math.max (x, ···)`
-
-Returns the argument with the maximum value according to the Lua operator `<`.
-
-#### math.maxinteger
-
-`math.maxinteger`
-
-An integer with the maximum value for an integer.
-
-#### math.min
-
-`math.min (x, ···)`
-
-Returns the argument with the minimum value, according to the Lua operator <.
-
-#### math.mininteger
-
-`math.mininteger`
-
-An integer with the minimum value for an integer.
-
-#### math.modf
-
-`math.modf (x)`
-
-Returns the integral part of x and the fractional part of x. Its second result is always a float.
-
-#### math.pi
-
-`math.pi`
-
-The value of π.
-
-#### math.rad
-
-`math.rad (x)`
-
-Converts the angle x from degrees to radians.
-
-#### math.sin
-
-`math.sin (x)`
-
-Returns the sine of x (assumed to be in radians).
-
-#### math.sqrt
-
-`math.sqrt (x)`
-
-Returns the square root of x. (You can also use the expression x^0.5 to compute this value.)
-
-#### math.tan
-
-`math.tan (x)`
-
-Returns the tangent of x (assumed to be in radians).
-
-#### math.tointeger
-
-`math.tointeger (x)`
-
-If the value x is convertible to an integer, returns that integer. Otherwise, returns fail.
-
-#### math.type
-
-`math.type (x)`
-
-Returns "integer" if x is an integer, "float" if it is a float, or fail if x is not a number.
-
-#### math.ult
-
-`math.ult (m, n)`
-
-Returns the string `t` (ie. a boolean `true`) if and only if integer `m` is below integer n when they are compared as unsigned integers.
-
 ### Lua table library
 
 This library provides generic functions for table manipulation. It provides all its functions inside the table table.
@@ -2812,82 +2888,6 @@ Returns the elements from the given list. This function is equivalent to
 ```
 
 By default, `i` is 1 and `j` is #list.
-
-### Lua buildjson library
-
-The `buildjson` library is embedded into the build system (nothing needs to be downloaded) but it must be accessed through `buildjson = require('buildjson')`.
-That keeps with the [design goal to maintain Lua conventions](#lua-specification).
-
-There is a popular Lua library [dkjson](https://dkolf.de/dkjson-lua/) for parsing JSON.
-The API for `buildjson` has intentionally been kept similar to `dkjson`.
-
-#### buildjson.encode
-
-```lua
-buildjson = require('buildjson')
-tbl = {
-  animals = { "dog", "cat", "aardvark" },
-  instruments = { "violin", "trombone", "theremin" }
-}
-str = buildjson.encode (tbl, { indent = true })
-
--- or
-buildjson = require('buildjson')
-str = buildjson.encode (tbl)
-```
-
-Converts a Lua value to JSON:
-
-- `nil` values are not printed
-- `buildjson.null` values are encoded as JSON null
-
-If `indent` is truthy then the JSON is pretty-printed.
-
-#### buildjson.decode
-
-```lua
-buildjson = require('buildjson')
-str = '{"animals":["dog","cat","aardvark"],"bugs":null}'
-buildjson.decode (str)
-
--- or
-buildjson = require('buildjson')
-value, errmsg, errrendered, sb, sl, sc, eb, el, ec = buildjson.decode (str)
-```
-
-Converts JSON to a Lua value:
-
-- Large numbers are converted to floating-point numbers with a possible loss of precision. If outside the floating-point range, an error is raised.
-- JSON nulls are converted to `buildjson.null` Lua values
-
-If the JSON could be converted, the result is the first return value.
-
-Otherwise:
-
-- `value` is `nil`
-- `errmsg` is a brief error message
-- `errrendered` is a prerendered error
-- `sb`, `sl`, and `sc` are the starting byte offset (zero-based), line and column (1-based)
-- `eb`, `el`, and `ec` are the ending byte offset (zero-based), line and column (1-based)
-
-#### buildjson.null
-
-```lua
-buildjson = require('buildjson')
-tbl = {
-  animals = { "dog", "cat", "aardvark" },
-  bugs = buildjson.null,
-  trees = nil
-}
-str = buildjson.encode (tbl)
-
--- {
---   "animals":["dog","cat","aardvark"],
---   "bugs":null
--- }
-```
-
-The `buildjson.null` Lua value represents JSON null.
 
 ### Custom Lua Modules
 
