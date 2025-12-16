@@ -60,7 +60,7 @@
     - [subshell: get-object MODULE@VERSION -s REQUEST\_SLOT](#subshell-get-object-moduleversion--s-request_slot)
     - [subshell: post-object MODULE@VERSION -- CLI\_FORM\_DOC](#subshell-post-object-moduleversion----cli_form_doc)
     - [subshell: get-asset MODULE@VERSION FILE\_PATH](#subshell-get-asset-moduleversion-file_path)
-    - [Anonymous Regular Files: `-f :file`](#anonymous-regular-files--f-file)
+    - [Anonymous Regular Files: `-f :file:BASENAME`](#anonymous-regular-files--f-filebasename)
     - [Anonymous Executable Files: `-f :exe`](#anonymous-executable-files--f-exe)
     - [Anonymous Directories: `-d :`](#anonymous-directories--d-)
     - [Object ID with Build Metadata](#object-id-with-build-metadata)
@@ -337,7 +337,7 @@ Consider the following snippet from JSON build configuration that fetches PowerS
           "--arch", "$(get-asset CommonsBase_Dotnet.Lookup@1.0.0 -p arch -m ./${SLOTNAME.request})",
           "--tool-path", "${SLOT.request}",
           "--version", "7.5.4",
-          "--configfile", "$(get-asset CommonsBase_Shell.Pwsh.Bundles@7.5.4 -p NuGet.Config -f :file)"
+          "--configfile", "$(get-asset CommonsBase_Shell.Pwsh.Bundles@7.5.4 -p NuGet.Config -f :file:NuGet.Config)"
         ]
       },
       "outputs": {
@@ -1306,15 +1306,15 @@ Gets the zip file member from the object or asset, which must be a zip archive.
 
 Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
 
-| Option      | Description                                                                                                                 |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `-f :file`  | Place object in an [anonymous regular file](#anonymous-regular-files--f-file) and return its filepath                       |
-| `-f :exe`   | Place object in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
-| `-d :`      | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
-| `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
-| `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+| Option              | Description                                                                                                                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `-f :file:BASENAME` | Place object in an [anonymous regular file](#anonymous-regular-files--f-filebasename) and return its filepath               |
+| `-f :exe`           | Place object in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
+| `-d :`              | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`          | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
+| `-m MEMBER`         | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
 
-If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+If none of the `-f :file:BASENAME`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
 
 - the content may not exceed 1024 bytes
 - no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
@@ -1324,17 +1324,17 @@ If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the conten
 
 Submit the JSON constructed from `CLI_FORM_DOC` to the rule uniquely identified by `MODULE@VERSION`.
 
-| Option      | Description                                                                                                                 |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `-f :file`  | Place object in an [anonymous regular file](#anonymous-regular-files--f-file) and return its filepath                       |
-| `-f :exe`   | Place object in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
-| `-d :`      | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
-| `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
-| `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+| Option              | Description                                                                                                                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `-f :file:BASENAME` | Place object in an [anonymous regular file](#anonymous-regular-files--f-filebasename) and return its filepath               |
+| `-f :exe`           | Place object in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
+| `-d :`              | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`          | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
+| `-m MEMBER`         | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
 
 See [Form Document](#form-document) for the `CLI_FORM_DOC` form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
 
-If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+If none of the `-f :file:BASENAME`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
 
 - the content may not exceed 1024 bytes
 - no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
@@ -1344,25 +1344,27 @@ If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the conten
 
 Get the contents of the asset at `FILE_PATH` for the bundle `MODULE@VERSION`.
 
-| Option      | Description                                                                                                                |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `-f :file`  | Place asset in an [anonymous regular file](#anonymous-regular-files--f-file) and return its filepath                       |
-| `-f :exe`   | Place asset in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
-| `-d :`      | The asset must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
-| `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                                                 |
-| `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                                               |
+| Option              | Description                                                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `-f :file:BASENAME` | Place asset in an [anonymous regular file](#anonymous-regular-files--f-filebasename) and return its filepath               |
+| `-f :exe`           | Place asset in an [anonymous executable file](#anonymous-executable-files--f-exe) and return its filepath                  |
+| `-d :`              | The asset must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`          | See [Option: [-n STRIP]](#option--n-strip)                                                                                 |
+| `-m MEMBER`         | See [Option: [-m MEMBER](#option--m-member)]                                                                               |
 
-If none of the `-f :file`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+If none of the `-f :file:BASENAME`, `-f :exe`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
 
 - the content may not exceed 1024 bytes
 - no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
 - the byte 0 (ASCII NUL) may not be in the content as a security measure
 
-### Anonymous Regular Files: `-f :file`
+### Anonymous Regular Files: `-f :file:BASENAME`
 
 Place the object or asset in an anonymous regular file and return the file path.
 
-The file will be named `a.dat` and placed in a directory with no other files.
+The file will be named `BASENAME` and placed in a directory with no other files.
+
+If the simplified `-f :file` expression is used, the file will be named `a.dat.
 
 ### Anonymous Executable Files: `-f :exe`
 
@@ -2757,7 +2759,7 @@ The return values are the *bundle*, *partial get-bundle command* and the *partia
   ```
 
 - *partial get-bundle command*: The partially complete [value shell command](#value-shell-language-vsl) `get-bundle MODULE@VERSION` with `MODULE@VERSION` replaced with a real value. To use the command in subshells, the `-d :` must be added to complete the value shell command.
-- *partial get-asset command*: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION` with `MODULE@VERSION` replaced with a real value. To use the command in subshells, the `-p PROJECT_SOURCE_FILE -f :file` must be added to complete the value shell command.
+- *partial get-asset command*: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION` with `MODULE@VERSION` replaced with a real value. To use the command in subshells, the `-p PROJECT_SOURCE_FILE -f :file:BASENAME` must be added to complete the value shell command.
 
 Performance consideration: Using the *partial get-asset command* will almost always be more efficient for single file access than *partial get-bundle command*, as the latter may zip up the bundle and then unzip more files than are needed.
 
@@ -3304,7 +3306,7 @@ The details about the build request will be available as follows:
 | `request.srcfile.bundle`       | [Embedded File Scripts](#embedded-file-scripts)           | [Bundle](#assets) of the [Lua is embedded in it](#embedded-file-scripts), if any                              |
 | `request.srcfile.getasset`     | [Embedded File Scripts](#embedded-file-scripts)           | The shell command [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir)                             |
 |                                |                                                           | to get the asset in `request.srcfile.bundle`.                                                                 |
-|                                |                                                           | The `-f :file` or `-f :exe` argument must be added.                                                           |
+|                                |                                                           | The `-f :file:BASENAME` or `-f :exe` argument must be added.                                                  |
 | `request.submit.outputid`      | [Free Rule submit](#free-rule-command---submit)           | `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)                       |
 | `request.submit.outputmodule`  | [Free Rule submit](#free-rule-command---submit)           | `MODULE` in `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)           |
 | `request.submit.outputversion` | [Free Rule submit](#free-rule-command---submit)           | `VERSION` in `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)          |
@@ -3552,7 +3554,7 @@ The `request` table is available as:
   }
   ```
 
-- `request.srcfile.getasset`: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION -p PATH` with `MODULE@VERSION` and `PATH` replaced with real values. To use the command in subshells, the `-f :file` or (unlikely) `-f :exe` must be added to complete the value shell command.
+- `request.srcfile.getasset`: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION -p PATH` with `MODULE@VERSION` and `PATH` replaced with real values. To use the command in subshells, the `-f :file:BASENAME` or (unlikely) `-f :exe` must be added to complete the value shell command.
 
 The algorithm is:
 
