@@ -156,6 +156,8 @@
       - [string.upper](#stringupper)
     - [Lua table library](#lua-table-library)
       - [table.concat](#tableconcat)
+      - [table.getn](#tablegetn)
+      - [table.move](#tablemove)
       - [table.pack](#tablepack)
       - [table.unpack](#tableunpack)
     - [Custom Lua Modules](#custom-lua-modules)
@@ -2933,6 +2935,26 @@ All functions ignore non-numeric keys in the tables given as arguments.
 `table.concat (list [, sep [, i [, j]]])`
 
 Given a list where all elements are strings or numbers, returns the string `list[i]..sep..list[i+1] ··· sep..list[j]`. The default value for `sep` is the empty string, the default for `i` is 1, and the default for j is the length of the list (ie. `#list` from Lua 5.1+). If `i` is greater than `j`, returns the empty string.
+
+#### table.getn
+
+`table.getn (table)`
+
+**CAUTION** This Lua 5.0 function will be removed at a later date when the conventional Lua 5.1 table length operator `#` is introduced. Be prepared to change your Lua modules and rules when this happens.
+
+Returns the size of a table, when seen as a list. If the table has an `n` field with a numeric value, this value is the size of the table. Otherwise, the size is one less the first integer index with a `nil` value.
+
+Deprecated in Lua 5.1.
+
+#### table.move
+
+`table.move (a1, f, e, t [,a2])`
+
+Moves elements from the table `a1` to the table `a2`, performing the equivalent to the following multiple assignment: `a2[t],··· = a1[f],···,a1[e]`. The default for `a2` is `a1`. The destination range can overlap with the source range. The number of elements to be moved must fit in a Lua integer.
+
+Returns the destination table `a2`.
+
+Introduced in Lua 5.3.
 
 #### table.pack
 
