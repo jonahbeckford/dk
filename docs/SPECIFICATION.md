@@ -2512,8 +2512,8 @@ Any other Lua value will return a falsy value.
 #### request.io.realpath
 
 ```lua
-request.io.realpath(file)
-request.io.realpath(dir)
+request.io.realpath(file [, { relative = 1 }])
+request.io.realpath(dir [, { ... }])
 ```
 
 The path to the file or directory object.
@@ -2530,6 +2530,11 @@ In particular:
   1. Return dangling symlinks as the return value of `request.io.realpath`
   2. Bind those symlinks (ex. `ln -s -f` on Unix) to correct locations after the Lua rule function is finished but immediately before running rule expressions
   3. Bind those symlinks to dangling locations after the rule expressions are finished
+
+If `relative` is truthy, the path is returned as a relative path from the project base directory.
+Since, especially on Windows, not all paths can be made relative, the conversion to a relative path is best-effort.
+
+Without `relative`, at the discretion of the build system implementation the returned path may be an absolute path or a relative path.
 
 #### request.io.toasset
 
