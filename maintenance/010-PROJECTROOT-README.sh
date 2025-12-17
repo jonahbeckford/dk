@@ -41,7 +41,7 @@ fi
 
 # nit: Why doesn't CRLF work with ocaml-mdx?
 if [ -n "${COMSPEC:-}" ]; then
-    dos2unix README.md
+    dos2unix README.md docs/SCRIPTING.md
 fi
 
 if [ -n "${COMSPEC:-}" ]; then
@@ -55,6 +55,10 @@ if [ -n "${COMSPEC:-}" ]; then
 fi
 
 opam exec -- ocaml-mdx test -v -v -o README.corrected.md README.md
+opam exec -- ocaml-mdx test -v -v -o docs/SCRIPTING.corrected.md docs/SCRIPTING.md
 
 install README.md "target/README.$(date +%s).md"
+install docs/SCRIPTING.md "target/SCRIPTING.$(date +%s).md"
+
 mv README.corrected.md README.md
+mv docs/SCRIPTING.corrected.md docs/SCRIPTING.md

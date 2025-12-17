@@ -1,78 +1,52 @@
-# dk - A terribly uninteresting build and scripting system
+# dk - A terribly uninteresting build system
 
 `dk` solves the problem of **README-itis**: you give your users a long README document, your users fail to setup your software, and you lose a user forever.
 
-If you have a Linux application you could choose `nix` or Docker, but outside of that domain you have limited options. `dk` reliably builds software comparable to `nix` and Docker, but is designed for non-techie end-users (esp. Windows users) and has a few security controls and a spec for easy adoption into language build tools.
+If you have a Linux application you could choose `nix` or Docker, but outside of that domain you have limited options. `dk` reliably builds software comparable to `nix` and Docker, but is designed to be run by non-techie end-users (especially Windows users) and has a few security controls and a spec for easy adoption into language build tools.
 
-We'll use the software behind `dk` itself as an example of easy-to-fail, average-complexity software. `dk`'s scripting functionality requires a runtime environment and platform development kits are downloaded on-demand. We want our users (ex. you) to install and get started *quickly*. Users copy-and-paste the text blocks below on Windows. Go ahead and copy-and-paste yourself if you want to try the `dk` cross-compiling scripting environment, or skip past it to learn about the `dk` build tool:
+Let's build the [ASCII art tutorial for C#](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/file-based-programs) using `dk`.
 
-<!-- Windows updates: dk Ml.Use -- .\maintenance\010-PROJECTROOT-README.sh -->
+The following should work on Windows using PowerShell, macOS and glibc-based Linux:
 
-<!-- $MDX skip -->
 ```sh
-# Install a standalone executable. And available for macOS and Linux.
-$ winget install -e --id Diskuv.dk
+$ git clone --branch V2_4 https://github.com/diskuv/dk.git dksrc
+Cloning into 'dksrc'...
 ```
 
-<!-- $MDX skip -->
 ```sh
-# THIS EXAMPLE: The `dk` software stack has scripting.
-#      Here's a script to download and print a page to the screen.
-# IN GENERAL: Your users copy-and-paste your first example ...
-$ dk -S "
-    module Uri = Tr1Uri_Std.Uri
-  " -U "
-    Tr1Stdlib_V414Io.StdIo.print_endline @@
-    Lwt_main.run @@
-    DkNet_Std.Http.fetch_url ~max_sz:4096 @@
-    Uri.of_string {|https://jigsaw.w3.org/HTTP/h-content-md5.html|}
-  " -O ReleaseSmall Exe
-
-... THIS EXAMPLE: `dk` will install a scripting environment, download
-... development kits on-demand for different platforms, and do a
-... cross-compile. It *takes time* to download massive development kits.
-... You (and your user) will do something else in another window, but as
-... long as you don't have to type anything, you'll probably stick around!
-... ⟳ ⟳ ⟳ software installed automatically ⟳ ⟳ ⟳
-... ⟳ ⟳ ⟳         example executed         ⟳ ⟳ ⟳
-
-# THIS EXAMPLE: `dk` scripting makes standalone executables.
-# IN GENERAL: Your users get the results they want ...
-$ file target/ZzZz_Zz.Adhoc-*
-target/ZzZz_Zz.Adhoc-android_arm32v7a:   ELF 32-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-android_arm64v8a:   ELF 64-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-android_x86_64:     ELF 64-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-darwin_arm64:       Mach-O 64-bit executable arm...
-target/ZzZz_Zz.Adhoc-darwin_x86_64:      Mach-O 64-bit executable x86...
-target/ZzZz_Zz.Adhoc-linux_x86:          ELF 32-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-linux_x86_64:       ELF 64-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-windows_x86_64.exe: PE32+ executable (console) x...
-target/ZzZz_Zz.Adhoc-windows_x86.exe:    PE32 executable (console) In...
+$ dksrc/dk0 --20251217 run dksrc/samples/2025/AsciiArt.cs --delay 1000 "This is line one" "This is another line" "This is the last line"
+This is the last line
 ```
 
-You still need that long README for your complex software,
-but **your software setup is boring and in your users' hands quickly**.
+<!--
+-v --trial -d intermediate -d explain --cell dk0=ext/dk -I ext/dk/etc/dk/v --trust-local-package CommonsBase_Std --trust-local-package CommonsBase_Dotnet --trust-local-package CommonsBase_Shell run CommonsBase_Dotnet.SDK.Dotnet@10.0.100-rc.2.25502.107 'args[]=run' 'args[]=ext/dk/samples/2025/AsciiArt.cs'
+-->
+
+What did we accomplish?
+
+- You did not need to install `.NET` to build and run the `C#` script.
+- Removing the generated `target/` removes all traces of `.NET`.
+- On Windows, you did not need to accept elevated Administrator prompts to get `.NET` installed. Nor did you have to hunt for non-Administrator alternatives like [scripted continuous integration installs](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script#purpose) and [packaging to work on school computers](https://dotnet.microsoft.com/en-us/learntocode)
+- On Windows, you didn't worry if your PC has conflicting software (PATH conflicts, DLL hell, etc.) or was missing the correct `.NET` runtime.
+
+There is nothing special about `.NET` in what we accomplished, other than that is what the author (Jonah) needed first.
+
+In summary: You still may need a long README for your complex software, but **your software setup is boring and in your users' hands quickly**.
 
 ## Introduction
 
-`dk` solves README-itis in two ways:
-
-1. You model your actions (all that stuff you would put into a README) with scripts that `dk` will cross-compile for your users' platforms.
-2. All required actions are executed as needed on your users' machines with dk's build tool.
-
-Keep your setup boring: no interesting knobs, and no typing beyond the initial copy-and-paste.
+`dk` solves README-itis by keeping your setup boring: no interesting knobs, and no typing beyond the initial copy-and-paste.
 
 Skip down to [Comparisons](#comparisons) for how `dk` fits with other tools.
 
-The build tool is quite new and has not yet been integrated into the script runner. But it has a `dksrc/dk0` reference implementation which are documented in the next sections, and specifications are at [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
+The build system specifications are at [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
+The `dksrc/dk0` reference implementation is documented in the next sections, but as of December 2025 it has not been updated to use the Lua-based scripting.
 
-Separately, a [Quick Start for Scripting](#quick-start---scripting) is further below, and the main documentation site for the script runner is <https://diskuv.com/dk/help/latest/>.
-
-But we'll start with a walk-through of the **build tool** by unpackaging the popular zip compression software "7zip". (dk has no affliation with 7zip.)
+We'll start explaining the build system by unpackaging the popular zip compression software "7zip". (dk has no affliation with 7zip.)
 
 ---
 
-- [dk - A terribly uninteresting build and scripting system](#dk---a-terribly-uninteresting-build-and-scripting-system)
+- [dk - A terribly uninteresting build system](#dk---a-terribly-uninteresting-build-system)
   - [Introduction](#introduction)
   - [Concepts and Theory](#concepts-and-theory)
     - [Theory](#theory)
@@ -90,7 +64,6 @@ But we'll start with a walk-through of the **build tool** by unpackaging the pop
     - [7zip - building in GitHub Actions](#7zip---building-in-github-actions)
     - [7zip - summary](#7zip---summary)
   - [Using the Build Tool to debug a failed form](#using-the-build-tool-to-debug-a-failed-form)
-  - [Quick Start - Scripting](#quick-start---scripting)
   - [Comparisons](#comparisons)
   - [Licenses](#licenses)
   - [Open-Source](#open-source)
@@ -116,8 +89,6 @@ This is *not* a toy problem! We would need the 7zip executable if our second tas
 For unpacking the 7zip executables, we'll submit a form several times (each time with different parameters):
 
 ```sh
-$ git clone https://github.com/diskuv/dk.git dksrc
-Cloning into 'dksrc'...
 $ dksrc/dk0 get-object 'CommonsBase_Std.S7z@25.1.0' -s Release.Darwin_x86_64 -m ./7zz.exe -f target/Darwin_x86_64.7zz.exe
 [up-to-date] CommonsBase_Std.S7z@25.1.0+bn-20250101000000 -s Release.Darwin_x86_64
 ```
@@ -142,10 +113,10 @@ Mode                 LastWriteTime         Length Name
 
 so you can see the concepts in action:
 
-| Concept               | Examples                                                                                                             |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **Assets**            | ![7zip 25.01 GitHub Releases](docs/images/7zip-25-01-github-releases.png)                                            |
-| **Submitting Forms**  | ![Using a form with the CLI](docs/images/7zip-apply-form.png)                                                        |
+| Concept               | Examples                                                                                                                |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Assets**            | ![7zip 25.01 GitHub Releases](docs/images/7zip-25-01-github-releases.png)                                               |
+| **Submitting Forms**  | ![Using a form with the CLI](docs/images/7zip-apply-form.png)                                                           |
 | **Generated Objects** | `Y:\a\target\pid\500\bnrtauvvz5kvhwd5\out\Release.Windows_x86`:<br>![7z.exe object](docs/images/7zip-object-7z-exe.png) |
 |                       | `Y:\a\target\pid\500\wtqhxi4flrfk6sab\out\Release.Darwin_arm64`:<br>![7z tar](docs/images/7zip-object-tar.png)          |
 
@@ -336,16 +307,16 @@ Some of JSON file is fairly straightforward, but let's go through six (6) fields
 Now we are ready to run it.
 Let's review the command line options:
 
-| Argument                          | What                                                        |
-| --------------------------------- | ----------------------------------------------------------- |
-| `dksrc/dk0`               | The build tool. Eventually it will just be `dk`             |
-| `-I 7zip-project`                 | The folders containing `*.values.jsonc` files               |
-| `-x 7zip-org:subpath:`            | Invalidate all bundle files with the `origin: "7zip-org"`    |
-| `--`                              | Separate `dksrc/dk0` options from the command after |
-| `get-asset`                  | Command to get the named asset                         |
-| `OurZip_Demo.S7z1a.Assets@25.1.0` | The name and version in `.values.json`                      |
-| `-p 7zr.exe`                      | Identifies the file in `files:[{path:...},...]`             |
-| `-f target/7zr.exe`               | Send command output into the file                           |
+| Argument                          | What                                                      |
+| --------------------------------- | --------------------------------------------------------- |
+| `dksrc/dk0`                       | The build tool. Eventually it will just be `dk`           |
+| `-I 7zip-project`                 | The folders containing `*.values.jsonc` files             |
+| `-x 7zip-org:subpath:`            | Invalidate all bundle files with the `origin: "7zip-org"` |
+| `--`                              | Separate `dksrc/dk0` options from the command after       |
+| `get-asset`                       | Command to get the named asset                            |
+| `OurZip_Demo.S7z1a.Assets@25.1.0` | The name and version in `.values.json`                    |
+| `-p 7zr.exe`                      | Identifies the file in `files:[{path:...},...]`           |
+| `-f target/7zr.exe`               | Send command output into the file                         |
 
 and with that we do:
 
@@ -657,16 +628,16 @@ Previously we had used `get-asset`. Since we have so many bundle files, it is ea
 if we checked them all at once.
 We'll be using a new command `get-bundle`.
 
-| Argument                          | What                                                        |
-| --------------------------------- | ----------------------------------------------------------- |
-| `dksrc/dk0`               | The build tool. Eventually it will just be `dk`             |
-| `-I 7zip-project`                 | The folders containing `*.values.jsonc` files               |
-| `-x 7zip-org:subpath:`            | Invalidate all files with the `origin: "7zip-org"`          |
-| `--autofix`                       | Fix any invalid checksums                                   |
+| Argument                          | What                                                |
+| --------------------------------- | --------------------------------------------------- |
+| `dksrc/dk0`                       | The build tool. Eventually it will just be `dk`     |
+| `-I 7zip-project`                 | The folders containing `*.values.jsonc` files       |
+| `-x 7zip-org:subpath:`            | Invalidate all files with the `origin: "7zip-org"`  |
+| `--autofix`                       | Fix any invalid checksums                           |
 | `--`                              | Separate `dksrc/dk0` options from the command after |
-| `get-bundle`                       | Command to get all members of the named bundle               |
-| `OurZip_Demo.S7z1a.Assets@25.1.0` | The name and version in `.values.json`                      |
-| `-d target/7zr-assets`            | Send command output into the directory                      |
+| `get-bundle`                      | Command to get all members of the named bundle      |
+| `OurZip_Demo.S7z1a.Assets@25.1.0` | The name and version in `.values.json`              |
+| `-d target/7zr-assets`            | Send command output into the directory              |
 
 With that we get:
 
@@ -1387,109 +1358,6 @@ PS OurZip_Demo.S7z9.Debug@25.1.0+bn-20250101000000 -s Release.Linux_arm64> exit
 The Unix shell is similar.
 
 The `$env:SHELL_SLOT` (PowerShell), `%SHELL_SLOT%` (Windows Batch) or `$SHELL_SLOT` have the SLOT output directory for `enter-object OBJECT -s SLOT`.
-
-## Quick Start - Scripting
-
-<!-- SYNC: site:src/content/docs/guide/dk-quick-walkthrough.mdoc, dk.git:README.md#quickstart -->
-
-Install on Windows:
-
-<!-- $MDX skip -->
-```powershell
-winget install -e --id Diskuv.dk
-```
-
-or Apple/Silicon:
-
-<!-- $MDX skip -->
-```sh
-sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202508302258-signed/dk-darwin_arm64
-sudo chmod +x /usr/local/bin/dk
-```
-
-or Apple/Intel:
-
-<!-- $MDX skip -->
-```sh
-sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202508302258-signed/dk-darwin_x86_64
-sudo chmod +x /usr/local/bin/dk
-```
-
-or Linux with glibc and libstdc++ (Debian, Ubuntu, etc. but not Alpine):
-
-<!-- $MDX skip -->
-```sh
-sudo curl -o /usr/local/bin/dk https://diskuv.com/a/dk-exe/2.4.202508302258-signed/dk-linux_x86_64
-sudo chmod +x /usr/local/bin/dk
-[ -x /usr/bin/dnf ] && sudo dnf install -y libstdc++
-```
-
-Then cross-compile a script to standalone Windows, Linux, Android executables (and to a macOS executable if you are on a macOS machine):
-
-<!-- $MDX skip -->
-```sh
-$ dk -S "
-    module Http = DkNet_Std.Http
-    module Uri = Tr1Uri_Std.Uri
-    let print_endline = Tr1Stdlib_V414Io.StdIo.print_endline
-  " -U "
-    print_endline @@
-    Lwt_main.run @@
-    Http.fetch_url ~max_sz:4096 @@
-    Uri.of_string {|https://jigsaw.w3.org/HTTP/h-content-md5.html|}
-  " -O ReleaseSmall Exe
-[INFO ] /StdStd_Std.Run/
-       Assembling adhoc script ZzZz_Zz.Adhoc:
-       module Http = DkNet_Std.Http
-       module Uri = Tr1Uri_Std.Uri
-
-       let print_endline = Tr1Stdlib_V414Io.StdIo.print_endline
-
-       let __init (context : DkCoder_Std.Context.t) =
-         print_endline @@ Lwt_main.run
-         @@ Http.fetch_url ~max_sz:4096
-         @@ Uri.of_string {|https://jigsaw.w3.org/HTTP/h-content-md5.html|};
-         __init context
-       [@@warning "-unused-var-strict"]
-
-
-[INFO ][2025-09-17T23:18:56Z] /StdStd_Std.Exe/
-       <linux_x86_64>     target/ZzZz_Zz.Adhoc-linux_x86_64
-[INFO ][2025-09-17T23:18:57Z] /StdStd_Std.Exe/
-       <linux_x86>        target/ZzZz_Zz.Adhoc-linux_x86
-[INFO ][2025-09-17T23:19:01Z] /StdStd_Std.Exe/
-       <android_x86_64>   target/ZzZz_Zz.Adhoc-android_x86_64
-[INFO ][2025-09-17T23:19:04Z] /StdStd_Std.Exe/
-       <android_arm64v8a> target/ZzZz_Zz.Adhoc-android_arm64v8a
-[INFO ][2025-09-17T23:19:05Z] /StdStd_Std.Exe/
-       <android_arm32v7a> target/ZzZz_Zz.Adhoc-android_arm32v7a
-[INFO ][2025-09-17T23:19:05Z] /StdStd_Std.Exe/
-       Skipped darwin_x86_64 executable since that requires macOS machines for codesigning and Xcode for licensed MacOSX SDK
-[INFO ][2025-09-17T23:19:05Z] /StdStd_Std.Exe/
-       Skipped darwin_arm64 executable since that requires macOS machines for codesigning and Xcode for licensed MacOSX SDK
-[INFO ][2025-09-17T23:19:08Z] /StdStd_Std.Exe/
-       <windows_x86_64>   target/ZzZz_Zz.Adhoc-windows_x86_64.exe
-[INFO ][2025-09-17T23:19:11Z] /StdStd_Std.Exe/
-       <windows_x86>      target/ZzZz_Zz.Adhoc-windows_x86.exe
-```
-
-The executables will be available in the `target/` folder:
-
-<!-- $MDX skip -->
-```sh
-$ file target/ZzZz_Zz.Adhoc-* | cut -c1-69 | awk '{print $0 "..."}'
-target/ZzZz_Zz.Adhoc-android_arm32v7a:   ELF 32-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-android_arm64v8a:   ELF 64-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-android_x86_64:     ELF 64-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-darwin_arm64:       Mach-O 64-bit executable arm...
-target/ZzZz_Zz.Adhoc-darwin_x86_64:      Mach-O 64-bit executable x86...
-target/ZzZz_Zz.Adhoc-linux_x86:          ELF 32-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-linux_x86_64:       ELF 64-bit LSB pie executabl...
-target/ZzZz_Zz.Adhoc-windows_x86.exe:    PE32 executable (console) In...
-target/ZzZz_Zz.Adhoc-windows_x86_64.pdb: MSVC program database ver 7....
-target/ZzZz_Zz.Adhoc-windows_x86_64.exe: PE32+ executable (console) x...
-target/ZzZz_Zz.Adhoc-windows_x86.pdb:    MSVC program database ver 7....
-```
 
 ## Comparisons
 
