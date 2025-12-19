@@ -13,7 +13,7 @@ Let's pretend your application is the [official ASCII art application for C# .NE
 |                                                     | ... and running GUIs and accessing GPUs/AI is difficult inside containers |
 | write a `nix` package and distribute a `nix` cache  | most desktop users are not Linux users                                    |
 
-**Instead** tell your users to run the following on Windows with PowerShell or in a macOS shell:
+**Instead** tell your users to run the following on Windows with PowerShell or in a macOS/Linux shell:
 
 <!-- $MDX skip -->
 ```console
@@ -84,6 +84,8 @@ Skip down to [Comparisons](#comparisons) for how `dk` fits with other tools.
 
 The build system specifications are at [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
 The [Apache 2.0 and OSL 3.0 open source](https://gitlab.com/dkml/build-tools/MlFront#licenses) `dksrc/dk0` reference implementation is documented in the next sections, but as of December 2025 it has not been updated to use the simpler, Lua-based scripting.
+
+Requirements: `dksrc/dk0` works on Windows, macOS and Linux, with Linux needing `curl` installed. For now the `.NET` build rules require `glibc` on Linux (Debian, Ubuntu, RHEL, etc.), but the build system is statically linked on Linux and does not require `glibc`.
 
 We'll start explaining the build system by unpackaging the popular zip compression software "7zip". (dk has no affliation with 7zip.)
 
