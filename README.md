@@ -13,10 +13,6 @@ The following should work on Windows using PowerShell, macOS and (soon) glibc-ba
 git clone --branch V2_4 https://github.com/diskuv/dk.git dksrc
 ```
 
-```text
-Cloning into 'dksrc'...
-```
-
 <!-- TODO: dk0 run requires user prompting.
 So mdx is disabled until dk0 has an option and environment variable to accept that.
 The environment variable would work better with mdx generation of README.md.
@@ -25,6 +21,9 @@ Manual regeneration? Prefix with `yes |`, disable MDX skip and sanitize paths (m
 ```console
 dksrc/dk0 --20251217 -nosysinc run dksrc/samples/2025/AsciiArt.cs --delay 1000 "This is line one" "This is another line" "This is the last line"
 ```
+
+<details>
+<summary>Console Output</summary>
 
 ```text
 The script `dksrc/samples/2025/AsciiArt.cs` (OurScript_Std.Xewxvzupgqaehc3qi.Run@0.1.0+bn-20250101000000)
@@ -52,8 +51,8 @@ Warning: Compiler server returned unexpected response: CannotConnectResponse
  / /    / _ \ / /  (_-<      / /  (_-<     / __/ / _ \/ -_)      / / / _ `/ (_-</ __/      / /  / /  / _ \/ -_)
 /_/    /_//_//_/  /___/     /_/  /___/     \__/ /_//_/\__/      /_/  \_,_/ /___/\__/      /_/  /_/  /_//_/\__/
 
-
 ```
+</details>
 
 What did we accomplish?
 
