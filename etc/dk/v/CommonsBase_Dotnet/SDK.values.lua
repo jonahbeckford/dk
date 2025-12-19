@@ -6172,7 +6172,10 @@ function M.run(options)
     local program = dotnetsdk .. "/dotnet" .. request.continued.extexe
 
     -- make args = run <scriptpath> -- <userargs...>
-    local args = { "run", scriptpath, "--" }
+    -- BUT ... VBCSCompiler.exe will stay alive and the dotnet directory will essentially
+    -- be locked until reboot. Any subsequent run on Windows will fail since they try to update
+    -- the locked dotnet files like System.Runtime.InteropServices.dll.
+    local args = { "run", scriptpath,  "--disable-build-servers", "--" }
     local nuserargs = table.getn(userargs) ---@diagnostic disable-line: deprecated, access-invisible
     local nargs = table.getn(args) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(userargs, 1, nuserargs, nargs + 1, args)
