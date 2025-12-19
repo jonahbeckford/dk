@@ -1,12 +1,19 @@
 # dk - A terribly uninteresting build system
 
-`dk` solves the problem of **README-itis**: you give your users a long README document, your users fail to setup your software, and you lose a user forever.
+Motivating problem: You have technical users, many of whom are not software engineers. They need to customize your software on their own PCs.
 
-If you have a Linux application you could choose `nix` or Docker, but outside of that domain you have limited options. `dk` reliably builds software comparable to `nix` and Docker, but is designed to be run by non-techie end-users (especially Windows users) and has a few security controls and a spec for easy adoption into language build tools.
+Let's pretend your application is the [official ASCII art application for C# .NET](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/file-based-programs). You evaluate the commons ways to run your software:
 
-Let's build the [ASCII art tutorial for C#](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/file-based-programs) using `dk`.
+| You                                                 | Problem                                                                  |
+| --------------------------------------------------- | ------------------------------------------------------------------------ |
+| compile your application and distribute executables | users can't customize it                                                 |
+| ask users to install a language SDK and runtime     | if only all your users were engineers with Administrator/root access!    |
+| build `Docker` containers                           | Windows users have corporate and school PCs without Administrator access |
+|                                                     | And containers are hard to customize.                                    |
+|                                                     | And running GUIs and accessing GPUs/AI is difficult inside containers.   |
+| write a `nix` package and distribute a `nix` cache  | most of your users are not on Linux                                      |
 
-The following should work on Windows using PowerShell, macOS and (soon) glibc-based Linux:
+**Instead** tell your users to run the following on Windows with PowerShell or in a macOS shell:
 
 <!-- $MDX skip -->
 ```console
@@ -54,25 +61,30 @@ Warning: Compiler server returned unexpected response: CannotConnectResponse
 ```
 </details>
 
-What did we accomplish?
+<br>
 
-- You did not need to install `.NET` to build and run the `C#` script.
-- Removing the generated `target/` removes all traces of `.NET`.
+What did you accomplish?
+
+- You did not need to install `.NET` to build and run the `C#` script
+- Your users can customize configuration files and any source files you expose; your software will get built automatically
+- Removing the generated `t/` directory removes all traces of the `.NET` SDK and runtime
 - On Windows, you did not need to accept elevated Administrator prompts to get `.NET` installed. Nor did you have to hunt for non-Administrator alternatives like [scripted continuous integration installs](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script#purpose) and [packaging to work on school computers](https://dotnet.microsoft.com/en-us/learntocode)
 - On Windows, you didn't worry if your PC has conflicting software (PATH conflicts, DLL hell, etc.) or was missing the correct `.NET` runtime.
 
 There is nothing special about `.NET` in what we accomplished, other than that is what the author (Jonah) needed first.
 
-In summary: You still may need a long README for your complex software, but **your software setup is boring and in your users' hands quickly**.
-
 ## Introduction
 
-`dk` solves README-itis by keeping your setup boring: no interesting knobs, and no typing beyond the initial copy-and-paste.
+Underlying `dk` is a thesis:
+
+> a parameterizable, incremental, remote cacheable build system is indistinguishable from a package manager
+
+In short: You don't need a package manager, script launcher, install wizard, yadda yadda yadda. The `dk` build system is all you need to have **your software setup and customization be boring and in your users' hands quickly**.
 
 Skip down to [Comparisons](#comparisons) for how `dk` fits with other tools.
 
 The build system specifications are at [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
-The `dksrc/dk0` reference implementation is documented in the next sections, but as of December 2025 it has not been updated to use the Lua-based scripting.
+The `dksrc/dk0` reference implementation is documented in the next sections, but as of December 2025 it has not been updated to use the simpler, Lua-based scripting.
 
 We'll start explaining the build system by unpackaging the popular zip compression software "7zip". (dk has no affliation with 7zip.)
 
