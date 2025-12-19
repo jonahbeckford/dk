@@ -1187,16 +1187,16 @@ jobs:
                   path: |
                       t/d/dk/val.1
                       t/d/dk/cts.1.*
-                      target/config/dk/build.pub
-                      target/config/dk/build.sec
+                      t/c/dk/build.pub
+                      t/c/dk/build.sec
                   restore-keys: dk-stores-and-keys             # use latest cache
                   key: dk-stores-and-keys-${{ github.run_id }} # update cache on every run
 
             - name: Build ${{ github.workflow }}
               env:
                   # Cross-platform CI caches behave best when the cached data is under the project directory
-                  XDG_CONFIG_HOME: ${{ github.workspace }}/target/config
-                  XDG_DATA_HOME: ${{ github.workspace }}/target/data
+                  XDG_CONFIG_HOME: ${{ github.workspace }}/t/c
+                  XDG_DATA_HOME: ${{ github.workspace }}/t/d
               run: |
                 dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./LICENSE -f target/LICENSE
 

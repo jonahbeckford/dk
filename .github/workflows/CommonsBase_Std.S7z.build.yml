@@ -26,29 +26,29 @@ jobs:
                   # The data stores and build keys are safe to share between Windows, macOS and Linux
                   enableCrossOsArchive: true
                   path: |
-                      t/d/dk/val.1
-                      t/d/dk/cts.1.*
-                      target/config/dk/build.pub
-                      target/config/dk/build.sec
+                      t/d/val.1
+                      t/d/cts.1.*
+                      t/c/build.pub
+                      t/c/build.sec
                   restore-keys: dk-stores-and-keys             # use latest cache
                   key: dk-stores-and-keys-${{ github.run_id }} # update cache on every run
 
             - name: Build ${{ github.workflow }}
-              env:
-                  # Cross-platform CI caches behave best when the cached data is under the project directory
-                  XDG_CONFIG_HOME: ${{ github.workspace }}/target/config
-                  XDG_DATA_HOME: ${{ github.workspace }}/target/data
+              # `--trial` helps cross-platform CI caches behave best since cache+data is under the project directory
+              shell: cmd # default `shell: pwsh` ==> adding `if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }` after each dk0 command
               run: |
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./LICENSE -f target/LICENSE
+                dksrc/dk0 --trial --print-config || ECHO Build configuration printed above.
 
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./7zz.exe -f target/Release.Darwin_arm64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_x86_64  -m ./7zz.exe -f target/Release.Darwin_x86_64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm      -m ./7zz.exe -f target/Release.Linux_arm.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm64    -m ./7zz.exe -f target/Release.Linux_arm64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86      -m ./7zz.exe -f target/Release.Linux_x86.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86_64   -m ./7zz.exe -f target/Release.Linux_x86_64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86    -m ./7zz.exe -f target/Release.Windows_x86.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86_64 -m ./7zz.exe -f target/Release.Windows_x86_64.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_arm64   -m ./LICENSE -f target/LICENSE
+
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_arm64   -m ./7zz.exe -f target/Release.Darwin_arm64.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_x86_64  -m ./7zz.exe -f target/Release.Darwin_x86_64.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_arm      -m ./7zz.exe -f target/Release.Linux_arm.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_arm64    -m ./7zz.exe -f target/Release.Linux_arm64.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_x86      -m ./7zz.exe -f target/Release.Linux_x86.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_x86_64   -m ./7zz.exe -f target/Release.Linux_x86_64.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Windows_x86    -m ./7zz.exe -f target/Release.Windows_x86.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Windows_x86_64 -m ./7zz.exe -f target/Release.Windows_x86_64.7zz.exe
 
             - name: Test ${{ github.workflow }}
               run: target/${{ env.TEST_SLOT }}.7zz.exe --help
