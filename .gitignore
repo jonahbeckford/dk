@@ -17,7 +17,7 @@
 /.ci/local/share/gradle
 
 # dk0
-/target/
+/t/
 /.mlfshell_*
 /xconfig/
 
