@@ -16,7 +16,7 @@
 // Use dotnet-install.sh --verbose and dotnet-install.ps1 -Verbose to see the URLs.
 // ------------------------------------------------
 // Tests:
-// ./mlfront-shell -I etc/dk/v --trust-local-package CommonsBase_Dotnet --verbose --autofix -- get-bundle CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -d target/dotnetbundle
+// ./mlfront-shell -I etc/dk/v --trust-local-package CommonsBase_Dotnet --verbose --autofix get-bundle CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -d target/dotnetbundle
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_4/etc/jsonschema/mlfront-values.json",
   "schema_version": { "major": 1, "minor": 0 },
