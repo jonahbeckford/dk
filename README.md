@@ -325,7 +325,7 @@ and with that we do:
 # You should have done this already in earlier steps. If not, do it now:
 # $ git clone https://github.com/diskuv/dk.git dksrc
 
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-asset 'OurZip_Demo.S7z1a.Assets@25.1.0' -p 7zr.exe -f target/7zr.exe
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-asset 'OurZip_Demo.S7z1a.Assets@25.1.0' -p 7zr.exe -f target/7zr.exe
 [error 215565e4]: Could not get asset.
 
     ╭──▶ 7zip-project/OurZip_Demo.S7z.S7zr0.values.jsonc:25.24-25.40
@@ -352,13 +352,13 @@ and we get:
 
 <!-- $MDX skip -->
 ```sh
-$ dksrc/dk0 --autofix -I 7zip-project -x 7zip-org:subpath: -- get-asset 'OurZip_Demo.S7z1a.Assets@25.1.0' -p 7zr.exe -f target/7zr.exe
+$ dksrc/dk0 --autofix -I 7zip-project -x 7zip-org:subpath: get-asset 'OurZip_Demo.S7z1a.Assets@25.1.0' -p 7zr.exe -f target/7zr.exe
 ...
 autofix applied to `7zip-project/OurZip_Demo.S7z1a.S7zr.values.jsonc`
 ```
 
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-asset 'OurZip_Demo.S7z1a.Assets@25.1.0' -p 7zr.exe -f target/7zr.exe
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-asset 'OurZip_Demo.S7z1a.Assets@25.1.0' -p 7zr.exe -f target/7zr.exe
 [up-to-date] OurZip_Demo.S7z1a.Assets@25.1.0+bn-20250101000000 -p 7zr.exe
 ```
 
@@ -466,7 +466,7 @@ The JSON field is called `precommands` because a form has an optional "function"
 form is submitted. We don't have a function in this example, but precommands always run before the optional function.
 
 **Key Point**: The `get-object` precommand is the basic unit of function composition in the `dk` build system.
-You can submit a form from the command line `dksrc/dk0 ... -- get-object FORM ...`, which runs the form's
+You can submit a form from the command line `dksrc/dk0 ... get-object FORM ...`, which runs the form's
 precommands, and if one or more of those precommands is a `get-object` that precommand will submit another form.
 And that form can then run precommands, which can then submit more forms. And so on.
 
@@ -489,7 +489,7 @@ when you forgot to declare files or you declare too many files.
 We'll use `get-object` to submit our new form. With that we get:
 
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-object 'OurZip_Demo.S7z1b.S7zr@25.1.0' -s Release.Windows_x86_64 -d target/7zr-win64
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-object 'OurZip_Demo.S7z1b.S7zr@25.1.0' -s Release.Windows_x86_64 -d target/7zr-win64
 [up-to-date] OurZip_Demo.S7z1b.S7zr@25.1.0+bn-20250101000000 -s Release.Windows_x86_64
 ```
 
@@ -642,7 +642,7 @@ We'll be using a new command `get-bundle`.
 With that we get:
 
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-bundle 'OurZip_Demo.S7z1c.Assets@25.1.0' -d target/7zr-assets
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-bundle 'OurZip_Demo.S7z1c.Assets@25.1.0' -d target/7zr-assets
 [up-to-date] OurZip_Demo.S7z1c.Assets@25.1.0+bn-20250101000000
 ```
 
@@ -689,7 +689,7 @@ What happens if we output the bundle to a file rather than a directory.
 That is, what if we replaced `-d target/7zr-assets` with `-f target/7zr-file`?
 
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-bundle 'OurZip_Demo.S7z1c.Assets@25.1.0' -f target/7zr-file
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-bundle 'OurZip_Demo.S7z1c.Assets@25.1.0' -f target/7zr-file
 [up-to-date] OurZip_Demo.S7z1c.Assets@25.1.0+bn-20250101000000
 ```
 
@@ -833,7 +833,7 @@ But for now we can submit the form if we are on Windows. We'll submit the `Relea
 
 <!-- $MDX os_type=Win32 -->
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-object 'OurZip_Demo.S7z2.Windows7zExe@25.1.0' -s Release.Windows_arm64 -d target/7zexe-winarm64
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-object 'OurZip_Demo.S7z2.Windows7zExe@25.1.0' -s Release.Windows_arm64 -d target/7zexe-winarm64
 [up-to-date] OurZip_Demo.S7z2.Windows7zExe@25.1.0+bn-20250101000000 -s Release.Windows_arm64
 ```
 
@@ -942,7 +942,7 @@ The use of `7zr.exe` means we can only run this step on Windows hardware, even t
 
 <!-- $MDX os_type=Win32 -->
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-object 'OurZip_Demo.S7z3.MacLinux7zTar@25.1.0' -s Release.Linux_arm64 -d target/7ztar-linuxarm64
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-object 'OurZip_Demo.S7z3.MacLinux7zTar@25.1.0' -s Release.Linux_arm64 -d target/7ztar-linuxarm64
 [up-to-date] OurZip_Demo.S7z3.MacLinux7zTar@25.1.0+bn-20250101000000 -s Release.Linux_arm64
 ```
 
@@ -1042,7 +1042,7 @@ The use of `7z.exe` means we can only run this step on Windows hardware, even th
 
 <!-- $MDX os_type=Win32 -->
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-object 'OurZip_Demo.S7z4.MacLinux7zExe@25.1.0' -s Release.Darwin_x86_64 -d target/7zexe-macintel
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-object 'OurZip_Demo.S7z4.MacLinux7zExe@25.1.0' -s Release.Darwin_x86_64 -d target/7zexe-macintel
 [up-to-date] OurZip_Demo.S7z4.MacLinux7zExe@25.1.0+bn-20250101000000 -s Release.Darwin_x86_64
 ```
 
@@ -1127,7 +1127,7 @@ We have not yet provided an overall interface for the 7zip package. Let's do thi
 With that our users can grab the `7zz.exe` executable for any operating system and CPU architecture:
 
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-object 'OurZip_Demo.S7z5.S7zExe@25.1.0' -s Release.Linux_x86_64 -d target/7z-linux64
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-object 'OurZip_Demo.S7z5.S7zExe@25.1.0' -s Release.Linux_x86_64 -d target/7z-linux64
 [up-to-date] OurZip_Demo.S7z5.S7zExe@25.1.0+bn-20250101000000 -s Release.Linux_x86_64
 ```
 
@@ -1141,7 +1141,7 @@ target/7z-linux64/7zz.exe: ELF 64-bit LSB pie executable, x86-64, version 1 (SYS
 Since `7zz.exe` is a standalone executable that doesn't need any DLLs or `.so` (except standard GLIBC system libraries on Linux), we can use the `-m MEMBER` option to directly fetch the `7zz.exe` executable:
 
 ```sh
-$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: -- get-object 'OurZip_Demo.S7z5.S7zExe@25.1.0' -s Release.Linux_x86_64 -m ./7zz.exe -f target/7zz.exe
+$ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-object 'OurZip_Demo.S7z5.S7zExe@25.1.0' -s Release.Linux_x86_64 -m ./7zz.exe -f target/7zz.exe
 [up-to-date] OurZip_Demo.S7z5.S7zExe@25.1.0+bn-20250101000000 -s Release.Linux_x86_64
 $ file target/7zz.exe
 target/7zz.exe: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=7a6c7a136fc4e7df4ddcd80d2aae72bc658ef822, for GNU/Linux 3.2.0, stripped
@@ -1198,16 +1198,16 @@ jobs:
                   XDG_CONFIG_HOME: ${{ github.workspace }}/target/config
                   XDG_DATA_HOME: ${{ github.workspace }}/target/data
               run: |
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./LICENSE -f target/LICENSE
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./LICENSE -f target/LICENSE
 
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./7zz.exe -f target/Release.Darwin_arm64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_x86_64  -m ./7zz.exe -f target/Release.Darwin_x86_64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm      -m ./7zz.exe -f target/Release.Linux_arm.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm64    -m ./7zz.exe -f target/Release.Linux_arm64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86      -m ./7zz.exe -f target/Release.Linux_x86.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86_64   -m ./7zz.exe -f target/Release.Linux_x86_64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86    -m ./7zz.exe -f target/Release.Windows_x86.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std -- get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86_64 -m ./7zz.exe -f target/Release.Windows_x86_64.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./7zz.exe -f target/Release.Darwin_arm64.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_x86_64  -m ./7zz.exe -f target/Release.Darwin_x86_64.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm      -m ./7zz.exe -f target/Release.Linux_arm.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm64    -m ./7zz.exe -f target/Release.Linux_arm64.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86      -m ./7zz.exe -f target/Release.Linux_x86.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86_64   -m ./7zz.exe -f target/Release.Linux_x86_64.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86    -m ./7zz.exe -f target/Release.Windows_x86.7zz.exe
+                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86_64 -m ./7zz.exe -f target/Release.Windows_x86_64.7zz.exe
 
             - name: Test ${{ github.workflow }}
               run: target/${{ env.TEST_SLOT }}.7zz.exe --help
