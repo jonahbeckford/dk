@@ -4,14 +4,14 @@ Motivating problem: You have technical users, many of whom are not software engi
 
 Let's pretend your application is the [official ASCII art application for C# .NET](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/file-based-programs). You evaluate the commons ways to run your software:
 
-| You                                                 | Problem                                                                  |
-| --------------------------------------------------- | ------------------------------------------------------------------------ |
-| compile your application and distribute executables | users can't customize it                                                 |
-| ask users to install a language SDK and runtime     | if only all your users were engineers with Administrator/root access!    |
-| build `Docker` containers                           | Windows users have corporate and school PCs without Administrator access |
-|                                                     | And containers are hard to customize.                                    |
-|                                                     | And running GUIs and accessing GPUs/AI is difficult inside containers.   |
-| write a `nix` package and distribute a `nix` cache  | most of your users are not on Linux                                      |
+| You can                                             | but                                                                   |
+| --------------------------------------------------- | ------------------------------------------------------------------------  |
+| compile your application and distribute executables | users can't customize a prebuilt executable                                                  |
+| ask users to install a language SDK and runtime     | not all users are software engineers with Administrator/root access     |
+| build `Docker` containers                           | Windows users have corporate and school PCs without Administrator access  |
+|                                                     | ... and containers are hard to customize                                  |
+|                                                     | ... and running GUIs and accessing GPUs/AI is difficult inside containers |
+| write a `nix` package and distribute a `nix` cache  | most desktop users are not Linux users                                       |
 
 **Instead** tell your users to run the following on Windows with PowerShell or in a macOS shell:
 
@@ -40,7 +40,6 @@ is requesting permission to run:
     run $CACHED/AsciiArt.cs -- --delay 1000 'This is line one' 'This is another line' 'This is the last line'
 
 Do you trust this script to run the program? (y/N): y
-Warning: Compiler server returned unexpected response: CannotConnectResponse
  ______   __    _              _              __   _
 /_  __/  / /   (_)  ___       (_)  ___       / /  (_)  ___  ___       ___   ___  ___
  / /    / _ \ / /  (_-<      / /  (_-<      / /  / /  / _ \/ -_)     / _ \ / _ \/ -_)
@@ -63,10 +62,10 @@ Warning: Compiler server returned unexpected response: CannotConnectResponse
 
 <br>
 
-What did you accomplish?
+**What did you accomplish?**
 
 - You did not need to install `.NET` to build and run the `C#` script
-- Your users can customize configuration files and any source files you expose; your software will get built automatically
+- Your users can customize the `C#` script, configuration files, and whatever you expose; your software will get built automatically
 - Removing the generated `t/` directory removes all traces of the `.NET` SDK and runtime
 - On Windows, you did not need to accept elevated Administrator prompts to get `.NET` installed. Nor did you have to hunt for non-Administrator alternatives like [scripted continuous integration installs](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script#purpose) and [packaging to work on school computers](https://dotnet.microsoft.com/en-us/learntocode)
 - On Windows, you didn't worry if your PC has conflicting software (PATH conflicts, DLL hell, etc.) or was missing the correct `.NET` runtime.
@@ -84,7 +83,7 @@ In short: You don't need a package manager, script launcher, install wizard, yad
 Skip down to [Comparisons](#comparisons) for how `dk` fits with other tools.
 
 The build system specifications are at [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
-The `dksrc/dk0` reference implementation is documented in the next sections, but as of December 2025 it has not been updated to use the simpler, Lua-based scripting.
+The [Apache 2.0 and OSL 3.0 open source](https://gitlab.com/dkml/build-tools/MlFront#licenses) `dksrc/dk0` reference implementation is documented in the next sections, but as of December 2025 it has not been updated to use the simpler, Lua-based scripting.
 
 We'll start explaining the build system by unpackaging the popular zip compression software "7zip". (dk has no affliation with 7zip.)
 
