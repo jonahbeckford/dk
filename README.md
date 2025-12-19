@@ -13,14 +13,42 @@ $ git clone --branch V2_4 https://github.com/diskuv/dk.git dksrc
 Cloning into 'dksrc'...
 ```
 
+<!-- TODO: dk0 run requires user prompting.
+So mdx is disabled until dk0 has an option and environment variable to accept that.
+The environment variable would work better with mdx generation of README.md.
+Manual regeneration? Prefix with `yes |`, disable MDX skip and sanitize paths (maybe do that in 010 script) -->
+<!-- $MDX skip -->
 ```sh
-$ dksrc/dk0 --20251217 run dksrc/samples/2025/AsciiArt.cs --delay 1000 "This is line one" "This is another line" "This is the last line"
-This is the last line
-```
+$ dksrc/dk0 --20251217 -nosysinc run dksrc/samples/2025/AsciiArt.cs --delay 1000 "This is line one" "This is another line" "This is the last line"
 
-<!--
--v --trial -d intermediate -d explain --cell dk0=ext/dk -I ext/dk/etc/dk/v --trust-local-package CommonsBase_Std --trust-local-package CommonsBase_Dotnet --trust-local-package CommonsBase_Shell run CommonsBase_Dotnet.SDK.Dotnet@10.0.100-rc.2.25502.107 'args[]=run' 'args[]=ext/dk/samples/2025/AsciiArt.cs'
--->
+
+The script `dksrc/samples/2025/AsciiArt.cs` (OurScript_Std.Xewxvzupgqaehc3qi.Run@0.1.0+bn-20250101000000)
+is requesting permission to run:
+  Program: $CACHED/dotnet
+  Arguments:
+    run $CACHED/AsciiArt.cs -- --delay 1000 'This is line one' 'This is another line' 'This is the last line'
+
+Do you trust this script to run the program? (y/N): y
+Warning: Compiler server returned unexpected response: CannotConnectResponse
+ ______   __    _              _              __   _
+/_  __/  / /   (_)  ___       (_)  ___       / /  (_)  ___  ___       ___   ___  ___
+ / /    / _ \ / /  (_-<      / /  (_-<      / /  / /  / _ \/ -_)     / _ \ / _ \/ -_)
+/_/    /_//_//_/  /___/     /_/  /___/     /_/  /_/  /_//_/\__/      \___//_//_/\__/
+
+
+ ______   __    _              _                              __    __                    __   _
+/_  __/  / /   (_)  ___       (_)  ___      ___ _  ___  ___  / /_  / /  ___   ____       / /  (_)  ___  ___
+ / /    / _ \ / /  (_-<      / /  (_-<     / _ `/ / _ \/ _ \/ __/ / _ \/ -_) / __/      / /  / /  / _ \/ -_)
+/_/    /_//_//_/  /___/     /_/  /___/     \_,_/ /_//_/\___/\__/ /_//_/\__/ /_/        /_/  /_/  /_//_/\__/
+
+
+ ______   __    _              _             __    __              __             __         __   _
+/_  __/  / /   (_)  ___       (_)  ___      / /_  / /  ___        / / ___ _  ___ / /_       / /  (_)  ___  ___
+ / /    / _ \ / /  (_-<      / /  (_-<     / __/ / _ \/ -_)      / / / _ `/ (_-</ __/      / /  / /  / _ \/ -_)
+/_/    /_//_//_/  /___/     /_/  /___/     \__/ /_//_/\__/      /_/  \_,_/ /___/\__/      /_/  /_/  /_//_/\__/
+
+
+```
 
 What did we accomplish?
 
@@ -643,6 +671,24 @@ With that we get:
 
 ```sh
 $ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-bundle 'OurZip_Demo.S7z1c.Assets@25.1.0' -d target/7zr-assets
+[progress]: dla 7zip-org:7zr.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-arm.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-arm64.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-arm.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-arm64.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-x64.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-x86.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-mac.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-x64.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
 [up-to-date] OurZip_Demo.S7z1c.Assets@25.1.0+bn-20250101000000
 ```
 
@@ -690,6 +736,24 @@ That is, what if we replaced `-d target/7zr-assets` with `-f target/7zr-file`?
 
 ```sh
 $ dksrc/dk0 -I 7zip-project -x 7zip-org:subpath: get-bundle 'OurZip_Demo.S7z1c.Assets@25.1.0' -f target/7zr-file
+[progress]: dla 7zip-org:7zr.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-arm.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-arm64.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-arm.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-arm64.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-x64.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-linux-x86.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-mac.tar.xz ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
+[progress]: dla 7zip-org:7z2501-x64.exe ...
+[progress]:   dlb https://github.com/ip7z/7zip/releases/download/25.01 ...
 [up-to-date] OurZip_Demo.S7z1c.Assets@25.1.0+bn-20250101000000
 ```
 
@@ -1185,29 +1249,39 @@ jobs:
                   # The data stores and build keys are safe to share between Windows, macOS and Linux
                   enableCrossOsArchive: true
                   path: |
-                      t/d/dk/val.1
-                      t/d/dk/cts.1.*
-                      t/c/dk/build.pub
-                      t/c/dk/build.sec
+                      t/d/val.1
+                      t/d/cts.1.*
+                      t/c/build.pub
+                      t/c/build.sec
                   restore-keys: dk-stores-and-keys             # use latest cache
                   key: dk-stores-and-keys-${{ github.run_id }} # update cache on every run
 
             - name: Build ${{ github.workflow }}
-              env:
-                  # Cross-platform CI caches behave best when the cached data is under the project directory
-                  XDG_CONFIG_HOME: ${{ github.workspace }}/t/c
-                  XDG_DATA_HOME: ${{ github.workspace }}/t/d
+              shell: pwsh
+              # `--trial` helps cross-platform CI caches behave best since cache+data is under the project directory
               run: |
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./LICENSE -f target/LICENSE
+                dksrc/dk0 --trial --print-config
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_arm64   -m ./7zz.exe -f target/Release.Darwin_arm64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Darwin_x86_64  -m ./7zz.exe -f target/Release.Darwin_x86_64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm      -m ./7zz.exe -f target/Release.Linux_arm.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_arm64    -m ./7zz.exe -f target/Release.Linux_arm64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86      -m ./7zz.exe -f target/Release.Linux_x86.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Linux_x86_64   -m ./7zz.exe -f target/Release.Linux_x86_64.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86    -m ./7zz.exe -f target/Release.Windows_x86.7zz.exe
-                dksrc/dk0 --verbose -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object '${{ github.workflow }}@${{ env.LIBRARY_VERSION }}' -s Release.Windows_x86_64 -m ./7zz.exe -f target/Release.Windows_x86_64.7zz.exe
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_arm64   -m ./LICENSE -f target/LICENSE
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_arm64   -m ./7zz.exe -f target/Release.Darwin_arm64.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_x86_64  -m ./7zz.exe -f target/Release.Darwin_x86_64.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_arm      -m ./7zz.exe -f target/Release.Linux_arm.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_arm64    -m ./7zz.exe -f target/Release.Linux_arm64.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_x86      -m ./7zz.exe -f target/Release.Linux_x86.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_x86_64   -m ./7zz.exe -f target/Release.Linux_x86_64.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Windows_x86    -m ./7zz.exe -f target/Release.Windows_x86.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Windows_x86_64 -m ./7zz.exe -f target/Release.Windows_x86_64.7zz.exe
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
             - name: Test ${{ github.workflow }}
               run: target/${{ env.TEST_SLOT }}.7zz.exe --help
