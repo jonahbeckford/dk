@@ -57,6 +57,15 @@ fi
 opam exec -- ocaml-mdx test -v -v -o README.corrected.md README.md
 opam exec -- ocaml-mdx test -v -v -o docs/SCRIPTING.corrected.md docs/SCRIPTING.md
 
+sanitize() {
+    # ex. /Volumes/ExtremeSSD/Source/dk/t/c/b.1/sub/bcxcynflu6qy4eg4i7s2szq67y/dotnet
+    # shellcheck disable=SC2016
+    /usr/bin/sed 's#[/A-Za-z0-9]*/t/c/b.1/sub/[^/]*#$CACHED#g' "$1" > "$1.tmp"
+    mv "$1.tmp" "$1"
+}
+sanitize README.corrected.md
+sanitize docs/SCRIPTING.corrected.md
+
 install README.md "target/README.$(date +%s).md"
 install docs/SCRIPTING.md "target/SCRIPTING.$(date +%s).md"
 
