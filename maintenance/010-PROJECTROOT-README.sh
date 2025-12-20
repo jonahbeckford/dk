@@ -25,7 +25,10 @@ opam show mdx || opam install mdx
 #     install -v ../dksdk-coder/_build/default/ext/MlFront/src/MlFront_Exec/Shell.exe "$LOCALAPPDATA/Programs/dk0/dk0exe-2.4.2.12-windows_x86_64/mlfshell.exe"
 # fi
 
+# Clone dk source. First step in README.md.
 rm -rf dksrc/
+git clone --branch V2_4 https://github.com/diskuv/dk.git dksrc
+
 rm -rf 7zip-project/
 install -d 7zip-project
 set +f
