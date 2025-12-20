@@ -15,6 +15,7 @@ Let's pretend your application is the [official ASCII art application for C# .NE
 
 **Instead** tell your users to run the following on Windows with PowerShell or in a macOS/Linux shell:
 
+<!-- Performed in 010-PROJECTROOT-README.md. mdx blocks must have `$ ` which interferes with GitHub copy-and-paste. -->
 <!-- $MDX skip -->
 ```console
 git clone --branch V2_4 https://github.com/diskuv/dk.git dksrc
