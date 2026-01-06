@@ -9,9 +9,14 @@
     - [(pending re-organization) Concepts](#pending-re-organization-concepts)
   - [Project Structure](#project-structure)
   - [Assets](#assets)
-    - [Local Paths](#local-paths)
+    - [Asset Identity](#asset-identity)
+    - [Web assets](#web-assets)
+    - [Cell assets](#cell-assets)
+    - [Self assets](#self-assets)
+    - [Local assets](#local-assets)
     - [Zip Archive Reproducibility](#zip-archive-reproducibility)
-    - [Remote Paths](#remote-paths)
+    - [Loading Assets](#loading-assets)
+  - [Bundles](#bundles)
     - [Saving Bundles](#saving-bundles)
   - [Forms](#forms)
     - [Form Variables](#form-variables)
@@ -186,6 +191,7 @@
     - [Trace Store](#trace-store)
     - [Value Store](#value-store)
       - [v - parsed values.json AST](#v---parsed-valuesjson-ast)
+      - [z - zip file](#z---zip-file)
       - [V256 - SHA256 of Values File](#v256---sha256-of-values-file)
       - [P256 - SHA256 of Asset](#p256---sha256-of-asset)
       - [Z256 - SHA256 of Zip Archive File](#z256---sha256-of-zip-archive-file)
@@ -550,23 +556,109 @@ Cells exist to make efficient builds and to locating source code even when sourc
 
 ## Assets
 
-Assets are remote or local files that are inputs to a build. All assets have SHA-256 checksums.
+Assets are remote or local files that are inputs to a build. All assets have SHA-1 or SHA-256 checksums.
 
-Bundles are a named collection of assets.
+Assets are accessed with the [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir) command described in a later section of the document.
 
-Assets are accessed with the [get-bundle](#get-bundle-moduleversion--f-file---d-dir) and [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir) commands described in a later section of the document.
+### Asset Identity
 
-### Local Paths
+Assets are located with one or more URL or file path mirrors:
 
-A path, if it does not start with `https://` or `http://` is a *local* path.
+| Scheme     | What                                   |
+| ---------- | -------------------------------------- |
+| `https://` | [HTTP over TLS web asset](#web-assets) |
+| `http://`  | [HTTP web asset](#web-assets)          |
+| `cell://`  | [Cell asset](#cell-assets)             |
+| `file://`  | [Local asset](#local-assets)           |
+| *none*     | [Local asset](#local-assets)           |
 
-A local path may be either:
+However, the assets are uniquely identified by their SHA256 checksums.
+That unique identification means that mirrors for assets can be added
+at any time (including in the future) without triggering rebuilds.
+
+### Web assets
+
+Examples:
+
+```text
+https://example.com/asset1.zip
+http://example.com/asset2/
+```
+
+### Cell assets
+
+Examples:
+
+```text
+cell://dk0/etc/table/dotnet
+```
+
+Cells are local directories within the [project structure](#project-structure). For the reference implementation, the option `dk0 --cell NAME=LOCATION` is available to specify cells, and both the `root` and `dk0` cells are predefined.
+
+For example, `cell://dk0/etc/table/dotnet` is the local directory `etc/table/dotnet` within the cell `dk0`.
+
+### Self assets
+
+Examples:
+
+```text
+selfasset://test-origin
+```
+
+provides access to [custom Lua rule assets](#free-rule-functions) described in later sections like in the following example:
+
+```lua
+local M = { id = "OurTest_Exec.PostObject.TestRequest@1.0.0" }
+rules = build.newrules(M)
+function rules.EchoRequest(command, request)
+    local path = "a/path"
+    if command == "submit" then
+        local file = request.io.open("some/asset/file", "w")
+        request.io.write(file, "This is my asset!\n")
+        local origin, asset = request.io.toasset(file, {
+            path = path, origin_name = "test-origin"
+        })
+        return {
+            submit = {
+                values = {
+                    schema_version = { major = 1, minor = 0 },
+                    bundles = {
+                        {
+                            id = request.submit.outputid,
+                            listing = {
+                                origins = { origin }
+                            },
+                            assets = { asset }
+                        }
+                    }
+                }
+            }
+        }
+    end
+end
+
+return M
+```
+
+[request.io.toasset](#requestiotoasset) creates the `selfasset` URLs on-demand.
+
+### Local assets
+
+Examples:
+
+```text
+file://C:/source
+C:\source
+file:///usr/src/main.tar.gz
+/usr/src/main.tar.gz
+```
+
+A local asset must be located with an absolute path, and may be either:
 
 - a file
 - a directory
 
-A local directory path is always zipped into a zip archive file.
-The [Zip Archive Reproducibility (next section)](#zip-archive-reproducibility) standards will be followed.
+A local directory path is always zipped into a zip archive file, where the [Zip Archive Reproducibility (next section)](#zip-archive-reproducibility) standards will be followed.
 
 ### Zip Archive Reproducibility
 
@@ -580,9 +672,58 @@ The [Zip Archive Reproducibility (next section)](#zip-archive-reproducibility) s
 
 [IANA application/zip]: https://www.iana.org/assignments/media-types/application/zip
 
-### Remote Paths
+### Loading Assets
 
-A path, if it starts with `https://` or `http://` is a *remote* path.
+The asset key of [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir):
+
+```sh
+get-asset MODULE@VERSION -p PATH
+```
+
+has the components:
+
+1. MODULE: Module ID
+2. VERSION: Module Version
+3. PATH: Asset path
+
+The first two (2) components uniquely identify a [bundle](#bundles) while
+the third component uniquely identifies the asset within a bundle like:
+
+```json
+"bundles": [
+  // This is bundle identified by id = MODULE@VERSION
+  {
+    "id": "DkDistribution_Std.Bundle@2.4.202508011516-signed",
+    "listing": {
+      "origins": [
+        {
+          "name": "github-release",
+          "mirrors": [
+            "https://github.com/diskuv/dk/releases/download/2.4.202508011516-signed"
+          ]
+        }
+      ]
+    },
+    "assets": [
+      // This is the asset identified by path = PATH
+      {
+        "origin": "github-release",
+        "path": "SHA256.sig",
+        "size": 151,
+        "checksum": {
+          "sha256": "0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"
+        }
+      }
+    ]
+  }
+]
+```
+
+## Bundles
+
+Bundles are a named collection of assets.
+
+Bundles are accessed with the [get-bundle](#get-bundle-moduleversion--f-file---d-dir) command described in a later section of the document.
 
 ### Saving Bundles
 
@@ -2687,7 +2828,7 @@ bundle, getbundle, getasset = request.ui.glob {
 }
 ```
 
-Creates a [bundle](#assets) of files from a project source directory for use when constructing a `values` inside a [Custom Lua Rule](#ui-rule-functions).
+Creates a [bundle](#bundles) of files from a project source directory for use when constructing a `values` inside a [Custom Lua Rule](#ui-rule-functions).
 
 The design intent is to allow user influenced change detection and reproducibility for project files:
 
@@ -2744,7 +2885,7 @@ src/
 
 The return values are the *bundle*, *partial get-bundle command* and the *partial get-asset command*:
 
-- *bundle*: The [bundle](#assets). For example:
+- *bundle*: The [bundle](#bundles). For example:
 
   ```lua
   {
@@ -3544,7 +3685,7 @@ The `request` table is available as:
 - `request.srcfile`: An information table about the source file that contains the embedded Lua.
 - `request.srcfile.id`: An asset identifer unique to the source file.
 - `request.srcfile.basename`: The basename of the source file.
-- `request.srcfile.bundle`: The [bundle](#assets). For example:
+- `request.srcfile.bundle`: The [bundle](#bundles). For example:
 
   ```lua
   {
@@ -3932,16 +4073,14 @@ is stored in the trace, and the potentially large value is stored in the value s
 
 The value store is a key-value table stored on disk.
 
-The *value id* is a string which is a *value type* (defined below) and a set of fields, concatenated together and then SHA-256 base32-encoded.
-The value id serves as a unique key for the value in a value store.
-
 The **value type** is a single letter that categorizes what the value is:
 
 | Value Type | What                      | Docs                      |
 | ---------- | ------------------------- | ------------------------- |
 | `o`        | object                    | [Objects](#objects)       |
-| `b`        | bundle                    | [Assets](#assets)         |
+| `b`        | bundle                    | [Bundles](#bundles)       |
 | `a`        | asset                     | [Assets](#assets)         |
+| `z`        | asset (large zip files)   | [Assets](#assets)         |
 | `j`        | values.json file          | [JSON Files](#json-files) |
 | `l`        | values.lua file           | [Lua Scripts](#scripts)   |
 | `v`        | (cache) parsed values AST | [JSON Files](#json-files) |
@@ -3952,23 +4091,30 @@ All value types are *lowercase* for support on case-insensitive file systems.
 
 Any value types with `(cache)` are stored in the local cache rather than the valuestore.
 
-- A **value** is a file whose content matches the value type. A values file is a `value.json` build file itself. An object is a zip archive of the output of a [form](#forms). Form, bundle and asset value are serialized parsed abstract syntax trees.
-- A **value sha256** is a SHA-256 hex-encoded string of the value. That is, if you ran `certutil` (Windows), `sha256sum` (Linux) or `shasum -a 256` (macOS) on the value file, the *value sha256* is what you would see.
+- A **value file** is a file whose content matches the value type
+- A **value sha256** is a SHA-256 hex-encoded string of the value file. That is, if you ran `certutil` (Windows), `sha256sum` (Linux) or `shasum -a 256` (macOS) on the value file, the *value sha256* is what you would see.
 
-| Value Type | Key                                   | Value Id before SHA256 and base32          | Value                                             |
-| ---------- | ------------------------------------- | ------------------------------------------ | ------------------------------------------------- |
-| `j`        | [V256](#v256---sha256-of-values-file) | [V256](#v256---sha256-of-values-file)      | dos2unix json `{schema_version:,forms:,bundles:}` |
-| `l`        | [V256](#v256---sha256-of-values-file) | [V256](#v256---sha256-of-values-file)      | dos2unix lua script                               |
-| `v`        | [VCI](#vci---values-canonical-id)     | [VCK](#vck---values-checksum)              | parsed `{schema_version:,forms:,bundles:}`        |
-| `a`        | asset                                 | [P256](#p256---sha256-of-asset)            | contents of asset                                 |
-| `b`        | bundle                                | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file                      |
+The build system requests data in the form of a build key, and a [build task](#task-model) is responsible for resolving the build key into a value that will be persisted in the value store.
+The value will be of a type that depends on the build key:
 
-TODO: Combine the following with earlier table. These are from BuildCore.
+| Build Key                             | Value Type | Id Material                                | Value File                                                               |
+| ------------------------------------- | ---------- | ------------------------------------------ | ------------------------------------------------------------------------ |
+| [asset](#assets)                      | `a`        | [P256](#p256---sha256-of-asset)            | contents of asset                                                        |
+|                                       | `z`        | [Z256](#z256---sha256-of-zip-archive-file) | [zip file central directory](#z---zip-file)                              |
+| [bundle](#bundles)                    | `b`        | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file                                             |
+| [V256](#v256---sha256-of-values-file) | `j`        | [V256](#v256---sha256-of-values-file)      | dos2unix json `{schema_version:,forms:,bundles:}`                        |
+| [V256](#v256---sha256-of-values-file) | `l`        | [V256](#v256---sha256-of-values-file)      | dos2unix lua script                                                      |
+| [VCI](#vci---values-canonical-id)     | `v`        | [VCK](#vck---values-checksum)              | [parsed `{schema_version:,forms:,bundles:}`](#v---parsed-valuesjson-ast) |
 
-| Value Type | Key Kind    | Value Kind     |
-| ---------- | ----------- | -------------- |
-| `j`        | ChecksumKey | ValuesJsonFile |
-| `l`        | ChecksumKey | ValuesLuaFile  |
+If the asset value is known¹ to be a zip file the build system implementation will produce both the `z` value type *and* the `a` value type. A build system implementation may choose to lazily extract entries using the `z` value type which serves as an index over the `a` value type. The `z` value type optimization avoids the overhead of preemptively downloading and unzip all of the possibly huge `a` zip file. However, for the `z` index to provide a benefit, the build system implementation that reads the asset value must support zipfile assets *and* the asset URL must support byte range lookups. For example, if the assets are on a [web server](#web-assets) that does not support the [HTTP Range header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Range), the entire `a` zip file will be downloaded.
+
+¹: Currently only value store assets of [distributed value stores](#distributed-value-stores) are known to be zip files. Other asset files are [1-to-1 with their SHA256 identifiers](#asset-identity), and so can't be deterministically known to be zip files.
+
+The *value id* is used to lookup or persist into the value store. It is calculated as follows, where `||` is concatenation:
+
+```text
+ValueType || Base32( SHA256( IdMaterial ) )
+```
 
 #### v - parsed values.json AST
 
@@ -3984,6 +4130,55 @@ and even then the parse time must be greater than the added download time.
 **Security Note**: Distributed parsed AST adds a direct entry point into the build system's memory layout.
 So other implementations and a future reference implementation should keep the AST in a local, non-distributable cache
 where the parsed AST can be generated on-demand. <https://github.com/diskuv/dk/issues/44>
+
+#### z - zip file
+
+The value file is:
+
+| Offset (bytes)         | Size (bytes) | What                               |
+| ---------------------- | ------------ | ---------------------------------- |
+| 0                      | 4            | Magic number. `44 4B 48 5A` (DKHZ) |
+| 4                      | 4            | Reserved. `00 00 00 00`            |
+| 8                      | 4            | size (*i*) of asset id             |
+| 12                     | 4            | size (*p*) of asset path           |
+| 16                     | 8            | size (*n*) of [Central Directory]  |
+| 24                     | i            | asset id = `MODULE@VERSION`        |
+| 24 + i                 | p            | asset path                         |
+| CD = align(24 + i + p) | n            | [Central Directory]                |
+
+where:
+
+- **`CD`** is `24 + i + p` aligned up to the nearest 8 byte boundary.
+
+All sizes are little-endian.
+
+The [Central Directory] includes:
+
+1. All the [Central directory file headers (CDFH)](https://en.wikipedia.org/wiki/ZIP_(file_format)#Central_directory_file_header_(CDFH)) including their ZIP64 extra fields.
+2. [Zip64 End of central directory record (EOCD64)](https://en.wikipedia.org/wiki/ZIP_(file_format)#ZIP64)
+3. [20-byte End of Central Directory Locator](https://en.wikipedia.org/wiki/ZIP_(file_format)#ZIP64)
+4. The classic [end of central directory record (EOCD)](https://en.wikipedia.org/wiki/ZIP_(file_format)#End_of_central_directory_record_(EOCD))
+
+The following [Central Directory] fields are modified:
+
+| Record                                         | Offset | Size | New Value                                                                |
+| ---------------------------------------------- | ------ | ---- | ------------------------------------------------------------------------ |
+| Zip64 End of central directory record (EOCD64) | 16     | 4    | 1 (Number of this disk.)                                                 |
+| Zip64 End of central directory record (EOCD64) | 20     | 4    | 1 (Disk where central directory starts.)                                 |
+| Zip64 End of central directory record (EOCD64) | 48     | 8    | CD (Offset of start of central directory, relative to start of archive.) |
+| Zip64 End of Central Directory Locator         | 4      | 4    | 1 (Disk where EOCD64 starts.)                                            |
+| Zip64 End of Central Directory Locator         | 8      | 8    | CD + EOCD64 (Offset to start of EOCD64, relative to start of archive.)   |
+| Zip64 End of Central Directory Locator         | 16     | 4    | 2 (Total number of disks.)                                               |
+| Classic EOCD                                   | 4      | 2    | 1 (Number of this disk)                                                  |
+| Classic EOCD                                   | 6      | 2    | 1 (Disk where central directory starts)                                  |
+| Classic EOCD                                   | 8      | 8    | CD (Offset of start of central directory, relative to start of archive)  |
+
+The modifications mean the `z` value files are valid ZIP files. In other words:
+
+- the `z` file becomes the second disk containing only the directory entries
+- the original asset file, if downloaded in its entirety, is the first disk
+
+[Central Directory]: https://en.wikipedia.org/wiki/ZIP_(file_format)#Structure
 
 #### V256 - SHA256 of Values File
 
