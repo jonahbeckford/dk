@@ -4142,37 +4142,18 @@ If the signature does not match the local build key, or if the AST is incompatib
 
 #### z - zip file
 
-The value file is the following for an asset:
+The value file is:
 
-| Offset (bytes)                 | Size (bytes) | What                               |
-| ------------------------------ | ------------ | ---------------------------------- |
-| 0                              | 4            | Magic number. `44 4B 49 5A` (DKIZ) |
-| 4                              | 4            | `00 00 00 00`                      |
-| 8                              | 4            | size (*i*) of asset modver         |
-| 12                             | 4            | size (*i2*) of asset path          |
-| 16                             | i            | asset modver = `MODULE@VERSION`    |
-| 16 + i                         | i2           | asset path                         |
-| FIRST_OFS = align(16 + i + i2) | 8            | offset of first entry              |
-| CD = FIRST_OFS + 8             | n            | [Central Directory]                |
+| Offset (bytes) | Size (bytes) | What                               |
+| -------------- | ------------ | ---------------------------------- |
+| 0              | 4            | Magic number. `44 4B 49 5A` (DKIZ) |
+| 4              | 4            | Reserved. `00 00 00 00`            |
+| 8              | 8            | offset of first local header       |
+| CD = 16        | n            | [Central Directory]                |
 
-and the following for an object:
+The offset of the first local header is typically zero (0) except in special cases like:
 
-| Offset (bytes)                 | Size (bytes) | What                               |
-| ------------------------------ | ------------ | ---------------------------------- |
-| 0                              | 4            | Magic number. `44 4B 49 5A` (DKIZ) |
-| 4                              | 4            | `00 00 00 01`                      |
-| 8                              | 4            | size (*i*) of object modver        |
-| 12                             | 4            | size (*i2*) of object slot         |
-| 16                             | i            | object modver = `MODULE@VERSION`   |
-| 16 + i                         | i2           | object slot                        |
-| FIRST_OFS = align(16 + i + i2) | 8            | offset of first entry              |
-| CD = FIRST_OFS + 8             | n            | [Central Directory]                |
-
-where:
-
-- **`FIRST_OFS`** is `24 + i + i2` aligned up to the nearest 8 byte boundary.
-
-The offset the first entry is typically zero (0) but for self-extracting archives it will be nonzero.
+- self-extracting zips have the executable stub before the first local header
 
 All sizes are little-endian.
 
