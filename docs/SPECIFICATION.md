@@ -191,7 +191,7 @@
     - [Trace Store](#trace-store)
     - [Value Store](#value-store)
       - [v - parsed values.json AST](#v---parsed-valuesjson-ast)
-      - [z - zip file](#z---zip-file)
+      - [i - index file](#i---index-file)
       - [BLD - Build Metadata](#bld---build-metadata)
       - [V256 - SHA256 of Values File](#v256---sha256-of-values-file)
       - [P256 - SHA256 of Asset](#p256---sha256-of-asset)
@@ -4103,7 +4103,7 @@ The value will be of a type that depends on the build key:
 | ------------------------------------- | ---------- | ------------------------------------------ | ------------------------------------------------------------------------ |
 | [asset](#assets)                      | `a`        | [P256](#p256---sha256-of-asset)            | contents of asset                                                        |
 |                                       |            | `::` [BLD](#bld---build-metadata)          |                                                                          |
-|                                       | `i`        | [Z256](#z256---sha256-of-zip-archive-file) | [zip file index](#z---zip-file)                                          |
+|                                       | `i`        | [Z256](#z256---sha256-of-zip-archive-file) | [index](#i---index-file)                                                 |
 | [bundle](#bundles)                    | `b`        | [Z256](#z256---sha256-of-zip-archive-file) | contents of zip archive file                                             |
 |                                       |            | `::` [BLD](#bld---build-metadata)          |                                                                          |
 | [object](#objects)                    | `o`        | [FRM](#frm---form)                         | output of form function                                                  |
@@ -4140,16 +4140,16 @@ A `values.json` is parsed into an AST, and the AST is persisted directly from OC
 The build system will verify the signature of the AST before loading the AST into memory.
 If the signature does not match the local build key, or if the AST is incompatible with the memory layout of the current process (see [compatibility tag](#ct---compatibility-tag)), the `j` values.json file is fetched and re-parsed into a new AST.
 
-#### z - zip file
+#### i - index file
 
 The value file is:
 
-| Offset (bytes) | Size (bytes) | What                               |
-| -------------- | ------------ | ---------------------------------- |
-| 0              | 4            | Magic number. `44 4B 49 5A` (DKIZ) |
-| 4              | 4            | Reserved. `00 00 00 00`            |
-| 8              | 8            | offset of first local header       |
-| CD = 16        | n            | [Central Directory]                |
+| Offset (bytes) | Size (bytes) | What                                        |
+| -------------- | ------------ | ------------------------------------------- |
+| 0              | n            | [Central Directory]                         |
+| n              | 4            | Magic number. `44 4B 49 56` (DKIV)          |
+| n+4            | 4            | Reserved. `00 00 00 00` for zipfile indexes |
+| n+8            | 8            | offset of first local header                |
 
 The offset of the first local header is typically zero (0) except in special cases like:
 
