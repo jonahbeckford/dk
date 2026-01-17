@@ -2,13 +2,17 @@ name: CommonsBase_Std@2.4.x  # we'll build this library
 on:
   push:
     tags:
-      - '2.4.*' # build if tag is pushed
+      - '2.4.*' # build if even minor version tag is pushed
+    branches:
+      - main    # will be translated to `next_odd_minor_version` (prerelease and build metadata can't be used when distributing versions)
   workflow_dispatch: # allow manual triggering from GitHub page
+env:
+  next_odd_minor_version: 2.5.1 # must have non-zero patch version
 
 jobs:
     distribute:
         runs-on: windows-2022
-        if: github.ref_type == 'tag' && startsWith(github.ref_name, '2.4.')
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.4.')) || github.ref_name == 'main'
         permissions:
           id-token: write
           contents: write # for action-gh-release
@@ -27,7 +31,8 @@ jobs:
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
               with:
-                  id: CommonsBase_Std@${{ github.ref_name }}
+                  #   Use even minor tag-based version if tag, else use hardcoded next odd minor version
+                  id: ${{ github.ref_type == 'tag' && format('CommonsBase_Std@{0}', github.ref_name) || format('CommonsBase_Std@{0}', env.next_odd_minor_version) }}
                   pubkey: ${{ secrets.distribute_2_4_pubkey }}
                   seckey: ${{ secrets.distribute_2_4_seckey }}
                   slots: |
@@ -41,7 +46,8 @@ jobs:
                     CommonsBase_Std.S7z@25.1.0
                     CommonsBase_Std.Coreutils@0.2.2
                   use-cache: true
-                  experimental-mlfront-ref: HEAD
+                  #   Use HEAD of mlfront when -dev (ie. main branch)
+                  experimental-mlfront-ref: ${{ github.ref_type == 'tag' && '' || 'HEAD' }}
                   options: -nosysinc -I etc/dk/v # special flags only for CommonsBase_Std: rebuild "system" modules
 
             - name: Generate artifact attestation
