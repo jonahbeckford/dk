@@ -1,47 +1,54 @@
-name: CommonsBase_Std@2.5.x
+name: CommonsBase_Std@2.5.x  # we'll build this library
 on:
   push:
     tags:
       - '2.5.*' # build if tag is pushed
-  workflow_dispatch: # allow manual triggering from GitHub Actions page
+    branches:
+      - main    # will be translated to `dkdist_next_odd_minor_version` (prerelease and build metadata can't be used when distributing versions)
+  workflow_dispatch: # allow manual triggering from GitHub page
+env:
+  dkdist_next_odd_minor_version: 2.7.1 # must have non-zero patch version
 
 jobs:
     distribute:
-        runs-on: ubuntu-latest # or windows-latest or macos-latest
-        if: github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.')
+        runs-on: windows-2022
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.')) || github.ref_name == 'main'
         permissions:
           id-token: write
           contents: write # for action-gh-release
           attestations: write
 
-        # The secrets created by `dk0/dk0 prepare-version --ci github VERSION`
-        # are tied to this `dk-distribution` environment only.
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
         environment: dk-distribution
         steps:
             - name: Harden Runner # Optional but recommended
               uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
               with: { egress-policy: audit }
-
             - name: Checkout project
               uses: actions/checkout@v5
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
               with:
-                  id: CommonsBase_Std@${{ github.ref_name }}
-                  # faster but less safe?   use-cache: true
-                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
-                  seckey: ${{ secrets.distribute_2_5_seckey }}
-# CHANGE THE `slots` FIELD!
-#                 vvvvvvvv
+                  #   Use even minor tag-based version if tag, else use hardcoded next odd minor version
+                  id: ${{ github.ref_type == 'tag' && format('CommonsBase_Std@{0}', github.ref_name) || format('CommonsBase_Std@{0}', env.dkdist_next_odd_minor_version) }}
+                  pubkey: ${{ secrets.distribute_2_4_pubkey }}
+                  seckey: ${{ secrets.distribute_2_4_seckey }}
                   slots: |
-                    Debug.Agnostic
-                    Release.Agnostic
-# CHANGE THE `forms` FIELD!
-#                 vvvvvvvv
+                    Release.Windows_x86
+                    Release.Windows_x86_64
+                    Release.Darwin_arm64
+                    Release.Darwin_x86_64
+                    Release.Linux_x86
+                    Release.Linux_x86_64
                   forms: |
-                    CommonsBase_Std.Change.Me.Including.Version@1.2.3
-                    CommonsBase_Std.This.Should.Be.One.Of.Your.Forms@4.5.6
+                    CommonsBase_Std.S7z@25.1.0
+                    CommonsBase_Std.Coreutils@0.2.2
+                  use-cache: true
+                  #   Use HEAD when not tagged
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+                  options: -nosysinc -I etc/dk/v # special flags only for CommonsBase_Std: rebuild "system" modules
 
             - name: Generate artifact attestation
               id: attest
@@ -49,5 +56,12 @@ jobs:
               with: { subject-path: dk-dist/* }
 
             - name: Release ${{ github.workflow }}
+              if: github.ref_type == 'tag'
               uses: softprops/action-gh-release@f38efdea4c5ffe13e9424b0aa2833bee28f1e34c # v2. Oct. 6, 2025
               with: { files: dk-dist/* }
+            - name: Archive ${{ github.workflow }}
+              if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist
+                path: dk-dist/
