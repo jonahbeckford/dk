@@ -1,18 +1,18 @@
-name: CommonsBase_Std@2.4.x  # we'll build this library
+name: CommonsBase_Std@2.5.x  # we'll build this library
 on:
   push:
     tags:
-      - '2.4.*' # build if tag is pushed
+      - '2.5.*' # build if tag is pushed
     branches:
       - main    # will be translated to `dkdist_next_odd_minor_version` (prerelease and build metadata can't be used when distributing versions)
   workflow_dispatch: # allow manual triggering from GitHub page
 env:
-  dkdist_next_odd_minor_version: 2.5.1 # must have non-zero patch version
+  dkdist_next_odd_minor_version: 2.7.1 # must have non-zero patch version
 
 jobs:
     distribute:
         runs-on: windows-2022
-        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.4.')) || github.ref_name == 'main'
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.')) || github.ref_name == 'main'
         permissions:
           id-token: write
           contents: write # for action-gh-release
