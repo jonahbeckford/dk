@@ -1,19 +1,21 @@
 # dk - A build system
 
-Motivating problem: You have technical users, many of whom are not software engineers. They need to customize your software on their own PCs.
+Motivating problem: You distribute source code to users. You may be a package maintainer, a contractor who must give source to their customers, an educator with students, etc. And it has been difficult getting your users to build your software project.
 
-Let's pretend your application is the [official ASCII art application for C# .NET](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/file-based-programs). You evaluate the commons ways to run your software:
+We'll use the [official ASCII art application for C# .NET](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/file-based-programs) as an example.
+*This isn't the best example; in the future it will be replaced with an example using C and OCaml!*
 
-| You can                                             | but                                                                       |
-| --------------------------------------------------- | ------------------------------------------------------------------------- |
-| compile your application and distribute executables | users can't customize a prebuilt executable                               |
-| ask users to install a language SDK and runtime     | not all users are software engineers with Administrator/root access       |
-| build `Docker` containers                           | Windows users have corporate and school PCs without Administrator access  |
-|                                                     | ... and containers are hard to customize                                  |
-|                                                     | ... and running GUIs and accessing GPUs/AI is difficult inside containers |
-| write a `nix` package and distribute a `nix` cache  | most desktop users are not Linux users                                    |
+There are conventional ways to allows your users to run your software project:
 
-**Instead** tell your users to run the following on Windows with PowerShell or in a macOS/Linux shell:
+| You can                                            | but                                                                       |
+| -------------------------------------------------- | ------------------------------------------------------------------------- |
+| ask users to install a language SDK and runtime    | not all users are software engineers with Administrator/root access       |
+| build `Docker` containers                          | Windows users have corporate and school PCs without Administrator access  |
+|                                                    | ... and containers are hard to customize                                  |
+|                                                    | ... and running GUIs and accessing GPUs/AI is difficult inside containers |
+| write a `nix` package and distribute a `nix` cache | most desktop users are not Linux users                                    |
+
+**Instead** with `dk` your users can run the following on Windows with PowerShell or in a macOS/Linux shell:
 
 <!-- Performed in 010-PROJECTROOT-README.md. mdx blocks must have `$ ` which interferes with GitHub copy-and-paste. -->
 <!-- $MDX skip -->
@@ -75,11 +77,7 @@ There is nothing special about `.NET` in what we accomplished, other than that i
 
 ## Introduction
 
-Underlying `dk` is a thesis:
-
-> a parameterizable, incremental, remote cacheable build system is indistinguishable from a package manager
-
-In short: You don't need a package manager, script launcher, install wizard, yadda yadda yadda. The `dk` build system is all you need to have **your software setup and customization be boring and in your users' hands quickly**.
+`dk` is a parameterizable, incremental, remote cacheable build system.
 
 Skip down to [Comparisons](#comparisons) for how `dk` fits with other tools.
 
