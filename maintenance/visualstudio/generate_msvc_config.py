@@ -168,6 +168,9 @@ def main():
             url = payload.get("url")
             file_name = payload.get("fileName")
             sha256 = payload.get("sha256")
+            # Normalize checksum to lowercase to satisfy dk0 strict matching
+            if sha256:
+                sha256 = sha256.lower()
             size = payload.get("size")
             
             if not url or not file_name or not sha256:

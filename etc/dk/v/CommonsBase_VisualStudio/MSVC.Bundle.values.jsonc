@@ -1342,7 +1342,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/d01408643d88c49fd35822fe2f09f873/winsdksetup.exe",
           "size": 1451712,
           "checksum": {
-            "sha256": "508F1844DC5B8021B0F521E523EA1B94A6689DEC0DD71769B805C24AEF464A30"
+            "sha256": "508f1844dc5b8021b0f521e523ea1b94a6689dec0dd71769b805c24aef464a30"
           }
         },
         {
@@ -1351,7 +1351,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0351672462ae87dbccb0195b97e6581b/03fbc2dfe9d3e7bb2389c7ed18c6ad3e.cab",
           "size": 750432,
           "checksum": {
-            "sha256": "1B16D4D3BA917C656CE6AFA694D96B1DF2C5D207DAB05090631516386FB2F84C"
+            "sha256": "1b16d4d3ba917c656ce6afa694d96b1df2c5d207dab05090631516386fb2f84c"
           }
         },
         {
@@ -1360,7 +1360,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/325a7defd08009f127e744b77811038a/05047a45609f311645eebcac2739fc4c.cab",
           "size": 230154,
           "checksum": {
-            "sha256": "B7E35F174C27EBEDB4666D5B55590D86C4C9C3D5270DB77678F018BD15305B1B"
+            "sha256": "b7e35f174c27ebedb4666d5b55590d86c4c9c3d5270db77678f018bd15305b1b"
           }
         },
         {
@@ -1369,7 +1369,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/8a661813b993cf6fe27d1bde9619d215/05254f60ea43b4e3959b17cdb03268c0.cab",
           "size": 666792,
           "checksum": {
-            "sha256": "8B978E3DDD5EB441ACCA2EFDD73AB244CC1B7091CAB3B06E4B59CAECBDE30235"
+            "sha256": "8b978e3ddd5eb441acca2efdd73ab244cc1b7091cab3b06e4b59caecbde30235"
           }
         },
         {
@@ -1378,7 +1378,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5332f98401f68a3c8ecfc019c673766f/07a57cdb41ba28cced14005f087267be.cab",
           "size": 103671,
           "checksum": {
-            "sha256": "96F01B4CF8A64C0A8B429FA9AEADC3FFFC7E0C8E328CE236F4ED1260B90AF7AF"
+            "sha256": "96f01b4cf8a64c0a8b429fa9aeadc3fffc7e0c8e328ce236f4ed1260b90af7af"
           }
         },
         {
@@ -1387,7 +1387,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3e8dd12a6619f4b7e96855f1afd54937/08e9468089f54c8455f59fd9bb48fcec.cab",
           "size": 76024,
           "checksum": {
-            "sha256": "A0FE8FEE678F6DD5CE946504D770ACD235FEA5F5119F1654A206E3025F8FE030"
+            "sha256": "a0fe8fee678f6dd5ce946504d770acd235fea5f5119f1654a206e3025f8fe030"
           }
         },
         {
@@ -1396,7 +1396,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/771d479c6d9039f31a49bacade67666f/126c039acc6f1c0a9426a128efb713e7.cab",
           "size": 1562760,
           "checksum": {
-            "sha256": "2E82C99F1381F9AE82DFA0108BBF15B341FCE4A516F6D6F674F9D72F34B12834"
+            "sha256": "2e82c99f1381f9ae82dfa0108bbf15b341fce4a516f6d6f674f9d72f34b12834"
           }
         },
         {
@@ -1405,7 +1405,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/70bc4e1b1fe7f6ec12a1b9c0ae91e23d/12a529d45b148a2d28290a8a7535b37b.cab",
           "size": 1053428,
           "checksum": {
-            "sha256": "188771F1AB070BEBC8EB5F63AA178E113203BDD447FD215DD2E06A6BF05E8E53"
+            "sha256": "188771f1ab070bebc8eb5f63aa178e113203bdd447fd215dd2e06a6bf05e8e53"
           }
         },
         {
@@ -1414,7 +1414,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/97c264939d7cd59720f490af3bedc315/13bf5f9b75a9d1c9f44ba5d34a14227f.cab",
           "size": 95400,
           "checksum": {
-            "sha256": "39A790744BCD93953505D1D79163C74928B5796200008FB47BF775C06F4C14DC"
+            "sha256": "39a790744bcd93953505d1d79163c74928b5796200008fb47bf775c06f4c14dc"
           }
         },
         {
@@ -1423,7 +1423,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3c345a98f51a2ba0a3b339dc875bdd55/13d68b8a7b6678a368e2d13ff4027521.cab",
           "size": 390028,
           "checksum": {
-            "sha256": "A5F5C256E375924011030FEDA7B5B8C926F2326E3469FBCA8A4459383868FC41"
+            "sha256": "a5f5c256e375924011030feda7b5b8c926f2326e3469fbca8a4459383868fc41"
           }
         },
         {
@@ -1432,7 +1432,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ada3c5b05d873d325d256b527ec72e62/15369c02f0856bfd3d570cd8a8107b55.cab",
           "size": 911433,
           "checksum": {
-            "sha256": "4E8B989481A3729A398E77DCE9557EFE695925AC25E36E62D463B8C3785E3901"
+            "sha256": "4e8b989481a3729a398e77dce9557efe695925ac25e36e62d463b8c3785e3901"
           }
         },
         {
@@ -1441,7 +1441,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/bb4f36c1edee0e614be4b72164a8bec8/1623efce9d1a46396798f44a7bc769e9.cab",
           "size": 456944,
           "checksum": {
-            "sha256": "2469DE3F4180033D2BD3CDC4A6D54485B7150B851890B7BB0C9E970CC629F9EA"
+            "sha256": "2469de3f4180033d2bd3cdc4a6d54485b7150b851890b7bb0c9e970cc629f9ea"
           }
         },
         {
@@ -1450,7 +1450,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/58c4e40c82e3ad7938a1916047900077/16ab2ea2187acffa6435e334796c8c89.cab",
           "size": 666824,
           "checksum": {
-            "sha256": "BCA91D517D56993B72A55C456411A178C3446844085BBC0AA9154D8355D34906"
+            "sha256": "bca91d517d56993b72a55c456411a178c3446844085bbc0aa9154d8355d34906"
           }
         },
         {
@@ -1459,7 +1459,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b4e1f8750c8db014fdd342975883acc0/19248fabbb2098a7b88c4a2786066bcc.cab",
           "size": 782646,
           "checksum": {
-            "sha256": "00772C510BFCD0B3B906EA1C363344ADE63A00E35885CF134EE9F03D6C0B50C7"
+            "sha256": "00772c510bfcd0b3b906ea1c363344ade63a00e35885cf134ee9f03d6c0b50c7"
           }
         },
         {
@@ -1468,7 +1468,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b702fbb0544de373970c1cca19225cad/1de82860db02f762c5f65a73daa31f3e.cab",
           "size": 14272415,
           "checksum": {
-            "sha256": "B397CFD24191662FEC589C39FE1CAAD1AF6CD4E7733CB7260826AAABF5DE3AB2"
+            "sha256": "b397cfd24191662fec589c39fe1caad1af6cd4e7733cb7260826aaabf5de3ab2"
           }
         },
         {
@@ -1477,7 +1477,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6c92bbeff929414eb130f0db4d1656ee/1f32e9acf0bb1e6a5f485cd8670cd8e1.cab",
           "size": 22076,
           "checksum": {
-            "sha256": "0C4D136E9A78417F38E402625A53781C849CC66DBAC4EAA80805C2BBC3AD0D29"
+            "sha256": "0c4d136e9a78417f38e402625a53781c849cc66dbac4eaa80805c2bbc3ad0d29"
           }
         },
         {
@@ -1486,7 +1486,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/60f3a09c35888c41683b6995a5a73a8b/20e79882c0bf37840a94a4ce06bc571e.cab",
           "size": 2020102,
           "checksum": {
-            "sha256": "929DC2C1B5C6EA1B850FA51F710A6EA6C98A97C659778F7AB2355D033B394C44"
+            "sha256": "929dc2c1b5c6ea1b850fa51f710a6ea6c98a97c659778f7ab2355d033b394c44"
           }
         },
         {
@@ -1495,7 +1495,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0587aa3f911eaa4da3e4211af4457931/220daf459e79c5d26366654b1b482e87.cab",
           "size": 97416,
           "checksum": {
-            "sha256": "70F73A7F6E7697D2D1EAD70A03A16DE4EE627F8EC4EC667F215B39FBA175ECAD"
+            "sha256": "70f73a7f6e7697d2d1ead70a03a16de4ee627f8ec4ec667f215b39fba175ecad"
           }
         },
         {
@@ -1504,7 +1504,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/eaac881422f98b351338677817eaef52/262fa3187c00a1f695e0c3eeb7ecf423.cab",
           "size": 1606338,
           "checksum": {
-            "sha256": "3FCA53E9E281087ABDD6C1CFB142010B456F5BEDCA951B677C3B514B662FEB88"
+            "sha256": "3fca53e9e281087abdd6c1cfb142010b456f5bedca951b677c3b514b662feb88"
           }
         },
         {
@@ -1513,7 +1513,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/d74b283a693ba2fdffbd0374564c079c/2630bae9681db6a9f6722366f47d055c.cab",
           "size": 7616225,
           "checksum": {
-            "sha256": "1AB1CBF13126668C293D3FF04912445E654DEF3E5FDE388BFE0000C398CC4466"
+            "sha256": "1ab1cbf13126668c293d3ff04912445e654def3e5fde388bfe0000c398cc4466"
           }
         },
         {
@@ -1522,7 +1522,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5a142a7354d2615bb2abdce774cb22d8/263104e5ce3a72f68151a93d88a3f22f.cab",
           "size": 19254,
           "checksum": {
-            "sha256": "AAC788C9FC4895BF76718DE20CA9DEC6E450BE6EEFCD9179FA51DBEB86AA6A52"
+            "sha256": "aac788c9fc4895bf76718de20ca9dec6e450be6eefcd9179fa51dbeb86aa6a52"
           }
         },
         {
@@ -1531,7 +1531,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a15375db41cc4dc3cc199e598732f099/26ea25236f12b23db661acf268a70cfa.cab",
           "size": 93991,
           "checksum": {
-            "sha256": "AB5A9357AF4CE36A9544437058BF84C13AF1171CAD9D8E005EEF07303CA831EB"
+            "sha256": "ab5a9357af4ce36a9544437058bf84c13af1171cad9d8e005eef07303ca831eb"
           }
         },
         {
@@ -1540,7 +1540,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ac4265dd9d3fb90fb04fc4dc705aac14/2a30b5d1115d515c6ddd8cd6b5173835.cab",
           "size": 94035,
           "checksum": {
-            "sha256": "DCB366792EFD60CFBE677F5C557747BB9B5BC805BB728DD4BAB54BD0944771D5"
+            "sha256": "dcb366792efd60cfbe677f5c557747bb9b5bc805bb728dd4bab54bd0944771d5"
           }
         },
         {
@@ -1549,7 +1549,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4d003231fbef5a1f3b85e22b065bbf6e/2dd914bb5abd9365f932d15eede09c52.cab",
           "size": 1369391,
           "checksum": {
-            "sha256": "1A2F69870584018A39E60B5E18A2C6C9C1302AB6899AE2FDD115D329F4ADD95D"
+            "sha256": "1a2f69870584018a39e60b5e18a2c6c9c1302ab6899ae2fdd115d329f4add95d"
           }
         },
         {
@@ -1558,7 +1558,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b3223440c1017148747929ae0855c689/2e876dd22fa5e6785f137e3422dd50ec.cab",
           "size": 9240183,
           "checksum": {
-            "sha256": "AA116CA4586D9E9B8E29168D118C558D86AE1ABE8E3CD6338CDACEEEAC525393"
+            "sha256": "aa116ca4586d9e9b8e29168d118c558d86ae1abe8e3cd6338cdaceeeac525393"
           }
         },
         {
@@ -1567,7 +1567,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/27bfac957d9fecad0563a9a0c65ea7cd/306e26e920fd32cb02bf538b4e799a0d.cab",
           "size": 169262,
           "checksum": {
-            "sha256": "8CB11551978A712476C2792E3D4ECBD31C89F02265ABF944322EC3D2B891906E"
+            "sha256": "8cb11551978a712476c2792e3d4ecbd31c89f02265abf944322ec3d2b891906e"
           }
         },
         {
@@ -1576,7 +1576,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b5ea2c6cbb20236e60e59b5fb99287f1/3e2f7be479e3679d700ce0782e4cc318.cab",
           "size": 32873230,
           "checksum": {
-            "sha256": "EE7D961DEBC4B7FBAAF2E56EDB732D81DB5ED6C6852983123E023FEA85130FFD"
+            "sha256": "ee7d961debc4b7fbaaf2e56edb732d81db5ed6c6852983123e023fea85130ffd"
           }
         },
         {
@@ -1585,7 +1585,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6e78b9982b2503619da3e096bc1b765b/4035a83dc8e73244d15d1196d55059c3.cab",
           "size": 19408,
           "checksum": {
-            "sha256": "59B90696115A3978373DE1EA0F5CD8A1715085EBBC45FC501B4607CFD62E802D"
+            "sha256": "59b90696115a3978373de1ea0f5cd8a1715085ebbc45fc501b4607cfd62e802d"
           }
         },
         {
@@ -1594,7 +1594,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/526e7231a98c76652c728563252df845/40d92f424eff54b03db4c51669f9a8d6.cab",
           "size": 194266,
           "checksum": {
-            "sha256": "21D8BEC6652E21791041C25A64BFDCE0EDFFC8BBEF3A8CA670E5FF3AB38BE038"
+            "sha256": "21d8bec6652e21791041c25a64bfdce0edffc8bbef3a8ca670e5ff3ab38be038"
           }
         },
         {
@@ -1603,7 +1603,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/23517c55cb910f00c93b4da0193322c8/43d52fdb99b86048e15fbd34f5b99cb5.cab",
           "size": 253091,
           "checksum": {
-            "sha256": "EB85DE9DB45D8F78F3D4CF1D46B78D01DB68839BE4EEC748FDF46FE78335A0CB"
+            "sha256": "eb85de9db45d8f78f3d4cf1d46b78d01db68839be4eec748fdf46fe78335a0cb"
           }
         },
         {
@@ -1612,7 +1612,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/cb507b5b9cec9a4d69fed45c9f94cde0/43fd989a0684600a8c4dda7a6373eb59.cab",
           "size": 47681,
           "checksum": {
-            "sha256": "2169BD653967A85C6DAC3A4514E6728CE8136E5D033A7165F7A7616853412888"
+            "sha256": "2169bd653967a85c6dac3a4514e6728ce8136e5d033a7165f7a7616853412888"
           }
         },
         {
@@ -1621,7 +1621,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ea274097dc298674d45878b9f9a258c6/44472e2321abba45e828de25827264a3.cab",
           "size": 23263,
           "checksum": {
-            "sha256": "767A037609B6E8574A250278CBFBC842836EEF70CE757EBCFD62E0043FFC01AD"
+            "sha256": "767a037609b6e8574a250278cbfbc842836eef70ce757ebcfd62e0043ffc01ad"
           }
         },
         {
@@ -1630,7 +1630,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/f4adab1afa7aee28472218799d747691/463ad1b0783ebda908fd6c16a4abfe93.cab",
           "size": 217774,
           "checksum": {
-            "sha256": "9A14E4F5576E8B4C26B8F3423E7793BBD7232D43D6C22C78E0543646E7767312"
+            "sha256": "9a14e4f5576e8b4c26b8f3423e7793bbd7232d43d6c22c78e0543646e7767312"
           }
         },
         {
@@ -1639,7 +1639,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ece865bd24a761f8e7a95b104be292db/47133212c2f5ccf49392d7762293a075.cab",
           "size": 1632453,
           "checksum": {
-            "sha256": "0AA278E9D16D3AA3F091607583669F0DF70475B11CD23813774E6A127420C6DF"
+            "sha256": "0aa278e9d16d3aa3f091607583669f0df70475b11cd23813774e6a127420c6df"
           }
         },
         {
@@ -1648,7 +1648,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4fe58bf86d637fa761479f9cc52593f3/4a4c678668584fc994ead5b99ccf7f03.cab",
           "size": 437895,
           "checksum": {
-            "sha256": "3ED6BEED89976BECA204FB9BAB907AF497C6104957584B156B6E1F8D3EFF0B45"
+            "sha256": "3ed6beed89976beca204fb9bab907af497c6104957584b156b6e1f8d3eff0b45"
           }
         },
         {
@@ -1657,7 +1657,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3c73d6fc71f32a6c7aca41424fdc0fd9/4ad4df991deb0eaa1f79f896b959d580.cab",
           "size": 1546944,
           "checksum": {
-            "sha256": "F3BEF542246F87B09CFB85246DE41FF7371D9F206B2BEE7840E207F95A0573A5"
+            "sha256": "f3bef542246f87b09cfb85246de41ff7371d9f206b2bee7840e207f95a0573a5"
           }
         },
         {
@@ -1666,7 +1666,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4e36fcec876a141ed52dc4b9ede5cb0f/4c59234340aaf3a96ec480c1aad8d179.cab",
           "size": 609557,
           "checksum": {
-            "sha256": "11DEC68793EAEE301EBE90F1CEF0AF44E69A7060E026D8625CC470CE0990ABED"
+            "sha256": "11dec68793eaee301ebe90f1cef0af44e69a7060e026d8625cc470ce0990abed"
           }
         },
         {
@@ -1675,7 +1675,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a2c7381894aacb5a90647117a38931df/4dc69cc131b3f4fdde53e76d759509dc.cab",
           "size": 464642,
           "checksum": {
-            "sha256": "219A2D2D06F3C2AD0B455D78A0BF445F7BF5CB26BAEA96A8ACC68CB7825C82E4"
+            "sha256": "219a2d2d06f3c2ad0b455d78a0bf445f7bf5cb26baea96a8acc68cb7825c82e4"
           }
         },
         {
@@ -1684,7 +1684,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/da2185c96b636011e6723236d05d94ca/4e2dea081242e821596b58b31bc22cca.cab",
           "size": 18666,
           "checksum": {
-            "sha256": "03F8E52DB7C2AB3555735D94907E4AF7CBB2A412FE7C90F5FCF4E0271F482655"
+            "sha256": "03f8e52db7c2ab3555735d94907e4af7cbb2a412fe7c90f5fcf4e0271f482655"
           }
         },
         {
@@ -1693,7 +1693,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1b28d2bca1f3968e7e8277fddb36f446/4ec14c5368b7642563c070cd168960a8.cab",
           "size": 1883818,
           "checksum": {
-            "sha256": "9B513780E631553801ADBEDE1284B170268C2920BEB68175E6C149AA7E3D134B"
+            "sha256": "9b513780e631553801adbede1284b170268c2920beb68175e6c149aa7e3d134b"
           }
         },
         {
@@ -1702,7 +1702,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3a329ae6e3b538e4db9cd64cef03c3af/4fe4c8b88812f5339018c0eef95acdb9.cab",
           "size": 26607,
           "checksum": {
-            "sha256": "F212733C37578A22A627EEBA596C41DA3F10D1577E29307C4D072898D3A17A4E"
+            "sha256": "f212733c37578a22a627eeba596c41da3f10d1577e29307c4d072898d3a17a4e"
           }
         },
         {
@@ -1711,7 +1711,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3762381001e2a54a5a5716b27d2b105d/50ce7925226cb6ab8e0fe9ad9fd58433.cab",
           "size": 7429173,
           "checksum": {
-            "sha256": "FC2785B67C8DE6F18DC536F13196A8FD8ED91471038E5EDA9DFF65AEC9F34F65"
+            "sha256": "fc2785b67c8de6f18dc536f13196a8fd8ed91471038e5eda9dff65aec9f34f65"
           }
         },
         {
@@ -1720,7 +1720,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2651de004689fce1ec19e32a7e9d1b98/53174a8154da07099db041b9caffeaee.cab",
           "size": 15722093,
           "checksum": {
-            "sha256": "26A7F855FB98B23FC70DE4CFD99623103392EAABA815AB18DBBD78BDB8FAA988"
+            "sha256": "26a7f855fb98b23fc70de4cfd99623103392eaaba815ab18dbbd78bdb8faa988"
           }
         },
         {
@@ -1729,7 +1729,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/29b31409fa08a3f6beedd398e4bf55f5/5509e4710313421be8d5e7cfbfde4d30.cab",
           "size": 1045628,
           "checksum": {
-            "sha256": "CA9EB6754BEE2D0B22DE9E307810ABAC82A04CC408280942F28EBDC8DE6CEB2F"
+            "sha256": "ca9eb6754bee2d0b22de9e307810abac82a04cc408280942f28ebdc8de6ceb2f"
           }
         },
         {
@@ -1738,7 +1738,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1d679a8d210f0d74ac4bce4cac7517ed/559dbc3a49a69c6adf60b1c87b4df71b.cab",
           "size": 18582,
           "checksum": {
-            "sha256": "E36443223C188A96F0850C84550B5A2526681C9CE1E0AF6EA696C34CE48ED15E"
+            "sha256": "e36443223c188a96f0850c84550b5a2526681c9ce1e0af6ea696c34ce48ed15e"
           }
         },
         {
@@ -1747,7 +1747,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ecc0d787216272ad8791a0a12b498d05/563138901adf40a699df4654138ac397.cab",
           "size": 1434555,
           "checksum": {
-            "sha256": "739A6978D3AEB801493F3384AB9065CF13DB450983792C97D0FD3C617716ADC5"
+            "sha256": "739a6978d3aeb801493f3384ab9065cf13db450983792c97d0fd3c617716adc5"
           }
         },
         {
@@ -1756,7 +1756,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6de6e33d1174a6ddb52bb92f4a4e8c66/56a114848fda9a7e47bad4b3fc4be9a6.cab",
           "size": 7786657,
           "checksum": {
-            "sha256": "AAACB398CD964F7C5E122FD11E5E307773FAB7E056408E562EF4A0C362FE95E1"
+            "sha256": "aaacb398cd964f7c5e122fd11e5e307773fab7e056408e562ef4a0c362fe95e1"
           }
         },
         {
@@ -1765,7 +1765,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/569f2129e683aa7bacc7d1e2f561792c/576cff9c50e8085ab8d9c28ee12bac3e.cab",
           "size": 666785,
           "checksum": {
-            "sha256": "121D13E0EF2C5E01D831CD69A42B31D240E1221C9ABA5D97500D3455D4E30501"
+            "sha256": "121d13e0ef2c5e01d831cd69a42b31d240e1221c9aba5d97500d3455d4e30501"
           }
         },
         {
@@ -1774,7 +1774,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4a7fd7d75fe74586abf16d54df28222a/58314d0646d7e1a25e97c902166c3155.cab",
           "size": 16641361,
           "checksum": {
-            "sha256": "0F52A8B02348AF47F08A7442BEECD8E55B0C58FBF55A930855EA0D653B8D686A"
+            "sha256": "0f52a8b02348af47f08a7442beecd8e55b0c58fbf55a930855ea0d653b8d686a"
           }
         },
         {
@@ -1783,7 +1783,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/19e604c4dec954fafca107942abfc484/590d28783ff280b8b0016c3492433241.cab",
           "size": 9020636,
           "checksum": {
-            "sha256": "CC54DF23DF1BEECE75CCFA8823F27D5F7DAE74D59359DE77787895E744E51153"
+            "sha256": "cc54df23df1beece75ccfa8823f27d5f7dae74d59359de77787895e744e51153"
           }
         },
         {
@@ -1792,7 +1792,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6ee3f8e44cb5468b568f52da03a31dd1/598442d9f84639d200d4f3af477da95c.cab",
           "size": 59271,
           "checksum": {
-            "sha256": "E8993086254D084DEA6222CC21B735E390A0410A549FC43B07E9D3B0D9C5C783"
+            "sha256": "e8993086254d084dea6222cc21b735e390a0410a549fc43b07e9d3b0d9c5c783"
           }
         },
         {
@@ -1801,7 +1801,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/97e69c700020a3dcd3bb38eec4f1a849/5a22e5cde814b041749fb271547f4dd5.cab",
           "size": 15555092,
           "checksum": {
-            "sha256": "5D79FC417E1B741010C2E61C037FFDD85058709A6BABD3DF250255B017C19F87"
+            "sha256": "5d79fc417e1b741010c2e61c037ffdd85058709a6babd3df250255b017c19f87"
           }
         },
         {
@@ -1810,7 +1810,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/9183f639765838513ba5de62edb79fc1/5c9ecffb06ed5f4fe5fb7db86bf7328b.cab",
           "size": 368421,
           "checksum": {
-            "sha256": "553B402A8072F5DB4D79367B13877764539265ECDB9A4EE79ED502D7ADFE33AB"
+            "sha256": "553b402a8072f5db4d79367b13877764539265ecdb9a4ee79ed502d7adfe33ab"
           }
         },
         {
@@ -1819,7 +1819,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1ac555124fb958c1a358b74492d00ec7/5cf1d61a223a02ff2f52fe05f058d52e.cab",
           "size": 1242819,
           "checksum": {
-            "sha256": "3325C946F38CA5ACA3C4050C74FEDB6419AB0B8BCD87FBD67F7F43AD5CCA9815"
+            "sha256": "3325c946f38ca5aca3c4050c74fedb6419ab0b8bcd87fbd67f7f43ad5cca9815"
           }
         },
         {
@@ -1828,7 +1828,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6fb94e805b7c0c03de79525968e949c4/5f6cfec263cd265cf3b0d97fd78ddf05.cab",
           "size": 3100156,
           "checksum": {
-            "sha256": "210D307723D3E7650914F5591EEFA8A516972BA2906514C36571401D0F947BB6"
+            "sha256": "210d307723d3e7650914f5591eefa8a516972ba2906514c36571401d0f947bb6"
           }
         },
         {
@@ -1837,7 +1837,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ff415200eab419bd9e14e73750f83bb6/61d57a7a82309cd161a854a6f4619e52.cab",
           "size": 9506610,
           "checksum": {
-            "sha256": "9C3D6AFC6819AB4A517696749D01207EDD01AC856FAF81628AA3A895B42DB246"
+            "sha256": "9c3d6afc6819ab4a517696749d01207edd01ac856faf81628aa3a895b42db246"
           }
         },
         {
@@ -1846,7 +1846,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/9488dfdecd003a275e522c2089701185/66c7c64126fbf84f47ccec556d149b12.cab",
           "size": 18997,
           "checksum": {
-            "sha256": "E24291BE40685AF074D2405E88C42FAECCC922085A88FF005E138886524D45D5"
+            "sha256": "e24291be40685af074d2405e88c42faeccc922085a88ff005e138886524d45d5"
           }
         },
         {
@@ -1855,7 +1855,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/273dd093456c75efc4b49fd252cd58ea/67c9fd1fab36154e6e7e429610cd67c8.cab",
           "size": 771061,
           "checksum": {
-            "sha256": "CB48511DD7CF833D6DEC6EBB0FC39DF548F198E69EFF9F803A1A2F9BACEE642B"
+            "sha256": "cb48511dd7cf833d6dec6ebb0fc39df548f198e69eff9f803a1a2f9bacee642b"
           }
         },
         {
@@ -1864,7 +1864,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/37a467133679909a116b8d4615b0b433/67fb2af3d2219b403e419535a547c019.cab",
           "size": 99402,
           "checksum": {
-            "sha256": "1ACE18C1178942BC4904283D3FBC758EA887AD0F048A6C9475ED257FD2742082"
+            "sha256": "1ace18c1178942bc4904283d3fbc758ea887ad0f048a6c9475ed257fd2742082"
           }
         },
         {
@@ -1873,7 +1873,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/f861cb1ba1a6924c5fedbe0d3fdc7b7d/685f3d4691f444bc382762d603a99afc.cab",
           "size": 1153453,
           "checksum": {
-            "sha256": "5BA4A2C34253C0DFE2C5A4E49CDE6AF4800B0CD7326F75F118E7AF905B85CC76"
+            "sha256": "5ba4a2c34253c0dfe2c5a4e49cde6af4800b0cd7326f75f118e7af905b85cc76"
           }
         },
         {
@@ -1882,7 +1882,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e6c5bf3bd3e86ca45205bd9f8df8e2e8/68a5a2b14625f935761325cddfadca11.cab",
           "size": 2434986,
           "checksum": {
-            "sha256": "BAC830C76CBE24847DD7C9732919988EB190D8F442A96D7293588D0D2A0C642F"
+            "sha256": "bac830c76cbe24847dd7c9732919988eb190d8f442a96d7293588d0d2a0c642f"
           }
         },
         {
@@ -1891,7 +1891,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/78ff4c18657ed648a48038907775421c/68de71e3e2fb9941ee5b7c77500c0508.cab",
           "size": 18797515,
           "checksum": {
-            "sha256": "42C23478CD0EE52DDCBC76FADF1F679479BB506AF6C972B2AFFB015702611378"
+            "sha256": "42c23478cd0ee52ddcbc76fadf1f679479bb506af6c972b2affb015702611378"
           }
         },
         {
@@ -1900,7 +1900,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/253d8581e7444fa786c8d70fb7943bd1/69661e20556b3ca9456b946c2c881ddd.cab",
           "size": 18726042,
           "checksum": {
-            "sha256": "631D45C77AEB9CC147C537C3232ED984D5ACB065B2E94567E50BB93D6B9187D1"
+            "sha256": "631d45c77aeb9cc147c537c3232ed984d5acb065b2e94567e50bb93d6b9187d1"
           }
         },
         {
@@ -1909,7 +1909,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ac6d4d160fb1d4756832e7abdcc5dd00/6b12414fdb1b4978419abcd383206c09.cab",
           "size": 18581,
           "checksum": {
-            "sha256": "16EF3A2C64F80D93499011208735EE8C83900A7AAF812E4BEA13168079819B91"
+            "sha256": "16ef3a2c64f80d93499011208735ee8c83900a7aaf812e4bea13168079819b91"
           }
         },
         {
@@ -1918,7 +1918,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5368265ffbf25f822170cd62d153b5b7/6b5a91701fdb98ac8bc4af6e238e0390.cab",
           "size": 2004720,
           "checksum": {
-            "sha256": "95892A4FC5C5EB1824AFD9685BE572B3EE040287FE8E29953EF45BECF61B28A4"
+            "sha256": "95892a4fc5c5eb1824afd9685be572b3ee040287fe8e29953ef45becf61b28a4"
           }
         },
         {
@@ -1927,7 +1927,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/37dfdf8ecfd513e430825f138c5c7693/6e86d5003787b5a44d77f0142b20f2ff.cab",
           "size": 104294,
           "checksum": {
-            "sha256": "29896D0527BD5BA747715312C1B441A46D48AE1B90B96E056F34C95EBB96B5F2"
+            "sha256": "29896d0527bd5ba747715312c1b441a46d48ae1b90b96e056f34c95ebb96b5f2"
           }
         },
         {
@@ -1936,7 +1936,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/9e71823e3166e26d14254fd65581f4cf/6ee7bbee8435130a869cf971694fd9e2.cab",
           "size": 26230219,
           "checksum": {
-            "sha256": "FFDE53B5617E55E490C0B8415E46BCDCAA8CD35B8A6D251579EF1AA5A00D28A3"
+            "sha256": "ffde53b5617e55e490c0b8415e46bcdcaa8cd35b8a6d251579ef1aa5a00d28a3"
           }
         },
         {
@@ -1945,7 +1945,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6dae9c0d04e19c1d00b638d9705dcaba/703316c9de0a32acf316d03b1cffc559.cab",
           "size": 9450791,
           "checksum": {
-            "sha256": "EC16DA5411CD81CEF3064D9EE331AF997354B5B093A1FBF5ABB6F626A46F700D"
+            "sha256": "ec16da5411cd81cef3064d9ee331af997354b5b093a1fbf5abb6f626a46f700d"
           }
         },
         {
@@ -1954,7 +1954,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/80f641f67b68a7a7833f88c7728aee7e/73b80f421d7f3df5a71bd772f56bf3ae.cab",
           "size": 98197,
           "checksum": {
-            "sha256": "3D24E7B2490E2E132D9AEB7E830622F7C51C87C311E57213E5C1D53B9964B41E"
+            "sha256": "3d24e7b2490e2e132d9aeb7e830622f7c51c87c311e57213e5c1d53b9964b41e"
           }
         },
         {
@@ -1963,7 +1963,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0789d33d4e00c349862492302b710528/766c0ffd568bbb31bf7fb6793383e24a.cab",
           "size": 8159318,
           "checksum": {
-            "sha256": "B5674B29D0F3F0553325A71F8F2EE9A138F46B1DD75D20A4D153B75800BAAF7E"
+            "sha256": "b5674b29d0f3f0553325a71f8f2ee9a138f46b1dd75d20a4d153b75800baaf7e"
           }
         },
         {
@@ -1972,7 +1972,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/aa7ef73fcbedd277b5fdc38d8fc4b710/78fa3c824c2c48bd4a49ab5969adaaf7.cab",
           "size": 55088983,
           "checksum": {
-            "sha256": "FD7C242959E2677D5A89BDA30FF5F201D33E32981ED43C8F9B5626C010EB6606"
+            "sha256": "fd7c242959e2677d5a89bda30ff5f201d33e32981ed43c8f9b5626c010eb6606"
           }
         },
         {
@@ -1981,7 +1981,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a55b729226592319d9121455dfdcf18e/7afc7b670accd8e3cc94cfffd516f5cb.cab",
           "size": 1053461,
           "checksum": {
-            "sha256": "D3584F5065A5FEF7EF89FEA891B207E66D88A373B1AD649C64CD32A51B2BD6AB"
+            "sha256": "d3584f5065a5fef7ef89fea891b207e66d88a373b1ad649c64cd32a51b2bd6ab"
           }
         },
         {
@@ -1990,7 +1990,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/932a4597cf2c43eabd97609233dfa877/7c3667a45d36470bf3cb648878a6ac2e.cab",
           "size": 778261,
           "checksum": {
-            "sha256": "12F34DAFCC48A3A0E121DC12E3C9C91040F40B4360C517881F4C88CDBCE3AB44"
+            "sha256": "12f34dafcc48a3a0e121dc12e3c9c91040f40b4360c517881f4c88cdbce3ab44"
           }
         },
         {
@@ -1999,7 +1999,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ec6d022f5eb96703a56b11741be9ea4b/8016f7584c8fbeff0b032c65f4173e78.cab",
           "size": 41215,
           "checksum": {
-            "sha256": "BEE928085CC3196942D68DB9736AD89858450EDB34BDDE8946263236DBA0CCB7"
+            "sha256": "bee928085cc3196942d68db9736ad89858450edb34bdde8946263236dba0ccb7"
           }
         },
         {
@@ -2008,7 +2008,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/998467f6f5921a74cc2dfe0459d0b9ef/8038f3cc95dc4b7d0346cb2ab7e044ff.cab",
           "size": 1053632,
           "checksum": {
-            "sha256": "704E2AACCC2639593D891DFDDF6F19410C7D8D6E5A1C68E124B1A8040A794744"
+            "sha256": "704e2aaccc2639593d891dfddf6f19410c7d8d6e5a1c68e124b1a8040a794744"
           }
         },
         {
@@ -2017,7 +2017,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/9e76a12f04d4cf98b80c1ad02e2c1efc/8125ee239710f33ea485965f76fae646.cab",
           "size": 5762915,
           "checksum": {
-            "sha256": "86474514BD28E6FFEAA7D0FAB9830AC6C2A9C7FB24CF8544B91525CCB5500F0D"
+            "sha256": "86474514bd28e6ffeaa7d0fab9830ac6c2a9c7fb24cf8544b91525ccb5500f0d"
           }
         },
         {
@@ -2026,7 +2026,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a811792d58f871ded095cac79e9c4f91/818d2d3634f0efb6e64d7e7c8ca5f98b.cab",
           "size": 113833,
           "checksum": {
-            "sha256": "3AFCDBF9C91483584FF9687DC0C71C0C9DC21252CA4D96AE5BBF339C08654C97"
+            "sha256": "3afcdbf9c91483584ff9687dc0c71c0c9dc21252ca4d96ae5bbf339c08654c97"
           }
         },
         {
@@ -2035,7 +2035,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/629bd97a9445c017990e458940949814/838060235bcd28bf40ef7532c50ee032.cab",
           "size": 19201,
           "checksum": {
-            "sha256": "A1A61A00398B5039F96E0348131D10307DF05A475637602D487398A616C4CA33"
+            "sha256": "a1a61a00398b5039f96e0348131d10307df05a475637602d487398a616c4ca33"
           }
         },
         {
@@ -2044,7 +2044,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/309bc32c42945844e9347500b3ea2edb/89d9bbd87f7a5560bafa520a4ebfdf17.cab",
           "size": 91566,
           "checksum": {
-            "sha256": "82F734143AA1182FD5080D5CEB8220A9EEB8C0C06D5FC06363AE91B0D12B4CAD"
+            "sha256": "82f734143aa1182fd5080d5ceb8220a9eeb8c0c06d5fc06363ae91b0d12b4cad"
           }
         },
         {
@@ -2053,7 +2053,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/7ab642534b0696bcfd9811738f6e117d/8ce0662e0e014576121e526f53d8f6b5.cab",
           "size": 446204,
           "checksum": {
-            "sha256": "09A79F1541357567A9B5EF66B5916AF6C3B48E170336764DAE3B91DD17538DC8"
+            "sha256": "09a79f1541357567a9b5ef66b5916af6c3b48e170336764dae3b91dd17538dc8"
           }
         },
         {
@@ -2062,7 +2062,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/34e5644d32c57a242e478a279704e091/8da73ae89e24f0b5cdf1787799c2a65f.cab",
           "size": 1503710,
           "checksum": {
-            "sha256": "91DAB0215AEC0D4BD2BC391BFF0712B7FEA36BF53CDE066D464DD6D1EF988BE9"
+            "sha256": "91dab0215aec0d4bd2bc391bff0712b7fea36bf53cde066d464dd6d1ef988be9"
           }
         },
         {
@@ -2071,7 +2071,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/17500de33a08d7c437f87d9bd1908b7f/8daf1f236e631041cdaa802ddb9ccc3d.cab",
           "size": 112384,
           "checksum": {
-            "sha256": "18F30536407FA34C31EC5D3242C27D84D03BA7730EE5D4AFC079B4E3801E25DF"
+            "sha256": "18f30536407fa34c31ec5d3242c27d84d03ba7730ee5d4afc079b4e3801e25df"
           }
         },
         {
@@ -2080,7 +2080,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4d6234c3af65b18fb45bd801e41301f7/8e4755178e6b5bcba8d3538c3630b7a5.cab",
           "size": 1143254,
           "checksum": {
-            "sha256": "F88AD9110F59B2C5167519D754A563FD72A4FAA224109802BC8D30977DAB279E"
+            "sha256": "f88ad9110f59b2c5167519d754a563fd72a4faa224109802bc8d30977dab279e"
           }
         },
         {
@@ -2089,7 +2089,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ac43dac7b7cf9091eda954a763566901/8fe3c1ca244ece932599eb0b61855d8f.cab",
           "size": 95293,
           "checksum": {
-            "sha256": "FEA3B9CB08B3EE4E2200C78DE38D9E68EBD9AB2314F94632FBE653885CC0C4F7"
+            "sha256": "fea3b9cb08b3ee4e2200c78de38d9e68ebd9ab2314f94632fbe653885cc0c4f7"
           }
         },
         {
@@ -2098,7 +2098,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e296bbb96e3e3993099850885c56d54c/90e1202895672ce81992e71be30528cc.cab",
           "size": 357397,
           "checksum": {
-            "sha256": "78D5B2CD2D0FE88D1466359D1EE3D000D435AF70972092E3D172424C59C9CB6A"
+            "sha256": "78d5b2cd2d0fe88d1466359d1ee3d000d435af70972092e3d172424c59c9cb6a"
           }
         },
         {
@@ -2107,7 +2107,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2289f7c3649f963bee4128b15837ed7b/931721e121ef91707ddcb6cac354d95c.cab",
           "size": 18702,
           "checksum": {
-            "sha256": "3286AB185550B5683AD2D6BF0749EF018F8DBBE3C227FD7D6CD99ED3B2B58D25"
+            "sha256": "3286ab185550b5683ad2d6bf0749ef018f8dbbe3c227fd7d6cd99ed3b2b58d25"
           }
         },
         {
@@ -2116,7 +2116,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/559c0006d2e0d22ed5f5c8b681a9dc07/93a74a1d34a22ae9d2e1ccc5208ad21a.cab",
           "size": 482713,
           "checksum": {
-            "sha256": "11500847BDD5CB076BC6D71A3709952C12550AB6FF90B82E919076203BADC76F"
+            "sha256": "11500847bdd5cb076bc6d71a3709952c12550ab6ff90b82e919076203badc76f"
           }
         },
         {
@@ -2125,7 +2125,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/682bdeda853456c26f65b68dab00cca5/94521fd1a9c57258998d60ce60dc43c3.cab",
           "size": 1905810,
           "checksum": {
-            "sha256": "6D55921313A1EFA414B8533F81BF1A304822B7C76B8B099C8FEE93A25ADD0633"
+            "sha256": "6d55921313a1efa414b8533f81bf1a304822b7c76b8b099c8fee93a25add0633"
           }
         },
         {
@@ -2134,7 +2134,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/692ce61af877b932fc703da21bdd577c/948a611cd2aca64b1e5113ffb7b95d5f.cab",
           "size": 880906,
           "checksum": {
-            "sha256": "6F108AD98E781F5B6EB3BEDB4BA63517E4A3D747FFCB10B9997EB0AC5BB15B60"
+            "sha256": "6f108ad98e781f5b6eb3bedb4ba63517e4a3d747ffcb10b9997eb0ac5bb15b60"
           }
         },
         {
@@ -2143,7 +2143,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/fe760f295195d1ac060d231bc46983ce/96076045170fe5db6d5dcf14b6f6688e.cab",
           "size": 678659,
           "checksum": {
-            "sha256": "99AE707D0186836E4790AD92A456DDD791A7959BCCC16C5000FED764390E3A0C"
+            "sha256": "99ae707d0186836e4790ad92a456ddd791a7959bccc16c5000fed764390e3a0c"
           }
         },
         {
@@ -2152,7 +2152,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1f647053f614d516269212e269d3e2ba/9a7145bc3b132e5da6d44c0ab4a1af70.cab",
           "size": 7914071,
           "checksum": {
-            "sha256": "BB83469F37B00136EA9FEE6A9A11719CDD271757D749E080B06B3457E9D4D509"
+            "sha256": "bb83469f37b00136ea9fee6a9a11719cdd271757d749e080b06b3457e9d4d509"
           }
         },
         {
@@ -2161,7 +2161,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e56573b1eb8263539e6b56fe1d1af45f/9ba47e440ec2fbe9a3d32a53bf0f68dc.cab",
           "size": 469933,
           "checksum": {
-            "sha256": "00E8371EF0536EDB83B098CE9D02D218961A4DC6B055255DBFF124DAB479CC41"
+            "sha256": "00e8371ef0536edb83b098ce9d02d218961a4dc6b055255dbff124dab479cc41"
           }
         },
         {
@@ -2170,7 +2170,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2e7e435dbb8f9ad9cd0552b94d240cbd/a17683486ace64c3f9a1cacb81ee0260.cab",
           "size": 101687,
           "checksum": {
-            "sha256": "32847728C52D5522E770CC2C2830D9FFFD01C9B327903196D16E9417A5A63A2F"
+            "sha256": "32847728c52d5522e770cc2c2830d9fffd01c9b327903196d16e9417a5a63a2f"
           }
         },
         {
@@ -2179,7 +2179,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/deacaedea952c11a1cc5fa75e8911f30/a1e2a83aa8a71c48c742eeaff6e71928.cab",
           "size": 27867333,
           "checksum": {
-            "sha256": "127A0C186EE26235B1458558345A0339490EBE19AF7134FFF36CB40C1E9EF3FA"
+            "sha256": "127a0c186ee26235b1458558345a0339490ebe19af7134fff36cb40c1e9ef3fa"
           }
         },
         {
@@ -2188,7 +2188,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/100d68d7eb8bed2b020251f78dd66f59/a330840cf08ad4d210703c9acd1bf2b8.cab",
           "size": 1078438,
           "checksum": {
-            "sha256": "C2EE2E87493E8849E8ED33911DC470120384C4D474F4D7C5580554B7D1110B15"
+            "sha256": "c2ee2e87493e8849e8ed33911dc470120384c4d474f4d7c5580554b7d1110b15"
           }
         },
         {
@@ -2197,7 +2197,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/79438111b04047c233d602a21cafb534/a35cd6c9233b6ba3da66eecaa9190436.cab",
           "size": 1919755,
           "checksum": {
-            "sha256": "C162897ED655F94A59CBFCA35075F68E74161921B768039F99BD6832A82CCC25"
+            "sha256": "c162897ed655f94a59cbfca35075f68e74161921b768039f99bd6832a82ccc25"
           }
         },
         {
@@ -2206,7 +2206,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3c90e0ff83bf111d0ed3c91889a658fa/a68c0988d16ee124783efd98074dcbf9.cab",
           "size": 19254,
           "checksum": {
-            "sha256": "C50B5B46A792A9A37E38CF4BD5DA5E6BF6FAD242F62F09912F1725E5F44FF1B7"
+            "sha256": "c50b5b46a792a9a37e38cf4bd5da5e6bf6fad242f62f09912f1725e5f44ff1b7"
           }
         },
         {
@@ -2215,7 +2215,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/bb0feb7867038738c5ef365c2181b63b/a76e4219ecb0f1c0006a6fe080c54ad9.cab",
           "size": 8317310,
           "checksum": {
-            "sha256": "C70E89A4E21BFCDD5C5A58AE8D6B8EB9A74C374F580B94B8B7B952E30FA8E51D"
+            "sha256": "c70e89a4e21bfcdd5c5a58ae8d6b8eb9a74c374f580b94b8b7b952e30fa8e51d"
           }
         },
         {
@@ -2224,7 +2224,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5f623a33d5074185817e3269f8be0c75/aa9c58552bdb82dae4ed48ece081cfe3.cab",
           "size": 1575753,
           "checksum": {
-            "sha256": "FB392A7B69C97B780015B5AA6C20D8CA20036D18B2357FEC0FB88896F9004BF6"
+            "sha256": "fb392a7b69c97b780015b5aa6c20d8ca20036d18b2357fec0fb88896f9004bf6"
           }
         },
         {
@@ -2233,7 +2233,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ffe31b2a06fd6ee151ab3bc6f6acca02/ac4ddfcf1101c483559a5f6e36f1ef2d.cab",
           "size": 20872,
           "checksum": {
-            "sha256": "76897747671F39089F475E87496A30E1159DC82BF88C9BF00806D5244DC7E2A4"
+            "sha256": "76897747671f39089f475e87496a30e1159dc82bf88c9bf00806d5244dc7e2a4"
           }
         },
         {
@@ -2242,7 +2242,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/197ae68a108a2198e043a486d683045d/application%20verifier%20arm64%20external%20package%20%28desktopeditions%29-arm64_en-us.msi",
           "size": 593920,
           "checksum": {
-            "sha256": "376A844D0C9A3C44C2582E0D06B77F302CCF79C9AB9F2187D338AF602E30B83B"
+            "sha256": "376a844d0c9a3c44c2582e0d06b77f302ccf79c9ab9f2187d338af602e30b83b"
           }
         },
         {
@@ -2251,7 +2251,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/c3f9b02f30362abe3ca45962517e7baa/application%20verifier%20arm64%20external%20package%20%28onecoreuap%29-arm64_en-us.msi",
           "size": 1626112,
           "checksum": {
-            "sha256": "7A35ACC6C24482823D0425393D9BCE66EED8BFA2D2F590B0BE5DC1DE750A3C28"
+            "sha256": "7a35acc6c24482823d0425393d9bce66eed8bfa2d2f590b0be5dc1de750a3c28"
           }
         },
         {
@@ -2260,7 +2260,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5ab10c8d09de9719fb6df58c90b8fc08/application%20verifier%20x64%20external%20package%20%28desktopeditions%29-x64_en-us.msi",
           "size": 688128,
           "checksum": {
-            "sha256": "D01BB8DE83BCA3DE0210C9320AFCD5765F2EC3D6853614EC73A3465AAA873853"
+            "sha256": "d01bb8de83bca3de0210c9320afcd5765f2ec3d6853614ec73a3465aaa873853"
           }
         },
         {
@@ -2269,7 +2269,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/aecb5c217d971220063c438db117e0f5/application%20verifier%20x64%20external%20package%20%28onecoreuap%29-x64_en-us.msi",
           "size": 2424832,
           "checksum": {
-            "sha256": "73FC224101C92BF78A5C30C365FF6A2D5D4FE346591337649C2E72A38E935BE7"
+            "sha256": "73fc224101c92bf78a5c30c365ff6a2d5d4fe346591337649c2e72a38e935be7"
           }
         },
         {
@@ -2278,7 +2278,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/974d524f5b9323ac00c6846eb0d923ba/application%20verifier%20x86%20external%20package%20%28desktopeditions%29-x86_en-us.msi",
           "size": 565248,
           "checksum": {
-            "sha256": "4071DE13BC767A348BE457D8548A89C644E1367E0E40F83F96D2EF9E86A9D273"
+            "sha256": "4071de13bc767a348be457d8548a89c644e1367e0e40f83f96d2ef9e86a9d273"
           }
         },
         {
@@ -2287,7 +2287,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6bf2e72ed2ba277dcbbeabc1e99404f8/application%20verifier%20x86%20external%20package%20%28onecoreuap%29-x86_en-us.msi",
           "size": 1335296,
           "checksum": {
-            "sha256": "34ED72604EBE9AFE46FCC3BBEB4CC11274D24E9888BBE98C9B7561CC4EB582D2"
+            "sha256": "34ed72604ebe9afe46fcc3bbeb4cc11274d24e9888bbe98c9b7561cc4eb582d2"
           }
         },
         {
@@ -2296,7 +2296,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/d3cb67f021550942db6a182ff3e05ccc/b0656253ef2f688d2982eafa2e73f621.cab",
           "size": 32696,
           "checksum": {
-            "sha256": "B867802578C05A0DFDC7397741A54B6F7FB3E80F0887592427A1A5B6F580588C"
+            "sha256": "b867802578c05a0dfdc7397741a54b6f7fb3e80f0887592427a1a5b6f580588c"
           }
         },
         {
@@ -2305,7 +2305,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/eeeda71bbd76046d828064d7a034ad6d/b1a824e2952532fe8fd0145f5d148d25.cab",
           "size": 410126,
           "checksum": {
-            "sha256": "08970C68256F5C86ED8759C8B0C7305765BBA551336D60A8359A0973E6854874"
+            "sha256": "08970c68256f5c86ed8759c8b0c7305765bba551336d60a8359a0973e6854874"
           }
         },
         {
@@ -2314,7 +2314,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/15aa99e1d99995dd3d9b1b4a02d7d0cb/b1a8ecf890b4ffddd05e8c9422f55db7.cab",
           "size": 159459,
           "checksum": {
-            "sha256": "30E53CDEDD019E9AA2C11130EB3CF60D6AAF1E414AA23CE60676AD1EE2261EFF"
+            "sha256": "30e53cdedd019e9aa2c11130eb3cf60d6aaf1e414aa23ce60676ad1ee2261eff"
           }
         },
         {
@@ -2323,7 +2323,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/988106c73fec6d66e0db762737ba0b4b/b2f03f34ff83ec013b9e45c7cd8e8a73.cab",
           "size": 156943,
           "checksum": {
-            "sha256": "E1049610C899389461BC754CFB916CF6B1D7FD92196382A2748CAD609097D2D2"
+            "sha256": "e1049610c899389461bc754cfb916cf6b1d7fd92196382a2748cad609097d2d2"
           }
         },
         {
@@ -2332,7 +2332,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/18ee979d7eaba1e49a4931b12cdcab92/b4eea6c909a31ab051e6f9b6218beec8.cab",
           "size": 378986,
           "checksum": {
-            "sha256": "4FED133B43C4750E995ABA028CD3EA0218C7838E425274A044A4B0EB84AD8E17"
+            "sha256": "4fed133b43c4750e995aba028cd3ea0218c7838e425274a044a4b0eb84ad8e17"
           }
         },
         {
@@ -2341,7 +2341,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/cf790101bbcdd115aebc63f7f1fd5fef/b5f177b84c0ec473cbd69557634b27cd.cab",
           "size": 18736,
           "checksum": {
-            "sha256": "B7AF995CD9EBD020B500CE15021CCDE4A536B2D8044A01790683B5DC49EFE261"
+            "sha256": "b7af995cd9ebd020b500ce15021ccde4a536b2d8044a01790683b5dc49efe261"
           }
         },
         {
@@ -2350,7 +2350,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/eda9c609b3219e5f0aa6f866e04a1219/b80b7321357f7c9f281536f9440dfe68.cab",
           "size": 18953,
           "checksum": {
-            "sha256": "CB124A9B9BB1FC687F067510967FC8D8B5A5BF8AC83B6DD3E658C2E25384EAA7"
+            "sha256": "cb124a9b9bb1fc687f067510967fc8d8b5a5bf8ac83b6dd3e658c2e25384eaa7"
           }
         },
         {
@@ -2359,7 +2359,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/70bf624f267445a7171c69eb33ea6436/b82881a61b7477bd4eb5de2cd5037fe2.cab",
           "size": 27880685,
           "checksum": {
-            "sha256": "A6748F83AE1203F222DF6B503355F39D6269A7C6C4B335553203A8BAC8F56470"
+            "sha256": "a6748f83ae1203f222df6b503355f39d6269a7c6c4b335553203a8bac8f56470"
           }
         },
         {
@@ -2368,7 +2368,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/82599132d21bbabc7a676fc9937b9bd9/b913ca15956d14df2d4b1f11ae07885b.cab",
           "size": 226754,
           "checksum": {
-            "sha256": "216EF2B5314FC3C6FCB14C1B0FE51B806BC3441D92D712D34140A63B948DA4D9"
+            "sha256": "216ef2b5314fc3c6fcb14c1b0fe51b806bc3441d92d712d34140a63b948da4d9"
           }
         },
         {
@@ -2377,7 +2377,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/34260234c87e568139da6d8d59a3d38e/be06eca425b0c3c2f4de61cbfe9bc7a7.cab",
           "size": 226698,
           "checksum": {
-            "sha256": "1E0BB50C8581F8BE4262906754FC25D2B545B2BADF0F2819BDF27E4443A7D42E"
+            "sha256": "1e0bb50c8581f8be4262906754fc25d2b545b2badf0f2819bdf27e4443a7d42e"
           }
         },
         {
@@ -2386,7 +2386,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/45d73cfda970de088bae470269042d66/beb5360d2daaa3167dea7ad16c28f996.cab",
           "size": 609250,
           "checksum": {
-            "sha256": "EB07EBB74C83D73760C4D58C5D616B6A7F239060D819A5EC282E33D87C995FAF"
+            "sha256": "eb07ebb74c83d73760c4d58c5d616b6a7f239060d819a5ec282e33d87c995faf"
           }
         },
         {
@@ -2395,7 +2395,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0d006eaa80700db6b601f319a6fb285e/c0aa6d435b0851bf34365aadabd0c20f.cab",
           "size": 4940303,
           "checksum": {
-            "sha256": "E4AD9081C32DC4B6386570CCCF83EB53FD9A7A5F7903CABE2A97BE8851A5715A"
+            "sha256": "e4ad9081c32dc4b6386570cccf83eb53fd9a7a5f7903cabe2a97be8851a5715a"
           }
         },
         {
@@ -2404,7 +2404,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/8269ee8171ac1053ce9e16498db54d6f/c1be9e93e88be3f6207f5cc074775d81.cab",
           "size": 97664,
           "checksum": {
-            "sha256": "751288ADD89DA53F27A83E4D7C04C1D8A55F213ACAAC655ED6B7FF3215E96A73"
+            "sha256": "751288add89da53f27a83e4d7c04c1d8a55f213acaac655ed6b7ff3215e96a73"
           }
         },
         {
@@ -2413,7 +2413,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/13bedfa6df562004c1e0ba0126d6ee89/c2aabf6ea5c1d348ec22f3aeb92f8656.cab",
           "size": 18911,
           "checksum": {
-            "sha256": "ACB099D078C80D37B2EB3AFCB6EDE17194F57509085656E0E12EB10E3F964C51"
+            "sha256": "acb099d078c80d37b2eb3afcb6ede17194f57509085656e0e12eb10e3f964c51"
           }
         },
         {
@@ -2422,7 +2422,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/f27355002b6d973f35396397fb1074d3/c4d38a2c963178a1a3469ca3d913768e.cab",
           "size": 21211,
           "checksum": {
-            "sha256": "521CE14B2E07DB059BC24209A730151C1263E3F857E600F85405219440D681C0"
+            "sha256": "521ce14b2e07db059bc24209a730151c1263e3f857e600f85405219440d681c0"
           }
         },
         {
@@ -2431,7 +2431,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/7582d4c8f361dd120128d8f52021ce66/cd9128b760c06a010e1621af6528432e.cab",
           "size": 65480,
           "checksum": {
-            "sha256": "B7D52EA647941FAED95017E0A5AE1AE2FB1EB3C9DB4EBE2CA7C17AE9A0258D1D"
+            "sha256": "b7d52ea647941faed95017e0a5ae1ae2fb1eb3c9db4ebe2ca7c17ae9a0258d1d"
           }
         },
         {
@@ -2440,7 +2440,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e6547ae45a254a52478120d1712dd1ce/cdea5502a35d09ddfbcda12e3a391dc0.cab",
           "size": 7560261,
           "checksum": {
-            "sha256": "5F4BA3B831BA43EEC759B7A172D88F8C2F6890B7A76E5D11CC021482C8275EDE"
+            "sha256": "5f4ba3b831ba43eec759b7a172d88f8c2f6890b7a76e5d11cc021482c8275ede"
           }
         },
         {
@@ -2449,7 +2449,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b8bb3a849a6998ffc88fe9ce86e58f0c/d117bb4bc77abadc7c603552e122e513.cab",
           "size": 583221,
           "checksum": {
-            "sha256": "E8649FB2D8F403B744DB37E5A772A85367BD459D2FE4A7CB88611DFFAD246AAA"
+            "sha256": "e8649fb2d8f403b744db37e5a772a85367bd459d2fe4a7cb88611dffad246aaa"
           }
         },
         {
@@ -2458,7 +2458,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3ddcb71a8d9fcd404582809bafa9d032/d1de88680a8e53fe75e01e94dc0ed767.cab",
           "size": 22007,
           "checksum": {
-            "sha256": "7333E502A963326786FBCD0E04B98B8DBC9FFB1361CC6DB710919273ED49D150"
+            "sha256": "7333e502a963326786fbcd0e04b98b8dbc9ffb1361cc6db710919273ed49d150"
           }
         },
         {
@@ -2467,7 +2467,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6ed28570990d6df7d071a80e364e2a86/d3e405ab232f8aca8c5b6a48a913d6b0.cab",
           "size": 934378,
           "checksum": {
-            "sha256": "982BF21CD0FCE20651B4D507D1ECFD090CAB04E3AC471DDC60F1F3C7D515CC4A"
+            "sha256": "982bf21cd0fce20651b4d507d1ecfd090cab04e3ac471ddc60f1f3c7d515cc4a"
           }
         },
         {
@@ -2476,7 +2476,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/8893fd0fef4656d62b6e20c4330cfd97/d67259e233ce975d91c3b02d483becad.cab",
           "size": 13783404,
           "checksum": {
-            "sha256": "E5DDA71201624768967E12C046D41DDBAA37859E794106507B82AF271389E15B"
+            "sha256": "e5dda71201624768967e12c046d41ddbaa37859e794106507b82af271389e15b"
           }
         },
         {
@@ -2485,7 +2485,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b57888bac20c9553f3dfb0f56dcbbbc2/d95da93904819b1f7e68adb98b49a9c7.cab",
           "size": 42015,
           "checksum": {
-            "sha256": "4CD959582A239CC4B1A5E21B7CED478C450D07A771DF21403ADF8AA41B970516"
+            "sha256": "4cd959582a239cc4b1a5e21b7ced478c450d07a771df21403adf8aa41b970516"
           }
         },
         {
@@ -2494,7 +2494,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/fa578cbe2c6d896473710e1be759ccf2/dcfb1aa345e349091a44e86ce1766566.cab",
           "size": 94012,
           "checksum": {
-            "sha256": "227B6212096CCC9855EEA3A81F63E9194DDCB4058E36A5DAB6DEB066FA49E94D"
+            "sha256": "227b6212096ccc9855eea3a81f63e9194ddcb4058e36a5dab6deb066fa49e94d"
           }
         },
         {
@@ -2503,7 +2503,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/25f5cf440629b68f6dbe4e4a39c947c2/de111c3d435b0785b31b28c386ee691f.cab",
           "size": 18982,
           "checksum": {
-            "sha256": "08D38CE8D28016E2ED37AB9F9CA5F7B6EA8A24BDC9EC31C1A3EE6A8879AFA16B"
+            "sha256": "08d38ce8d28016e2ed37ab9f9ca5f7b6ea8a24bdc9ec31c1a3ee6a8879afa16b"
           }
         },
         {
@@ -2512,7 +2512,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/dda55399afef17eb9987e1a6460663b7/e10768bb6e9d0ea730280336b697da66.cab",
           "size": 7340929,
           "checksum": {
-            "sha256": "51B36A3CF1A6B1D84660FE6D53DBAE17C86A7722162171CBC384C1EAF84C2F68"
+            "sha256": "51b36a3cf1a6b1d84660fe6d53dbae17c86a7722162171cbc384c1eaf84c2f68"
           }
         },
         {
@@ -2521,7 +2521,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/23f667337f64079648a7360dfea8e899/e10f8811d44b50885777f56f8272f66b.cab",
           "size": 609213,
           "checksum": {
-            "sha256": "9B89E3D425363C1F50331372895E57C09AC6D8C2BB6A4FB812E82FDE09E37E76"
+            "sha256": "9b89e3d425363c1f50331372895e57c09ac6d8c2bb6a4fb812e82fde09e37e76"
           }
         },
         {
@@ -2530,7 +2530,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/88e3fe1e7ab720ceb62cc34c815bedae/e24dd258b3bbfa69c0842948fe0dd670.cab",
           "size": 166860,
           "checksum": {
-            "sha256": "A3EB86ACB7ED657E10D38D422709E9DB28734013CFB1B08924CDC203126606B1"
+            "sha256": "a3eb86acb7ed657e10d38d422709e9db28734013cfb1b08924cdc203126606b1"
           }
         },
         {
@@ -2539,7 +2539,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4a8608b4bc3a15aaec125c8bfc8d593b/e3bfdbe21d5f48f62e6347294e6e8492.cab",
           "size": 107245,
           "checksum": {
-            "sha256": "90DEF6991B49C160A420680880B5D455B348754F734F9CED69D537A2C3B2EBBC"
+            "sha256": "90def6991b49c160a420680880b5d455b348754f734f9ced69d537a2c3b2ebbc"
           }
         },
         {
@@ -2548,7 +2548,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/390794b62a958f3d504ca642656fe005/e3d1b35aecfccda1b4af6fe5988ac4be.cab",
           "size": 15449514,
           "checksum": {
-            "sha256": "E23A14C753D368369EFD145115D8ACBD78697488768518221D5C6FB03CE49E4D"
+            "sha256": "e23a14c753d368369efd145115d8acbd78697488768518221d5c6fb03ce49e4d"
           }
         },
         {
@@ -2557,7 +2557,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/95e3dd4138a01796393ebacaca2af3d0/e59830bab4961666e8d8c2af1e5fa771.cab",
           "size": 203814,
           "checksum": {
-            "sha256": "751BC63CFE8374D776C09612D3FFC17D56DA4FD45B78FFCAE9D1186365C822DF"
+            "sha256": "751bc63cfe8374d776c09612d3ffc17d56da4fd45b78ffcae9d1186365c822df"
           }
         },
         {
@@ -2566,7 +2566,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/07f06952edf9f9e1e6b574fa7b027350/e5c4b31ff9997ac5603f4f28cd7df602.cab",
           "size": 1931113,
           "checksum": {
-            "sha256": "4E54471BC777CBA860FC6A33F3947D88266F6B69B3DD1AB74A1DDFE5227A6B56"
+            "sha256": "4e54471bc777cba860fc6a33f3947d88266f6b69b3dd1ab74a1ddfe5227a6b56"
           }
         },
         {
@@ -2575,7 +2575,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0acdf043f73d610879bfc44ad4c45ae3/e87de81a902e0c8cde9e1355c3ff5f3f.cab",
           "size": 1708928,
           "checksum": {
-            "sha256": "F0E8086F969781D4DB7A1DD371F143EF4527F07085212A73E13864DB16BA4AB8"
+            "sha256": "f0e8086f969781d4db7a1dd371f143ef4527f07085212a73e13864db16ba4ab8"
           }
         },
         {
@@ -2584,7 +2584,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0c375ffd4e97cfc17fd4c2ddf17e6930/e89e3dcbb016928c7e426238337d69eb.cab",
           "size": 920436,
           "checksum": {
-            "sha256": "7E3A380BFAD2F46CB67C5A468B9A3B551FCDCDCCF872025AB082B04BFB16CE6C"
+            "sha256": "7e3a380bfad2f46cb67c5a468b9a3b551fcdcdccf872025ab082b04bfb16ce6c"
           }
         },
         {
@@ -2593,7 +2593,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/7014c3dba529a250e38b0ea9fc6650be/e98fa5eb5fee6ce17a7a69d585870b7c.cab",
           "size": 1433533,
           "checksum": {
-            "sha256": "5D731C7655E984610F43476C6FC87A72BE2682877BD35632DA5B1E97FF7DF427"
+            "sha256": "5d731c7655e984610f43476c6fc87a72be2682877bd35632da5b1e97ff7df427"
           }
         },
         {
@@ -2602,7 +2602,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5daccb28a8c64adf1dd092dafc66c09f/ec0637c03f99046936d32d51e13a392a.cab",
           "size": 18531,
           "checksum": {
-            "sha256": "00E93884BBD82A7F40E6779D1078CAC1BF4A39DA32B266B7CCB5479B86ED05BF"
+            "sha256": "00e93884bbd82a7f40e6779d1078cac1bf4a39da32b266b7ccb5479b86ed05bf"
           }
         },
         {
@@ -2611,7 +2611,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b5e42a5b6c1b87637ec3154540a2a049/ec9ab4bbb809719605d27da343b909e8.cab",
           "size": 107191,
           "checksum": {
-            "sha256": "C8B540F3B76705DFDCDA27AE64559231FF569E25EADDFA1037C7EEA744ED46B6"
+            "sha256": "c8b540f3b76705dfdcda27ae64559231ff569e25eaddfa1037c7eea744ed46b6"
           }
         },
         {
@@ -2620,7 +2620,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ec4438f32e8514ae24bbe27576cb2ad4/ec9d39539c27e8cf5ad39bffce00c34e.cab",
           "size": 234234,
           "checksum": {
-            "sha256": "17A66663934644F3C5F5EFFA2ADF4931B3E9398FF105720FCA88A4539F076000"
+            "sha256": "17a66663934644f3c5f5effa2adf4931b3e9398ff105720fca88a4539f076000"
           }
         },
         {
@@ -2629,7 +2629,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/eeab55532fdbec60dc27601525f7f9f0/eca0aa33de85194cd50ed6e0aae0156f.cab",
           "size": 42208,
           "checksum": {
-            "sha256": "3F3B246024E19ED8B275711941468BAAA6A5F5FCCB2787F661FA2F849563666C"
+            "sha256": "3f3b246024e19ed8b275711941468baaa6a5f5fccb2787f661fa2f849563666c"
           }
         },
         {
@@ -2638,7 +2638,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/b016582755ac4b5ed712825597a923c9/ed4d1c6b9811d81e3cebc553ae604f0d.cab",
           "size": 18721,
           "checksum": {
-            "sha256": "B51B9A3896C9E0758DA9108B62ECFB9166360FD69E5F8C51511CF1B2C94310CC"
+            "sha256": "b51b9a3896c9e0758da9108b62ecfb9166360fd69e5f8c51511cf1b2c94310cc"
           }
         },
         {
@@ -2647,7 +2647,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/29619b6c3af1e802489d81ce3fee3561/ed5aa2f399092df3084cce671f072cac.cab",
           "size": 1518540,
           "checksum": {
-            "sha256": "C6C6FCCC5105D6477140F0121C2A7CE56DFFA8CFEDC2DA0529A8B3BCE4BB13AF"
+            "sha256": "c6c6fccc5105d6477140f0121c2a7ce56dffa8cfedc2da0529a8b3bce4bb13af"
           }
         },
         {
@@ -2656,7 +2656,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e585f2c56f72307d83910dcd718df0e3/ef4472fd7552490fd759075186ed2ec8.cab",
           "size": 264109,
           "checksum": {
-            "sha256": "D2305DEC5AEB74B900FD206D2B545EEB814529A2B76B4D7C2E3B7A5B3767003A"
+            "sha256": "d2305dec5aeb74b900fd206d2b545eeb814529a2b76b4d7c2e3b7a5b3767003a"
           }
         },
         {
@@ -2665,7 +2665,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/d1ea250987f6464f25d8e93c4bba03d5/f105a73f98cfc88c7b64d8f7b39a474c.cab",
           "size": 59281,
           "checksum": {
-            "sha256": "C14724709B790547022982A07928CB159BD39C52C8E3B14928E0748D0928A308"
+            "sha256": "c14724709b790547022982a07928cb159bd39c52c8e3b14928e0748d0928a308"
           }
         },
         {
@@ -2674,7 +2674,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/63adad4959dbec20ae00144e0d0b2520/f2e05dfd38ed343d3de77209cf3ecdae.cab",
           "size": 1240491,
           "checksum": {
-            "sha256": "3E4F20BE476B7A6AD320872D830FE093C0E266EE14320795EE0546F45CFB5989"
+            "sha256": "3e4f20be476b7a6ad320872d830fe093c0e266ee14320795ee0546f45cfb5989"
           }
         },
         {
@@ -2683,7 +2683,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/28aec2cbe20a3a150565b98901d18ebf/f4661eda3692e166927c14c96164150a.cab",
           "size": 1009428,
           "checksum": {
-            "sha256": "17E0E6ABF874B95927B82B8B0B156D6FA9B5C06B45E06B5153D4A326753CD039"
+            "sha256": "17e0e6abf874b95927b82b8b0b156d6fa9b5c06b45e06b5153d4a326753cd039"
           }
         },
         {
@@ -2692,7 +2692,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/11027d7c6049152f5d22a0f606d15ad4/f7b25543b47329ef932ad391c72c4ab7.cab",
           "size": 89550,
           "checksum": {
-            "sha256": "04ECC96BBCDACB6B6A18CED2F6ADBAC38CAF785A4DE82F878BF54C3360120EE7"
+            "sha256": "04ecc96bbcdacb6b6a18ced2f6adbac38caf785a4de82f878bf54c3360120ee7"
           }
         },
         {
@@ -2701,7 +2701,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/bb2becba196f75525a8419d3d3e3168a/f9b24c8280986c0683fbceca5326d806.cab",
           "size": 7256303,
           "checksum": {
-            "sha256": "8AEC2BA4D89199CCABA1A98802989C4C4CEA3024B373B957E904B40826E91BA0"
+            "sha256": "8aec2ba4d89199ccaba1a98802989c4c4cea3024b373b957e904b40826e91ba0"
           }
         },
         {
@@ -2710,7 +2710,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1a20bafd26e043bc6ff4d473fda11049/f9ff50431335056fb4fbac05b8268204.cab",
           "size": 19140,
           "checksum": {
-            "sha256": "04D93FFB913C8346820CD41B0AF0F29DCB4A20DDCD5D3007134F4A1E44CCD03F"
+            "sha256": "04d93ffb913c8346820cd41b0af0f29dcb4a20ddcd5d3007134f4a1e44ccd03f"
           }
         },
         {
@@ -2719,7 +2719,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ed73bd4f81432460adfe8e83c6c10025/fe38b2fd0d440e3c6740b626f51a22fc.cab",
           "size": 19219,
           "checksum": {
-            "sha256": "936AC61D441BAB9B87E9C95E3BFE183E59A3ED5F21DE67276467D39766AC6DDA"
+            "sha256": "936ac61d441bab9b87e9c95e3bfe183e59a3ed5f21de67276467d39766ac6dda"
           }
         },
         {
@@ -2728,7 +2728,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6d638fa2a03a8860236273937a260c34/fef2cfedd6135e0ed85290b83f3682c3.cab",
           "size": 754648,
           "checksum": {
-            "sha256": "2FC73A7F62924827DE8A99DBF1E56B833A06862427DD1C6727FF1E959C39BD4C"
+            "sha256": "2fc73a7f62924827de8a99dbf1e56b833a06862427dd1c6727ff1e959c39bd4c"
           }
         },
         {
@@ -2737,7 +2737,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/9c3450eb8d8cdcb52aa5bae63ddd70c9/ff8dd5a961e46b5d05906ac4b7a5ba37.cab",
           "size": 18563,
           "checksum": {
-            "sha256": "5C79A7C95B48C7FB6A8C85916DAC8A021806EADCAB80D7B2E6D40CF66B426AD8"
+            "sha256": "5c79a7c95b48c7fb6a8c85916dac8a021806eadcab80d7b2e6d40cf66b426ad8"
           }
         },
         {
@@ -2746,7 +2746,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1349720da452dfef5673c437cd89ee20/kits%20configuration%20installer-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "62B4EDE368FC3049E38994A7DE1D74B5083BDC3CE16D24C971CA11C5B4DF30FC"
+            "sha256": "62b4ede368fc3049e38994a7de1d74b5083bdc3ce16d24c971ca11c5b4df30fc"
           }
         },
         {
@@ -2755,7 +2755,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e49397f7ace5f3c7a60d84170c1c80a0/msi%20development%20tools-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "4C9DD9E03B8076209E6ADD405175EC89E91043EBAA09E9C544417E6BD944426B"
+            "sha256": "4c9dd9e03b8076209e6add405175ec89e91043ebaa09e9c544417e6bd944426b"
           }
         },
         {
@@ -2764,7 +2764,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/8766e126bd7ee07be54b1e2e64b2fdad/msival2-x86_en-us.msi",
           "size": 655360,
           "checksum": {
-            "sha256": "0BC3B5FFF2982B04FDBBBDDE62B4E641AC4DA9B0F2328863C97BAADBCF311521"
+            "sha256": "0bc3b5fff2982b04fdbbbdde62b4e641ac4da9b0f2328863c97baadbcf311521"
           }
         },
         {
@@ -2773,7 +2773,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/def731ddabb5922ff3368fc942789228/orca-x86_en-us.msi",
           "size": 655360,
           "checksum": {
-            "sha256": "13F259DC3ADF470CAB6109816A54F8CA48C02A5D144523219BF1D287B78636E8"
+            "sha256": "13f259dc3adf470cab6109816a54f8ca48c02a5d144523219bf1d287b78636e8"
           }
         },
         {
@@ -2782,7 +2782,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/489591c14f1889a5a5fa19de34a83493/sdk%20arm64%20additions-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "D62ECF71CCBB67C3ECD4D81B9BBCA7B77FC281DAC3432FA9D84EE2C40AB449BB"
+            "sha256": "d62ecf71ccbb67c3ecd4d81b9bbca7b77fc281dac3432fa9d84ee2c40ab449bb"
           }
         },
         {
@@ -2791,7 +2791,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/cd49d0d6f945382494ba7ba863c9f77d/sdk%20arm64%20redistributables-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "789238A5B1590BCF14507937A1A93A72F050F4F68E58D61DCEC844DC025C2968"
+            "sha256": "789238a5b1590bcf14507937a1a93a72f050f4f68e58d61dcec844dc025c2968"
           }
         },
         {
@@ -2800,7 +2800,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/117422a259c666b949ac367d6be5b952/universal%20crt%20extension%20sdk-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "3026912C69E0909C740D19643B2796953FDEF55869B342D3F5BDBB1B8B5ABAD6"
+            "sha256": "3026912c69e0909c740d19643b2796953fdef55869b342d3f5bdbb1b8b5abad6"
           }
         },
         {
@@ -2809,7 +2809,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/10eb12a847d3599e56df8d07e9f1d37e/universal%20crt%20headers%20libraries%20and%20sources-x86_en-us.msi",
           "size": 589824,
           "checksum": {
-            "sha256": "D5BAA603E2677393416905F69EAF08277376984F9BCA2F06A51B6EB99E4143A5"
+            "sha256": "d5baa603e2677393416905f69eaf08277376984f9bca2f06a51b6eb99e4143a5"
           }
         },
         {
@@ -2818,7 +2818,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a83dfcfd5d065028c8ac86949ddb44a8/universal%20crt%20redistributable-x86_en-us.msi",
           "size": 475136,
           "checksum": {
-            "sha256": "C8FF9056286402C85E9E307C571133961CF93F622AB90FAFE50CCF0F0D150EB7"
+            "sha256": "c8ff9056286402c85e9e307c571133961cf93f622ab90fafe50ccf0f0d150eb7"
           }
         },
         {
@@ -2827,7 +2827,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/548e9b92cbbdc7bca59184031d07b63f/universal%20crt%20tools%20arm64-arm64_en-us.msi",
           "size": 471040,
           "checksum": {
-            "sha256": "96BFD241904561C4DF45887D8C8232ECA11ADDA4F2C3C82BA14DA50DA1E7D1E7"
+            "sha256": "96bfd241904561c4df45887d8c8232eca11adda4f2c3c82ba14da50da1e7d1e7"
           }
         },
         {
@@ -2836,7 +2836,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6922fbf1614c9a8dbe13e6279b0cb792/universal%20crt%20tools%20x64-x64_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "39F890B6921339E8E443A31826AB62B9DEE5CE877BABD170A35F5C62B04EFD35"
+            "sha256": "39f890b6921339e8e443a31826ab62b9dee5ce877babd170a35f5c62b04efd35"
           }
         },
         {
@@ -2845,7 +2845,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1cd541a8b94d78e7cb9b674502a99aee/universal%20crt%20tools%20x86-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "8C31FF97074EB1DB98ECF1E7CC60E14433D075A905D22A87040E3C761F889AB9"
+            "sha256": "8c31ff97074eb1db98ecf1e7cc60e14433d075a905d22a87040e3c761f889ab9"
           }
         },
         {
@@ -2854,7 +2854,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5545d9c4f67a1e14c32dba7c0140daba/universal%20general%20midi%20dls%20extension%20sdk-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "54FC0AE795502E10D4F46731D1263C588BEC758EC0DA407D6047140231F199D2"
+            "sha256": "54fc0ae795502e10d4f46731d1263c588bec758ec0da407d6047140231f199d2"
           }
         },
         {
@@ -2863,7 +2863,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/724285b1d09a37d6b34043a57ae751bb/winappdeploy-x86_en-us.msi",
           "size": 1814528,
           "checksum": {
-            "sha256": "78F246955EDC54FF899C889965D57A025B85BCA17FE379192072DC0372F785F3"
+            "sha256": "78f246955edc54ff899c889965d57a025b85bca17fe379192072dc0372f785f3"
           }
         },
         {
@@ -2872,7 +2872,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a96ea10c120dcf10798771220d52f294/windows%20app%20certification%20kit%20native%20components-x64_en-us.msi",
           "size": 512000,
           "checksum": {
-            "sha256": "BE5EDDF2B5B4FEB0A6EFADDE20D105292D82DEEBC43CFC27F4693F86675979D6"
+            "sha256": "be5eddf2b5b4feb0a6efadde20d105292d82deebc43cfc27f4693f86675979d6"
           }
         },
         {
@@ -2881,7 +2881,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/61602bd0e2dea7534cd3a2e177e7d80e/windows%20app%20certification%20kit%20native%20components-x86_en-us.msi",
           "size": 512000,
           "checksum": {
-            "sha256": "D4124741847D7081E251C18DA288B661671681FF30ECA2B6CAAFFA03AECB9524"
+            "sha256": "d4124741847d7081e251c18da288b661671681ff30eca2b6caaffa03aecb9524"
           }
         },
         {
@@ -2890,7 +2890,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/7bdb723afa51fa8d0c1a84921508e9c1/windows%20app%20certification%20kit%20supportedapilist%20x86-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "00357A35F0B55BE7EEB3D1BD6DFB6EA4BD180A50DE151C339D26303AE3C6280D"
+            "sha256": "00357a35f0b55be7eeb3d1bd6dfb6ea4bd180a50de151c339d26303ae3c6280d"
           }
         },
         {
@@ -2899,7 +2899,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/dd0abc4fbcc43959dded9690bff9c7b6/windows%20app%20certification%20kit%20x64%20%28onecoreuap%29-x86_en-us.msi",
           "size": 462848,
           "checksum": {
-            "sha256": "0A7F555D8620A7CF87799C5A488D1F80BD98F386AAB7747BF69D31C9E0E178F6"
+            "sha256": "0a7f555d8620a7cf87799c5a488d1f80bd98f386aab7747bf69d31c9e0e178f6"
           }
         },
         {
@@ -2908,7 +2908,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2d68ea3a8b7705b6f3e95b6b65d68a35/windows%20app%20certification%20kit%20x64-x86_en-us.msi",
           "size": 581632,
           "checksum": {
-            "sha256": "C3EB3159FA2656ADCD0506F62A49CC150E9D36ED23FE8519B154394FFE3668E5"
+            "sha256": "c3eb3159fa2656adcd0506f62a49cc150e9d36ed23fe8519b154394ffe3668e5"
           }
         },
         {
@@ -2917,7 +2917,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a1cfddef6ae576c677c97edfce1e0dd6/windows%20app%20certification%20kit%20x86%20%28onecoreuap%29-x86_en-us.msi",
           "size": 462848,
           "checksum": {
-            "sha256": "107A4AB6D62A91561000CBDC0F774DA3AF458A92A386AB2ACCF329340A586064"
+            "sha256": "107a4ab6d62a91561000cbdc0f774da3af458a92a386ab2accf329340a586064"
           }
         },
         {
@@ -2926,7 +2926,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/157ebb2b89c14b26663f9600db475d87/windows%20app%20certification%20kit%20x86-x86_en-us.msi",
           "size": 581632,
           "checksum": {
-            "sha256": "54F4B652673CA6D7E7FB9502A0288EABFE9FE39541B3568F94C62D93D761BD11"
+            "sha256": "54f4b652673ca6d7e7fb9502a0288eabfe9fe39541b3568f94c62d93d761bd11"
           }
         },
         {
@@ -2935,7 +2935,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/18d75053363ab78a74fde83a02b2791b/windows%20desktop%20extension%20sdk%20contracts-x86_en-us.msi",
           "size": 475136,
           "checksum": {
-            "sha256": "19E223C07D6C6992229A3865FC77A96A36C4EE4DCFED7965A753E97381C20668"
+            "sha256": "19e223c07d6c6992229a3865fc77a96a36c4ee4dcfed7965a753e97381c20668"
           }
         },
         {
@@ -2944,7 +2944,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/60f38607db37ff4f96b8d15608e21dca/windows%20desktop%20extension%20sdk-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "0AEF9017D720A789E08BC97568510583E3FDF755B5B07723DE33B9332106E8FF"
+            "sha256": "0aef9017d720a789e08bc97568510583e3fdf755b5b07723de33b9332106e8ff"
           }
         },
         {
@@ -2953,7 +2953,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/dcb1ae52fe7695f66065b93fa6fdfddd/windows%20iot%20extension%20sdk%20contracts-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "64491C01193BA445460F06718F733AD1FC4FA8ECD7F013304C7B689A92ADF9A0"
+            "sha256": "64491c01193ba445460f06718f733ad1fc4fa8ecd7f013304c7b689a92adf9a0"
           }
         },
         {
@@ -2962,7 +2962,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/d4fd2ba568b5ec157ecccf619ea2db98/windows%20iot%20extension%20sdk-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "BA1DD610CBF220134B495B525F6D31BDAB2E14999ABBE84A247D477A6C87E0F3"
+            "sha256": "ba1dd610cbf220134b495b525f6d31bdab2e14999abbe84a247d477a6c87e0f3"
           }
         },
         {
@@ -2971,7 +2971,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5beb6a52bffd425b9ae0f6a2aa497824/windows%20mobile%20extension%20sdk%20contracts-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "B2EFAA414B65317FAD00A62CB23AC8AA665935FC386002656B80B3AD57F0F295"
+            "sha256": "b2efaa414b65317fad00a62cb23ac8aa665935fc386002656b80b3ad57f0f295"
           }
         },
         {
@@ -2980,7 +2980,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3ef62252636f52571f04dd3ee5f6846c/windows%20mobile%20extension%20sdk-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "A54E95D37C15EEDD85688D24171CB4FE1E00C28439B564FF758739B37596EBF0"
+            "sha256": "a54e95d37c15eedd85688d24171cb4fe1e00c28439b564ff758739b37596ebf0"
           }
         },
         {
@@ -2989,7 +2989,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6c280f77de5da97806b85eb463f950c2/windows%20sdk%20arm64%20desktop%20tools-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "F1699159E12EFB8039B8442EE88045181A852AED23F6EC0D545D6047E89E54F4"
+            "sha256": "f1699159e12efb8039b8442ee88045181a852aed23f6ec0d545d6047e89e54f4"
           }
         },
         {
@@ -2998,7 +2998,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/290ce5de550c3c46053f353b6680337b/windows%20sdk%20desktop%20headers%20arm64-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "F9A1B80EA6C7E4B97D36724AB9E06DB5E74AF3EAB6EA7992E21E8F7692CA439F"
+            "sha256": "f9a1b80ea6c7e4b97d36724ab9e06db5e74af3eab6ea7992e21e8f7692ca439f"
           }
         },
         {
@@ -3007,7 +3007,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/f68c9eb8d016804f1e2e119a9312515f/windows%20sdk%20desktop%20headers%20x64-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "2A3A8B297E5C9595E65E58F36A7B73E563148A4DBAF308E2ADC017918C23BBDE"
+            "sha256": "2a3a8b297e5c9595e65e58f36a7b73e563148a4dbaf308e2adc017918c23bbde"
           }
         },
         {
@@ -3016,7 +3016,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/c2a7b596ae61b7c8cbce22612b482fd2/windows%20sdk%20desktop%20headers%20x86-x86_en-us.msi",
           "size": 794624,
           "checksum": {
-            "sha256": "69B715D5CE6A914729E960BF81FF8EE36176C24C3D927FDF03FE5C3B7372EEF7"
+            "sha256": "69b715d5ce6a914729e960bf81ff8ee36176c24c3d927fdf03fe5c3b7372eef7"
           }
         },
         {
@@ -3025,7 +3025,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2ee860067f3b560269f0498013e5b790/windows%20sdk%20desktop%20libs%20arm64-x86_en-us.msi",
           "size": 528384,
           "checksum": {
-            "sha256": "42B5B7C8090B3797F436E123C3CAB5C2442C54F2F695A9C948D6945D4F1D0C4A"
+            "sha256": "42b5b7c8090b3797f436e123c3cab5c2442c54f2f695a9c948d6945d4f1d0c4a"
           }
         },
         {
@@ -3034,7 +3034,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/bb31d9db6ba871889a2c5654d6bf4a59/windows%20sdk%20desktop%20libs%20x64-x86_en-us.msi",
           "size": 528384,
           "checksum": {
-            "sha256": "C0AB0FB806427F21B980CB309575175B971380E6D599E133D400B150674DD5FF"
+            "sha256": "c0ab0fb806427f21b980cb309575175b971380e6d599e133d400b150674dd5ff"
           }
         },
         {
@@ -3043,7 +3043,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a75e465983dbf26afb223eb549b1dcfa/windows%20sdk%20desktop%20libs%20x86-x86_en-us.msi",
           "size": 528384,
           "checksum": {
-            "sha256": "7E002E319F5B57C74D8FBD0D30C90855074BFE2FAF13BDBE9D694F12770DF35B"
+            "sha256": "7e002e319f5b57c74d8fbd0d30c90855074bfe2faf13bdbe9d694f12770df35b"
           }
         },
         {
@@ -3052,7 +3052,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5601c88b7ac79c3e6a1e5a7475ddbd99/windows%20sdk%20desktop%20tools%20arm64-x86_en-us.msi",
           "size": 471040,
           "checksum": {
-            "sha256": "0CD3C88A67A7BDCA975CFAD2B9269F19392ACE93E2E27F54A4AA2B931D4088EB"
+            "sha256": "0cd3c88a67a7bdca975cfad2b9269f19392ace93e2e27f54a4aa2b931d4088eb"
           }
         },
         {
@@ -3061,7 +3061,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/85eadceec4f85fb7e8c6e772ee72f8ff/windows%20sdk%20desktop%20tools%20x64-x86_en-us.msi",
           "size": 475136,
           "checksum": {
-            "sha256": "D75CBACAFC348CF1D0FFFF4576D728217F0F90F698979668DBC9984DBE51D696"
+            "sha256": "d75cbacafc348cf1d0ffff4576d728217f0f90f698979668dbc9984dbe51d696"
           }
         },
         {
@@ -3070,7 +3070,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/3cf186c098a60e79615c60f0f6dafc20/windows%20sdk%20desktop%20tools%20x86-x86_en-us.msi",
           "size": 475136,
           "checksum": {
-            "sha256": "6ECBF2077CE0631FF76CCF986BA78A6D1F12622CCC1CF8BF35A071D791DA943B"
+            "sha256": "6ecbf2077ce0631ff76ccf986ba78a6d1f12622ccc1cf8bf35a071d791da943b"
           }
         },
         {
@@ -3079,7 +3079,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a7cb15c9ba7dc43724e6659a1043fcbe/windows%20sdk%20directx%20x64%20remote-x64_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "D91A5066B4504616CF16123C943B5D1BC5BC7CDEAEF42FFF7308C6C54B7CADE5"
+            "sha256": "d91a5066b4504616cf16123c943b5d1bc5bc7cdeaef42fff7308c6c54b7cade5"
           }
         },
         {
@@ -3088,7 +3088,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/c76b69f3edc25596d0d47a9968b39f84/windows%20sdk%20directx%20x86%20remote-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "2A50044DACC43BCD1FB74DEBEBDE8B73265F867D6A7B25DF10F991C0D11554FE"
+            "sha256": "2a50044dacc43bcd1fb74debebde8b73265f867d6a7b25df10f991c0d11554fe"
           }
         },
         {
@@ -3097,7 +3097,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5e8c49d781122a56650da9bb7a350711/windows%20sdk%20eula-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "349A72234D1435D7836A455E045F4FBFA4BCE5350A2AB50D800C17E10E95914A"
+            "sha256": "349a72234d1435d7836a455e045f4fbfa4bce5350a2ab50d800c17e10e95914a"
           }
         },
         {
@@ -3106,7 +3106,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/6650cef612850a22d72bcc84979e56eb/windows%20sdk%20facade%20windows%20winmd%20versioned-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "D9650556D9C1D0B1718208286F03458648A66C899A8297D54B7124AA07AAC1A6"
+            "sha256": "d9650556d9c1d0b1718208286f03458648a66c899a8297d54b7124aa07aac1a6"
           }
         },
         {
@@ -3115,7 +3115,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/cd6ea848e65166506695ea8785c6f177/windows%20sdk%20for%20windows%20store%20apps%20contracts-x86_en-us.msi",
           "size": 466944,
           "checksum": {
-            "sha256": "8A4AA90A7AF27A989EACECCCC769310B929E91687BA63E78259AF8EE82963704"
+            "sha256": "8a4aa90a7af27a989eacecccc769310b929e91687ba63e78259af8ee82963704"
           }
         },
         {
@@ -3124,7 +3124,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/44a0c6016a0ddc4c2798666baa994b2f/windows%20sdk%20for%20windows%20store%20apps%20directx%20x64%20remote-x64_en-us.msi",
           "size": 454656,
           "checksum": {
-            "sha256": "4C573878E423372153EF7BAB0C689040D66E77624AA6265132D56607445F01A5"
+            "sha256": "4c573878e423372153ef7bab0c689040d66e77624aa6265132d56607445f01a5"
           }
         },
         {
@@ -3133,7 +3133,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/ae9bef1476eb011f588b457ba90bb7c1/windows%20sdk%20for%20windows%20store%20apps%20directx%20x86%20remote-x86_en-us.msi",
           "size": 454656,
           "checksum": {
-            "sha256": "5B3FEC2E23FD0FC8287728274F575BD7B3D70F9435963E9C749573B22C526FDB"
+            "sha256": "5b3fec2e23fd0fc8287728274f575bd7b3d70f9435963e9c749573b22c526fdb"
           }
         },
         {
@@ -3142,7 +3142,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4cf3fb4014ac82048a9ddb5e9cea1f12/windows%20sdk%20for%20windows%20store%20apps%20headers%20onecoreuap-x86_en-us.msi",
           "size": 471040,
           "checksum": {
-            "sha256": "09E56F308379A3406D7F23C40E3D86F828550B0C60868AB5C993A4538A9D9DE6"
+            "sha256": "09e56f308379a3406d7f23c40e3d86f828550b0c60868ab5c993a4538a9d9de6"
           }
         },
         {
@@ -3151,7 +3151,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/d9b278c884b8be2a7f7abd3b1dfc5a9f/windows%20sdk%20for%20windows%20store%20apps%20headers-x86_en-us.msi",
           "size": 1052672,
           "checksum": {
-            "sha256": "F7B24ECB9EE0F4E62B4247F09715E7336511922D22B2EBACF88ADD1F3660F1F7"
+            "sha256": "f7b24ecb9ee0f4e62b4247f09715e7336511922d22b2ebacf88add1f3660f1f7"
           }
         },
         {
@@ -3160,7 +3160,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/24d695f8445afa98a09b915c827dc467/windows%20sdk%20for%20windows%20store%20apps%20legacy%20tools-x86_en-us.msi",
           "size": 454656,
           "checksum": {
-            "sha256": "BD51EAF7F2391170553261E45F6476F3F2F2C4951F83F3033BF6E77E0E6425C7"
+            "sha256": "bd51eaf7f2391170553261e45f6476f3f2f2c4951f83f3033bf6e77e0e6425c7"
           }
         },
         {
@@ -3169,7 +3169,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4fac7e6615e446580897adfd713922c7/windows%20sdk%20for%20windows%20store%20apps%20libs-x86_en-us.msi",
           "size": 528384,
           "checksum": {
-            "sha256": "9F4F04A1A703112DF58B4FC73ABE8831D9B46BB036CC9FA0F599566AADE22F6A"
+            "sha256": "9f4f04a1a703112df58b4fc73abe8831d9b46bb036cc9fa0f599566aade22f6a"
           }
         },
         {
@@ -3178,7 +3178,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0e9c296f66a7d436ee67c69684173418/windows%20sdk%20for%20windows%20store%20apps%20metadata-x86_en-us.msi",
           "size": 454656,
           "checksum": {
-            "sha256": "DBC8A63E2084AF98B2F203106CFDDE18A928BF472F85B4A052467B73ED4B3F16"
+            "sha256": "dbc8a63e2084af98b2f203106cfdde18a928bf472f85b4a052467b73ed4b3f16"
           }
         },
         {
@@ -3187,7 +3187,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e355b98f6a8b9b0b24fcf78e49ac2f12/windows%20sdk%20for%20windows%20store%20apps%20tools-x86_en-us.msi",
           "size": 516096,
           "checksum": {
-            "sha256": "5CA589AF212ACDDC55147058170E722A5BB226AEE343D88C9B38AF693C79A5E2"
+            "sha256": "5ca589af212acddc55147058170e722a5bb226aee343d88c9b38af693c79a5e2"
           }
         },
         {
@@ -3196,7 +3196,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/13efed30788b8be0d30b4fff61e2fe80/windows%20sdk%20for%20windows%20store%20apps-x86_en-us.msi",
           "size": 462848,
           "checksum": {
-            "sha256": "4545B8872ADB0BB76DD71266CBE2B857F781D0565B864B14FF376B8BC563A306"
+            "sha256": "4545b8872adb0bb76dd71266cbe2b857f781d0565b864b14ff376b8bc563a306"
           }
         },
         {
@@ -3205,7 +3205,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/49c2cd5c5bd0b3cfa6aa3a7a010a3397/windows%20sdk%20for%20windows%20store%20managed%20apps%20libs-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "936E5289A329B974F27C6B60F1BED9C0F307574095DCB4AF4A181365CD3DB4A7"
+            "sha256": "936e5289a329b974f27c6b60f1bed9c0f307574095dcb4af4a181365cd3db4a7"
           }
         },
         {
@@ -3214,7 +3214,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/369069322f39c828f28fd57c7cccb27c/windows%20sdk%20modern%20non-versioned%20developer%20tools-x86_en-us.msi",
           "size": 458752,
           "checksum": {
-            "sha256": "1B33821A256F6AC9D2E7D2DA1707404662423CF167DB49A1552780FE791B2B73"
+            "sha256": "1b33821a256f6ac9d2e7d2da1707404662423cf167db49a1552780fe791b2b73"
           }
         },
         {
@@ -3223,7 +3223,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2aa0dbf41e0e8b6cf3b9bb9179d7c456/windows%20sdk%20modern%20versioned%20developer%20tools-x86_en-us.msi",
           "size": 458752,
           "checksum": {
-            "sha256": "F75C3CBD6535AE05EEEEB74C06247A29A955B9CD1E2118BAD00D62BE801BB9FF"
+            "sha256": "f75c3cbd6535ae05eeeeb74c06247a29a955b9cd1e2118bad00d62be801bb9ff"
           }
         },
         {
@@ -3232,7 +3232,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e7d49b3def826360af91aff3955afc5c/windows%20sdk%20onecoreuap%20headers%20arm64-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "7A45E99569DC5624C244BA172BDE86198F6642F16267126B0770AF58BD3ABD13"
+            "sha256": "7a45e99569dc5624c244ba172bde86198f6642f16267126b0770af58bd3abd13"
           }
         },
         {
@@ -3241,7 +3241,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/377dc18910a423877f75ca8dc460d3fd/windows%20sdk%20onecoreuap%20headers%20x64-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "7122E0A2219C0116D3F7196168CE750ABB1B0F8A720939A3CDD66942F8901111"
+            "sha256": "7122e0a2219c0116d3f7196168ce750abb1b0f8a720939a3cdd66942f8901111"
           }
         },
         {
@@ -3250,7 +3250,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/320778fb4de6c783bd50f0ac949a30f5/windows%20sdk%20onecoreuap%20headers%20x86-x86_en-us.msi",
           "size": 495616,
           "checksum": {
-            "sha256": "E5EDC91FEA962FDE1EC1B54C962477A4A3DFE19DBF4D7947734D3FE95911E46F"
+            "sha256": "e5edc91fea962fde1ec1b54c962477a4a3dfe19dbf4d7947734d3fe95911e46f"
           }
         },
         {
@@ -3259,7 +3259,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2f4de98264deec552dbd0ee6bc0abdfb/windows%20sdk%20redistributables-x86_en-us.msi",
           "size": 450560,
           "checksum": {
-            "sha256": "7075BAED6297E61086EF47A8C86F8E2A9C5ED41D01AA799BFF79F562E0928A8A"
+            "sha256": "7075baed6297e61086ef47a8c86f8e2a9c5ed41d01aa799bff79f562e0928a8a"
           }
         },
         {
@@ -3268,7 +3268,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/5bc19e88c423819209e790a9021f8313/windows%20sdk%20signing%20tools-x86_en-us.msi",
           "size": 462848,
           "checksum": {
-            "sha256": "AAD82D4F5EE8C113C6C7C78611CD13034157841A784FCBA55BD87C61D810DAA6"
+            "sha256": "aad82d4f5ee8c113c6c7c78611cd13034157841a784fcba55bd87c61d810daa6"
           }
         },
         {
@@ -3277,7 +3277,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/4e6c6f2277a87b8e405cffcecfaecd1f/windows%20sdk-x86_en-us.msi",
           "size": 462848,
           "checksum": {
-            "sha256": "D056625749ECA5CB6D4D58BBF21B9F22DD10AD8D1D7D0E404A1BC841E1D279B4"
+            "sha256": "d056625749eca5cb6d4d58bbf21b9f22dd10ad8d1d7d0e404a1bc841e1d279b4"
           }
         },
         {
@@ -3286,7 +3286,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/a22e698db63949d4e12a7260d9873109/windows%20team%20extension%20sdk%20contracts-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "2C613EC7026E619FD824D6F1A81BD3BF213F332CFBB89E1512691C520B8FF3D4"
+            "sha256": "2c613ec7026e619fd824d6f1a81bd3bf213f332cfbb89e1512691c520b8ff3d4"
           }
         },
         {
@@ -3295,7 +3295,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2b4ff28c8fd6ad4ed8d12381352858d9/windows%20team%20extension%20sdk-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "2839D002A00C882DC738643DA12F7F23E99F7FD4CF405C568A1E220804CCF317"
+            "sha256": "2839d002a00c882dc738643da12f7f23e99f7fd4cf405c568a1e220804ccf317"
           }
         },
         {
@@ -3304,7 +3304,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/f104df27d627c375a79d46bd65a56611/winrt%20intellisense%20desktop%20-%20en-us-x86_en-us.msi",
           "size": 495616,
           "checksum": {
-            "sha256": "BDA650F26B55B642B716B08D7F539DEE50926101D33B9FD6EF1CB04A3CC849CB"
+            "sha256": "bda650f26b55b642b716b08d7f539dee50926101d33b9fd6ef1cb04a3cc849cb"
           }
         },
         {
@@ -3313,7 +3313,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/c5abca27d395fd8419cad23bdd697eaa/winrt%20intellisense%20desktop%20-%20other%20languages-x86_en-us.msi",
           "size": 602112,
           "checksum": {
-            "sha256": "00D85DFD10AA00669099027CDF67B46046E006465E9E47B7F88AF0B30A214DA8"
+            "sha256": "00d85dfd10aa00669099027cdf67b46046e006465e9e47b7f88af0b30a214da8"
           }
         },
         {
@@ -3322,7 +3322,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/0b0697cdddfb6cde83bd11245de6e8d3/winrt%20intellisense%20iot%20-%20en-us-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "6F8A59A29B34E21FC0BA9CB1F4239161D8209704051873BBD85B5CECAC6CA10D"
+            "sha256": "6f8a59a29b34e21fc0ba9cb1f4239161d8209704051873bbd85b5cecac6ca10d"
           }
         },
         {
@@ -3331,7 +3331,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/9d554565bbf6f32c8a76984a6844526c/winrt%20intellisense%20iot%20-%20other%20languages-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "C8AA9857F44F9C2131C1B9E1B00A810B792655F9916999218E804AAE5AAA6360"
+            "sha256": "c8aa9857f44f9c2131c1b9e1b00a810b792655f9916999218e804aae5aaa6360"
           }
         },
         {
@@ -3340,7 +3340,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/02d531b1d73d77d31f7955962335c946/winrt%20intellisense%20mobile%20-%20en-us-x86_en-us.msi",
           "size": 454656,
           "checksum": {
-            "sha256": "4AAAF567E16916F052065A6ED19D605F53841AE078E7EBEDE78BF1059AE89DAC"
+            "sha256": "4aaaf567e16916f052065a6ed19d605f53841ae078e7ebede78bf1059ae89dac"
           }
         },
         {
@@ -3349,7 +3349,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/c5f1fd493fb9d85f6fd46531fc3836f9/winrt%20intellisense%20ppi%20-%20en-us-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "CBF21372D991FA3D91E053F093E59CA60F12A6BA1D3283BEF9C890D336EA2FA9"
+            "sha256": "cbf21372d991fa3d91e053f093e59ca60f12a6ba1d3283bef9c890d336ea2fa9"
           }
         },
         {
@@ -3358,7 +3358,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/2f2c0a6d9962ff493370bb4e3fd4684b/winrt%20intellisense%20ppi%20-%20other%20languages-x86_en-us.msi",
           "size": 446464,
           "checksum": {
-            "sha256": "2152C1960F19732A154483B0ABB909DCF67A61422723B2416BD16DF05F5CCE4B"
+            "sha256": "2152c1960f19732a154483b0abb909dcf67a61422723b2416bd16df05f5cce4b"
           }
         },
         {
@@ -3367,7 +3367,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/e2b614806e40fefa1cf8d188b153a7d3/winrt%20intellisense%20uap%20-%20en-us-x86_en-us.msi",
           "size": 483328,
           "checksum": {
-            "sha256": "C4A9D3956529C2DC98106EAAC36A95D1623431517E730F0BD34773F2DCA5EEF5"
+            "sha256": "c4a9d3956529c2dc98106eaac36a95d1623431517e730f0bd34773f2dca5eef5"
           }
         },
         {
@@ -3376,7 +3376,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/c156bfddcb5af93d2b8a6262c5ed28f8/winrt%20intellisense%20uap%20-%20other%20languages-x86_en-us.msi",
           "size": 552960,
           "checksum": {
-            "sha256": "AE8777F1F33353A42F60AEB12AF541A413134352FEA3D359BEC15BF987154B79"
+            "sha256": "ae8777f1f33353a42f60aeb12af541a413134352fea3d359bec15bf987154b79"
           }
         },
         {
@@ -3385,7 +3385,7 @@
           "path": "3afa4e72-d57a-4ebb-93c5-e7962e7b633b/1d69ce30cb83d3071d1352a4351cb5b4/uapsdkaddon-x86.msi",
           "size": 237568,
           "checksum": {
-            "sha256": "F67C3417A7EFF0D6313A10A045ECC0928F06AB06B35F8F9519E1432FC0FF3603"
+            "sha256": "f67c3417a7eff0d6313a10a045ecc0928f06ab06b35f8f9519e1432fc0ff3603"
           }
         },
         {
@@ -3394,7 +3394,7 @@
           "path": "ce9ebac5-d0b0-4a01-9e8d-97679b3d5515/412cd86a46f13f60c4937d984139f106/winsdkinstaller.exe",
           "size": 41904,
           "checksum": {
-            "sha256": "25C1E69EE65DD53311DD24F08F1DD6006E1078D749AD7022D0EFD0D5B6C1E757"
+            "sha256": "25c1e69ee65dd53311dd24f08f1dd6006e1078d749ad7022d0efd0d5b6c1e757"
           }
         },
         {
