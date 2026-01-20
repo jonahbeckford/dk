@@ -28,3 +28,6 @@
 /dksrc/
 etc/dk/i/values.unattested.json
 /target/
+
+# Python (from maintenance/visualstudio/)
+__pycache__/
