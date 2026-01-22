@@ -58,15 +58,14 @@
     - [install-object MODULE@VERSION -s REQUEST\_SLOT (-f FILE | -d DIR/)](#install-object-moduleversion--s-request_slot--f-file---d-dir)
     - [get-asset MODULE@VERSION FILE\_PATH (-f FILE | -d DIR/)](#get-asset-moduleversion-file_path--f-file---d-dir)
     - [get-bundle MODULE@VERSION (-f FILE | -d DIR/)](#get-bundle-moduleversion--f-file---d-dir)
-    - [Options: -f FILE and -d DIR](#options--f-file-and--d-dir)
+    - [Options: -f FILE and -d DIR and -x GLOB and -e GLOB](#options--f-file-and--d-dir-and--x-glob-and--e-glob)
     - [Option: \[-n STRIP\]](#option--n-strip)
     - [Option: \[-m MEMBER\]](#option--m-member)
   - [Subshells](#subshells)
     - [subshell: get-object MODULE@VERSION -s REQUEST\_SLOT](#subshell-get-object-moduleversion--s-request_slot)
     - [subshell: post-object MODULE@VERSION -- CLI\_FORM\_DOC](#subshell-post-object-moduleversion----cli_form_doc)
     - [subshell: get-asset MODULE@VERSION FILE\_PATH](#subshell-get-asset-moduleversion-file_path)
-    - [Anonymous Regular Files: `-f :file:BASENAME`](#anonymous-regular-files--f-filebasename)
-    - [Anonymous Executable Files: `-f :exe:BASENAME`](#anonymous-executable-files--f-exebasename)
+    - [Anonymous Files: `-f :` or `-f BASENAME`](#anonymous-files--f--or--f-basename)
     - [Anonymous Directories: `-d :`](#anonymous-directories--d-)
     - [Object ID with Build Metadata](#object-id-with-build-metadata)
     - [JSON Files](#json-files)
@@ -1322,8 +1321,10 @@ Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified b
 | `-d DIR/`   | The object must be a zip archive, and its contents are extracted into `DIR/`. |
 | `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                    |
 | `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                  |
+| `-x GLOB`   | Exclude globbed files from `-d DIR/`. May be repeated.                        |
+| `-e GLOB`   | Make globbed files executable in `-d DIR/` and `-f FILE`. May be repeated.    |
 
-See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
+See [Options: -f FILE, -d DIR, -x GLOB, and -e GLOB](#options--f-file-and--d-dir-and--x-glob-and--e-glob) for output behavior.
 
 The object `ID` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
@@ -1337,10 +1338,12 @@ Submit the JSON constructed from `CLI_FORM_DOC` to the [Lua rule](#introduction-
 | `-d DIR/`   | The object must be a zip archive, and its contents are extracted into `DIR/`. |
 | `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                    |
 | `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                  |
+| `-x GLOB`   | Exclude globbed files from `-d DIR/`. May be repeated.                        |
+| `-e GLOB`   | Make globbed files executable in `-d DIR/` and `-f FILE`. May be repeated.    |
 
 If no `-f` or `-d` option is given, the object is dumped to the standard output (ie. your console).
 
-See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
+See [Options: -f FILE, -d DIR, -x GLOB, and -e GLOB](#options--f-file-and--d-dir-and--x-glob-and--e-glob) for output behavior.
 
 See [Form Document](#form-document) for the `CLI_FORM_DOC` form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
 
@@ -1366,10 +1369,12 @@ Install the contents of the slot `REQUEST_SLOT` for the object uniquely identifi
 | `-d DIR/`   | Install contents of the zip archive to the install directory `DIR/`. The object must be a zip archive. |
 | `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                                             |
 | `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                                           |
+| `-x GLOB`   | Exclude globbed files from `-d DIR/`. May be repeated.                                                 |
+| `-e GLOB`   | Make globbed files executable in `-d DIR/` and `-f FILE`. May be repeated.                             |
 
 **More than one `install-object` can use the same install directory `DIR`**.
 
-See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
+See [Options: -f FILE, -d DIR, -x GLOB, and -e GLOB](#options--f-file-and--d-dir-and--x-glob-and--e-glob) for output behavior.
 
 The object `MODULE@VERSION` implicitly or explicitly contains build metadata; see [ID with Build Metadata](#object-id-with-build-metadata).
 
@@ -1383,8 +1388,10 @@ Get the contents of the asset at `FILE_PATH` for the bundle `MODULE@VERSION`.
 | `-d DIR/`   | The asset must be a zip archive, and its contents are extracted into `DIR/`. |
 | `-n STRIP`  | See [Option: [-n STRIP]](#option--n-strip)                                   |
 | `-m MEMBER` | See [Option: [-m MEMBER](#option--m-member)]                                 |
+| `-x GLOB`   | Exclude globbed files from `-d DIR/`. May be repeated.                       |
+| `-e GLOB`   | Make globbed files executable in `-d DIR/` and `-f FILE`. May be repeated.   |
 
-See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
+See [Options: -f FILE, -d DIR, -x GLOB, and -e GLOB](#options--f-file-and--d-dir-and--x-glob-and--e-glob) for output behavior.
 
 ### get-bundle MODULE@VERSION (-f FILE | -d DIR/)
 
@@ -1395,8 +1402,10 @@ Get the archive file for the bundle `MODULE@VERSION`.
 | `-f FILE`  | Place bundle in `FILE`. `FILE` will be a zip archive with **all** the bundle files. |
 | `-d DIR/`  | **All** the bundle files will be extracted into `DIR/`.                             |
 | `-n STRIP` | See [Option: [-n STRIP]](#option--n-strip)                                          |
+| `-x GLOB`  | Exclude globbed files from `-d DIR/`. May be repeated.                              |
+| `-e GLOB`  | Make globbed files executable in `-d DIR/` and `-f FILE`. May be repeated.          |
 
-See [Options: -f FILE and -d DIR](#options--f-file-and--d-dir) for output path restrictions.
+See [Options: -f FILE, -d DIR, -x GLOB, and -e GLOB](#options--f-file-and--d-dir-and--x-glob-and--e-glob) for output behavior.
 
 *What about the `-m MEMBER` option?*
 
@@ -1404,19 +1413,25 @@ Use [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir) to get a spe
 Having a `-m MEMBER` option would be equivalent but redundant and slightly confusing since
 not much about assets implies they are stored as archives.
 
-### Options: -f FILE and -d DIR
+### Options: -f FILE and -d DIR and -x GLOB and -e GLOB
 
-FILEs in the format:
+Each output file (a single file if `-f FILE` or zero or more if `-d FILE`) has a *normalized entry* name.
 
-- `*.exe`
-- `**/bin/*`
-- `**/sbin/*`
-- `bin/*`
-- `sbin/*`
+Any `-x GLOB` or `-e GLOB` option operates on a glob matched against the normalized entry name:
 
-where the separator may be `/` or `\\` will all be written with a `chmod +x` (executable bit) on Unix.
+- For `-f FILE` the normalized entry name is the basename of `FILE`.
+- For `-d DIR` the normalized entry name is zip archive entry name, with any redundant `./` and `somedir/../` path segments removed, and leading segments removed if `-n STRIP` was used.
 
-No command may write to the same file. Specifically:
+For example, the options `-e '**/*.exe' -e 'bin/*' -x 'doc/**'` will cause any `.exe` output file to be made *executable*,
+and any files in the output `bin/` directory to be made executable, and to not output any entries (including deeply nested entries)
+to the `doc/` directory.
+
+When an output file is made executable:
+
+- On Unix the file's executable bit will be set (ie. `chmod a+x OUTPUTFILE`)
+- On macOS, if the output file is a Mach-O file that needs a code signature *and* the output file is **not* within an Apple app or bundle, then the file will be code signed with the machine signature (ie. `/usr/bin/codesign --sign - --force OUTPUTFILE`). Any output file within a `*.app/Contents/**` file tree or `*.bundle/Contents/**` file tree (case-insensitive) is considered to be within an Apple app or bundle. For example, if the output file were `t/x/y/SomeApp.app/Contents/bin/somefile` it would not be codesigned because `SomeApp` is presumed to be signed already within an existing or future `x/y/SomeApp.app/Contents/_CodeSignature/`.
+
+No command may write to the same output file. Specifically:
 
 - It is an error to have more than one `get-object` or `get-bundle` or `get-asset` or `resume-object` or `install-object` use the same `FILE`.
 - It is an error to have more than one `get-object` or `get-bundle` or `get-asset` or `resume-object` use the same `DIR` or otherwise overlap the same `DIR`. Overlapping means one command can't write to the subdirectory of another command's `DIR`.
@@ -1450,15 +1465,16 @@ Gets the zip file member from the object or asset, which must be a zip archive.
 
 Get the contents of the slot `REQUEST_SLOT` for the object uniquely identified by `MODULE@VERSION`.
 
-| Option              | Description                                                                                                                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `-f :file:BASENAME` | Place object in an [anonymous regular file](#anonymous-regular-files--f-filebasename) and return its filepath               |
-| `-f :exe:BASENAME`  | Place object in an [anonymous executable file](#anonymous-executable-files--f-exebasename) and return its filepath          |
-| `-d :`              | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
-| `-n STRIP`          | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
-| `-m MEMBER`         | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+| Option                  | Description                                                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `-f :` or `-f BASENAME` | Place object in an [anonymous file](#anonymous-files--f--or--f-basename) and return its filepath                            |
+| `-d :`                  | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`              | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
+| `-m MEMBER`             | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+| `-x GLOB`               | Exclude globbed files from `-d DIR/`. May be repeated.                                                                      |
+| `-e GLOB`               | Make globbed files executable in `-d DIR/` and `-f ...`. May be repeated.                                                   |
 
-If none of the `-f :file:BASENAME`, `-f :exe:BASENAME`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+If none of the `-f :`, `-f BASENAME`, or `-d :` options are specified, the contents are captured and returned with the following restrictions:
 
 - the content may not exceed 1024 bytes
 - no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
@@ -1468,17 +1484,18 @@ If none of the `-f :file:BASENAME`, `-f :exe:BASENAME`, or `-d :` option are spe
 
 Submit the JSON constructed from `CLI_FORM_DOC` to the rule uniquely identified by `MODULE@VERSION`.
 
-| Option              | Description                                                                                                                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `-f :file:BASENAME` | Place object in an [anonymous regular file](#anonymous-regular-files--f-filebasename) and return its filepath               |
-| `-f :exe:BASENAME`  | Place object in an [anonymous executable file](#anonymous-executable-files--f-exebasename) and return its filepath          |
-| `-d :`              | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
-| `-n STRIP`          | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
-| `-m MEMBER`         | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+| Option                  | Description                                                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `-f :` or `-f BASENAME` | Place object in an [anonymous file](#anonymous-files--f--or--f-basename) and return its filepath                            |
+| `-d :`                  | The object must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`              | See [Option: [-n STRIP]](#option--n-strip)                                                                                  |
+| `-m MEMBER`             | See [Option: [-m MEMBER](#option--m-member)]                                                                                |
+| `-x GLOB`               | Exclude globbed files from `-d DIR/`. May be repeated.                                                                      |
+| `-e GLOB`               | Make globbed files executable in `-d DIR/` and `-f ...`. May be repeated.                                                   |
 
 See [Form Document](#form-document) for the `CLI_FORM_DOC` form parameters. If there are none, the `-- CLI_FORM_DOC` can be left out.
 
-If none of the `-f :file:BASENAME`, `-f :exe:BASENAME`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+If none of the `-f :`, `-f BASENAME`, or `-d :` options are specified, the contents are captured and returned with the following restrictions:
 
 - the content may not exceed 1024 bytes
 - no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
@@ -1488,42 +1505,36 @@ If none of the `-f :file:BASENAME`, `-f :exe:BASENAME`, or `-d :` option are spe
 
 Get the contents of the asset at `FILE_PATH` for the bundle `MODULE@VERSION`.
 
-| Option              | Description                                                                                                                |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `-f :file:BASENAME` | Place asset in an [anonymous regular file](#anonymous-regular-files--f-filebasename) and return its filepath               |
-| `-f :exe:BASENAME`  | Place asset in an [anonymous executable file](#anonymous-executable-files--f-exebasename) and return its filepath          |
-| `-d :`              | The asset must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
-| `-n STRIP`          | See [Option: [-n STRIP]](#option--n-strip)                                                                                 |
-| `-m MEMBER`         | See [Option: [-m MEMBER](#option--m-member)]                                                                               |
+| Option                  | Description                                                                                                                |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `-f :` or `-f BASENAME` | Place asset in an [anonymous file](#anonymous-files--f--or--f-basename) and return its filepath                            |
+| `-d :`                  | The asset must be a zip archive, and its contents are extracted into an [anonymous directory](#anonymous-directories--d-). |
+| `-n STRIP`              | See [Option: [-n STRIP]](#option--n-strip)                                                                                 |
+| `-m MEMBER`             | See [Option: [-m MEMBER](#option--m-member)]                                                                               |
+| `-x GLOB`               | Exclude globbed files from `-d DIR/`. May be repeated.                                                                     |
+| `-e GLOB`               | Make globbed files executable in `-d DIR/` and `-f ...`. May be repeated.                                                  |
 
-If none of the `-f :file:BASENAME`, `-f :exe:BASENAME`, or `-d :` option are specified, the contents are captured and returned with the following restrictions:
+If none of the `-f :`, `-f BASENAME`, or `-d :` options are specified, the contents are captured and returned with the following restrictions:
 
 - the content may not exceed 1024 bytes
 - no translation is performed on the bytes (UTF-16 is not translated to UTF-8, etc.)
 - the byte 0 (ASCII NUL) may not be in the content as a security measure
 
-### Anonymous Regular Files: `-f :file:BASENAME`
+### Anonymous Files: `-f :` or `-f BASENAME`
 
 Place the object or asset in an anonymous regular file and return the file path.
 
 The file will be named `BASENAME` and placed in a directory with no other files.
 
-If the simplified `-f :file` expression is used, the file will be named `a.dat.
+If the simplified `-f :` expression is used, the file will be named `a.dat`.
 
-### Anonymous Executable Files: `-f :exe:BASENAME`
+The file will be made executable if one of the `-e GLOB` patterns match. The executable will:
 
-Place the object or asset in an anonymous executable file and return the file path.
-
-The executable will:
-
-- be named `BASENAME`
 - on Unix execution machines its executable bits are set (bitwise OR `0o111`)
 - on macOS execution machines it will be codesigned if it is a Mach-O file that must be signed
-- be placed in a directory with no other files
 
-Conventionally `BASENAME` includes an `.exe` extension so it can run on Windows, but `.exe` is not required.
-
-If the simplified `-f :exe` expression is used, the file will be named `a.exe`.
+Conventionally if the file is to be made executable, the `BASENAME` includes an `.exe` extension so it can run on Windows.
+However the `.exe` extension is not required if the file will not run on Windows.
 
 ### Anonymous Directories: `-d :`
 
@@ -4110,7 +4121,7 @@ The value will be of a type that depends on the build key:
 | [object](#objects)                    | `o`        | [FRM](#frm---form)                         | output of form function                                                  |
 |                                       |            | `::<SLOT>`                                 |                                                                          |
 |                                       |            | `::` [BLD](#bld---build-metadata)          |                                                                          |
-|                                       | `i`        | [Z256](#z256---sha256-of-zip-archive-file) | [zip file index](#z---zip-file)                                          |
+|                                       | `i`        | [Z256](#z256---sha256-of-zip-archive-file) | [index file](#i---index-file)                                            |
 | [V256](#v256---sha256-of-values-file) | `j`        | [V256](#v256---sha256-of-values-file)      | dos2unix json `{schema_version:,forms:,bundles:}`                        |
 | [V256](#v256---sha256-of-values-file) | `l`        | [V256](#v256---sha256-of-values-file)      | dos2unix lua script                                                      |
 | [VCI](#vci---values-canonical-id)     | `v`        | [VCK](#vck---values-checksum)              | [parsed `{schema_version:,forms:,bundles:}`](#v---parsed-valuesjson-ast) |
