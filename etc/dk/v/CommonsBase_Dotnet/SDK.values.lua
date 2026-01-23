@@ -5865,7 +5865,7 @@ function CommonsBase_Std__Dotnet_SDK.form_values_unix(slot)
 
   local getasset_tarfile =
       string.format(
-        "$(get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-%s.tar.gz -f :file)",
+        "$(get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-%s.tar.gz -f :)",
         arch)
   local postobject       =
       string.format(
@@ -6053,7 +6053,7 @@ function CommonsBase_Std__Dotnet_SDK.workaround_make_dotnet_executable(response,
         args = {
           -- TODO: When coreutils does not require Windows to run (through S7z.Windows7zExe), we can
           -- avoid the system /bin/chmod and use the coreutils version ...
-          -- "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe)",         
+          -- "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f : -e '*')",         
           -- "chmod",
           "/bin/chmod",
           "+x",
@@ -6073,7 +6073,7 @@ function CommonsBase_Std__Dotnet_SDK.workaround_make_dotnet_executable(response,
   }
   -- the workaround need to run, but we ignore its output
   response.submit.expressions.files["ignorable-arch-txt"] =
-      "$(get-object " .. workaround .. " -s Release.Agnostic -f :file)"
+      "$(get-object " .. workaround .. " -s Release.Agnostic -f :)"
 end
 
 function rules.Files(command, request)
@@ -6163,7 +6163,7 @@ function M.run(options)
     response.submit.values = response.submit.values or {}
     response.submit.values.bundles = { request.srcfile.bundle }
     response.submit.expressions.files["scriptpath"] = "$(" ..
-        request.srcfile.getasset .. " -f :file:" .. request.srcfile.basename .. ")"
+        request.srcfile.getasset .. " -f " .. request.srcfile.basename .. ")"
     return response
   elseif command == "ui" then
     local dotnetsdk = request.io.realpath(request.continued.dotnetsdk)

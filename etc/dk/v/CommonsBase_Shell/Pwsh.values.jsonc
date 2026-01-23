@@ -122,7 +122,7 @@
           "--version",
           "7.5.4",
           "--configfile",
-          "$(get-asset CommonsBase_Shell.Pwsh.Bundles@7.5.4 -p NuGet.Config -f :file)"
+          "$(get-asset CommonsBase_Shell.Pwsh.Bundles@7.5.4 -p NuGet.Config -f :)"
         ]
       },
       "outputs": {
