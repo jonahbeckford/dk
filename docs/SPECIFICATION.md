@@ -3331,7 +3331,7 @@ return {
           id = "OurExample_Std.SomeModule@0.1.2",
           function_ = {
             args = {
-              "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe:coreutils.exe)",
+              "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f coreutils.exe -e '*')",
               "sort",
               "--output",
               "${SLOT.request}/sorted-file",
@@ -3475,7 +3475,7 @@ The details about the build request will be available as follows:
 | `request.srcfile.bundle`       | [Embedded File Scripts](#embedded-file-scripts)           | [Bundle](#assets) of the [Lua is embedded in it](#embedded-file-scripts), if any                              |
 | `request.srcfile.getasset`     | [Embedded File Scripts](#embedded-file-scripts)           | The shell command [get-asset](#get-asset-moduleversion-file_path--f-file---d-dir)                             |
 |                                |                                                           | to get the asset in `request.srcfile.bundle`.                                                                 |
-|                                |                                                           | The `-f :file:BASENAME` or `-f :exe:BASENAME` argument must be added.                                         |
+|                                |                                                           | The `-f BASENAME` or `-f :` argument must be added.                                                                     |
 | `request.submit.outputid`      | [Free Rule submit](#free-rule-command---submit)           | `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)                       |
 | `request.submit.outputmodule`  | [Free Rule submit](#free-rule-command---submit)           | `MODULE` in `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)           |
 | `request.submit.outputversion` | [Free Rule submit](#free-rule-command---submit)           | `VERSION` in `MODULE@VERSION` given by [Free Rule declareoutput](#free-rule-command---declareoutput)          |
@@ -3726,7 +3726,7 @@ The `request` table is available as:
   }
   ```
 
-- `request.srcfile.getasset`: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION -p PATH` with `MODULE@VERSION` and `PATH` replaced with real values. To use the command in subshells, the `-f :file:BASENAME` or (unlikely) `-f :exe:BASENAME` must be added to complete the value shell command.
+- `request.srcfile.getasset`: The partially complete [value shell command](#value-shell-language-vsl) `get-asset MODULE@VERSION -p PATH` with `MODULE@VERSION` and `PATH` replaced with real values. To use the command in subshells, the `-f BASENAME` or `-f :` must be added to complete the value shell command.
 
 The algorithm is:
 
