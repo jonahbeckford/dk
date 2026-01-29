@@ -29,7 +29,7 @@ jobs:
               uses: actions/checkout@v5
 
             - name: Distribute Modules
-              uses: diskuv/dk-distribute@v1
+              uses: diskuv/dk-distribute@e9c4404a2c74c9f325ab708ac17034bf0c0a5ed8 # Jan 19, 2026
               with:
                   #   Use even minor tag-based version if tag, else use hardcoded next odd minor version
                   id: ${{ github.ref_type == 'tag' && format('CommonsBase_Std@{0}', github.ref_name) || format('CommonsBase_Std@{0}', env.dkdist_next_odd_minor_version) }}
