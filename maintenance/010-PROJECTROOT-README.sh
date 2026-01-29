@@ -23,7 +23,7 @@ opam show mdx || opam install mdx
 rm -rf dksrc/
 git clone --branch V2_5 https://github.com/diskuv/dk.git dksrc
 #   SYNC: 010-PROJECTROOT-README.sh 100-imports.sh
-# dksrc/dk0 --trial import-github-l2 --repo diskuv/dk --tag 2.5.202601180000 --outdir dksrc/etc/dk/i/
+# dksrc/dk0 --trial import-github-l2 --repo diskuv/dk --tag 2.5.202601180005 --outdir dksrc/etc/dk/i/
 # dksrc/dk0 --trial import-github-l2 --repo jonahbeckford/dk --tag 2.5.202601180004 --outdir dksrc/etc/dk/i/
 
 # Hack dk0 2.4.2.52 until 2.4.2.53 is built
