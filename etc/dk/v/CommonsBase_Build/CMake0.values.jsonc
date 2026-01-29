@@ -12,18 +12,18 @@
     },
     "forms": [
         {
-            "id": "CommonsBase_Build.CMake@3.25.3",
+            "id": "CommonsBase_Build.CMake0@3.25.3",
             "precommands": {
                 "private": [
                     // macOS as of dk0 2.4.2.52 does not expand symlinks correctly so codesigning fails
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d ${SLOT.Release.Darwin_arm64} -e 'CMake.app/Contents/bin/*'",
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d ${SLOT.Release.Darwin_x86_64} -e 'CMake.app/Contents/bin/*'",
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-linux_x86.zip -n 1 -d ${SLOT.Release.Linux_x86}/CMake.app/Contents -e 'bin/*'",
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-linux_x86_64.zip -n 1 -d ${SLOT.Release.Linux_x86_64}/CMake.app/Contents -e 'bin/*'",
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-linux_arm64.zip -n 1 -d ${SLOT.Release.Linux_arm64}/CMake.app/Contents -e 'bin/*'",
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-3.25.3-windows-arm64.zip -n 1 -d ${SLOT.Release.Windows_arm64}/CMake.app/Contents",
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-3.25.3-windows-i386.zip -n 1 -d ${SLOT.Release.Windows_x86}/CMake.app/Contents",
-                    "get-asset CommonsBase_Build.CMake.Bundle@3.25.3 -p cmake-3.25.3-windows-x86_64.zip -n 1 -d ${SLOT.Release.Windows_x86_64}/CMake.app/Contents"
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d ${SLOT.Release.Darwin_arm64} -e 'CMake.app/Contents/bin/*'",
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d ${SLOT.Release.Darwin_x86_64} -e 'CMake.app/Contents/bin/*'",
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-linux_x86.zip -n 1 -d ${SLOT.Release.Linux_x86}/CMake.app/Contents -e 'bin/*'",
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-linux_x86_64.zip -n 1 -d ${SLOT.Release.Linux_x86_64}/CMake.app/Contents -e 'bin/*'",
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-linux_arm64.zip -n 1 -d ${SLOT.Release.Linux_arm64}/CMake.app/Contents -e 'bin/*'",
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-3.25.3-windows-arm64.zip -n 1 -d ${SLOT.Release.Windows_arm64}/CMake.app/Contents",
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-3.25.3-windows-i386.zip -n 1 -d ${SLOT.Release.Windows_x86}/CMake.app/Contents",
+                    "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-3.25.3-windows-x86_64.zip -n 1 -d ${SLOT.Release.Windows_x86_64}/CMake.app/Contents"
                 ]
             },
             "outputs": {
