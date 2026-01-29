@@ -4,6 +4,10 @@
 //   and then a com.apple.macl xattr is placed on CMake.app (making it readonly).
 //   Extra files (like cmake.exe) can't be placed in it ==> interface must use ${.exe.execution}.
 //   Note: dk0 will not do its own codesign because it sees CMake.app/Contents means an Apple app or bundle.
+//
+// dk0 2.4.2.58 expand symlinks correctly so code signature verification works on macOS.
+// BUT deterministic zip files created for dk0 objects don't contain symlinks, so `get-object`
+// will be an invalid CMake.app since its code signature will be broken.
 {
     "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/mlfront-values.json",
     "schema_version": {
@@ -15,7 +19,6 @@
             "id": "CommonsBase_Build.CMake0@3.25.3",
             "precommands": {
                 "private": [
-                    // macOS as of dk0 2.4.2.52 does not expand symlinks correctly so codesigning fails
                     "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d ${SLOT.Release.Darwin_arm64} -e 'CMake.app/Contents/bin/*'",
                     "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d ${SLOT.Release.Darwin_x86_64} -e 'CMake.app/Contents/bin/*'",
                     "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-linux_x86.zip -n 1 -d ${SLOT.Release.Linux_x86}/CMake.app/Contents -e 'bin/*'",
@@ -7186,35 +7189,52 @@
                         ]
                     },
                     {
+                        // commented out paths are symlinks
+                        // "CMake.app/Contents/Frameworks/QtCore.framework/Resources",
+                        // "CMake.app/Contents/Frameworks/QtCore.framework/Versions/Current",
+                        // "CMake.app/Contents/Frameworks/QtGui.framework/Resources",
+                        // "CMake.app/Contents/Frameworks/QtGui.framework/Versions/Current",
+                        // "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Resources",
+                        // "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/Current",
+                        // "CMake.app/Contents/Frameworks/QtWidgets.framework/Resources",
+                        // "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/Current",
                         "paths": [
                             "CMake.app/Contents/_CodeSignature/CodeResources",
                             "CMake.app/Contents/bin/ccmake",
                             "CMake.app/Contents/bin/cmake-gui",
                             "CMake.app/Contents/CodeResources",
                             "CMake.app/Contents/Frameworks/QtCore.framework/QtCore",
-                            "CMake.app/Contents/Frameworks/QtCore.framework/Resources",
+                            "CMake.app/Contents/Frameworks/QtCore.framework/Resources/Info.plist",
                             "CMake.app/Contents/Frameworks/QtCore.framework/Versions/5/_CodeSignature/CodeResources",
                             "CMake.app/Contents/Frameworks/QtCore.framework/Versions/5/QtCore",
                             "CMake.app/Contents/Frameworks/QtCore.framework/Versions/5/Resources/Info.plist",
-                            "CMake.app/Contents/Frameworks/QtCore.framework/Versions/Current",
+                            "CMake.app/Contents/Frameworks/QtCore.framework/Versions/Current/_CodeSignature/CodeResources",
+                            "CMake.app/Contents/Frameworks/QtCore.framework/Versions/Current/QtCore",
+                            "CMake.app/Contents/Frameworks/QtCore.framework/Versions/Current/Resources/Info.plist",
                             "CMake.app/Contents/Frameworks/QtGui.framework/QtGui",
-                            "CMake.app/Contents/Frameworks/QtGui.framework/Resources",
+                            "CMake.app/Contents/Frameworks/QtGui.framework/Resources/Info.plist",
                             "CMake.app/Contents/Frameworks/QtGui.framework/Versions/5/_CodeSignature/CodeResources",
                             "CMake.app/Contents/Frameworks/QtGui.framework/Versions/5/QtGui",
                             "CMake.app/Contents/Frameworks/QtGui.framework/Versions/5/Resources/Info.plist",
-                            "CMake.app/Contents/Frameworks/QtGui.framework/Versions/Current",
+                            "CMake.app/Contents/Frameworks/QtGui.framework/Versions/Current/_CodeSignature/CodeResources",
+                            "CMake.app/Contents/Frameworks/QtGui.framework/Versions/Current/QtGui",
+                            "CMake.app/Contents/Frameworks/QtGui.framework/Versions/Current/Resources/Info.plist",
                             "CMake.app/Contents/Frameworks/QtPrintSupport.framework/QtPrintSupport",
-                            "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Resources",
+                            "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Resources/Info.plist",
                             "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/5/_CodeSignature/CodeResources",
                             "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/5/QtPrintSupport",
                             "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/5/Resources/Info.plist",
-                            "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/Current",
+                            "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/Current/_CodeSignature/CodeResources",
+                            "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/Current/QtPrintSupport",
+                            "CMake.app/Contents/Frameworks/QtPrintSupport.framework/Versions/Current/Resources/Info.plist",
                             "CMake.app/Contents/Frameworks/QtWidgets.framework/QtWidgets",
-                            "CMake.app/Contents/Frameworks/QtWidgets.framework/Resources",
+                            "CMake.app/Contents/Frameworks/QtWidgets.framework/Resources/Info.plist",
                             "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/5/_CodeSignature/CodeResources",
                             "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/5/QtWidgets",
                             "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/5/Resources/Info.plist",
-                            "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/Current",
+                            "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/Current/_CodeSignature/CodeResources",
+                            "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/Current/QtWidgets",
+                            "CMake.app/Contents/Frameworks/QtWidgets.framework/Versions/Current/Resources/Info.plist",
                             "CMake.app/Contents/Info.plist",
                             "CMake.app/Contents/MacOS/CMake",
                             "CMake.app/Contents/PlugIns/platforms/libqcocoa.dylib",
