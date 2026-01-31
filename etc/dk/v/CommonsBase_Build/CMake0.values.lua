@@ -3,9 +3,11 @@
 --  generator: the cmake generator to use (defaults to "Ninja")
 --  args: list of arguments to pass to cmake executable.
 --        The -B build directory will already be set.
+--  out: list of expected output files in the build directory.
 -- example:
---  dk0 post-object CommonsBase_Build.CMake0.FreeGenerate@3.25.3 generator=Ninja 'args[]=-S' 'args[]=.'
+--  dk0 post-object CommonsBase_Build.CMake0.FreeGenerate@3.25.3 generator=Ninja 'args[]=-S' 'args[]=.' 'out[]=CMakeCache.txt'
 -- would run: cmake -G Ninja -B <post-object output directory> -S .
+--  and expect CMakeCache.txt in the output directory.
 
 -- USAGE 2 OF 2: CommonsBase_Build.CMake0.Generate@3.25.3 build= generator= args[]=
 -- (UI rule) Generates a CMake build system in the build directory.
@@ -14,7 +16,7 @@
 --  args: list of arguments to pass to cmake executable.
 --        The -B build directory will already be set.
 -- example:
---  dk0 post-object CommonsBase_Build.CMake0.Generate@3.25.3 generator=Ninja 'args[]=-S' 'args[]=.'
+--  dk0 run CommonsBase_Build.CMake0.Generate@3.25.3 generator=Ninja build=target/b 'args[]=-S' 'args[]=.'
 -- would run: cmake -G Ninja -B <post-object output directory> -S .
 
 -- Why a rule instead of a simpler `get-object`?
@@ -29,7 +31,7 @@ local M = {
 -- lua-ml does not support local functions.
 -- And if the variable was "local" it would be nil inside rules.Untar.
 -- So a should-be-unique global is used instead.
-CommonsBase_Build__CMake0__Run__3_25_3 = {}
+CommonsBase_Build__CMake0__3_25_3 = {}
 
 rules, uirules = build.newrules(M)
 
@@ -38,7 +40,7 @@ function rules.FreeGenerate(command, request)
     return {
       declareoutput = {
         return_form = {
-          id = "OurCMake_Run." .. request.declareoutput.generatesymbol() .. "@1.0.0",
+          id = "OurCMake_FreeGenerate." .. request.rule.generatesymbol() .. "@1.0.0",
           slot = "Release.Agnostic"
         }
       }
@@ -47,27 +49,28 @@ function rules.FreeGenerate(command, request)
     local generator = request.user.generator or "Ninja"
     local args = request.user.args
     assert(type(args) == "table", "args must be a table. please provide `'args[]=ARG1' 'args[]=ARG2' ...`")
+    local out = request.user.out
+    assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
     local p = {
       outputid = request.submit.outputid,
-      outputmodule = request.submit.outputmodule,
-      outputversion = request.submit.outputversion,
       abi = request.execution.ABIv3,
       generator = generator,
-      args = args
+      args = args,
+      out = out
     }
 
     -- print args
     -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
     -- local json = require("buildjson")
     -- print(json.encode(request.user, { indent = 1 }))
-    
+
 
     if request.execution.OSFamily == "macos" then
-      return CommonsBase_Build__CMake0__Run__3_25_3.run_macos(p)
+      return CommonsBase_Build__CMake0__3_25_3.free_macos(request, p)
     elseif request.execution.OSFamily == "linux" then
-      return CommonsBase_Build__CMake0__Run__3_25_3.run_linux(p)
+      return CommonsBase_Build__CMake0__3_25_3.free_linux(request, p)
     elseif request.execution.OSFamily == "windows" then
-      return CommonsBase_Build__CMake0__Run__3_25_3.run_win32(p)
+      return CommonsBase_Build__CMake0__3_25_3.free_win32(request, p)
     else
       error("unsupported OSFamily: " .. request.execution.OSFamily)
     end
@@ -75,40 +78,266 @@ function rules.FreeGenerate(command, request)
 end
 
 function uirules.Generate(command, request)
-  if command == "submit" then
-    local build = assert(request.user.build, "please provide 'build=BUILD_DIRECTORY'")
-    local generator = request.user.generator or "Ninja"
-    local args = request.user.args
-    assert(type(args) == "table", "args must be a table. please provide `'args[]=ARG1' 'args[]=ARG2' ...`")
-    local p = {
-      outputid = request.submit.outputid,
-      outputmodule = request.submit.outputmodule,
-      outputversion = request.submit.outputversion,
-      abi = request.execution.ABIv3,
-      generator = generator,
-      args = args,
-      build = build
-    }
+  local build = assert(request.user.build, "please provide 'build=BUILD_DIRECTORY'")
+  local generator = request.user.generator or "Ninja"
+  local args = request.user.args
+  assert(type(args) == "table", "args must be a table. please provide `'args[]=ARG1' 'args[]=ARG2' ...`")
+  local outputid = "OurCMake_Generate." .. request.rule.generatesymbol() .. "@1.0.0"
+  local p = {
+    outputid = outputid,
+    abi = request.execution.ABIv3,
+    generator = generator,
+    args = args,
+    build = build
+  }
 
-    -- print args
-    -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
-    -- local json = require("buildjson")
-    -- print(json.encode(request.user, { indent = 1 }))
-    
+  -- print args
+  -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
+  -- local json = require("buildjson")
+  -- print(json.encode(request.user, { indent = 1 }))
 
-    if request.execution.OSFamily == "macos" then
-      return CommonsBase_Build__CMake0__Run__3_25_3.run_macos(p)
-    elseif request.execution.OSFamily == "linux" then
-      return CommonsBase_Build__CMake0__Run__3_25_3.run_linux(p)
-    elseif request.execution.OSFamily == "windows" then
-      return CommonsBase_Build__CMake0__Run__3_25_3.run_win32(p)
-    else
-      error("unsupported OSFamily: " .. request.execution.OSFamily)
-    end
+  if request.execution.OSFamily == "macos" then
+    return CommonsBase_Build__CMake0__3_25_3.ui_macos(command, request, p)
+  elseif request.execution.OSFamily == "linux" then
+    return CommonsBase_Build__CMake0__3_25_3.ui_linux(command, request, p)
+  elseif request.execution.OSFamily == "windows" then
+    return CommonsBase_Build__CMake0__3_25_3.ui_win32(command, request, p)
+  else
+    error("unsupported OSFamily: " .. request.execution.OSFamily)
   end
 end
 
-CommonsBase_Build__CMake0__Run__3_25_3.paths_common = {
+function CommonsBase_Build__CMake0__3_25_3.free_macos(request, p)
+  -- concatenate into [args]
+  local args = {
+    "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d : -e 'CMake.app/Contents/bin/*')/CMake.app/Contents/bin/cmake",
+    "-G", p.generator,
+    "-B", "${SLOT.Release.Agnostic}" }
+  table.move(p.args, 1, table.getn(p.args), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+
+  return {
+    submit = {
+      values = {
+        schema_version = { major = 1, minor = 0 },
+        forms = {
+          {
+            id = p.outputid,
+            function_ = {
+              execution = { { name = "OSFamily", value = "macos" } },
+              args = args
+            },
+            outputs = {
+              assets = {
+                {
+                  slots = { "Release.Agnostic" },
+                  paths = p.out
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+end
+
+function CommonsBase_Build__CMake0__3_25_3.free_linux(request, p)
+  -- concatenate into [args]
+  local cmakeabi
+  local slot
+  if request.execution.ABIv3 == "linux_x86_64" then
+    cmakeabi = "linux_x86_64"
+  elseif request.execution.ABIv3 == "linux_x86" then
+    cmakeabi = "linux_x86"
+  elseif request.execution.ABIv3 == "linux_arm64" then
+    cmakeabi = "linux_arm64"
+  else
+    error("unsupported ABIv3: " .. request.execution.ABIv3)
+  end
+  local args = {
+    "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-" .. cmakeabi .. ".zip -n 1 -d : -e 'bin/*')/bin/cmake",
+    "-G", p.generator,
+    "-B", "${SLOT.Release.Agnostic}" }
+  table.move(p.args, 1, table.getn(p.args), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+
+  return {
+    submit = {
+      values = {
+        schema_version = { major = 1, minor = 0 },
+        forms = {
+          {
+            id = p.outputid,
+            function_ = {
+              execution = { { name = "OSFamily", value = "linux" } },
+              args = args
+            },
+            outputs = {
+              assets = {
+                {
+                  slots = { "Release.Agnostic" },
+                  paths = p.out
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+end
+
+function CommonsBase_Build__CMake0__3_25_3.free_win32(request, p)
+  -- concatenate into [args]
+  local cmakeabi
+  local slot
+  if request.execution.ABIv3 == "windows_x86_64" then
+    cmakeabi = "windows_x86_64"
+  elseif request.execution.ABIv3 == "windows_x86" then
+    cmakeabi = "windows_x86"
+  elseif request.execution.ABIv3 == "windows_arm64" then
+    cmakeabi = "windows_arm64"
+  else
+    error("unsupported ABIv3: " .. request.execution.ABIv3)
+  end
+  local args = {
+    "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-" .. cmakeabi .. ".zip -n 1 -d : -e 'bin/*')/bin/cmake.exe",
+    "-G", p.generator,
+    "-B", "${SLOT.Release.Agnostic}" }
+  table.move(p.args, 1, table.getn(p.args), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+
+  return {
+    submit = {
+      values = {
+        schema_version = { major = 1, minor = 0 },
+        forms = {
+          {
+            id = p.outputid,
+            function_ = {
+              execution = { { name = "OSFamily", value = "windows" } },
+              args = args
+            },
+            outputs = {
+              assets = {
+                {
+                  slots = { "Release.Agnostic" },
+                  paths = p.out
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+end
+
+function CommonsBase_Build__CMake0__3_25_3.ui_macos(command, request, p)
+  if command == "submit" then
+    return {
+      submit = {
+        expressions = {
+          directories = {
+            cmakedir =
+            "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d : -e 'CMake.app/Contents/bin/*')/CMake.app/Contents/bin/cmake"
+          }
+        }
+      }
+    }
+  elseif command == "ui" then
+    -- concatenate into [args]
+    local args = {
+      "-G", p.generator,
+      "-B", p.build }
+    table.move(p.args, 1, table.getn(p.args), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+
+    request.ui.spawn {
+      program = request.io.realpath(request.continued.cmakedir),
+      args = args
+    }
+  end
+end
+
+function CommonsBase_Build__CMake0__3_25_3.ui_linux(command, request, p)
+  if command == "submit" then
+    local cmakedir
+    if request.execution.ABIv3 == "linux_x86_64" then
+      cmakedir =
+      "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-linux_x86_64.zip -n 1 -d ${SLOT.Release.Linux_x86_64}/CMake.app/Contents -e 'bin/*'"
+    elseif request.execution.ABIv3 == "linux_x86" then
+      cmakedir =
+      "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-linux_x86.zip -n 1 -d ${SLOT.Release.Linux_x86}/CMake.app/Contents -e 'bin/*'"
+    elseif request.execution.ABIv3 == "linux_arm64" then
+      cmakedir =
+      "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-linux_arm64.zip -n 1 -d ${SLOT.Release.Linux_arm64}/CMake.app/Contents -e 'bin/*'"
+    else
+      error("unsupported ABIv3: " .. request.execution.ABIv3)
+    end
+    return {
+      submit = {
+        expressions = {
+          directories = {
+            cmakedir = cmakedir
+          }
+        }
+      }
+    }
+  elseif command == "ui" then
+    -- concatenate into [args]
+    local args = {
+      "-G", p.generator,
+      "-B", p.build }
+    table.move(p.args, 1, table.getn(p.args), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+
+    request.ui.spawn {
+      program = request.io.realpath(request.continued.cmakedir),
+      args = args
+    }
+  end
+end
+
+function CommonsBase_Build__CMake0__3_25_3.ui_win32(command, request, p)
+  if command == "submit" then
+    local cmakedir
+    if request.execution.ABIv3 == "windows_x86_64" then
+      cmakedir =
+      "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-3.25.3-windows-x86_64.zip -n 1 -d ${SLOT.Release.Windows_x86_64}/CMake.app/Contents"
+    elseif request.execution.ABIv3 == "windows_x86" then
+      cmakedir =
+      "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-3.25.3-windows-i386.zip -n 1 -d ${SLOT.Release.Windows_x86}/CMake.app/Contents"
+    elseif request.execution.ABIv3 == "windows_arm64" then
+      cmakedir =
+      "get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-3.25.3-windows-arm64.zip -n 1 -d ${SLOT.Release.Windows_arm64}/CMake.app/Contents"
+    else
+      error("unsupported ABIv3: " .. request.execution.ABIv3)
+    end
+    return {
+      submit = {
+        expressions = {
+          directories = {
+            cmakedir = cmakedir
+          }
+        }
+      }
+    }
+  elseif command == "ui" then
+    -- concatenate into [args]
+    local args = {
+      "-G", p.generator,
+      "-B", p.build }
+    table.move(p.args, 1, table.getn(p.args), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+
+    request.ui.spawn {
+      program = request.io.realpath(request.continued.cmakedir),
+      args = args
+    }
+  end
+end
+
+-- By using a $(get-asset ...) subshell we do not need to declare all the paths
+-- like we did when get-asset was a precommand. So TODO:
+-- REMOVE ALL THESE PATH LISTS WHEN TESTING COMPLETE!
+
+CommonsBase_Build__CMake0__3_25_3.paths_common = {
   "CMake.app/Contents/share/aclocal/cmake.m4",
   "CMake.app/Contents/share/bash-completion/completions/cmake",
   "CMake.app/Contents/share/bash-completion/completions/cpack",
@@ -3262,7 +3491,7 @@ CommonsBase_Build__CMake0__Run__3_25_3.paths_common = {
   "CMake.app/Contents/share/vim/vimfiles/syntax/cmake.vim"
 }
 
-CommonsBase_Build__CMake0__Run__3_25_3.paths_windows = {
+CommonsBase_Build__CMake0__3_25_3.paths_windows = {
   "CMake.app/Contents/bin/cmake-gui.exe",
   "CMake.app/Contents/bin/cmake.exe",
   "CMake.app/Contents/bin/cmcldeps.exe",
@@ -3271,7 +3500,7 @@ CommonsBase_Build__CMake0__Run__3_25_3.paths_windows = {
   "CMake.app/Contents/doc/cmake/cmake.org.html"
 }
 
-CommonsBase_Build__CMake0__Run__3_25_3.paths_darwin_and_windows = {
+CommonsBase_Build__CMake0__3_25_3.paths_darwin_and_windows = {
   "CMake.app/Contents/doc/cmake/CMake.qch",
   "CMake.app/Contents/doc/cmake/Copyright.txt",
   "CMake.app/Contents/doc/cmake/cmcurl/COPYING",
@@ -7207,13 +7436,13 @@ CommonsBase_Build__CMake0__Run__3_25_3.paths_darwin_and_windows = {
   "CMake.app/Contents/share/cmake-3.25/Licenses/LGPLv3.txt"
 }
 
-CommonsBase_Build__CMake0__Run__3_25_3.paths_darwin_and_linux = {
+CommonsBase_Build__CMake0__3_25_3.paths_darwin_and_linux = {
   "CMake.app/Contents/bin/cmake",
   "CMake.app/Contents/bin/cpack",
   "CMake.app/Contents/bin/ctest"
 }
 
-CommonsBase_Build__CMake0__Run__3_25_3.paths_linux = {
+CommonsBase_Build__CMake0__3_25_3.paths_linux = {
   "CMake.app/Contents/doc/cmake-3.25/Copyright.txt",
   "CMake.app/Contents/doc/cmake-3.25/cmcurl/COPYING",
   "CMake.app/Contents/doc/cmake-3.25/cmlibarchive/COPYING",
@@ -7226,7 +7455,7 @@ CommonsBase_Build__CMake0__Run__3_25_3.paths_linux = {
   "CMake.app/Contents/doc/cmake-3.25/cmzstd/LICENSE"
 }
 
-CommonsBase_Build__CMake0__Run__3_25_3.paths_darwin = {
+CommonsBase_Build__CMake0__3_25_3.paths_darwin = {
   -- commented out paths are symlinks:
   -- "CMake.app/Contents/Frameworks/QtCore.framework/Resources",
   -- "CMake.app/Contents/Frameworks/QtCore.framework/Versions/Current",
@@ -7279,51 +7508,5 @@ CommonsBase_Build__CMake0__Run__3_25_3.paths_darwin = {
   "CMake.app/Contents/Resources/CMakeSetup.icns",
   "CMake.app/Contents/Resources/qt.conf"
 }
-
-function CommonsBase_Build__CMake0__Run__3_25_3.run_macos(p)
-  -- calculate build directory
-  local build_dir = p.build_dir or "$(SLOT.Release.Agnostic)"
-
-  -- concatenate into [paths]
-  local paths = {}
-  local tbl = CommonsBase_Build__CMake0__Run__3_25_3.paths_common
-  table.move(tbl, 1, table.getn(tbl), table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
-  tbl = CommonsBase_Build__CMake0__Run__3_25_3.paths_darwin_and_linux
-  table.move(tbl, 1, table.getn(tbl), table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
-  tbl = CommonsBase_Build__CMake0__Run__3_25_3.paths_darwin
-  table.move(tbl, 1, table.getn(tbl), table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
-
-  -- concatenate into [args]
-  local args = {
-    "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d : -e 'CMake.app/Contents/bin/*')/CMake.app/Contents/bin/cmake",
-    "-G", p.generator,
-    "-B", build_dir }
-  table.move(p.args, 1, table.getn(p.args), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
-
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            function_ = {
-              execution = { { name = "OSFamily", value = "macos" } },
-              args = args
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
-                  paths = paths
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-end
 
 return M
