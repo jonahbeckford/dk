@@ -24,8 +24,6 @@
       - [${SLOT.request}](#slotrequest)
       - [${SLOT.SlotName}](#slotslotname)
       - [${SLOTNAME.\*}](#slotname)
-      - [${MOREINCLUDES}](#moreincludes)
-      - [${MORECOMMANDS}](#morecommands)
       - [${/} directory separator](#-directory-separator)
       - [${.exe.execution}](#exeexecution)
       - [${.exe.target}](#exetarget)
@@ -43,7 +41,6 @@
       - [-NAME](#-name)
       - [\<NAME=VALUE](#namevalue-1)
     - [Form Order of Processing](#form-order-of-processing)
-    - [Dynamic Functions](#dynamic-functions)
   - [Objects](#objects)
     - [Saving and Loading Objects](#saving-and-loading-objects)
     - [Object Slots](#object-slots)
@@ -831,26 +828,6 @@ At the time of writing, the list is:
 - `Windows_x86`
 - `Windows_x86_64`
 
-#### ${MOREINCLUDES}
-
-> 🚧 This variable was experimental and is now being removed.
-
-The directory that the function can place new `*.values.json` values files into. These values will be available to [MORECOMMANDS](#morecommands).
-
-There are some restrictions on the content of the values in these new ("more") `*.values.json`:
-
-- There must be no *more* distributions.
-
-See [dynamic functions](#dynamic-functions) for more information.
-
-#### ${MORECOMMANDS}
-
-> 🚧 This variable was experimental and is now being removed.
-
-A newline separated file containing [zero or more value shell commands](#value-shell-language-vsl) that the function can write into.
-
-See [dynamic functions](#dynamic-functions) for more information.
-
 #### ${/} directory separator
 
 The directory separator. Except for one edge case (below), it is always `/` even on Windows. That is, form commands can assume the `/` separator, which can simplify function code when the function interacts with MSYS2.
@@ -1054,56 +1031,8 @@ The order of processing is as follows:
 2. The form's precommands are executed, in parallel if supported by the build system.
 3. If there is a breakpoint from the `enter-object` command, a system shell (PowerShell, bash, etc.) is invoked.
 4. The form's function command line is executed. The command line is the concatenation of the function arguments in `"function": { "args": ... }`.
-5. (tbd) If [${MORECOMMANDS}](#morecommands) is part of the form's arguments or precommands, then:
-   1. The [${MOREINCLUDES}](#moreincludes) directory is scanned for `values.json[c]` and `*.values.json[c]` values files. However, the values files are *not* imported in the value store.
-   2. The [${MOREINCLUDES}](#moreincludes) values files are [alpha-converted](#dynamic-functions) and imported as `valuesfile` values.
-   3. The module ids in the [${MORECOMMANDS}](#morecommands) are [alpha-converted](#dynamic-functions) using `BOUND_MODULES` from the last step.
-   4. The alpha-converted shell commands in [${MORECOMMANDS}](#morecommands) are run.
-6. The form's output files are verified to exist.
-7. The [`${SLOT.slotname}`](#slotslotname) that are part of the form's arguments and precommands are made available to other forms.
-
-The trace and value store are updated as normal during the MORECOMMANDS, so if the same form id, form slot and form document are submitted the build system can re-use the cached values.
-
-### Dynamic Functions
-
-> Dynamic functions have not been implemented in the reference implementation as of 2025-11-08.
-> They have been mostly been subsumed by [Lua scripts](#scripts), although the alpha conversion from this Dynamic Function section may eventually be ported to Lua rules.
-
-Use the [MOREINCLUDES](#moreincludes) and [MORECOMMANDS](#morecommands) to create a function which perform `get-object`, `get-bundle` and other commands dynamically.
-You'll want to do this in the following scenarios:
-
-1. (lazy evaluation) All `precommands` are executed, modulo some optimizations specific to the [object slot](#object-slots), and they can be expensive. Using a dynamic function you can do an expensive `get-object` or `get-asset` based on the function inputs.
-2. (language builds) Many languages have a lock file which can be parsed and executed to build a project: npm and cargo lockfiles, etc. Using a dynamic function means you don't have to model that language in the dk build system. Instead, write a dynamic function that can read the lock file (use a `get-asset` in the precommand to grab a language parser) and create a [values.json](#json-files) from that lock file. You'll get incremental language builds cheaply.
-3. (huge build graphs) You can shrink a build graph by delegating large parts of it to dynamic functions. The entire build graph (minus dynamic functions) must be kept in memory so using a dynamic function gives you a knob so you don't have to increase the memory. *nit: this requires garbage collection / cache eviction of dynamic functions from the in-memory trace store, which is not implemented yet in the reference implementation*
-
-Any function, including dynamic functions, must enumerate all the output files it produces. This limits dynamic functions in (we believe) a good way: you must know the outputs before you run the dynamic function. This design choice was influenced by Buck2.
-
-The rest of this section is the implementation. It requires a basic knowledge of [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus).
-
----
-
-There is an **alpha conversion** procedure to avoid name collisions:
-
-1. The set of *more* form ids and *more* bundle ids that are defined is assigned to the set `DEFINED_MODULES`.
-2. The set of *more* form ids and *more* bundle ids that are referenced is assigned to the set `REFERENCED_MODULES`.
-3. The set `BOUND_MODULES` is calculated as `REFERENCED_MODULES - DEFINED_MODULES`.
-4. A deterministic *more* namespace term is created from a hash of the form id, form slot and the form document. For example, the form id `SomeForm_Std.Example@1.0.0` and the form slot `Release.Agnostic` and the form document `{"username":"nobody"}` are SHA-256 hashed together and base32 encoded to create a *more* namespace term like `LMBnmfdhn7lw4wepx2qiunrmgm4o5lx4wwsf2yfj7xyxggkg5kdsltq` (it is allowed to be shorter, but must start with `LMB` representing anonynmous lambda functions).
-5. Each *more* form id and each *more* bundle id that is *not* in `BOUND_MODULES` is appended with the *more* namespace term in memory (ex. `SomeForm_Std.Example@1.0.0` becomes `SomeForm_Std.Example.Hnmfdhn7lw4wepx2qiunrmgm4o5lx4wwsf2yfj7xyxggkg5kdsltq@1.0.0`).
-6. The converted `.*.values.json` files are written to a cached directory and imported into the value store.
-
-The above procedure is the conventional alpha conversion from lambda calculus.
-
-There is **no beta reduction** because all function applications are parameter-less. That is, functions are thunks `f ()` as influenced by the design of Stanford's [gg] build system. Even the form document is not a lambda parameter; instead it is part of the function (form) body.
-
-There are no partial functions (in contrast to Nix) and no passing functions as first class arguments to other functions. But everything-is-a-thunk is easy for implementors and (hopefully) easy for non-functional users to understand.
-
-There are other trade-offs with this design choice. Given a repeated function application with the same form id, form slot and form document:
-
-- the function is memoized (the second and subsequent applications are loaded from cache) since the function body (the alpha converted MOREINCLUDES) and results (the object) are stored by the same identifiers in the value and trace store
-- the value and trace store can grow large since each function application is stored
-- failures should be much easier to debug since the inputs to the function application are available in the value/trace store and the function application has its own function directory (ie. `enter-object` should work)
-
-[gg]: https://www.usenix.org/system/files/atc19-fouladi.pdf
+5. The form's output files are verified to exist.
+6. The [`${SLOT.slotname}`](#slotslotname) that are part of the form's arguments and precommands are made available to other forms.
 
 ## Objects
 
