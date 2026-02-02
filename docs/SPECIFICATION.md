@@ -1001,7 +1001,7 @@ cannot make assumptions about the order of the precommands.
 
 The following optimizations are allowed:
 
-- Precommands may be run in parallel.
+- Precommands may be run in parallel unless the `"precommands": { "sequential": true, ... }` flag is enabled.
 - Precommands may be skipped if the requested slot does not match the precommand output slot.
   For example, let's say you issue the command `get-object THE_ID -s Release.Agnostic`.
   Let's also say `THE_ID` object has two precommands:

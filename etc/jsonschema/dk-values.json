@@ -517,6 +517,21 @@
                         "type": "object",
                         "additionalProperties": false,
                         "properties": {
+                            "sequential": {
+                                "description": "Whether the precommands should be executed sequentially. If true (or 1), the precommands are executed one after the other in the order they are defined. If false, 0 or not specified, the precommands may be executed in parallel. Defaults to false.",
+                                "oneOf": [
+                                    {
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "type": "integer",
+                                        "enum": [
+                                            0,
+                                            1
+                                        ]
+                                    }
+                                ]
+                            },
                             "private": {
                                 "description": "The commands used to fetch objects that must be available to execute the form. The commands are written in the Value Shell Language (VSL). When installing the form with an installer value controller, these \"private\" objects are not installed with this form's output.",
                                 "type": "array",
