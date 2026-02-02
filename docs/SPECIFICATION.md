@@ -125,6 +125,10 @@
     - [Lua package library](#lua-package-library)
       - [require](#require)
       - [package.registrykey](#packageregistrykey)
+    - [Lua quote library](#lua-quote-library)
+      - [quote.posix\_shell](#quoteposix_shell)
+      - [quote.value\_shell](#quotevalue_shell)
+      - [quote.windows\_batch](#quotewindows_batch)
     - [Lua request.rule library](#lua-requestrule-library)
       - [request.rule.generatesymbol](#requestrulegeneratesymbol)
     - [Lua request.execution library](#lua-requestexecution-library)
@@ -2455,6 +2459,26 @@ Once imported with `require`, standard modules are enriched with constants as pe
 A opaque variable holding a key to an internal table of packages that are loaded.
 
 In the reference implementation, the internal table of packages is stored in an OCaml analog of the [Lua C registry](https://www.lua.org/manual/5.4/manual.html#4.3).
+
+### Lua quote library
+
+#### quote.posix_shell
+
+`quote.posix_shell (s)`
+
+Returns a string that is quoted as a single word in a POSIX shell.
+
+#### quote.value_shell
+
+`quote.value_shell (s)`
+
+Returns a string that is quoted as a single word in the [Value Shell Language](#vsl-lexical-rules).
+
+#### quote.windows_batch
+
+`quote.windows_batch (s)`
+
+Returns a string that is quoted as a single word in a Windows Batch file.
 
 ### Lua request.rule library
 
