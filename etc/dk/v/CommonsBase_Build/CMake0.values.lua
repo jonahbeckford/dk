@@ -1,28 +1,53 @@
 -- USAGE 1 OF 2: CommonsBase_Build.CMake0.F_Build@3.25.3 (bundlemodver= | assetmodver= assetpath=)
 -- (Free rule) Generates a CMake build directory, builds the CMake project and installs the CMake project in the output directory.
--- Either bundlemodver or assetmodver+assetpath must be provided.
+-- Configurations: One of the following sets of options must be provided:
+--  bundlemodver
+--  assetmodver + assetpath
 -- Options:
 --  generator: the cmake generator to use (defaults to "Ninja")
 --  assetmodver: asset module@version of CMake source directory
 --  assetpath: path inside the asset module to the CMake source directory
 --  bundlemodver: bundle module@version of CMake source directory
 --  sourcesubdir: subdirectory inside the asset or bundle that contains the CMakeLists.txt (defaults to root of asset or bundle)
+--  nstrip: levels of leading directories to nstrip while extract asset or bundle (defaults to 0)
 --  gargs[]: list of cmake generator arguments to pass to cmake executable.
 --        The -S source directory is required.
 --        The -B build directory will already be set.
 --  bargs[]: list of cmake build arguments to pass to cmake executable.
 --  iargs[]: list of cmake install arguments to pass to cmake executable.
---  out[]: list of expected output files in the build directory
+--  out[]: (required) list of expected output files in the build directory
 --  exe[]: list of glob patterns for executables to set execute permissions (Unix) and locally codesign (macOS).
 -- example:
 --  dk0 post-object CommonsBase_Build.CMake0.F_Build@3.25.3 generator=Ninja 'iargs[]=-S' 'iargs[]=.' 'out[]=bin/cmake-generated.exe'
+-- runs:
+--   get-asset <assetmodver> -p <assetpath> -d s [-or-] get-bundle <bundlemodver> -d s
+--   $(get-object CommonsBase_Build.Ninja0@1.12.1 -s Release.<execution abi> -m ./ninja.exe -f : -e '*') (if generator is "Ninja")
+--   cmake -G <generator> -S s/<sourcesubdir> -B b
+--     -DCMAKE_INSTALL_PREFIX:FILEPATH=${SLOTABS.Release.Agnostic}
+--     -DCMAKE_MAKE_PROGRAM:FILEPATH=<path to ninja.exe> (if generator is "Ninja")
+--     <gargs>
+--   cmake --build b <bargs>
+--   cmake --install b --prefix ${SLOTABS.Release.Agnostic} <iargs>
+--
+-- 1: The CMAKE_INSTALL_PREFIX is set for CMake projects like google/or-tools that do not respect
+-- the prefix option in `cmake --install --prefix` (usually when the project sets CMAKE_INSTALL_PREFIX CACHE
+-- variable by default).
+-- 2: TODO: The Ninja generator (the default) only works on Windows when the build is run in a Visual Studio Developer Command Prompt.
+-- 3: FUTURE: CMakeCache.txt can be checked in this rule to find out if all the CACHE variables are hermetic. 
+--    Example: BAD: _Python3_EXECUTABLE:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.11/bin/python3.11
+--    Example: GOOD: generated_dir:INTERNAL=/Volumes/SSD/Source/dk/t/p/4472/e7lu/f/Release.Agnostic/b/_deps/googletest-build/googletest/generated
 
 -- USAGE 2 OF 2: CommonsBase_Build.CMake0.Generate@3.25.3
 -- (UI rule) Generates a CMake build system in the build directory.
--- All options of F_Build except bundlemodver/assetmodver/assetpath are supported,
--- but installdir= is required.
+-- All options of F_Build except bundlemodver/assetmodver/assetpath are supported.
+-- Configurations: One of the following sets of options must be provided:
+--   src[]
+--   mirrors[] + urlpath
 -- Options:
---  installdir: the install directory to pass to `cmake --install ... --prefix INSTALL_DIRECTORY`
+--  src[]: list of glob patterns for the local source directory
+--  mirrors[]: HTTP base urls to download the CMake source directory
+--  urlpath: path added to the mirrors so full URL is a ZIP file of the CMake source directory
+--  installdir: (required) the install directory to pass to `cmake --install ... --prefix INSTALL_DIRECTORY`
 
 -- Why a rule instead of a simpler `get-object`?
 -- Because dk0 objects are deterministic zip files that do not allow symlinks.
@@ -69,6 +94,7 @@ function rules.F_Build(command, request)
     local out = request.user.out
     assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
     local exe = request.user.exe or {}
+    local nstrip = request.user.nstrip or 0
 
     local p = {
       outputid = request.submit.outputid,
@@ -82,14 +108,15 @@ function rules.F_Build(command, request)
       bargs = bargs,
       iargs = iargs,
       out = out,
-      exe = exe
+      exe = exe,
+      nstrip = nstrip
     }
 
     -- print args
     -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
     -- local json = require("buildjson")
     -- print(json.encode(request.user, { indent = 1 }))
-
+    -- print("p object: " .. json.encode(p, { indent = 1 }))
 
     if request.execution.OSFamily == "macos" then
       p.cmakeexe =
@@ -133,46 +160,6 @@ function rules.F_Build(command, request)
   end
 end
 
-function uirules.Build(command, request)
-  local installdir = assert(request.user.installdir, "please provide 'installdir=INSTALL_DIRECTORY'")
-  local generator = request.user.generator or "Ninja"
-
-  local srcglobs = request.user.src
-  assert(type(srcglobs) == "table",
-    "src must be a table. please provide 'src[]=GLOB1' 'src[]=GLOB2' ...")
-
-  -- SYNC: rules.F_Build#A, uirules.Build#A
-  local gargs = request.user.gargs or {}
-  local bargs = request.user.bargs or {}
-  local iargs = request.user.iargs or {}
-  local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
-  local out = request.user.out
-  assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
-  local exe = request.user.exe or {}
-
-  local outputid = "OurCMake_Build." .. request.rule.generatesymbol() .. "@1.0.0"
-  local p = {
-    outputid = outputid,
-    abi = request.execution.ABIv3,
-    generator = generator,
-    gargs = gargs,
-    bargs = bargs,
-    iargs = iargs,
-    sourcesubdir = sourcesubdir,
-    srcglobs = srcglobs,
-    out = out,
-    installdir = installdir,
-    exe = exe
-  }
-
-  -- print args
-  -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
-  -- local json = require("buildjson")
-  -- print(json.encode(request.user, { indent = 1 }))
-
-  return CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, request, p)
-end
-
 function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
   -- the source directory will be "s/" inside the function directory
   -- the build directory will be "b/" inside the function directory
@@ -190,12 +177,26 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
   else
     precommand_getsource = "get-asset " .. p.assetmodver .. " -p " .. p.assetpath .. " -d s"
   end
+  if p.nstrip and p.nstrip > 0 then
+    precommand_getsource = precommand_getsource .. " -n " .. tostring(p.nstrip)
+  end
 
-  -- concatenate p.gargs into string "generate_cmd"
+  -- ninja generator args
+  local gninjaargs = {}
+  if p.generator == "Ninja" then
+    gninjaargs = {
+      "-DCMAKE_MAKE_PROGRAM:FILEPATH=$(get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." .. p.abi ..
+      " -m ./ninja.exe -f : -e '*')/ninja.exe"
+    }
+  end
+
+  -- concatenate [p.gargs] into string "generate_cmd"
   local gargs = {
-    p.cmakeexe, "-G", p.generator, "-S", sourcedir, "-B", "b"
+    p.cmakeexe, "-G", p.generator, "-S", sourcedir, "-B", "b",
+    "-DCMAKE_INSTALL_PREFIX:FILEPATH=${SLOTABS.Release.Agnostic}"
   }
   table.move(p.gargs, 1, table.getn(p.gargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
+  table.move(gninjaargs, 1, table.getn(gninjaargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
 
   -- concatenate p.bargs into string "build_cmd"
   local bargs = {
@@ -205,7 +206,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
 
   -- concatenate p.iargs into array "iargs"
   local iargs = {
-    p.cmakeexe, "--install", "b", "--prefix", "${SLOT.Release.Agnostic}"
+    p.cmakeexe, "--install", "b", "--prefix", "${SLOTABS.Release.Agnostic}"
   }
   table.move(p.iargs, 1, table.getn(p.iargs), table.getn(iargs) + 1, iargs) ---@diagnostic disable-line: deprecated, access-invisible
 
@@ -244,15 +245,126 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
   }
 end
 
+function uirules.Build(command, request)
+  local installdir = assert(request.user.installdir, "please provide 'installdir=INSTALL_DIRECTORY'")
+  local generator = request.user.generator or "Ninja"
+
+  local src = request.user.src
+  local mirrors = request.user.mirrors
+  local urlpath = request.user.urlpath
+  if src then
+    assert(type(src) == "table",
+      "src must be a table. please provide 'src[]=GLOB1' 'src[]=GLOB2' ...")
+  else
+    assert(mirrors and urlpath,
+      "please provide either 'src[]=GLOB_PATTERN' or both 'mirrors[]=MIRROR_URL' and 'urlpath=URL_PATH'")
+    assert(type(mirrors) == "table",
+      "mirrors must be a table. please provide 'mirrors[]=MIRROR1' 'mirrors[]=MIRROR2' ...")
+
+    -- validate mirrors are https:// or http://
+    local k, v = next(mirrors)
+    while k do
+      local s, e = string.find(v, "^https?://")
+      assert(s == 1, "mirror `" .. v .. "` must start with 'http://' or 'https://'")
+      k, v = next(mirrors, k)
+    end
+  end
+
+  -- SYNC: rules.F_Build#A, uirules.Build#A
+  local gargs = request.user.gargs or {}
+  local bargs = request.user.bargs or {}
+  local iargs = request.user.iargs or {}
+  local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
+  local out = request.user.out
+  assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
+  local exe = request.user.exe or {}
+  local nstrip = request.user.nstrip or 0
+
+  -- split urlpath=path#sha256,size
+  local urlpath_only, urlpath_sha256, urlpath_size
+  if urlpath then
+    local s1, e1 = string.find(urlpath, "#")
+    assert(s1 and e1, "urlpath `" .. urlpath .. "` must be in the format path#sha256,size")
+    urlpath_only = string.sub(urlpath, 1, s1 - 1)
+    local s2, e2 = string.find(urlpath, ",", e1 + 1)
+    assert(s2 and e2, "urlpath `" .. urlpath .. "` must be in the format path#sha256,size")
+    urlpath_sha256 = string.sub(urlpath, e1 + 1, s2 - 1)
+    urlpath_size = tonumber(string.sub(urlpath, e2 + 1))
+  end
+
+  local outputid = "OurCMake_Build." .. request.rule.generatesymbol() .. "@1.0.0"
+  local p = {
+    outputid = outputid,
+    abi = request.execution.ABIv3,
+    generator = generator,
+    gargs = gargs,
+    bargs = bargs,
+    iargs = iargs,
+    sourcesubdir = sourcesubdir,
+    src = src,
+    mirrors = mirrors,
+    urlpath_only = urlpath_only,
+    urlpath_sha256 = urlpath_sha256,
+    urlpath_size = urlpath_size,
+    nstrip = nstrip,
+    out = out,
+    installdir = installdir,
+    exe = exe
+  }
+
+  -- print args
+  -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
+  -- local json = require("buildjson")
+  -- print(json.encode(request.user, { indent = 1 }))
+
+  return CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, request, p)
+end
+
 function CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, request, p)
   local k, v, a
   if command == "submit" then
-    local bundle, getbundle, getasset = request.ui.glob {
-      patterns = p.srcglobs, cell = "root"
-    }
+    local bundle
 
-    -- bundlemodver
-    local bundlemodver = assert(bundle.id, "could not determine bundle module version from src globs")
+    -- bundlemodver or assetmodver+assetpath
+    local arg_content
+    if p.src then
+      -- source from local files; glob it and let .F_Build extract the bundle
+      bundle = request.ui.glob {
+        patterns = p.src, cell = "root"
+      }
+      local bundlemodver = assert(bundle.id, "could not determine bundle module version from src globs")
+      arg_content = { "bundlemodver=" .. bundlemodver }
+    else
+      -- source from remote zipfile; create an asset bundle and let .F_Build extract the zipfile asset
+      local genid = request.rule.generatesymbol()
+      local origin = genid .. "-content"
+
+      bundle = {
+        id = "OurCMake_UI.Content." .. genid .. "@1.0.0",
+        listing = {
+          origins = {
+            {
+              name = origin,
+              mirrors = p.mirrors
+            }
+          }
+        },
+        assets = {
+          {
+            origin = origin,
+            path = p.urlpath_only,
+            size = p.urlpath_size,
+            checksum = {
+              sha256 = p.urlpath_sha256
+            }
+          }
+        }
+      }
+      arg_content = {
+        "assetmodver=" .. bundle.id,
+        "assetpath=" .. p.urlpath_only
+      }
+    end
 
     -- out
     local arg_out = {}
@@ -299,17 +411,24 @@ function CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, re
       k, v = next(p.iargs, k)
     end
 
+    -- nstrip
+    local arg_nstrip = {}
+    if p.nstrip and p.nstrip > 0 then
+      arg_nstrip = { "nstrip=" .. tostring(p.nstrip) } -- "nstrip=LEVELS" is F_Build option
+    end
+
     -- concatenate [arg_out] and [arg_exe] into command
     local command = { "post-object", "CommonsBase_Build.CMake0.F_Build@3.25.3",
       "-d", p.installdir,
-      "bundlemodver=" .. bundlemodver,
       "sourcesubdir=" .. p.sourcesubdir
     }
+    table.move(arg_content, 1, table.getn(arg_content), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_out, 1, table.getn(arg_out), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_exe, 1, table.getn(arg_exe), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_gargs, 1, table.getn(arg_gargs), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_bargs, 1, table.getn(arg_bargs), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_iargs, 1, table.getn(arg_iargs), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
+    table.move(arg_nstrip, 1, table.getn(arg_nstrip), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
 
     -- print("Submitting command: " .. table.concat(command, " "))
 

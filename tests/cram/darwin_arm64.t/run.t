@@ -20,8 +20,8 @@ Ninja0
   $ ./o/ninja.exe --version
   1.12.1
 
-CMake0
-------
+CMake0 (local)
+--------------
 
   $ dk0 --trial -nosysinc -I ../etc/dk/v --trust-local-package CommonsBase_Build run CommonsBase_Build.CMake0.Build@3.25.3 'src[]=*.c' 'src[]=CMakeLists.txt' 'out[]=bin/sample' 'iargs[]=--verbose' 'installdir=install' 'exe[]=bin/*'
   [progress]: dla dk-releases:cmake-darwin_universal.zip size 80161981 ...
@@ -46,3 +46,11 @@ CMake0
 
   $ install/bin/sample
   success cram darwin_arm64.t!
+
+CMake0 (remote)
+---------------
+
+. nstrip=1 because top-level directory in zip file is "or-tools-9.15/"
+. urlpath=v9.15.zip#<sha256>,<size>
+
+  $ dk0 --trial -nosysinc -I ../etc/dk/v --trust-local-package CommonsBase_Build run CommonsBase_Build.CMake0.Build@3.25.3 installdir=t/i3 'out[]=bin/sample' 'mirrors[]=https://github.com/google/or-tools/archive/refs/tags' 'urlpath=v9.15.zip#920d8266b30a7a8f8572a5dc663fdf8d2701792101dd95f09e72397c16e12858,25297362' 'nstrip=1' 'gargs[]=-DBUILD_DEPS:BOOL=ON'
