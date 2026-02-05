@@ -1,8 +1,38 @@
--- USAGE 1 OF 2: CommonsBase_Build.CMake0.F_Build@3.25.3 (bundlemodver= | assetmodver= assetpath=)
+-- USAGE 1 OF 2: CommonsBase_Build.CMake0.Build@3.25.3
+-- (UI rule) Generates a CMake build system in the build directory.
+-- All options of F_Build except bundlemodver/assetmodver/assetpath are supported.
+-- Configurations: One of the following sets of options must be provided:
+--   installdir= src[]=
+--   installdir= mirrors[]= urlpath=
+-- Options:
+--  src[]: list of glob patterns for the local source directory
+--  mirrors[]: HTTP base urls to download the CMake source directory
+--  urlpath: path added to the mirrors so full URL is a ZIP file of the CMake source directory
+--  installdir: (required) the install directory to pass to `cmake --install ... --prefix INSTALL_DIRECTORY`
+--  generator: the cmake generator to use (defaults to "Ninja")
+--  nstrip: levels of leading directories to nstrip while extract asset or bundle (defaults to 0)
+--  gargs[]: list of cmake generator arguments to pass to cmake executable.
+--        The -S source directory is required.
+--        The -B build directory will already be set.
+--  bargs[]: list of cmake build arguments to pass to cmake executable.
+--  iargs[]: list of cmake install arguments to pass to cmake executable.
+--  out[]: (required) list of expected output files in the build directory
+--  exe[]: list of glob patterns for executables to set execute permissions (Unix) and locally codesign (macOS).
+-- examples:
+--  dk0 --trial run CommonsBase_Build.CMake0.Build@3.25.3 \
+--    installdir=t/i \
+--    'mirrors[]=https://github.com/google/or-tools/archive/refs/tags' \
+--    'urlpath=v9.15.zip#920d8266b30a7a8f8572a5dc663fdf8d2701792101dd95f09e72397c16e12858,25297362' \
+--    'nstrip=1' \
+--    'gargs[]=-DBUILD_DEPS:BOOL=ON' \
+--    'out[]=bin/nqueue_sat'
+-- what gets run: (see usage for "CommonsBase_Build.CMake0.F_Build@3.25.3" below)
+
+-- USAGE 2 OF 2: CommonsBase_Build.CMake0.F_Build@3.25.3 (bundlemodver= | assetmodver= assetpath=)
 -- (Free rule) Generates a CMake build directory, builds the CMake project and installs the CMake project in the output directory.
 -- Configurations: One of the following sets of options must be provided:
---  bundlemodver
---  assetmodver + assetpath
+--  bundlemodver=
+--  assetmodver= assetpath=
 -- Options:
 --  generator: the cmake generator to use (defaults to "Ninja")
 --  assetmodver: asset module@version of CMake source directory
@@ -17,9 +47,10 @@
 --  iargs[]: list of cmake install arguments to pass to cmake executable.
 --  out[]: (required) list of expected output files in the build directory
 --  exe[]: list of glob patterns for executables to set execute permissions (Unix) and locally codesign (macOS).
--- example:
---  dk0 post-object CommonsBase_Build.CMake0.F_Build@3.25.3 generator=Ninja 'iargs[]=-S' 'iargs[]=.' 'out[]=bin/cmake-generated.exe'
--- runs:
+-- examples:
+--  dk0 --trial post-object CommonsBase_Build.CMake0.F_Build@3.25.3 \
+--    generator=Ninja 'iargs[]=-S' 'iargs[]=.' 'out[]=bin/cmake-generated.exe'
+-- what gets run:
 --   get-asset <assetmodver> -p <assetpath> -d s [-or-] get-bundle <bundlemodver> -d s
 --   $(get-object CommonsBase_Build.Ninja0@1.12.1 -s Release.<execution abi> -m ./ninja.exe -f : -e '*') (if generator is "Ninja")
 --   cmake -G <generator> -S s/<sourcesubdir> -B b
@@ -28,235 +59,39 @@
 --     <gargs>
 --   cmake --build b <bargs>
 --   cmake --install b --prefix ${SLOTABS.Release.Agnostic} <iargs>
---
--- 1: The CMAKE_INSTALL_PREFIX is set for CMake projects like google/or-tools that do not respect
+
+-- COMPILERS
+-- 
+-- ::: Windows / Visual Studio
+-- <TODO> The Ninja generator (the default) only works on Windows when the build is run in a Visual Studio Developer Command Prompt.
+
+-- DESIGN QUESTIONS
+-- Q1: Why a rule instead of a simpler `get-object`?
+-- ANS1: Because dk0 objects are deterministic zip files that do not allow symlinks.
+-- Symlinks cause inconsistency across platforms so with deterministic objects
+-- the CMake.app code signature output by `get-object` would be invalid on macOS.
+-- 
+-- Q2: CMAKE_INSTALL_PREFIX?
+-- The CMAKE_INSTALL_PREFIX is set for CMake projects like google/or-tools that do not respect
 -- the prefix option in `cmake --install --prefix` (usually when the project sets CMAKE_INSTALL_PREFIX CACHE
 -- variable by default).
--- 2: TODO: The Ninja generator (the default) only works on Windows when the build is run in a Visual Studio Developer Command Prompt.
--- 3: FUTURE: CMakeCache.txt can be checked in this rule to find out if all the CACHE variables are hermetic.
+-- 
+-- Q3: Hermeticity?
+-- In a <FUTURE> version, CMakeCache.txt can be checked in this rule to find out if all the CACHE variables are hermetic.
 --    Example: BAD: _Python3_EXECUTABLE:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.11/bin/python3.11
 --    Example: GOOD: generated_dir:INTERNAL=/Volumes/SSD/Source/dk/t/p/4472/e7lu/f/Release.Agnostic/b/_deps/googletest-build/googletest/generated
 
--- USAGE 2 OF 2: CommonsBase_Build.CMake0.Generate@3.25.3
--- (UI rule) Generates a CMake build system in the build directory.
--- All options of F_Build except bundlemodver/assetmodver/assetpath are supported.
--- Configurations: One of the following sets of options must be provided:
---   src[]
---   mirrors[] + urlpath
--- Options:
---  src[]: list of glob patterns for the local source directory
---  mirrors[]: HTTP base urls to download the CMake source directory
---  urlpath: path added to the mirrors so full URL is a ZIP file of the CMake source directory
---  installdir: (required) the install directory to pass to `cmake --install ... --prefix INSTALL_DIRECTORY`
-
--- Why a rule instead of a simpler `get-object`?
--- Because dk0 objects are deterministic zip files that do not allow symlinks.
--- Symlinks cause inconsistency across platforms so with deterministic objects
--- the CMake.app code signature output by `get-object` would be invalid on macOS.
 
 local M = {
   id = "CommonsBase_Build.CMake0@3.25.3"
 }
 
 -- lua-ml does not support local functions.
--- And if the variable was "local" it would be nil inside rules.Untar.
+-- And if the variable was "local" it would be nil inside the rules/uirules function bodies.
 -- So a should-be-unique global is used instead.
 CommonsBase_Build__CMake0__3_25_3 = {}
 
 rules, uirules = build.newrules(M)
-
-function rules.F_Build(command, request)
-  if command == "declareoutput" then
-    return {
-      declareoutput = {
-        return_form = {
-          id = "OurCMake_F_Build." .. request.rule.generatesymbol() .. "@1.0.0",
-          slot = "Release.Agnostic"
-        }
-      }
-    }
-  elseif command == "submit" then
-    local generator = request.user.generator or "Ninja"
-    local bundlemodver = request.user.bundlemodver
-    local assetmodver = request.user.assetmodver
-    local assetpath = request.user.assetpath
-    assert(bundlemodver or assetmodver,
-      "please provide either 'bundlemodver=BUNDLEMODULE@VERSION' or 'assetmodver=ASSETMODULE@VERSION' for the CMake source directory")
-    if assetmodver then
-      assert(assetpath, "please provide 'assetpath=PATH_INSIDE_ASSET' when using 'assetmodver=ASSETMODULE@VERSION'")
-    end
-
-    -- SYNC: rules.F_Build#A, uirules.Build#A
-    local gargs = request.user.gargs or {}
-    local bargs = request.user.bargs or {}
-    local iargs = request.user.iargs or {}
-    local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
-    local out = request.user.out
-    assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
-    local exe = request.user.exe or {}
-    local nstrip = request.user.nstrip or 0
-
-    local p = {
-      outputid = request.submit.outputid,
-      abi = request.execution.ABIv3,
-      generator = generator,
-      bundlemodver = bundlemodver,
-      assetmodver = assetmodver,
-      assetpath = assetpath,
-      sourcesubdir = sourcesubdir,
-      gargs = gargs,
-      bargs = bargs,
-      iargs = iargs,
-      out = out,
-      exe = exe,
-      nstrip = nstrip
-    }
-
-    -- print args
-    -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
-    -- local json = require("buildjson")
-    -- print(json.encode(request.user, { indent = 1 }))
-    -- print("p object: " .. json.encode(p, { indent = 1 }))
-
-    -- ninjaexe must be absolute path since it is passed to CMAKE_MAKE_PROGRAM CACHE variable
-    if request.execution.OSFamily == "macos" then
-      p.cmakeexe =
-      "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d : -e 'CMake.app/Contents/bin/*')/CMake.app/Contents/bin/cmake"
-      p.absninjaexe = "$(--path=absnative get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." ..
-          p.abi ..
-          " -m ./ninja.exe -f ninja -e '*')"
-      p.osfamily = "macos"
-      return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
-    elseif request.execution.OSFamily == "linux" then
-      local cmakeabi
-      if request.execution.ABIv3 == "linux_x86_64" then
-        cmakeabi = "linux_x86_64"
-      elseif request.execution.ABIv3 == "linux_x86" then
-        cmakeabi = "linux_x86"
-      elseif request.execution.ABIv3 == "linux_arm64" then
-        cmakeabi = "linux_arm64"
-      else
-        error("unsupported ABIv3: " .. request.execution.ABIv3)
-      end
-      p.cmakeexe = "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-" ..
-          cmakeabi .. ".zip -n 1 -d : -e 'bin/*')/bin/cmake"
-      p.absninjaexe = "$(--path=absnative get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." ..
-          p.abi ..
-          " -m ./ninja.exe -f ninja -e '*')"
-      p.osfamily = "linux"
-      return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
-    elseif request.execution.OSFamily == "windows" then
-      local cmakeabi
-      if request.execution.ABIv3 == "windows_x86_64" then
-        cmakeabi = "windows_x86_64"
-      elseif request.execution.ABIv3 == "windows_x86" then
-        cmakeabi = "windows_x86"
-      elseif request.execution.ABIv3 == "windows_arm64" then
-        cmakeabi = "windows_arm64"
-      else
-        error("unsupported ABIv3: " .. request.execution.ABIv3)
-      end
-      p.cmakeexe =
-          "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-" ..
-          cmakeabi .. ".zip -n 1 -d : -e 'bin/*')/bin/cmake.exe"
-      p.absninjaexe = "$(--path=absnative get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." ..
-          p.abi ..
-          " -m ./ninja.exe -f ninja.exe -e '*')"
-      p.osfamily = "windows"
-      return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
-    else
-      error("unsupported OSFamily: " .. request.execution.OSFamily)
-    end
-  end
-end
-
-function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
-  -- the source directory will be "s/" inside the function directory
-  -- the build directory will be "b/" inside the function directory
-  local sourcedir
-  if p.sourcesubdir == "." or p.sourcesubdir == "./" then
-    sourcedir = "s"
-  else
-    sourcedir = quote.value_shell("s/" .. p.sourcesubdir)
-  end
-
-  -- precommand to get source
-  local precommand_getsource
-  if p.bundlemodver then
-    precommand_getsource = "get-bundle " .. p.bundlemodver .. " -d s"
-  else
-    precommand_getsource = "get-asset " .. p.assetmodver .. " -p " .. p.assetpath .. " -d s"
-  end
-  if p.nstrip and p.nstrip > 0 then
-    precommand_getsource = precommand_getsource .. " -n " .. tostring(p.nstrip)
-  end
-
-  -- ninja generator args
-  local gninjaargs = {}
-  if p.generator == "Ninja" then
-    -- CMAKE_MAKE_PROGRAM needs to be absolute path
-    gninjaargs = {
-      "-DCMAKE_MAKE_PROGRAM:FILEPATH=" .. p.absninjaexe
-    }
-  end
-
-  -- concatenate [p.gargs] into string "generate_cmd"
-  local gargs = {
-    p.cmakeexe, "-G", p.generator, "-S", sourcedir, "-B", "b",
-    -- CMAKE_INSTALL_PREFIX needs to be absolute path
-    "-DCMAKE_INSTALL_PREFIX:FILEPATH=${SLOTABS.Release.Agnostic}"
-  }
-  table.move(p.gargs, 1, table.getn(p.gargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
-  table.move(gninjaargs, 1, table.getn(gninjaargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
-
-  -- concatenate p.bargs into string "build_cmd"
-  local bargs = {
-    p.cmakeexe, "--build", "b"
-  }
-  table.move(p.bargs, 1, table.getn(p.bargs), table.getn(bargs) + 1, bargs) ---@diagnostic disable-line: deprecated, access-invisible
-
-  -- concatenate p.iargs into array "iargs"
-  local iargs = {
-    p.cmakeexe, "--install", "b",
-    -- the install prefix needs to be absolute path
-    "--prefix", "${SLOTABS.Release.Agnostic}"
-  }
-  table.move(p.iargs, 1, table.getn(p.iargs), table.getn(iargs) + 1, iargs) ---@diagnostic disable-line: deprecated, access-invisible
-
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            precommands = {
-              private = {
-                precommand_getsource
-              }
-            },
-            function_ = {
-              execution = { { name = "OSFamily", value = p.osfamily } },
-              args = {
-                gargs,
-                bargs,
-                iargs
-              }
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
-                  paths = p.out
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-end
 
 function uirules.Build(command, request)
   local installdir = assert(request.user.installdir, "please provide 'installdir=INSTALL_DIRECTORY'")
@@ -325,11 +160,7 @@ function uirules.Build(command, request)
     exe = exe
   }
 
-  -- print args
-  -- print("CommonsBase_Build.CMake0.Generate@3.25.3 has the user object:")
-  -- local json = require("buildjson")
-  -- print(json.encode(request.user, { indent = 1 }))
-
+  -- delegate to helper function since this is getting large
   return CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, request, p)
 end
 
@@ -457,6 +288,196 @@ function CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, re
   elseif command == "ui" then
     print("done cmake build.")
   end
+end
+
+function rules.F_Build(command, request)
+  if command == "declareoutput" then
+    return {
+      declareoutput = {
+        return_form = {
+          id = "OurCMake_F_Build." .. request.rule.generatesymbol() .. "@1.0.0",
+          slot = "Release.Agnostic"
+        }
+      }
+    }
+  elseif command == "submit" then
+    local generator = request.user.generator or "Ninja"
+    local bundlemodver = request.user.bundlemodver
+    local assetmodver = request.user.assetmodver
+    local assetpath = request.user.assetpath
+    assert(bundlemodver or assetmodver,
+      "please provide either 'bundlemodver=BUNDLEMODULE@VERSION' or 'assetmodver=ASSETMODULE@VERSION' for the CMake source directory")
+    if assetmodver then
+      assert(assetpath, "please provide 'assetpath=PATH_INSIDE_ASSET' when using 'assetmodver=ASSETMODULE@VERSION'")
+    end
+
+    -- SYNC: rules.F_Build#A, uirules.Build#A
+    local gargs = request.user.gargs or {}
+    local bargs = request.user.bargs or {}
+    local iargs = request.user.iargs or {}
+    local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
+    local out = request.user.out
+    assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
+    local exe = request.user.exe or {}
+    local nstrip = request.user.nstrip or 0
+
+    local p = {
+      outputid = request.submit.outputid,
+      abi = request.execution.ABIv3,
+      generator = generator,
+      bundlemodver = bundlemodver,
+      assetmodver = assetmodver,
+      assetpath = assetpath,
+      sourcesubdir = sourcesubdir,
+      gargs = gargs,
+      bargs = bargs,
+      iargs = iargs,
+      out = out,
+      exe = exe,
+      nstrip = nstrip
+    }
+
+    -- ninjaexe must be absolute path since it is passed to CMAKE_MAKE_PROGRAM CACHE variable
+    if request.execution.OSFamily == "macos" then
+      p.cmakeexe =
+      "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-darwin_universal.zip -n 1 -d : -e 'CMake.app/Contents/bin/*')/CMake.app/Contents/bin/cmake"
+      p.absninjaexe = "$(--path=absnative get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." ..
+          p.abi ..
+          " -m ./ninja.exe -f ninja -e '*')"
+      p.osfamily = "macos"
+      return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
+    elseif request.execution.OSFamily == "linux" then
+      local cmakeabi
+      if request.execution.ABIv3 == "linux_x86_64" then
+        cmakeabi = "linux_x86_64"
+      elseif request.execution.ABIv3 == "linux_x86" then
+        cmakeabi = "linux_x86"
+      elseif request.execution.ABIv3 == "linux_arm64" then
+        cmakeabi = "linux_arm64"
+      else
+        error("unsupported ABIv3: " .. request.execution.ABIv3)
+      end
+      p.cmakeexe = "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-" ..
+          cmakeabi .. ".zip -n 1 -d : -e 'bin/*')/bin/cmake"
+      p.absninjaexe = "$(--path=absnative get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." ..
+          p.abi ..
+          " -m ./ninja.exe -f ninja -e '*')"
+      p.osfamily = "linux"
+      return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
+    elseif request.execution.OSFamily == "windows" then
+      local cmakeabi
+      if request.execution.ABIv3 == "windows_x86_64" then
+        cmakeabi = "windows_x86_64"
+      elseif request.execution.ABIv3 == "windows_x86" then
+        cmakeabi = "windows_x86"
+      elseif request.execution.ABIv3 == "windows_arm64" then
+        cmakeabi = "windows_arm64"
+      else
+        error("unsupported ABIv3: " .. request.execution.ABIv3)
+      end
+      p.cmakeexe =
+          "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-" ..
+          cmakeabi .. ".zip -n 1 -d : -e 'bin/*')/bin/cmake.exe"
+      p.absninjaexe = "$(--path=absnative get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." ..
+          p.abi ..
+          " -m ./ninja.exe -f ninja.exe -e '*')"
+      p.osfamily = "windows"
+      return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
+    else
+      error("unsupported OSFamily: " .. request.execution.OSFamily)
+    end
+  end
+end
+
+function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
+  -- the source directory will be "s/" inside the function directory
+  -- the build directory will be "b/" inside the function directory
+  local sourcedir
+  if p.sourcesubdir == "." or p.sourcesubdir == "./" then
+    sourcedir = "s"
+  else
+    sourcedir = quote.value_shell("s/" .. p.sourcesubdir)
+  end
+
+  -- precommand to get source
+  local precommand_getsource
+  if p.bundlemodver then
+    precommand_getsource = "get-bundle " .. p.bundlemodver .. " -d s"
+  else
+    precommand_getsource = "get-asset " .. p.assetmodver .. " -p " .. p.assetpath .. " -d s"
+  end
+  if p.nstrip and p.nstrip > 0 then
+    precommand_getsource = precommand_getsource .. " -n " .. tostring(p.nstrip)
+  end
+
+  -- ninja generator args
+  local gninjaargs = {}
+  if p.generator == "Ninja" then
+    -- CMAKE_MAKE_PROGRAM needs to be absolute path
+    gninjaargs = {
+      "-DCMAKE_MAKE_PROGRAM:FILEPATH=" .. p.absninjaexe
+    }
+  end
+
+  -- concatenate [p.gargs] into string "generate_cmd"
+  local gargs = {
+    p.cmakeexe, "-G", p.generator, "-S", sourcedir, "-B", "b",
+    -- CMAKE_INSTALL_PREFIX needs to be absolute path
+    "-DCMAKE_INSTALL_PREFIX:FILEPATH=${SLOTABS.Release.Agnostic}"
+  }
+  table.move(p.gargs, 1, table.getn(p.gargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
+  table.move(gninjaargs, 1, table.getn(gninjaargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
+
+  -- concatenate p.bargs into string "build_cmd"
+  local bargs = {
+    p.cmakeexe, "--build", "b"
+  }
+  table.move(p.bargs, 1, table.getn(p.bargs), table.getn(bargs) + 1, bargs) ---@diagnostic disable-line: deprecated, access-invisible
+
+  -- concatenate p.iargs into array "iargs"
+  local iargs = {
+    p.cmakeexe, "--install", "b",
+    -- the install prefix needs to be absolute path
+    "--prefix", "${SLOTABS.Release.Agnostic}"
+  }
+  table.move(p.iargs, 1, table.getn(p.iargs), table.getn(iargs) + 1, iargs) ---@diagnostic disable-line: deprecated, access-invisible
+
+  return {
+    submit = {
+      values = {
+        schema_version = { major = 1, minor = 0 },
+        forms = {
+          {
+            id = p.outputid,
+            precommands = {
+              private = {
+                precommand_getsource
+              }
+            },
+            function_ = {
+              execution = { { name = "OSFamily", value = p.osfamily } },
+              args = {
+                -- run: cmake -G
+                gargs,
+                -- run: cmake --build
+                bargs,
+                -- run: cmake --install
+                iargs
+              }
+            },
+            outputs = {
+              assets = {
+                {
+                  slots = { "Release.Agnostic" },
+                  paths = p.out
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 end
 
 return M
