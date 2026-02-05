@@ -23,7 +23,8 @@
       - [Variable Availability](#variable-availability)
       - [${SLOT.request}](#slotrequest)
       - [${SLOT.SlotName}](#slotslotname)
-      - [${SLOTNAME.\*}](#slotname)
+      - [${SLOTABS.SlotName}](#slotabsslotname)
+      - [${SLOTNAME.SlotName}](#slotnameslotname)
       - [${/} directory separator](#-directory-separator)
       - [${.exe.execution}](#exeexecution)
       - [${.exe.target}](#exetarget)
@@ -763,6 +764,15 @@ If the command has no request slot (ex. `get-bundle MODULE@VERSION`) and you use
 
 The output directory for the form function for the slot named `SlotName`.
 
+`SlotName` is a period-separated list of "*parts*":
+
+- lowercase context variables, and/or
+- capitalized namespace terms
+
+The namespace terms and context variables can be combined in any order.
+
+See [${SLOTNAME.SlotName}](#slotnameslotname) for a description of parts and the context variables.
+
 Output directories for the build system in install mode are the end-user installation directories, while for other modes the output directory may be a sandbox temporary directory.
 
 Expressions are only evaluated if *all* the output types the expression uses are valid for the build system. For example, an expression that uses the output directory `${SLOT.Release.Darwin_arm64}` will be skipped by the build system in install mode if the end-user machine's ABI is not `darwin_arm64`.
@@ -780,11 +790,19 @@ More generally:
 | `${SLOT.Release.Darwin_arm64}` | Only if the end-user machine's ABI | The install directory    |
 |                                | is `darwin_arm64`                  |                          |
 
-#### ${SLOTNAME.*}
+#### ${SLOTABS.SlotName}
 
-The name of the slot after the "SLOTNAME.", parts of which may contain *context variables*.
+The absolute path of the output directory for the form function for the slot named `SlotName`.
 
-`*` is a period-separated list of parts:
+CAUTION: ⚠️ Using this variable can lead to [non-relocatable packages](https://docs.conda.io/projects/conda-build/en/stable/resources/make-relocatable.html).
+
+Prefer [`${SLOT.SlotName}`](#slotslotname) unless an absolute path is required.
+
+#### ${SLOTNAME.SlotName}
+
+The name of the slot `SlotName` after expanding any context variables.
+
+`SlotName` is a period-separated list of "*parts*":
 
 - lowercase context variables, and/or
 - capitalized namespace terms
@@ -2488,7 +2506,7 @@ The `OSFamily` of the execution platform. Values include `windows` and `macos`; 
 request.execution.ABIv3
 ```
 
-The third version of the DkML ABI of the execution platform from [${SLOTNAME.*}](#slotname). Examples include `windows_x86_64` and `darwin_arm64`.
+The third version of the DkML ABI of the execution platform described in [${SLOTNAME.SlotName}](#slotnameslotname). Examples include `windows_x86_64` and `darwin_arm64`.
 
 #### request.execution.OSv3
 
