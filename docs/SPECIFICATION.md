@@ -204,6 +204,10 @@
       - [VCK - Values Checksum](#vck---values-checksum)
       - [FRM - Form](#frm---form)
   - [Evaluation](#evaluation)
+  - [Platforms](#platforms)
+    - [Windows](#windows)
+    - [macOS](#macos)
+    - [Linux/BSDs/MSYS2/Cygwin](#linuxbsdsmsys2cygwin)
 
 ## Introduction
 
@@ -4295,3 +4299,59 @@ The concatenation of:
 | STATESAVE    | Update trace store                                  |
 
 The number in parentheses is the classic phase number; those numbers are being phased out.
+
+## Platforms
+
+### Windows
+
+| File                     | What                                                                   |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `pwsh` in PATH           | `enter-object` interactive shell (optional; searched 1st)              |
+| `powershell` in PATH     | `enter-object` interactive shell (optional; searched 2nd)              |
+| `cmd` in PATH            | `enter-object` interactive shell (fallback; searched last)             |
+| `powershell.exe` in PATH | `dk0.cmd` batch script - for InvokeWebRequest (optional; searched 1st) |
+| `bitsadmin` in PATH      | `dk0.cmd` batch script - for download (fallback; searched last)        |
+| `certutil` in PATH       | `dk0.cmd` batch script - verify sha256sums                             |
+
+### macOS
+
+| File                | What                                                              |
+| ------------------- | ----------------------------------------------------------------- |
+| `/usr/bin/codesign` | Executables are locally signed when `-e GLOB_PATTERN`             |
+| `/bin/sh`           | `enter-object` interactive shell unless `SHELL` envvar set        |
+| `/bin/sh`           | `dk0` shell script                                                |
+| `/usr/bin/shasum`   | `dk0` shell script                                                |
+| `/usr/bin/curl`     | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/curl`         | `dk0` shell script (optional; searched 2st)                       |
+| `/usr/bin/wget`     | `dk0` shell script (optional; searched 3st)                       |
+| `/bin/wget`         | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/mv`       | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/mv`           | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/rm`       | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/rm`           | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/uname`    | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/uname`        | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/awk`      | `dk0` shell script - to parse sha256sums (optional; searched 1st) |
+| `/bin/awk`          | `dk0` shell script (fallback; searched last)                      |
+
+### Linux/BSDs/MSYS2/Cygwin
+
+| File                 | What                                                              |
+| -------------------- | ----------------------------------------------------------------- |
+| `/bin/sh`            | `enter-object` interactive shell unless `SHELL` envvar set        |
+| `/bin/sh`            | `dk0` shell script                                                |
+| `/usr/bin/shasum`    | `dk0` shell script (optional; searched 1st)                       |
+| `/usr/bin/sha256sum` | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/curl`      | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/curl`          | `dk0` shell script (optional; searched 2st)                       |
+| `/usr/bin/wget`      | `dk0` shell script (optional; searched 3st)                       |
+| `/bin/wget`          | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/mv`        | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/mv`            | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/rm`        | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/rm`            | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/uname`     | `dk0` shell script (optional; searched 1st)                       |
+| `/bin/uname`         | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/awk`       | `dk0` shell script - to parse sha256sums (optional; searched 1st) |
+| `/bin/awk`           | `dk0` shell script (fallback; searched last)                      |
+| `/usr/bin/cygpath`   | `dk0` shell script (optional)                                     |
