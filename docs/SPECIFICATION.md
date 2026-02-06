@@ -165,7 +165,9 @@
     - [Lua table library](#lua-table-library)
       - [table.concat](#tableconcat)
       - [table.getn](#tablegetn)
+      - [table.insert](#tableinsert)
       - [table.move](#tablemove)
+      - [table.remove](#tableremove)
       - [table.pack](#tablepack)
       - [table.unpack](#tableunpack)
     - [Custom Lua Modules](#custom-lua-modules)
@@ -3136,6 +3138,12 @@ Returns the size of a table, when seen as a list. If the table has an `n` field 
 
 Deprecated in Lua 5.1.
 
+#### table.insert
+
+`table.insert (list, [pos,] value)`
+
+Inserts element `value` at position `pos` in `list`, shifting up the elements `list[pos]`, `list[pos+1]`, ···, `list[#list]`. The default value for `pos` is `#list+1`, so that a call `table.insert(t,x)` inserts `x` at the end of the list `t`.
+
 #### table.move
 
 `table.move (a1, f, e, t [,a2])`
@@ -3151,6 +3159,14 @@ Introduced in Lua 5.3.
 `table.pack (···)`
 
 Returns a new table with all arguments stored into keys 1, 2, etc. and with a field "n" with the total number of arguments. Note that the resulting table may not be a sequence, if some arguments are `nil`.
+
+#### table.remove
+
+`table.remove (list [, pos])`
+
+Removes from `list` the element at position `pos`, returning the value of the removed element. When `pos` is an integer between `1` and `#list`, it shifts down the elements `list[pos+1]`, `list[pos+2]`, ···, `list[#list]` and erases element `list[#list]`; The index `pos` can also be `0` when `#list` is `0`, or `#list + 1`.
+
+The default value for `pos` is `#list`, so that a call `table.remove(l)` removes the last element of the list `l`.
 
 #### table.unpack
 
