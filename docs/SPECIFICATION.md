@@ -91,10 +91,10 @@
       - [Lua Global Variable - error](#lua-global-variable---error)
     - [Lua build library](#lua-build-library)
       - [build.newrules](#buildnewrules)
-    - [Lua buildjson library](#lua-buildjson-library)
-      - [buildjson.encode](#buildjsonencode)
-      - [buildjson.decode](#buildjsondecode)
-      - [buildjson.null](#buildjsonnull)
+    - [Lua jsondk library](#lua-jsondk-library)
+      - [jsondk.encode](#jsondkencode)
+      - [jsondk.decode](#jsondkdecode)
+      - [jsondk.null](#jsondknull)
     - [Lua math library](#lua-math-library)
       - [math.abs](#mathabs)
       - [math.acos](#mathacos)
@@ -398,7 +398,7 @@ Consider the `OurTest_Exec.PostObject.TestRequest.EchoRequest@1.0.0` rule:
 
 ```lua
 local M = { id = "OurTest_Exec.PostObject.TestRequest@1.0.0" }
-local json = require("buildjson")
+local json = require("jsondk")
 rules = build.newrules(M)
 
 function rules.EchoRequest(command, request)
@@ -416,7 +416,7 @@ function rules.EchoRequest(command, request)
         local file = request.io.open("some/asset/file", "w")
 
         request.io.write(file, "This line is from the example. There is more:\n")
-        request.io.write(file, buildjson.encode(request.user, { indent = 1 }))
+        request.io.write(file, jsondk.encode(request.user, { indent = 1 }))
 
         local origin, asset = request.io.toasset(file, {
             path = path, origin_name = "example-origin"
@@ -2066,7 +2066,7 @@ In Lua there is no declaration of fields; semantically, there is no difference b
 
 This function receives an argument of any type and converts it to a string in a reasonable format.
 
-Table contents are not converted. See [buildjson.encode](#buildjsonencode) to show inside of a table.
+Table contents are not converted. See [jsondk.encode](#jsondkencode) to show inside of a table.
 
 #### Lua Global Variable - print
 
@@ -2077,7 +2077,7 @@ This function is not intended for formatted output, but as a quick way to show a
 
 See [printf](#lua-global-variable---printf) for functions for formatted output.
 
-See [buildjson.encode](#buildjsonencode) to print tables.
+See [jsondk.encode](#jsondkencode) to print tables.
 
 #### Lua Global Variable - printf
 
@@ -2166,52 +2166,52 @@ The `freerules` and `uirules` fields will both be empty tables, and those empty 
 
 See [Custom Lua Rules](#introduction-to-custom-lua-rules) for a detailed explanation of the difference between `freerules` and `uirules`.
 
-### Lua buildjson library
+### Lua jsondk library
 
-The `buildjson` library is embedded into the build system (nothing needs to be downloaded) but it must be accessed through `buildjson = require('buildjson')`.
+The `jsondk` library is embedded into the build system (nothing needs to be downloaded) but it must be accessed through `jsondk = require('jsondk')`.
 That keeps with the [design goal to maintain Lua conventions](#lua-specification).
 
-There is a popular Lua library [dkjson](https://dkolf.de/dkjson-lua/) for parsing JSON.
-The API for `buildjson` has intentionally been kept similar to `dkjson`.
+There is a popular, unrelated Lua library [dkjson](https://dkolf.de/dkjson-lua/) for parsing JSON.
+Since the chance for confusion is high, `jsondk` is broadly compatible with `dkjson`.
 
-#### buildjson.encode
+#### jsondk.encode
 
 ```lua
-buildjson = require('buildjson')
+jsondk = require('jsondk')
 tbl = {
   animals = { "dog", "cat", "aardvark" },
   instruments = { "violin", "trombone", "theremin" }
 }
-str = buildjson.encode (tbl, { indent = true })
+str = jsondk.encode (tbl, { indent = true })
 
 -- or
-buildjson = require('buildjson')
-str = buildjson.encode (tbl)
+jsondk = require('jsondk')
+str = jsondk.encode (tbl)
 ```
 
 Converts a Lua value to JSON:
 
 - `nil` values are not printed
-- `buildjson.null` values are encoded as JSON null
+- `jsondk.null` values are encoded as JSON null
 
 If `indent` is truthy then the JSON is pretty-printed.
 
-#### buildjson.decode
+#### jsondk.decode
 
 ```lua
-buildjson = require('buildjson')
+jsondk = require('jsondk')
 str = '{"animals":["dog","cat","aardvark"],"bugs":null}'
-buildjson.decode (str)
+jsondk.decode (str)
 
 -- or
-buildjson = require('buildjson')
-value, errmsg, errrendered, sb, sl, sc, eb, el, ec = buildjson.decode (str)
+jsondk = require('jsondk')
+value, errmsg, errrendered, sb, sl, sc, eb, el, ec = jsondk.decode (str)
 ```
 
 Converts JSON to a Lua value:
 
 - Large numbers are converted to floating-point numbers with a possible loss of precision. If outside the floating-point range, an error is raised.
-- JSON nulls are converted to `buildjson.null` Lua values
+- JSON nulls are converted to `jsondk.null` Lua values
 
 If the JSON could be converted, the result is the first return value.
 
@@ -2223,16 +2223,16 @@ Otherwise:
 - `sb`, `sl`, and `sc` are the starting byte offset (zero-based), line and column (1-based)
 - `eb`, `el`, and `ec` are the ending byte offset (zero-based), line and column (1-based)
 
-#### buildjson.null
+#### jsondk.null
 
 ```lua
-buildjson = require('buildjson')
+jsondk = require('jsondk')
 tbl = {
   animals = { "dog", "cat", "aardvark" },
-  bugs = buildjson.null,
+  bugs = jsondk.null,
   trees = nil
 }
-str = buildjson.encode (tbl)
+str = jsondk.encode (tbl)
 
 -- {
 --   "animals":["dog","cat","aardvark"],
@@ -2240,7 +2240,7 @@ str = buildjson.encode (tbl)
 -- }
 ```
 
-The `buildjson.null` Lua value represents JSON null.
+The `jsondk.null` Lua value represents JSON null.
 
 ### Lua math library
 
@@ -2617,7 +2617,7 @@ request.io.write(file, value1, ...)
 
 Writes the value of each of its arguments to file `file`.
 The arguments must be strings or numbers. To write other values, use [tostring](#lua-global-variable---tostring)
-or [string.format](#stringformat) or [buildjson.encode](#buildjsonencode).
+or [string.format](#stringformat) or [jsondk.encode](#jsondkencode).
 
 #### request.io.list
 
@@ -3627,8 +3627,8 @@ the JSON document was converted from the Lua table `{ a=1, b=2 }` into:
 { "a": 1, "b": 2 }
 ```
 
-See [buildjson.encode](#buildjsonencode) for how Lua values are converted to JSON.
-However, for rule requests the `buildjson.null` value is **never** encoded.
+See [jsondk.encode](#jsondkencode) for how Lua values are converted to JSON.
+However, for rule requests the `jsondk.null` value is **never** encoded.
 That means a Lua `nil` is considered equivalent to a missing value.
 
 The introduction example also submitted a request to a rule through the command line:
