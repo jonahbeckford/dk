@@ -4,7 +4,7 @@
 // USAGE:
 // dk0 --trial get-object CommonsBase_Std.Fd@10.3.0 -s Release.Darwin_arm64 -d target/ -e fd.exe
 {
-  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/mlfront-values.json",
+  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
   "schema_version": { "major": 1, "minor": 0 },
   "forms": [
     {
