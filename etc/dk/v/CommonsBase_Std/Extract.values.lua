@@ -12,12 +12,17 @@
 --    All of the extracted paths.
 --    A future version may extract only the specified paths,
 --    but for now we extract all files and expect you to declare them all.
---
--- On macOS the /usr/bin/tar system binary is used.
+
+-- DESIGN
+-- Q1: Platforms?
+-- A1: On macOS the /usr/bin/tar system binary is used.
 -- On Linux the toybox tar command is fetched from an asset and used.
 -- On Windows the 7z.exe command is fetched from an asset and used.
+-- Q2: There is no way to filter which files I want.
+-- A2: <FUTURE> This rule will be renamed to Extract0, and the new Extract
+-- will run Fd on the extracted files to filter them. The split is because
+-- Fd requires Extract0.
 --
--- testing:
 -- examples:
 --   tar cvf target/nothing.tar README.md
 -- 
