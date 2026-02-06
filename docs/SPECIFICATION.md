@@ -124,10 +124,6 @@
     - [Lua package library](#lua-package-library)
       - [require](#require)
       - [package.registrykey](#packageregistrykey)
-    - [Lua quote library](#lua-quote-library)
-      - [quote.posix\_shell](#quoteposix_shell)
-      - [quote.value\_shell](#quotevalue_shell)
-      - [quote.windows\_batch](#quotewindows_batch)
     - [Lua request.rule library](#lua-requestrule-library)
       - [request.rule.generatesymbol](#requestrulegeneratesymbol)
     - [Lua request.execution library](#lua-requestexecution-library)
@@ -159,9 +155,13 @@
       - [string.len](#stringlen)
       - [string.lower](#stringlower)
       - [string.rep](#stringrep)
-      - [string.sanitizesubdir](#stringsanitizesubdir)
       - [string.sub](#stringsub)
       - [string.upper](#stringupper)
+    - [Lua stringdk library](#lua-stringdk-library)
+      - [stringdk.quote\_posix\_shell](#stringdkquote_posix_shell)
+      - [stringdk.quote\_value\_shell](#stringdkquote_value_shell)
+      - [stringdk.quote\_windows\_batch](#stringdkquote_windows_batch)
+      - [stringdk.sanitizesubpath](#stringdksanitizesubpath)
     - [Lua table library](#lua-table-library)
       - [table.concat](#tableconcat)
       - [table.getn](#tablegetn)
@@ -2439,26 +2439,6 @@ A opaque variable holding a key to an internal table of packages that are loaded
 
 In the reference implementation, the internal table of packages is stored in an OCaml analog of the [Lua C registry](https://www.lua.org/manual/5.4/manual.html#4.3).
 
-### Lua quote library
-
-#### quote.posix_shell
-
-`quote.posix_shell (s)`
-
-Returns a string that is quoted as a single word in a POSIX shell.
-
-#### quote.value_shell
-
-`quote.value_shell (s)`
-
-Returns a string that is quoted as a single word in the [Value Shell Language](#vsl-lexical-rules).
-
-#### quote.windows_batch
-
-`quote.windows_batch (s)`
-
-Returns a string that is quoted as a single word in a Windows Batch file.
-
 ### Lua request.rule library
 
 This library is available through the `request.rule` field to [free rule functions](#free-rule-functions) and to [UI rule functions](#ui-rule-functions).
@@ -3086,19 +3066,6 @@ Returns a string that is the concatenation of `n` copies of the string `s` separ
 
 (Note that it is very easy to exhaust the memory of your machine with a single call to this function.)
 
-#### string.sanitizesubdir
-
-`string.sanitizesubdir (s)`
-
-Returns a normalization of the subdirectory `s` if and only if `s` is a strict subdirectory; that is:
-
-- `s`, after file path normalization, does not begin with `..`
-- `s` has no unsafe file characters
-
-If `s` can't be sanitized, a `nil` and an error string is returned.
-
-This function supports conventional Lua assert checks: `local sanitized = assert(string.sanitizesubdir (s))`.
-
 #### string.sub
 
 `string.sub (s, i [, j])`
@@ -3112,6 +3079,39 @@ If, after the translation of negative indices, `i` is less than `1`, it is corre
 `string.upper (s)`
 
 Receives a string and returns a copy of this string with all ASCII lowercase letters changed to uppercase. All other characters are left unchanged.
+
+### Lua stringdk library
+
+#### stringdk.quote_posix_shell
+
+`stringdk.quote_posix_shell (s)`
+
+Returns a string that is quoted as a single word in a POSIX shell.
+
+#### stringdk.quote_value_shell
+
+`stringdk.quote_value_shell (s)`
+
+Returns a string that is quoted as a single word in the [Value Shell Language](#vsl-lexical-rules).
+
+#### stringdk.quote_windows_batch
+
+`stringdk.quote_windows_batch (s)`
+
+Returns a string that is quoted as a single word in a Windows Batch file.
+
+#### stringdk.sanitizesubpath
+
+`stringdk.sanitizesubpath (s)`
+
+Returns a normalization of the subpath `s` if and only if `s` is a strict subpath; that is:
+
+- `s`, after file path normalization, does not begin with `..`
+- `s` has no unsafe file characters
+
+If `s` can't be sanitized, a `nil` and an error string is returned.
+
+This function supports conventional Lua assert checks: `local sanitized = assert(stringdk.sanitizesubpath (s))`.
 
 ### Lua table library
 
