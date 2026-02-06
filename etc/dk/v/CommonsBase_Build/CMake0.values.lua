@@ -126,7 +126,7 @@ function uirules.Build(command, request)
   local gargs = request.user.gargs or {}
   local bargs = request.user.bargs or {}
   local iargs = request.user.iargs or {}
-  local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
+  local sourcesubdir = assert(stringdk.sanitizesubpath(request.user.sourcesubdir or "."))
   local out = request.user.out
   assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
   local outrmexact = request.user.outrmexact or {}
@@ -343,7 +343,7 @@ function rules.F_Build(command, request)
     local gargs = request.user.gargs or {}
     local bargs = request.user.bargs or {}
     local iargs = request.user.iargs or {}
-    local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
+    local sourcesubdir = assert(stringdk.sanitizesubpath(request.user.sourcesubdir or "."))
     local out = request.user.out
     assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
     local outrmexact = request.user.outrmexact or {}
@@ -433,7 +433,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
   if p.sourcesubdir == "." or p.sourcesubdir == "./" then
     sourcedir = "s"
   else
-    sourcedir = quote.value_shell("s/" .. p.sourcesubdir)
+    sourcedir = stringdk.quote_value_shell("s/" .. p.sourcesubdir)
   end
 
   -- precommand to get source
@@ -493,7 +493,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
   local rmdirs = {}
   k, v = next(p.outrmexact)
   while k do
-    v = assert(string.sanitizesubdir(v)) -- sanitize to prevent malicious input
+    v = assert(stringdk.sanitizesubpath(v)) -- sanitize to prevent malicious input
     rmdirs[k] = "${SLOT.Release.Agnostic}/" .. v
     k, v = next(p.outrmexact, k)
   end
