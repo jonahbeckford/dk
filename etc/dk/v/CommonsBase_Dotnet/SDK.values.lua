@@ -6131,7 +6131,7 @@ function M.run(options)
   local request = assert(ctx.request, "Expected `ctx = {request = { ... }}` in options")
   local continue_ = ctx.continue_
   local userargs = ctx.arg or {}
-  -- local json = require("buildjson")
+  -- local json = require("jsondk")
   -- print("run request for command " ..
   --   command .. " and continue_ " .. tostring(continue_) .. ":\n" .. json.encode(request, { indent = 1 }))
   if command == "submit" then
@@ -6199,7 +6199,7 @@ function uirules.Dotnet(command, request)
   if command == "submit" then
     return CommonsBase_Std__Dotnet_SDK.common_submit_response()
   elseif command == "ui" then
-    -- json = require("buildjson")
+    -- json = require("jsondk")
     -- print("ui request:\n" .. json.encode(request, { indent = 1 }))
     local dotnetsdk = request.io.realpath(assert(request.continued.dotnetsdk,
       "Expected `dotnetsdk` defined in `expressions.directories`"))
