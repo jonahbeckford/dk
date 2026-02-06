@@ -46,7 +46,7 @@ local M = {
 }
 
 -- lua-ml does not support local functions.
--- And if the variable was "local" it would be nil inside rules.Untar.
+-- And if the variable was "local" it would be nil inside the rules/uirules function bodies.
 -- So a should-be-unique global is used instead.
 CommonsBase_Std__Extract__0_1_0 = {}
 

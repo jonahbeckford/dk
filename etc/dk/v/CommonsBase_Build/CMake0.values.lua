@@ -17,8 +17,8 @@
 --  bargs[]: list of cmake build arguments to pass to cmake executable.
 --  iargs[]: list of cmake install arguments to pass to cmake executable.
 --  out[]: (required) list of expected output files in the build directory
---  outrmdir[]: list of "fd" directory name glob patterns for directories in the build directory to remove
---  outrmglob[]: list of "fd" filename glob patterns for files in the build directory to remove after outrmdir[]
+--  outrmexact[]: list of exact strictly relative paths (relative to build directory) to remove
+--  outrmglob[]: list of "fd" filename glob patterns for files in the build directory to remove after outrmexact[]
 --  exe[]: list of glob patterns for executables to set execute permissions (Unix) and locally codesign (macOS).
 -- examples:
 --  dk0 --trial run CommonsBase_Build.CMake0.Build@3.25.3 \
@@ -30,7 +30,7 @@
 --    'out[]=bin/nqueue_sat'
 -- what gets run: (see usage for "CommonsBase_Build.CMake0.F_Build@3.25.3" below)
 
--- USAGE 2 OF 2: CommonsBase_Build.CMake0.F_Build@3.25.3 (bundlemodver= | assetmodver= assetpath=)
+-- USAGE 2 OF 2: CommonsBase_Build.CMake0.F_Build@3.25.3
 -- (Free rule) Generates a CMake build directory, builds the CMake project and installs the CMake project in the output directory.
 -- Configurations: One of the following sets of options must be provided:
 --  bundlemodver=
@@ -48,8 +48,8 @@
 --  bargs[]: list of cmake build arguments to pass to cmake executable.
 --  iargs[]: list of cmake install arguments to pass to cmake executable.
 --  out[]: (required) list of expected output files in the build directory
---  outrmdir[]: list of "fd" directory name glob patterns for directories in the build directory to remove
---  outrmglob[]: list of "fd" filename glob patterns for files in the build directory to remove after outrmdir[]
+--  outrmexact[]: list of exact strictly relative paths (relative to build directory) to remove
+--  outrmglob[]: list of "fd" filename glob patterns for files in the build directory to remove after outrmexact[]
 --  exe[]: list of glob patterns for executables to set execute permissions (Unix) and locally codesign (macOS).
 -- examples:
 --  dk0 --trial post-object CommonsBase_Build.CMake0.F_Build@3.25.3 \
@@ -129,7 +129,7 @@ function uirules.Build(command, request)
   local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
   local out = request.user.out
   assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
-  local outrmdir = request.user.outrmdir or {}
+  local outrmexact = request.user.outrmexact or {}
   local outrmglob = request.user.outrmglob or {}
   local exe = request.user.exe or {}
   local nstrip = request.user.nstrip or 0
@@ -162,7 +162,7 @@ function uirules.Build(command, request)
     urlpath_size = urlpath_size,
     nstrip = nstrip,
     out = out,
-    outrmdir = outrmdir,
+    outrmexact = outrmexact,
     outrmglob = outrmglob,
     installdir = installdir,
     exe = exe
@@ -227,13 +227,13 @@ function CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, re
       k, v = next(p.out, k)
     end
 
-    -- outrmdir
-    local arg_outrmdir = {}
-    k, v = next(p.outrmdir)
+    -- outrmexact
+    local arg_outrmexact = {}
+    k, v = next(p.outrmexact)
     while k do
-      a = "outrmdir[]=" .. v -- "outrmdir[]=GLOB_PATTERN" is F_Build option
-      arg_outrmdir[k] = a
-      k, v = next(p.outrmdir, k)
+      a = "outrmexact[]=" .. v -- "outrmexact[]=GLOB_PATTERN" is F_Build option
+      arg_outrmexact[k] = a
+      k, v = next(p.outrmexact, k)
     end
 
     -- outrmglob
@@ -294,7 +294,7 @@ function CommonsBase_Build__CMake0__3_25_3.ui_generate_build_install(command, re
     }
     table.move(arg_content, 1, table.getn(arg_content), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_out, 1, table.getn(arg_out), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
-    table.move(arg_outrmdir, 1, table.getn(arg_outrmdir), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
+    table.move(arg_outrmexact, 1, table.getn(arg_outrmexact), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_outrmglob, 1, table.getn(arg_outrmglob), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_exe, 1, table.getn(arg_exe), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
     table.move(arg_gargs, 1, table.getn(arg_gargs), table.getn(command) + 1, command) ---@diagnostic disable-line: deprecated, access-invisible
@@ -346,7 +346,7 @@ function rules.F_Build(command, request)
     local sourcesubdir = assert(string.sanitizesubdir(request.user.sourcesubdir or "."))
     local out = request.user.out
     assert(type(out) == "table", "out must be a table. please provide `'out[]=FILE1' 'out[]=FILE2' ...`")
-    local outrmdir = request.user.outrmdir or {}
+    local outrmexact = request.user.outrmexact or {}
     local outrmglob = request.user.outrmglob or {}
     local exe = request.user.exe or {}
     local nstrip = request.user.nstrip or 0
@@ -363,7 +363,7 @@ function rules.F_Build(command, request)
       bargs = bargs,
       iargs = iargs,
       out = out,
-      outrmdir = outrmdir,
+      outrmexact = outrmexact,
       outrmglob = outrmglob,
       exe = exe,
       nstrip = nstrip
@@ -489,13 +489,13 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
     iargs
   }
 
-  -- validate and add `rm -rf DIRS` for each ${SLOT.Release.Agnostic}/DIR in p.outrmdir
+  -- validate and add `rm -rf DIRS` for each ${SLOT.Release.Agnostic}/DIR in p.outrmexact
   local rmdirs = {}
-  k, v = next(p.outrmdir)
+  k, v = next(p.outrmexact)
   while k do
     v = assert(string.sanitizesubdir(v)) -- sanitize to prevent malicious input
     rmdirs[k] = "${SLOT.Release.Agnostic}/" .. v
-    k, v = next(p.outrmdir, k)
+    k, v = next(p.outrmexact, k)
   end
   if (table.getn(rmdirs) > 0) then ---@diagnostic disable-line: deprecated, access-invisible
     local rmrfcmd = { p.coreutilsexe, "rm", "-rf" }
