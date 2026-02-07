@@ -58,8 +58,15 @@ jobs:
                     Release.Darwin_x86_64:CommonsBase_Std.Fd@10.3.0
                     Release.Linux_x86:CommonsBase_Std.Fd@10.3.0
                     Release.Linux_x86_64:CommonsBase_Std.Fd@10.3.0
+                  # TODO: Since script modules are autoregistered at dk0 startup, the script modules seen
+                  # during distribution (ie. all script modules) will have their lua values files
+                  # present and dependencies like CommonsBase_Dotnet.SDK.Dotnet@10.0.100-rc.2.25502.107
+                  # will be sucked into tracestore (why?). on import, they will fail with
+                  # `Could not import distribution because cannot force lazy valuesluafile l...: no value produced.`.
+                  # For now we distribute all script modules to mitigate.
                   scripts: |
                     CommonsBase_Std.Extract@0.1.0
+                    CommonsBase_Dotnet.SDK@10.0.100-rc.2.25502.107
                   use-cache: true
                   #   Use HEAD when not tagged
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
