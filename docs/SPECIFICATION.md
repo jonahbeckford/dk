@@ -167,8 +167,8 @@
       - [table.getn](#tablegetn)
       - [table.insert](#tableinsert)
       - [table.move](#tablemove)
-      - [table.remove](#tableremove)
       - [table.pack](#tablepack)
+      - [table.remove](#tableremove)
       - [table.unpack](#tableunpack)
     - [Custom Lua Modules](#custom-lua-modules)
     - [Introduction to Custom Lua Rules](#introduction-to-custom-lua-rules)
@@ -3015,7 +3015,7 @@ Numeric codes are not necessarily portable across platforms.
 
 The `pattern` is a Lua 2.5 pattern; see [Lua 2.5 §6.2 Patterns](https://www.lua.org/manual/2.5/manual.html#6.2).
 
-Looks for the first match of pattern in the string s. If it finds a match, then find returns the indices of s where this occurrence starts and ends; otherwise, it returns fail. A third, optional numeric argument init specifies where to start the search; its default value is 1 and can be negative. A true as a fourth, optional argument plain turns off the pattern matching facilities, so the function does a plain "find substring" operation, with no characters in pattern being considered magic.
+Looks for the first match of pattern in the string s. If it finds a match, then find returns the indices of s where this occurrence starts and ends; otherwise, it returns `fail`. A third, optional numeric argument `init` specifies where to start the search; its default value is 1 and can be negative. A true as a fourth, optional argument `plain` turns off the pattern matching facilities, so the function does a plain "find substring" operation, with no characters in pattern being considered magic.
 
 If the pattern has captures, then in a successful match the captured values are also returned, after the two indices.
 
