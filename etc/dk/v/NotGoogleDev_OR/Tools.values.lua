@@ -2,7 +2,7 @@
 --  NotGoogleDev - "Not" (unofficial) "GoogleDev" (Google developed software documented within https://developers.google.com)
 --  _OR - Operations Research at https://developers.google.com/optimization/ which contains `OR-Tools` and `OR API`
 
--- USAGE 1 of 1: NotGoogleDev_OR.Tools.F_Lib@9.15.0
+-- USAGE 1 of 2: NotGoogleDev_OR.Tools.F_Lib@9.15.0
 -- (Free rule) An object with or-tools C/C++ libraries, header files and share/ files (ex. solver models)
 --
 -- Configurations: One of the following sets of options must be provided:
@@ -40,6 +40,16 @@
 --     --trust-local-package CommonsBase_Std \
 --     --trial post-object -d target/ortools-static/ NotGoogleDev_OR.Tools.F_Lib@9.15.0 \
 --     ...
+--
+-- USAGE 2 of 2: NotGoogleDev_OR.Tools.F_Bin@9.15.0
+-- (Free rule) An object with or-tools example binaries
+-- Intended for verifying that static=1 in F_Lib, which shares the same code,
+-- produces fully static binaries.
+--
+-- Examples:
+--   dk0 --trial post-object -d target/ortools-macos-arm64-bin/ NotGoogleDev_OR.Tools.F_Bin@9.15.0 \
+--     targetabi=Release.Darwin_arm64
+--
 
 local M = {
   id = "NotGoogleDev_OR.Tools@9.15.0"
@@ -57,7 +67,7 @@ function rules.F_Lib(command, request)
     return {
       declareoutput = {
         return_form = {
-          id = "OurNotGoogleDev_OR.Tools.F_Build.Form." .. request.rule.generatesymbol() .. "@1.0.0",
+          id = "OurNotGoogleDev_OR.Tools.F_Lib.Form." .. request.rule.generatesymbol() .. "@1.0.0",
           slot = "Release.Agnostic"
         }
       }
@@ -69,6 +79,29 @@ function rules.F_Lib(command, request)
       outputmodule = request.submit.outputmodule,
       outputversion = request.submit.outputversion,
       static = static
+    }
+    NotGoogleDev_OR__Tools__9_15_0.cmake_flags(request, p)
+    return NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
+  end
+end
+
+function rules.F_Bin(command, request)
+  if command == "declareoutput" then
+    return {
+      declareoutput = {
+        return_form = {
+          id = "OurNotGoogleDev_OR.Tools.F_Bin.Form." .. request.rule.generatesymbol() .. "@1.0.0",
+          slot = "Release.Agnostic"
+        }
+      }
+    }
+  elseif command == "submit" then
+    local p = {
+      outputid = request.submit.outputid,
+      outputmodule = request.submit.outputmodule,
+      outputversion = request.submit.outputversion,
+      static = 1,
+      binaries_only = 1
     }
     NotGoogleDev_OR__Tools__9_15_0.cmake_flags(request, p)
     return NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
@@ -106,7 +139,7 @@ end
 function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
   local k, v
   local genid = request.rule.generatesymbol()
-  local bundleid = "OurNotGoogleDev_OR.Tools.F_Build.Content." .. genid .. "@1.0.0"
+  local bundleid = "OurNotGoogleDev_OR.Tools.Content." .. genid .. "@1.0.0"
   local assetpath = "v9.15.zip"
   local overlaystaticassetpath = "overlay-static"
 
@@ -114,19 +147,25 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
 
   -- constructed expected paths
   local paths = {}
-  --   add header files
-  table.move(NotGoogleDev_OR__Tools__9_15_0.includes, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.includes),
-    table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
-  --   add common libraries
-  table.move(NotGoogleDev_OR__Tools__9_15_0.common_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.common_libs),
-    table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
-  --   add static or shared libraries
-  if p.static then
-    table.move(NotGoogleDev_OR__Tools__9_15_0.static_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.static_libs),
-      table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+  if p.binaries_only then
+    -- if binaries_only then only add the binary paths
+    table.move(NotGoogleDev_OR__Tools__9_15_0.binaries, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.binaries),
+      1, paths) ---@diagnostic disable-line: deprecated, access-invisible
   else
-    table.move(NotGoogleDev_OR__Tools__9_15_0.shared_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.shared_libs),
+    --   add header files
+    table.move(NotGoogleDev_OR__Tools__9_15_0.includes, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.includes),
       table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+    --   add common libraries
+    table.move(NotGoogleDev_OR__Tools__9_15_0.common_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.common_libs),
+      table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+    --   add static or shared libraries
+    if p.static then
+      table.move(NotGoogleDev_OR__Tools__9_15_0.static_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.static_libs),
+        table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+    else
+      table.move(NotGoogleDev_OR__Tools__9_15_0.shared_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.shared_libs),
+        table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+    end
   end
 
   -- CMake command arguments for CommonsBase_Build.CMake0.F_Build@3.25.3
@@ -138,9 +177,19 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
     "assetpath=" .. assetpath,
     "nstrip=1",
     'gargs[]=-DBUILD_DEPS:BOOL=ON',
-    'gargs[]=-DBUILD_SHARED_LIBS:BOOL=' .. BUILD_SHARED_LIBS,
-    'outrmexact[]=bin', 'outrmexact[]=man', 'outrmexact[]=share'
+    'gargs[]=-DBUILD_SHARED_LIBS:BOOL=' .. BUILD_SHARED_LIBS
   }
+
+  if p.binaries_only then
+    table.insert(cmakecmd_arr, 'outrmexact[]=include')
+    table.insert(cmakecmd_arr, 'outrmexact[]=lib')
+    table.insert(cmakecmd_arr, 'outrmexact[]=man')
+    table.insert(cmakecmd_arr, 'outrmexact[]=share')
+  else
+    table.insert(cmakecmd_arr, 'outrmexact[]=bin')
+    table.insert(cmakecmd_arr, 'outrmexact[]=man')
+    table.insert(cmakecmd_arr, 'outrmexact[]=share')
+  end
 
   -- If static add overlayassetpath
   if p.static then
@@ -6372,6 +6421,41 @@ NotGoogleDev_OR__Tools__9_15_0.shared_libs = {
   "lib/libsoplexshared.8.0.0.dylib", "lib/libsoplexshared.8.0.dylib", "lib/libsoplexshared.dylib", "lib/libupb.a",
   "lib/libutf8_range.33.1.0.dylib", "lib/libutf8_range.dylib", "lib/libutf8_validity.33.1.0.dylib",
   "lib/libutf8_validity.dylib", "lib/libz.1.3.1.dylib", "lib/libz.1.dylib", "lib/libz.dylib"
+}
+
+NotGoogleDev_OR__Tools__9_15_0.binaries = {
+  "bin/assignment_groups_mip", "bin/assignment_groups_sat", "bin/assignment_linear_sum_assignment",
+  "bin/assignment_min_flow", "bin/assignment_mip", "bin/assignment_sat", "bin/assignment_task_sizes_mip",
+  "bin/assignment_task_sizes_sat", "bin/assignment_teams_mip", "bin/assignment_teams_sat", "bin/assumptions_sample_sat",
+  "bin/balance_min_flow", "bin/basic_example", "bin/bfs_directed", "bin/bfs_one_to_all", "bin/bfs_undirected",
+  "bin/bin_packing_mip", "bin/binpacking_problem_sat", "bin/bool_or_sample_sat", "bin/channeling_sample_sat",
+  "bin/clone_model_sample_sat", "bin/cocktail_hour", "bin/cp_is_fun_cp", "bin/cp_is_fun_sat", "bin/cp_sat_example",
+  "bin/cutting_stock", "bin/dag_constrained_shortest_path_sequential", "bin/dag_multiple_shortest_paths_one_to_all",
+  "bin/dag_multiple_shortest_paths_sequential", "bin/dag_shortest_path_one_to_all", "bin/dag_shortest_path_sequential",
+  "bin/dag_simple_constrained_shortest_path", "bin/dag_simple_multiple_shortest_paths", "bin/dag_simple_shortest_path",
+  "bin/dijkstra_all_pairs_shortest_paths", "bin/dijkstra_directed", "bin/dijkstra_one_to_all", "bin/dijkstra_sequential",
+  "bin/dijkstra_undirected", "bin/earliness_tardiness_cost_sample_sat", "bin/facility_lp_benders", "bin/fzn-cp-sat",
+  "bin/graph_coloring", "bin/highs", "bin/integer_programming_example", "bin/interval_sample_sat", "bin/issue4269",
+  "bin/knapsack", "bin/lagrangian_relaxation", "bin/linear_programming_example", "bin/literal_sample_sat",
+  "bin/mathopt_info", "bin/minimal_jobshop_cp", "bin/minimal_jobshop_sat", "bin/mip_var_array",
+  "bin/multiple_knapsack_mip", "bin/multiple_knapsack_sat", "bin/no_overlap_sample_sat", "bin/non_linear_sat",
+  "bin/nqueens_cp", "bin/nqueens_sat", "bin/nurses_cp", "bin/nurses_sat", "bin/optional_interval_sample_sat",
+  "bin/protoc", "bin/protoc-33.1.0", "bin/protoc-gen-upb", "bin/protoc-gen-upb_minitable",
+  "bin/protoc-gen-upb_minitable-33.1.0", "bin/protoc-gen-upb-33.1.0", "bin/protoc-gen-upbdefs",
+  "bin/protoc-gen-upbdefs-33.1.0", "bin/rabbits_and_pheasants_cp", "bin/rabbits_and_pheasants_sat",
+  "bin/ranking_sample_sat", "bin/reified_sample_sat", "bin/root_a_tree", "bin/rooted_tree_paths", "bin/sat_runner",
+  "bin/schedule_requests_sat", "bin/scip", "bin/search_for_all_solutions_sample_sat", "bin/simple_cp_program",
+  "bin/simple_glop_program", "bin/simple_knapsack_program", "bin/simple_lp_program", "bin/simple_ls_program",
+  "bin/simple_max_flow_program", "bin/simple_min_cost_flow_program", "bin/simple_mip_program", "bin/simple_pdlp_program",
+  "bin/simple_routing_program", "bin/simple_sat_program", "bin/solution_hinting_sample_sat", "bin/solve",
+  "bin/solve_and_print_intermediate_solutions_sample_sat", "bin/solve_with_time_limit_sample_sat",
+  "bin/step_function_sample_sat", "bin/stigler_diet", "bin/stop_after_n_solutions_sample_sat",
+  "bin/time_indexed_scheduling", "bin/tsp", "bin/tsp_circuit_board", "bin/tsp_cities", "bin/tsp_cities_routes",
+  "bin/tsp_distance_matrix", "bin/vector_bin_packing", "bin/vrp", "bin/vrp_breaks", "bin/vrp_capacity",
+  "bin/vrp_drop_nodes", "bin/vrp_global_span", "bin/vrp_initial_routes", "bin/vrp_pickup_delivery",
+  "bin/vrp_pickup_delivery_fifo", "bin/vrp_pickup_delivery_lifo", "bin/vrp_resources", "bin/vrp_routes",
+  "bin/vrp_solution_callback", "bin/vrp_starts_ends", "bin/vrp_time_windows", "bin/vrp_with_time_limit",
+  "bin/vrptw_store_solution_data"
 }
 
 return M
