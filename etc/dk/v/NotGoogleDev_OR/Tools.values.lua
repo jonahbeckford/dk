@@ -108,6 +108,7 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
   local genid = request.rule.generatesymbol()
   local bundleid = "OurNotGoogleDev_OR.Tools.F_Build.Content." .. genid .. "@1.0.0"
   local assetpath = "v9.15.zip"
+  local overlaystaticassetpath = "overlay-static"
 
   local BUILD_SHARED_LIBS = p.static and "OFF" or "ON"
 
@@ -116,9 +117,17 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
   --   add header files
   table.move(NotGoogleDev_OR__Tools__9_15_0.includes, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.includes),
     table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
-  --   add libraries
-  table.move(NotGoogleDev_OR__Tools__9_15_0.libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.libs),
+  --   add common libraries
+  table.move(NotGoogleDev_OR__Tools__9_15_0.common_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.common_libs),
     table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+  --   add static or shared libraries
+  if p.static then
+    table.move(NotGoogleDev_OR__Tools__9_15_0.static_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.static_libs),
+      table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+  else
+    table.move(NotGoogleDev_OR__Tools__9_15_0.shared_libs, 1, table.getn(NotGoogleDev_OR__Tools__9_15_0.shared_libs),
+      table.getn(paths) + 1, paths) ---@diagnostic disable-line: deprecated, access-invisible
+  end
 
   -- CMake command arguments for CommonsBase_Build.CMake0.F_Build@3.25.3
   local cmakecmd_arr = {
@@ -132,6 +141,11 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
     'gargs[]=-DBUILD_SHARED_LIBS:BOOL=' .. BUILD_SHARED_LIBS,
     'outrmexact[]=bin', 'outrmexact[]=man', 'outrmexact[]=share'
   }
+
+  -- If static add overlayassetpath
+  if p.static then
+    table.insert(cmakecmd_arr, 'overlayassetpath=' .. overlaystaticassetpath)
+  end
 
   -- Add the CMake flags from the cmakeflags array as "gargs[]=" arguments.
   k, v = next(p.cmakeflags)
@@ -148,8 +162,7 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
   end
 
   -- Sadly the CMake command arguments must be passed as a single JSON string today.
-  -- TODO: change JSON parser (or Lua table -> JSON serializer) to support
-  -- JSON arrays rather than a JSON string.
+  -- TODO: change JSON parser (or Lua table -> JSON serializer) to support JSON arrays rather than a JSON string.
   local cmakecmd_quoted = {}
   k, v = next(cmakecmd_arr)
   while k do
@@ -170,6 +183,10 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
                 {
                   name = "gh-google-or-tools",
                   mirrors = { "https://github.com/google/or-tools/archive/refs/tags" }
+                },
+                {
+                  name = "NotGoogleDev_OR",
+                  mirrors = { "cell://dk0/etc/dk/v/NotGoogleDev_OR" }
                 }
               }
             },
@@ -180,6 +197,14 @@ function NotGoogleDev_OR__Tools__9_15_0.delegate_to_cmake(request, p)
                 size = 25297362,
                 checksum = {
                   sha256 = "920d8266b30a7a8f8572a5dc663fdf8d2701792101dd95f09e72397c16e12858"
+                }
+              },
+              {
+                origin = "NotGoogleDev_OR",
+                path = overlaystaticassetpath,
+                size = 6008,
+                checksum = {
+                  sha256 = "3c66a24294bbf5548164c48e775045751c3930e68fb4e17941a1e17ae273681c"
                 }
               }
             }
@@ -5919,7 +5944,7 @@ NotGoogleDev_OR__Tools__9_15_0.includes = {
   "include/xml/xml.h", "include/xml/xmldef.h", "include/zconf.h", "include/zlib.h"
 }
 
-NotGoogleDev_OR__Tools__9_15_0.libs = {
+NotGoogleDev_OR__Tools__9_15_0.common_libs = {
   "lib/cmake/Boost-1.87.0/BoostConfig.cmake", "lib/cmake/Boost-1.87.0/BoostConfigVersion.cmake",
   "lib/cmake/Cbc/CbcConfig.cmake", "lib/cmake/Cbc/CbcConfigVersion.cmake", "lib/cmake/Cbc/CbcTargets-release.cmake",
   "lib/cmake/Cbc/CbcTargets.cmake", "lib/cmake/Cgl/CglConfig.cmake", "lib/cmake/Cgl/CglConfigVersion.cmake",
@@ -6120,7 +6145,139 @@ NotGoogleDev_OR__Tools__9_15_0.libs = {
   "lib/cmake/soplex/soplex-config-version.cmake", "lib/cmake/soplex/soplex-config.cmake",
   "lib/cmake/soplex/soplex-targets-release.cmake", "lib/cmake/soplex/soplex-targets.cmake",
   "lib/cmake/utf8_range/utf8_range-config.cmake", "lib/cmake/utf8_range/utf8_range-targets-release.cmake",
-  "lib/cmake/utf8_range/utf8_range-targets.cmake", "lib/libCbc.2.10.12.dylib", "lib/libCbc.2.dylib", "lib/libCbc.dylib",
+  "lib/cmake/utf8_range/utf8_range-targets.cmake",
+  "lib/pkgconfig/absl_absl_check.pc", "lib/pkgconfig/absl_absl_log.pc", "lib/pkgconfig/absl_absl_vlog_is_on.pc",
+  "lib/pkgconfig/absl_algorithm.pc", "lib/pkgconfig/absl_algorithm_container.pc", "lib/pkgconfig/absl_any.pc",
+  "lib/pkgconfig/absl_any_invocable.pc", "lib/pkgconfig/absl_atomic_hook.pc", "lib/pkgconfig/absl_bad_any_cast.pc",
+  "lib/pkgconfig/absl_bad_optional_access.pc", "lib/pkgconfig/absl_bad_variant_access.pc", "lib/pkgconfig/absl_base.pc",
+  "lib/pkgconfig/absl_base_internal.pc", "lib/pkgconfig/absl_bind_front.pc", "lib/pkgconfig/absl_bits.pc",
+  "lib/pkgconfig/absl_bounded_utf8_length_sequence.pc", "lib/pkgconfig/absl_btree.pc", "lib/pkgconfig/absl_charset.pc",
+  "lib/pkgconfig/absl_check.pc", "lib/pkgconfig/absl_city.pc", "lib/pkgconfig/absl_civil_time.pc",
+  "lib/pkgconfig/absl_cleanup.pc", "lib/pkgconfig/absl_cleanup_internal.pc", "lib/pkgconfig/absl_common_policy_traits.pc",
+  "lib/pkgconfig/absl_compare.pc", "lib/pkgconfig/absl_compressed_tuple.pc", "lib/pkgconfig/absl_config.pc",
+  "lib/pkgconfig/absl_container_common.pc", "lib/pkgconfig/absl_container_memory.pc", "lib/pkgconfig/absl_cord.pc",
+  "lib/pkgconfig/absl_cord_internal.pc", "lib/pkgconfig/absl_cord_test_helpers.pc",
+  "lib/pkgconfig/absl_cordz_functions.pc", "lib/pkgconfig/absl_cordz_handle.pc", "lib/pkgconfig/absl_cordz_info.pc",
+  "lib/pkgconfig/absl_cordz_sample_token.pc", "lib/pkgconfig/absl_cordz_statistics.pc",
+  "lib/pkgconfig/absl_cordz_update_scope.pc", "lib/pkgconfig/absl_cordz_update_tracker.pc",
+  "lib/pkgconfig/absl_core_headers.pc", "lib/pkgconfig/absl_crc32c.pc", "lib/pkgconfig/absl_crc_cord_state.pc",
+  "lib/pkgconfig/absl_crc_cpu_detect.pc", "lib/pkgconfig/absl_crc_internal.pc", "lib/pkgconfig/absl_debugging.pc",
+  "lib/pkgconfig/absl_debugging_internal.pc", "lib/pkgconfig/absl_decode_rust_punycode.pc",
+  "lib/pkgconfig/absl_demangle_internal.pc", "lib/pkgconfig/absl_demangle_rust.pc", "lib/pkgconfig/absl_die_if_null.pc",
+  "lib/pkgconfig/absl_dynamic_annotations.pc", "lib/pkgconfig/absl_endian.pc", "lib/pkgconfig/absl_errno_saver.pc",
+  "lib/pkgconfig/absl_examine_stack.pc", "lib/pkgconfig/absl_exponential_biased.pc",
+  "lib/pkgconfig/absl_failure_signal_handler.pc", "lib/pkgconfig/absl_fast_type_id.pc",
+  "lib/pkgconfig/absl_fixed_array.pc", "lib/pkgconfig/absl_flags.pc", "lib/pkgconfig/absl_flags_commandlineflag.pc",
+  "lib/pkgconfig/absl_flags_commandlineflag_internal.pc", "lib/pkgconfig/absl_flags_config.pc",
+  "lib/pkgconfig/absl_flags_internal.pc", "lib/pkgconfig/absl_flags_marshalling.pc", "lib/pkgconfig/absl_flags_parse.pc",
+  "lib/pkgconfig/absl_flags_path_util.pc", "lib/pkgconfig/absl_flags_private_handle_accessor.pc",
+  "lib/pkgconfig/absl_flags_program_name.pc", "lib/pkgconfig/absl_flags_reflection.pc",
+  "lib/pkgconfig/absl_flags_usage.pc", "lib/pkgconfig/absl_flags_usage_internal.pc",
+  "lib/pkgconfig/absl_flat_hash_map.pc", "lib/pkgconfig/absl_flat_hash_set.pc", "lib/pkgconfig/absl_function_ref.pc",
+  "lib/pkgconfig/absl_graphcycles_internal.pc", "lib/pkgconfig/absl_has_ostream_operator.pc",
+  "lib/pkgconfig/absl_hash.pc", "lib/pkgconfig/absl_hash_container_defaults.pc",
+  "lib/pkgconfig/absl_hash_function_defaults.pc", "lib/pkgconfig/absl_hash_policy_traits.pc",
+  "lib/pkgconfig/absl_hash_testing.pc", "lib/pkgconfig/absl_hashtable_control_bytes.pc",
+  "lib/pkgconfig/absl_hashtable_debug.pc", "lib/pkgconfig/absl_hashtable_debug_hooks.pc",
+  "lib/pkgconfig/absl_hashtable_profiler.pc", "lib/pkgconfig/absl_hashtablez_sampler.pc",
+  "lib/pkgconfig/absl_inlined_vector.pc", "lib/pkgconfig/absl_inlined_vector_internal.pc", "lib/pkgconfig/absl_int128.pc",
+  "lib/pkgconfig/absl_iterator_traits_internal.pc", "lib/pkgconfig/absl_iterator_traits_test_helper_internal.pc",
+  "lib/pkgconfig/absl_kernel_timeout_internal.pc", "lib/pkgconfig/absl_layout.pc", "lib/pkgconfig/absl_leak_check.pc",
+  "lib/pkgconfig/absl_log.pc", "lib/pkgconfig/absl_log_entry.pc", "lib/pkgconfig/absl_log_flags.pc",
+  "lib/pkgconfig/absl_log_globals.pc", "lib/pkgconfig/absl_log_initialize.pc",
+  "lib/pkgconfig/absl_log_internal_append_truncated.pc", "lib/pkgconfig/absl_log_internal_check_impl.pc",
+  "lib/pkgconfig/absl_log_internal_check_op.pc", "lib/pkgconfig/absl_log_internal_conditions.pc",
+  "lib/pkgconfig/absl_log_internal_config.pc", "lib/pkgconfig/absl_log_internal_flags.pc",
+  "lib/pkgconfig/absl_log_internal_fnmatch.pc", "lib/pkgconfig/absl_log_internal_format.pc",
+  "lib/pkgconfig/absl_log_internal_globals.pc", "lib/pkgconfig/absl_log_internal_log_impl.pc",
+  "lib/pkgconfig/absl_log_internal_log_sink_set.pc", "lib/pkgconfig/absl_log_internal_message.pc",
+  "lib/pkgconfig/absl_log_internal_nullguard.pc", "lib/pkgconfig/absl_log_internal_nullstream.pc",
+  "lib/pkgconfig/absl_log_internal_proto.pc", "lib/pkgconfig/absl_log_internal_strip.pc",
+  "lib/pkgconfig/absl_log_internal_structured.pc", "lib/pkgconfig/absl_log_internal_structured_proto.pc",
+  "lib/pkgconfig/absl_log_internal_voidify.pc", "lib/pkgconfig/absl_log_severity.pc", "lib/pkgconfig/absl_log_sink.pc",
+  "lib/pkgconfig/absl_log_sink_registry.pc", "lib/pkgconfig/absl_log_streamer.pc", "lib/pkgconfig/absl_log_structured.pc",
+  "lib/pkgconfig/absl_malloc_internal.pc", "lib/pkgconfig/absl_memory.pc", "lib/pkgconfig/absl_meta.pc",
+  "lib/pkgconfig/absl_no_destructor.pc", "lib/pkgconfig/absl_node_hash_map.pc", "lib/pkgconfig/absl_node_hash_set.pc",
+  "lib/pkgconfig/absl_node_slot_policy.pc", "lib/pkgconfig/absl_non_temporal_arm_intrinsics.pc",
+  "lib/pkgconfig/absl_non_temporal_memcpy.pc", "lib/pkgconfig/absl_nullability.pc", "lib/pkgconfig/absl_numeric.pc",
+  "lib/pkgconfig/absl_numeric_representation.pc", "lib/pkgconfig/absl_optional.pc", "lib/pkgconfig/absl_overload.pc",
+  "lib/pkgconfig/absl_periodic_sampler.pc", "lib/pkgconfig/absl_poison.pc", "lib/pkgconfig/absl_prefetch.pc",
+  "lib/pkgconfig/absl_pretty_function.pc", "lib/pkgconfig/absl_profile_builder.pc",
+  "lib/pkgconfig/absl_random_bit_gen_ref.pc", "lib/pkgconfig/absl_random_distributions.pc",
+  "lib/pkgconfig/absl_random_internal_distribution_caller.pc",
+  "lib/pkgconfig/absl_random_internal_distribution_test_util.pc", "lib/pkgconfig/absl_random_internal_entropy_pool.pc",
+  "lib/pkgconfig/absl_random_internal_fast_uniform_bits.pc", "lib/pkgconfig/absl_random_internal_fastmath.pc",
+  "lib/pkgconfig/absl_random_internal_generate_real.pc", "lib/pkgconfig/absl_random_internal_iostream_state_saver.pc",
+  "lib/pkgconfig/absl_random_internal_mock_helpers.pc", "lib/pkgconfig/absl_random_internal_nonsecure_base.pc",
+  "lib/pkgconfig/absl_random_internal_pcg_engine.pc", "lib/pkgconfig/absl_random_internal_platform.pc",
+  "lib/pkgconfig/absl_random_internal_randen.pc", "lib/pkgconfig/absl_random_internal_randen_engine.pc",
+  "lib/pkgconfig/absl_random_internal_randen_hwaes.pc", "lib/pkgconfig/absl_random_internal_randen_hwaes_impl.pc",
+  "lib/pkgconfig/absl_random_internal_randen_slow.pc", "lib/pkgconfig/absl_random_internal_salted_seed_seq.pc",
+  "lib/pkgconfig/absl_random_internal_seed_material.pc", "lib/pkgconfig/absl_random_internal_traits.pc",
+  "lib/pkgconfig/absl_random_internal_uniform_helper.pc", "lib/pkgconfig/absl_random_internal_wide_multiply.pc",
+  "lib/pkgconfig/absl_random_mocking_bit_gen.pc", "lib/pkgconfig/absl_random_random.pc",
+  "lib/pkgconfig/absl_random_seed_gen_exception.pc", "lib/pkgconfig/absl_random_seed_sequences.pc",
+  "lib/pkgconfig/absl_raw_hash_map.pc", "lib/pkgconfig/absl_raw_hash_set.pc",
+  "lib/pkgconfig/absl_raw_hash_set_resize_impl.pc", "lib/pkgconfig/absl_raw_logging_internal.pc",
+  "lib/pkgconfig/absl_sample_recorder.pc", "lib/pkgconfig/absl_scoped_mock_log.pc",
+  "lib/pkgconfig/absl_scoped_set_env.pc", "lib/pkgconfig/absl_span.pc", "lib/pkgconfig/absl_spinlock_wait.pc",
+  "lib/pkgconfig/absl_spy_hash_state.pc", "lib/pkgconfig/absl_stacktrace.pc", "lib/pkgconfig/absl_status.pc",
+  "lib/pkgconfig/absl_status_matchers.pc", "lib/pkgconfig/absl_statusor.pc", "lib/pkgconfig/absl_str_format.pc",
+  "lib/pkgconfig/absl_str_format_internal.pc", "lib/pkgconfig/absl_strerror.pc", "lib/pkgconfig/absl_string_view.pc",
+  "lib/pkgconfig/absl_strings.pc", "lib/pkgconfig/absl_strings_internal.pc", "lib/pkgconfig/absl_symbolize.pc",
+  "lib/pkgconfig/absl_synchronization.pc", "lib/pkgconfig/absl_throw_delegate.pc", "lib/pkgconfig/absl_time.pc",
+  "lib/pkgconfig/absl_time_zone.pc", "lib/pkgconfig/absl_tracing_internal.pc", "lib/pkgconfig/absl_type_traits.pc",
+  "lib/pkgconfig/absl_utf8_for_code_point.pc", "lib/pkgconfig/absl_utility.pc", "lib/pkgconfig/absl_variant.pc",
+  "lib/pkgconfig/absl_vlog_config_internal.pc", "lib/pkgconfig/absl_vlog_is_on.pc",
+  "lib/pkgconfig/absl_weakly_mixed_integer.pc", "lib/pkgconfig/bzip2.pc", "lib/pkgconfig/gmock.pc",
+  "lib/pkgconfig/gmock_main.pc", "lib/pkgconfig/gtest.pc", "lib/pkgconfig/gtest_main.pc", "lib/pkgconfig/highs.pc",
+  "lib/pkgconfig/protobuf-lite.pc", "lib/pkgconfig/protobuf.pc", "lib/pkgconfig/re2.pc", "lib/pkgconfig/upb.pc",
+  "lib/pkgconfig/utf8_range.pc"
+}
+
+NotGoogleDev_OR__Tools__9_15_0.static_libs = {
+  "lib/libabsl_base.a", "lib/libabsl_city.a", "lib/libabsl_civil_time.a", "lib/libabsl_cord_internal.a",
+  "lib/libabsl_cord.a", "lib/libabsl_cordz_functions.a", "lib/libabsl_cordz_handle.a", "lib/libabsl_cordz_info.a",
+  "lib/libabsl_cordz_sample_token.a", "lib/libabsl_crc_cord_state.a", "lib/libabsl_crc_cpu_detect.a",
+  "lib/libabsl_crc_internal.a", "lib/libabsl_crc32c.a", "lib/libabsl_debugging_internal.a",
+  "lib/libabsl_decode_rust_punycode.a", "lib/libabsl_demangle_internal.a", "lib/libabsl_demangle_rust.a",
+  "lib/libabsl_die_if_null.a", "lib/libabsl_examine_stack.a", "lib/libabsl_exponential_biased.a",
+  "lib/libabsl_failure_signal_handler.a", "lib/libabsl_flags_commandlineflag_internal.a",
+  "lib/libabsl_flags_commandlineflag.a", "lib/libabsl_flags_config.a", "lib/libabsl_flags_internal.a",
+  "lib/libabsl_flags_marshalling.a", "lib/libabsl_flags_parse.a", "lib/libabsl_flags_private_handle_accessor.a",
+  "lib/libabsl_flags_program_name.a", "lib/libabsl_flags_reflection.a", "lib/libabsl_flags_usage_internal.a",
+  "lib/libabsl_flags_usage.a", "lib/libabsl_graphcycles_internal.a", "lib/libabsl_hash.a",
+  "lib/libabsl_hashtable_profiler.a", "lib/libabsl_hashtablez_sampler.a", "lib/libabsl_int128.a",
+  "lib/libabsl_kernel_timeout_internal.a", "lib/libabsl_leak_check.a", "lib/libabsl_log_entry.a",
+  "lib/libabsl_log_flags.a", "lib/libabsl_log_globals.a", "lib/libabsl_log_initialize.a",
+  "lib/libabsl_log_internal_check_op.a", "lib/libabsl_log_internal_conditions.a", "lib/libabsl_log_internal_fnmatch.a",
+  "lib/libabsl_log_internal_format.a", "lib/libabsl_log_internal_globals.a", "lib/libabsl_log_internal_log_sink_set.a",
+  "lib/libabsl_log_internal_message.a", "lib/libabsl_log_internal_nullguard.a", "lib/libabsl_log_internal_proto.a",
+  "lib/libabsl_log_internal_structured_proto.a", "lib/libabsl_log_severity.a", "lib/libabsl_log_sink.a",
+  "lib/libabsl_malloc_internal.a", "lib/libabsl_periodic_sampler.a", "lib/libabsl_poison.a",
+  "lib/libabsl_profile_builder.a", "lib/libabsl_random_distributions.a",
+  "lib/libabsl_random_internal_distribution_test_util.a", "lib/libabsl_random_internal_entropy_pool.a",
+  "lib/libabsl_random_internal_platform.a", "lib/libabsl_random_internal_randen_hwaes_impl.a",
+  "lib/libabsl_random_internal_randen_hwaes.a", "lib/libabsl_random_internal_randen_slow.a",
+  "lib/libabsl_random_internal_randen.a", "lib/libabsl_random_internal_seed_material.a",
+  "lib/libabsl_random_seed_gen_exception.a", "lib/libabsl_random_seed_sequences.a", "lib/libabsl_raw_hash_set.a",
+  "lib/libabsl_raw_logging_internal.a", "lib/libabsl_scoped_set_env.a", "lib/libabsl_spinlock_wait.a",
+  "lib/libabsl_stacktrace.a", "lib/libabsl_status.a", "lib/libabsl_statusor.a", "lib/libabsl_str_format_internal.a",
+  "lib/libabsl_strerror.a", "lib/libabsl_string_view.a", "lib/libabsl_strings_internal.a", "lib/libabsl_strings.a",
+  "lib/libabsl_symbolize.a", "lib/libabsl_synchronization.a", "lib/libabsl_throw_delegate.a", "lib/libabsl_time_zone.a",
+  "lib/libabsl_time.a", "lib/libabsl_tracing_internal.a", "lib/libabsl_utf8_for_code_point.a",
+  "lib/libabsl_vlog_config_internal.a", "lib/libboost_atomic.a", "lib/libboost_chrono.a", "lib/libboost_container.a",
+  "lib/libboost_date_time.a", "lib/libboost_random.a", "lib/libboost_serialization.a", "lib/libboost_thread.a",
+  "lib/libboost_wserialization.a", "lib/libbz2.a", "lib/libCbc.a", "lib/libCbcSolver.a", "lib/libCgl.a", "lib/libClp.a",
+  "lib/libClpSolver.a", "lib/libCoinUtils.a", "lib/libgmock_main.a", "lib/libgmock.a", "lib/libgtest_main.a",
+  "lib/libgtest.a", "lib/libhighs.a", "lib/libortools_flatzinc.a", "lib/libortools.a", "lib/libOsi.a", "lib/libOsiCbc.a",
+  "lib/libOsiClp.a", "lib/libprotobuf-lite.a", "lib/libprotobuf.a", "lib/libprotoc.a", "lib/libre2.a", "lib/libscip.a",
+  "lib/libsoplex-pic.a", "lib/libsoplex.a", "lib/libsoplexshared.8.0.0.dylib", "lib/libsoplexshared.8.0.dylib",
+  "lib/libsoplexshared.dylib", "lib/libupb.a", "lib/libutf8_range.a", "lib/libutf8_validity.a", "lib/libz.a"
+}
+
+NotGoogleDev_OR__Tools__9_15_0.shared_libs = {
+  "lib/libCbc.2.10.12.dylib", "lib/libCbc.2.dylib", "lib/libCbc.dylib",
   "lib/libCbcSolver.2.10.12.dylib", "lib/libCbcSolver.2.dylib", "lib/libCbcSolver.dylib", "lib/libCgl.0.60.9.dylib",
   "lib/libCgl.0.dylib", "lib/libCgl.dylib", "lib/libClp.1.17.10.dylib", "lib/libClp.1.dylib", "lib/libClp.dylib",
   "lib/libClpSolver.1.17.10.dylib", "lib/libClpSolver.1.dylib", "lib/libClpSolver.dylib",
@@ -6214,94 +6371,7 @@ NotGoogleDev_OR__Tools__9_15_0.libs = {
   "lib/libscip.10.0.dylib", "lib/libscip.dylib", "lib/libsoplex-pic.a", "lib/libsoplex.a",
   "lib/libsoplexshared.8.0.0.dylib", "lib/libsoplexshared.8.0.dylib", "lib/libsoplexshared.dylib", "lib/libupb.a",
   "lib/libutf8_range.33.1.0.dylib", "lib/libutf8_range.dylib", "lib/libutf8_validity.33.1.0.dylib",
-  "lib/libutf8_validity.dylib", "lib/libz.1.3.1.dylib", "lib/libz.1.dylib", "lib/libz.dylib",
-  "lib/pkgconfig/absl_absl_check.pc", "lib/pkgconfig/absl_absl_log.pc", "lib/pkgconfig/absl_absl_vlog_is_on.pc",
-  "lib/pkgconfig/absl_algorithm.pc", "lib/pkgconfig/absl_algorithm_container.pc", "lib/pkgconfig/absl_any.pc",
-  "lib/pkgconfig/absl_any_invocable.pc", "lib/pkgconfig/absl_atomic_hook.pc", "lib/pkgconfig/absl_bad_any_cast.pc",
-  "lib/pkgconfig/absl_bad_optional_access.pc", "lib/pkgconfig/absl_bad_variant_access.pc", "lib/pkgconfig/absl_base.pc",
-  "lib/pkgconfig/absl_base_internal.pc", "lib/pkgconfig/absl_bind_front.pc", "lib/pkgconfig/absl_bits.pc",
-  "lib/pkgconfig/absl_bounded_utf8_length_sequence.pc", "lib/pkgconfig/absl_btree.pc", "lib/pkgconfig/absl_charset.pc",
-  "lib/pkgconfig/absl_check.pc", "lib/pkgconfig/absl_city.pc", "lib/pkgconfig/absl_civil_time.pc",
-  "lib/pkgconfig/absl_cleanup.pc", "lib/pkgconfig/absl_cleanup_internal.pc", "lib/pkgconfig/absl_common_policy_traits.pc",
-  "lib/pkgconfig/absl_compare.pc", "lib/pkgconfig/absl_compressed_tuple.pc", "lib/pkgconfig/absl_config.pc",
-  "lib/pkgconfig/absl_container_common.pc", "lib/pkgconfig/absl_container_memory.pc", "lib/pkgconfig/absl_cord.pc",
-  "lib/pkgconfig/absl_cord_internal.pc", "lib/pkgconfig/absl_cord_test_helpers.pc",
-  "lib/pkgconfig/absl_cordz_functions.pc", "lib/pkgconfig/absl_cordz_handle.pc", "lib/pkgconfig/absl_cordz_info.pc",
-  "lib/pkgconfig/absl_cordz_sample_token.pc", "lib/pkgconfig/absl_cordz_statistics.pc",
-  "lib/pkgconfig/absl_cordz_update_scope.pc", "lib/pkgconfig/absl_cordz_update_tracker.pc",
-  "lib/pkgconfig/absl_core_headers.pc", "lib/pkgconfig/absl_crc32c.pc", "lib/pkgconfig/absl_crc_cord_state.pc",
-  "lib/pkgconfig/absl_crc_cpu_detect.pc", "lib/pkgconfig/absl_crc_internal.pc", "lib/pkgconfig/absl_debugging.pc",
-  "lib/pkgconfig/absl_debugging_internal.pc", "lib/pkgconfig/absl_decode_rust_punycode.pc",
-  "lib/pkgconfig/absl_demangle_internal.pc", "lib/pkgconfig/absl_demangle_rust.pc", "lib/pkgconfig/absl_die_if_null.pc",
-  "lib/pkgconfig/absl_dynamic_annotations.pc", "lib/pkgconfig/absl_endian.pc", "lib/pkgconfig/absl_errno_saver.pc",
-  "lib/pkgconfig/absl_examine_stack.pc", "lib/pkgconfig/absl_exponential_biased.pc",
-  "lib/pkgconfig/absl_failure_signal_handler.pc", "lib/pkgconfig/absl_fast_type_id.pc",
-  "lib/pkgconfig/absl_fixed_array.pc", "lib/pkgconfig/absl_flags.pc", "lib/pkgconfig/absl_flags_commandlineflag.pc",
-  "lib/pkgconfig/absl_flags_commandlineflag_internal.pc", "lib/pkgconfig/absl_flags_config.pc",
-  "lib/pkgconfig/absl_flags_internal.pc", "lib/pkgconfig/absl_flags_marshalling.pc", "lib/pkgconfig/absl_flags_parse.pc",
-  "lib/pkgconfig/absl_flags_path_util.pc", "lib/pkgconfig/absl_flags_private_handle_accessor.pc",
-  "lib/pkgconfig/absl_flags_program_name.pc", "lib/pkgconfig/absl_flags_reflection.pc",
-  "lib/pkgconfig/absl_flags_usage.pc", "lib/pkgconfig/absl_flags_usage_internal.pc",
-  "lib/pkgconfig/absl_flat_hash_map.pc", "lib/pkgconfig/absl_flat_hash_set.pc", "lib/pkgconfig/absl_function_ref.pc",
-  "lib/pkgconfig/absl_graphcycles_internal.pc", "lib/pkgconfig/absl_has_ostream_operator.pc",
-  "lib/pkgconfig/absl_hash.pc", "lib/pkgconfig/absl_hash_container_defaults.pc",
-  "lib/pkgconfig/absl_hash_function_defaults.pc", "lib/pkgconfig/absl_hash_policy_traits.pc",
-  "lib/pkgconfig/absl_hash_testing.pc", "lib/pkgconfig/absl_hashtable_control_bytes.pc",
-  "lib/pkgconfig/absl_hashtable_debug.pc", "lib/pkgconfig/absl_hashtable_debug_hooks.pc",
-  "lib/pkgconfig/absl_hashtable_profiler.pc", "lib/pkgconfig/absl_hashtablez_sampler.pc",
-  "lib/pkgconfig/absl_inlined_vector.pc", "lib/pkgconfig/absl_inlined_vector_internal.pc", "lib/pkgconfig/absl_int128.pc",
-  "lib/pkgconfig/absl_iterator_traits_internal.pc", "lib/pkgconfig/absl_iterator_traits_test_helper_internal.pc",
-  "lib/pkgconfig/absl_kernel_timeout_internal.pc", "lib/pkgconfig/absl_layout.pc", "lib/pkgconfig/absl_leak_check.pc",
-  "lib/pkgconfig/absl_log.pc", "lib/pkgconfig/absl_log_entry.pc", "lib/pkgconfig/absl_log_flags.pc",
-  "lib/pkgconfig/absl_log_globals.pc", "lib/pkgconfig/absl_log_initialize.pc",
-  "lib/pkgconfig/absl_log_internal_append_truncated.pc", "lib/pkgconfig/absl_log_internal_check_impl.pc",
-  "lib/pkgconfig/absl_log_internal_check_op.pc", "lib/pkgconfig/absl_log_internal_conditions.pc",
-  "lib/pkgconfig/absl_log_internal_config.pc", "lib/pkgconfig/absl_log_internal_flags.pc",
-  "lib/pkgconfig/absl_log_internal_fnmatch.pc", "lib/pkgconfig/absl_log_internal_format.pc",
-  "lib/pkgconfig/absl_log_internal_globals.pc", "lib/pkgconfig/absl_log_internal_log_impl.pc",
-  "lib/pkgconfig/absl_log_internal_log_sink_set.pc", "lib/pkgconfig/absl_log_internal_message.pc",
-  "lib/pkgconfig/absl_log_internal_nullguard.pc", "lib/pkgconfig/absl_log_internal_nullstream.pc",
-  "lib/pkgconfig/absl_log_internal_proto.pc", "lib/pkgconfig/absl_log_internal_strip.pc",
-  "lib/pkgconfig/absl_log_internal_structured.pc", "lib/pkgconfig/absl_log_internal_structured_proto.pc",
-  "lib/pkgconfig/absl_log_internal_voidify.pc", "lib/pkgconfig/absl_log_severity.pc", "lib/pkgconfig/absl_log_sink.pc",
-  "lib/pkgconfig/absl_log_sink_registry.pc", "lib/pkgconfig/absl_log_streamer.pc", "lib/pkgconfig/absl_log_structured.pc",
-  "lib/pkgconfig/absl_malloc_internal.pc", "lib/pkgconfig/absl_memory.pc", "lib/pkgconfig/absl_meta.pc",
-  "lib/pkgconfig/absl_no_destructor.pc", "lib/pkgconfig/absl_node_hash_map.pc", "lib/pkgconfig/absl_node_hash_set.pc",
-  "lib/pkgconfig/absl_node_slot_policy.pc", "lib/pkgconfig/absl_non_temporal_arm_intrinsics.pc",
-  "lib/pkgconfig/absl_non_temporal_memcpy.pc", "lib/pkgconfig/absl_nullability.pc", "lib/pkgconfig/absl_numeric.pc",
-  "lib/pkgconfig/absl_numeric_representation.pc", "lib/pkgconfig/absl_optional.pc", "lib/pkgconfig/absl_overload.pc",
-  "lib/pkgconfig/absl_periodic_sampler.pc", "lib/pkgconfig/absl_poison.pc", "lib/pkgconfig/absl_prefetch.pc",
-  "lib/pkgconfig/absl_pretty_function.pc", "lib/pkgconfig/absl_profile_builder.pc",
-  "lib/pkgconfig/absl_random_bit_gen_ref.pc", "lib/pkgconfig/absl_random_distributions.pc",
-  "lib/pkgconfig/absl_random_internal_distribution_caller.pc",
-  "lib/pkgconfig/absl_random_internal_distribution_test_util.pc", "lib/pkgconfig/absl_random_internal_entropy_pool.pc",
-  "lib/pkgconfig/absl_random_internal_fast_uniform_bits.pc", "lib/pkgconfig/absl_random_internal_fastmath.pc",
-  "lib/pkgconfig/absl_random_internal_generate_real.pc", "lib/pkgconfig/absl_random_internal_iostream_state_saver.pc",
-  "lib/pkgconfig/absl_random_internal_mock_helpers.pc", "lib/pkgconfig/absl_random_internal_nonsecure_base.pc",
-  "lib/pkgconfig/absl_random_internal_pcg_engine.pc", "lib/pkgconfig/absl_random_internal_platform.pc",
-  "lib/pkgconfig/absl_random_internal_randen.pc", "lib/pkgconfig/absl_random_internal_randen_engine.pc",
-  "lib/pkgconfig/absl_random_internal_randen_hwaes.pc", "lib/pkgconfig/absl_random_internal_randen_hwaes_impl.pc",
-  "lib/pkgconfig/absl_random_internal_randen_slow.pc", "lib/pkgconfig/absl_random_internal_salted_seed_seq.pc",
-  "lib/pkgconfig/absl_random_internal_seed_material.pc", "lib/pkgconfig/absl_random_internal_traits.pc",
-  "lib/pkgconfig/absl_random_internal_uniform_helper.pc", "lib/pkgconfig/absl_random_internal_wide_multiply.pc",
-  "lib/pkgconfig/absl_random_mocking_bit_gen.pc", "lib/pkgconfig/absl_random_random.pc",
-  "lib/pkgconfig/absl_random_seed_gen_exception.pc", "lib/pkgconfig/absl_random_seed_sequences.pc",
-  "lib/pkgconfig/absl_raw_hash_map.pc", "lib/pkgconfig/absl_raw_hash_set.pc",
-  "lib/pkgconfig/absl_raw_hash_set_resize_impl.pc", "lib/pkgconfig/absl_raw_logging_internal.pc",
-  "lib/pkgconfig/absl_sample_recorder.pc", "lib/pkgconfig/absl_scoped_mock_log.pc",
-  "lib/pkgconfig/absl_scoped_set_env.pc", "lib/pkgconfig/absl_span.pc", "lib/pkgconfig/absl_spinlock_wait.pc",
-  "lib/pkgconfig/absl_spy_hash_state.pc", "lib/pkgconfig/absl_stacktrace.pc", "lib/pkgconfig/absl_status.pc",
-  "lib/pkgconfig/absl_status_matchers.pc", "lib/pkgconfig/absl_statusor.pc", "lib/pkgconfig/absl_str_format.pc",
-  "lib/pkgconfig/absl_str_format_internal.pc", "lib/pkgconfig/absl_strerror.pc", "lib/pkgconfig/absl_string_view.pc",
-  "lib/pkgconfig/absl_strings.pc", "lib/pkgconfig/absl_strings_internal.pc", "lib/pkgconfig/absl_symbolize.pc",
-  "lib/pkgconfig/absl_synchronization.pc", "lib/pkgconfig/absl_throw_delegate.pc", "lib/pkgconfig/absl_time.pc",
-  "lib/pkgconfig/absl_time_zone.pc", "lib/pkgconfig/absl_tracing_internal.pc", "lib/pkgconfig/absl_type_traits.pc",
-  "lib/pkgconfig/absl_utf8_for_code_point.pc", "lib/pkgconfig/absl_utility.pc", "lib/pkgconfig/absl_variant.pc",
-  "lib/pkgconfig/absl_vlog_config_internal.pc", "lib/pkgconfig/absl_vlog_is_on.pc",
-  "lib/pkgconfig/absl_weakly_mixed_integer.pc", "lib/pkgconfig/bzip2.pc", "lib/pkgconfig/gmock.pc",
-  "lib/pkgconfig/gmock_main.pc", "lib/pkgconfig/gtest.pc", "lib/pkgconfig/gtest_main.pc", "lib/pkgconfig/highs.pc",
-  "lib/pkgconfig/protobuf-lite.pc", "lib/pkgconfig/protobuf.pc", "lib/pkgconfig/re2.pc", "lib/pkgconfig/upb.pc",
-  "lib/pkgconfig/utf8_range.pc"
+  "lib/libutf8_validity.dylib", "lib/libz.1.3.1.dylib", "lib/libz.1.dylib", "lib/libz.dylib"
 }
 
 return M
