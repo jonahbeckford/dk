@@ -128,10 +128,55 @@ jobs:
                   t/d
                   t/k
                 
+    distribute-NotGoogleDev_OR:
+        needs: 
+          - distribute-CommonsBase_Std
+          - distribute-CommonsBase_Build
+        runs-on: ubuntu-24.04
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.')) || github.ref_name == 'main'
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('NotGoogleDev_OR@{0}', github.ref_name) || format('NotGoogleDev_OR@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  scripts: |
+                    NotGoogleDev_OR.Tools@9.15.0
+                  use-cache: true
+                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
+                  #   Use HEAD when not tagged
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+                  #   Temporary: always use HEAD until MlFront testing is done
+                  # experimental-mlfront-ref: HEAD
+                  options: -nosysinc -I etc/dk/v # special flags only for CommonsBase_*: rebuild "system" modules
+
+            - name: Archive NotGoogleDev_OR
+              # (always upload since 'release' is in a different job) if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-NotGoogleDev_OR
+                # t/d for dk0 data and t/k for dk0 keys, so previous dk0 values don't need to be rebuilt
+                path: |
+                  dk-dist/
+                  t/d
+                  t/k
+
     release:
         needs:
           - distribute-CommonsBase_Std
           - distribute-CommonsBase_Build
+          - distribute-NotGoogleDev_OR
         runs-on: ubuntu-24.04
         if: github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.')
         permissions:
@@ -140,6 +185,9 @@ jobs:
           attestations: write # for actions/attest-build-provenance
           artifact-metadata: write # for actions/attest-build-provenance
         steps:
+            - name: Checkout project
+              uses: actions/checkout@v5 # for dksrc/dk0
+
             - name: Download CommonsBase_Std distribution artifact
               uses: actions/download-artifact@v4
               with:
@@ -148,11 +196,15 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                 name: dist-CommonsBase_Build
+            - name: Download NotGoogleDev_OR distribution artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: dist-NotGoogleDev_OR
 
             - name: Combine distributions across jobs
               # overwrites the dk-dist/values.json downloaded from the previous jobs
               run: |
-                find .
+                find dk-dist
                 echo "Combining: dksrc/dk0 --trial --verbose combine --origin-name 'CommonsBase' --mirror '${{github.server_url}}/${{github.repository}}/releases/download/${{github.ref_name}}'"
                 dksrc/dk0 --trial --verbose combine --origin-name 'CommonsBase' --mirror '${{github.server_url}}/${{github.repository}}/releases/download/${{github.ref_name}}'
 
