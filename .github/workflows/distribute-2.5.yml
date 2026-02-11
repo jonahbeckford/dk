@@ -71,6 +71,7 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('CommonsBase_Std@{0}', github.ref_name) || format('CommonsBase_Std@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/v
                   objects: |
                     Release.Windows_x86_64:CommonsBase_Std.S7z.S7zr@25.1.0
                     Release.Windows_x86_64:CommonsBase_Std.S7z.Windows7zExe@25.1.0
@@ -103,7 +104,6 @@ jobs:
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
                   #   Temporary: always use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
-                  options: -nosysinc -I etc/dk/v # -nosysinc since CommonsBase_Std has no dependencies
 
             - name: Archive CommonsBase_Std
               if: github.ref_type != 'tag'
@@ -146,15 +146,17 @@ jobs:
 
             - name: Checkout project
               uses: actions/checkout@v5
+
             - name: Import Dependencies
               shell: bash
               env:
                 GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std
               run: |
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
-                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' \
-                  CommonsBase_Std
-                ls etc/dk/i
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
+                find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -162,6 +164,7 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('CommonsBase_Build@{0}', github.ref_name) || format('CommonsBase_Build@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import Dependencies" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
                   # No `Release.Windows_x86:CommonsBase_Build.Ninja0@1.12.1` today
                   objects: |
                     Release.Windows_arm64:CommonsBase_Build.Ninja0@1.12.1
@@ -181,7 +184,6 @@ jobs:
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
                   #   Temporary: always use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
-                  options: -I etc/dk/v
 
             - name: Archive CommonsBase_Build
               if: github.ref_type != 'tag'
@@ -224,15 +226,17 @@ jobs:
 
             - name: Checkout project
               uses: actions/checkout@v5
+
             - name: Import Dependencies
               shell: bash
               env:
                 GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std CommonsBase_Build
               run: |
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
-                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' \
-                  CommonsBase_Std CommonsBase_Build
-                ls etc/dk/i
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
+                find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -240,6 +244,7 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('NotGoogleDev_OR@{0}', github.ref_name) || format('NotGoogleDev_OR@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import Dependencies" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
                   scripts: |
                     NotGoogleDev_OR.Tools@9.15.0
                   use-cache: true
@@ -248,7 +253,6 @@ jobs:
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
                   #   Temporary: always use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
-                  options: -I etc/dk/v
 
             - name: Archive NotGoogleDev_OR
               if: github.ref_type != 'tag'
@@ -291,15 +295,17 @@ jobs:
 
             - name: Checkout project
               uses: actions/checkout@v5
+
             - name: Import Dependencies
               shell: bash
               env:
                 GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std CommonsBase_Build NotGoogleDev_OR
               run: |
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
-                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' \
-                  CommonsBase_Std CommonsBase_Build NotGoogleDev_OR
-                ls etc/dk/i
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
+                find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -307,6 +313,7 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('NotInriaParkas_Caml@{0}', github.ref_name) || format('NotInriaParkas_Caml@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import Dependencies" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
                   objects: |
                     Release.Darwin_arm64:NotInriaParkas_Caml.ORTools@9.15.0
                     Release.Darwin_x86_64:NotInriaParkas_Caml.ORTools@9.15.0
@@ -316,7 +323,6 @@ jobs:
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
                   #   Temporary: always use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
-                  options: -I etc/dk/v
 
             - name: Archive NotInriaParkas_Caml
               if: github.ref_type != 'tag'
