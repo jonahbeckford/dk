@@ -13,8 +13,10 @@ jobs:
     # JOB DESIGN:
     #
     # Each job in this workflow is a "package job" that build and distributes a single package.
-    # Tags are `VERSION+PACKAGE` (ex. 2.5.202602060017+CommonsBase_Std) where the PACKAGE is
-    # semver build metadata. A design alternative would be to use an input variable for PACKAGE,
+    # Tags are `VERSION+PACKAGE` (ex. 2.5.202602060017+CommonsBase-Std) where the PACKAGE is
+    # the package name with underscores replaced by dashes and periods replaced by double dashes
+    # to be valid semver build metadata required by `dk0 import-github-l2 --tag <tag>`.
+    # A design alternative to PACKAGE-encoded tags would be to use an input variable for PACKAGE,
     # but that requires the dk developer to go to the GitHub Actions UI and we lose the PACKAGE
     # in `git log`.
     #
@@ -33,7 +35,7 @@ jobs:
     # Package independence is also the basic dk design principle of "loose federation
     # of packages" in SPECIFICATION.md; any package job in this workflow file can be moved to a
     # different GitHub repository which is relatively easy to do because we have self-contained
-    # GitHub jobs. In particular, packages that are not CommonsBase_* shoulld be moved once the
+    # GitHub jobs. In particular, packages that are not CommonsBase_* should be moved once the
     # experiment is over.
     #
     # Steps:
@@ -41,8 +43,8 @@ jobs:
     # For tags only, `Attest` + `Release` steps are to save attestation and artifacts publicly.
 
     CommonsBase_Std:
-        # tag(2.5.x+CommonsBase_Std) or branch(main)
-        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase_Std')) || github.ref_name == 'main'
+        # tag(2.5.x+CommonsBase-Std) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-Std')) || github.ref_name == 'main'
 
         # runs-on(Windows): CommonsBase_Std requires Windows to build S7z
         runs-on: windows-2022
@@ -122,8 +124,8 @@ jobs:
               with: { files: dk-dist/* }
 
     CommonsBase_Build:
-        # tag(2.5.x+CommonsBase_Build) or branch(main)
-        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase_Build')) || github.ref_name == 'main'
+        # tag(2.5.x+CommonsBase-Build) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-Build')) || github.ref_name == 'main'
 
         # runs-on(anything). Linux is cheapest and quickest to boot in Github Actions
         runs-on: ubuntu-24.04
@@ -199,8 +201,8 @@ jobs:
               with: { files: dk-dist/* }
 
     NotGoogleDev_OR:
-        # tag(2.5.x+NotGoogleDev_OR) or branch(main)
-        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotGoogleDev_OR')) || github.ref_name == 'main'
+        # tag(2.5.x+NotGoogleDev-OR) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotGoogleDev-OR')) || github.ref_name == 'main'
 
         # runs-on(anything). Linux is cheapest and quickest to boot in Github Actions
         runs-on: ubuntu-24.04
@@ -266,8 +268,8 @@ jobs:
               with: { files: dk-dist/* }
 
     NotInriaParkas_Caml:
-        # tag(2.5.x+NotInriaParkas_Caml) or branch(main)
-        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotInriaParkas_Caml')) || github.ref_name == 'main'
+        # tag(2.5.x+NotInriaParkas-Caml) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotInriaParkas-Caml')) || github.ref_name == 'main'
 
         # runs-on(macOS). This NotInriaParkas_Caml package has (so far) been developed only for macOS
         runs-on: macos-latest
