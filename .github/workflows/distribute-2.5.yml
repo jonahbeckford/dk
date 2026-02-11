@@ -26,7 +26,7 @@ jobs:
     # especially since some packages have time-consuming builds. Instead of `needs:` we expect:
     # 1. The developer to do a `dk0 import-github-l2` once a package is built.
     # 2. Each package job in this workflow file to manipulate the etc/dk/i system directory in a
-    # `Shape Dependencies` step so that only packages that are required (ie. `needs:`) are
+    # `Import Dependencies` step so that only packages that are required (ie. `needs:`) are
     # present in the etc/dk/i directory. For example, the CommonsBase_Build package job should only have
     # the CommonsBase_Std package in its etc/dk/i directory, and especially not have
     # etc/dk/i/CommonsBase_Build.values.json which would conflict with the
@@ -146,13 +146,14 @@ jobs:
 
             - name: Checkout project
               uses: actions/checkout@v5
-            - name: Shape Dependencies
+            - name: Import Dependencies
               shell: bash
-              # [CommonsBase_Std] are dependencies
+              env:
+                GH_TOKEN: ${{ github.token }}
               run: |
-                find etc/dk/i -mindepth 1 -maxdepth 1 \
-                  -not -name 'CommonsBase_Std.*' \
-                  -exec rm -rf {} +
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                .github/scripts/import-latest-gh-releases.sh -r '${{ github.repository }}' \
+                  CommonsBase_Std
                 ls etc/dk/i
 
             - name: Distribute Modules
@@ -223,14 +224,14 @@ jobs:
 
             - name: Checkout project
               uses: actions/checkout@v5
-            - name: Shape Dependencies
+            - name: Import Dependencies
               shell: bash
-              # [CommonsBase_Std, CommonsBase_Build] are dependencies
+              env:
+                GH_TOKEN: ${{ github.token }}
               run: |
-                find etc/dk/i -mindepth 1 -maxdepth 1 \
-                  -not -name 'CommonsBase_Std.*' \
-                  -not -name 'CommonsBase_Build.*' \
-                  -exec rm -rf {} +
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                .github/scripts/import-latest-gh-releases.sh -r '${{ github.repository }}' \
+                  CommonsBase_Std CommonsBase_Build
                 ls etc/dk/i
 
             - name: Distribute Modules
@@ -290,15 +291,14 @@ jobs:
 
             - name: Checkout project
               uses: actions/checkout@v5
-            - name: Shape Dependencies
+            - name: Import Dependencies
               shell: bash
-              # [CommonsBase_Std, CommonsBase_Build, NotGoogleDev_OR] are dependencies
+              env:
+                GH_TOKEN: ${{ github.token }}
               run: |
-                find etc/dk/i -mindepth 1 -maxdepth 1 \
-                  -not -name 'CommonsBase_Std.*' \
-                  -not -name 'CommonsBase_Build.*' \
-                  -not -name 'NotGoogleDev_OR.*' \
-                  -exec rm -rf {} +
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                .github/scripts/import-latest-gh-releases.sh -r '${{ github.repository }}' \
+                  CommonsBase_Std CommonsBase_Build NotGoogleDev_OR
                 ls etc/dk/i
 
             - name: Distribute Modules
