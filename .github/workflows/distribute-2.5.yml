@@ -123,8 +123,11 @@ jobs:
               with:
                 name: dist-CommonsBase_Build
                 # t/d for dk0 data and t/k for dk0 keys, so previous dk0 values don't need to be rebuilt.
-                # BUT: the artifacts will be over 4GB which will fail this step, so don't use t/d or t/k
-                path: dk-dist/
+                # BUT: the artifacts will be over 4GB which will fail this step, so don't need t/d or t/k.
+                # YET: upload-artifact uses the common ancestor of the paths, so keep tiny t/k.
+                path: |
+                  dk-dist/
+                  t/k
 
     NotGoogleDev_OR:
         needs: 
