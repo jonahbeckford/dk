@@ -173,11 +173,57 @@ jobs:
                   t/d
                   t/k
 
+    NotInriaParkas_Caml:
+        needs: 
+          - CommonsBase_Std
+          - CommonsBase_Build
+          - NotGoogleDev_OR
+        runs-on: ubuntu-24.04
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.')) || github.ref_name == 'main'
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('NotInriaParkas_Caml@{0}', github.ref_name) || format('NotInriaParkas_Caml@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  objects: |
+                    NotInriaParkas_Caml.ORTools@9.15.0
+                  use-cache: true
+                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
+                  #   Use HEAD when not tagged
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+                  #   Temporary: always use HEAD until MlFront testing is done
+                  # experimental-mlfront-ref: HEAD
+                  options: -nosysinc -I etc/dk/v # special flags only for CommonsBase_*: rebuild "system" modules
+
+            - name: Archive NotInriaParkas_Caml
+              # (always upload since 'release' is in a different job) if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-NotInriaParkas_Caml
+                # t/d for dk0 data and t/k for dk0 keys, so previous dk0 values don't need to be rebuilt
+                path: |
+                  dk-dist/
+                  t/d
+                  t/k
+
     release:
         needs:
           - CommonsBase_Std
           - CommonsBase_Build
           - NotGoogleDev_OR
+          - NotInriaParkas_Caml
         runs-on: ubuntu-24.04
         if: github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.')
         permissions:
@@ -201,6 +247,10 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                 name: dist-NotGoogleDev_OR
+            - name: Download NotInriaParkas_Caml distribution artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: dist-NotInriaParkas_Caml
 
             - name: Combine distributions across jobs
               # overwrites the dk-dist/values.json downloaded from the previous jobs
