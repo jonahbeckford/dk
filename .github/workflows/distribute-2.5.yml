@@ -314,8 +314,12 @@ jobs:
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
                   options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import Dependencies" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # TODO: we have a gremlin ... perhaps cached AST ... with SLOT.Release.request translated into Release.Darwin_arm64 even
+                  #       though the request is Release.Darwin_x86_64.
+                  #       attempt 1: fix to SLOT.request (pending).
+                  #       attempt 2: clear ASTs from cache (and then `t/c` entirely).
+                  #  Release.Darwin_x86_64:NotInriaParkas_Caml.ORTools@9.15.0
                   objects: |
-                    Release.Darwin_x86_64:NotInriaParkas_Caml.ORTools@9.15.0
                     Release.Darwin_arm64:NotInriaParkas_Caml.ORTools@9.15.0
                   use-cache: true
                   # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
@@ -323,6 +327,14 @@ jobs:
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
                   #   Temporary: always use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
+
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-NotInriaParkas_Caml
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                path: t/p/*/*/l/*/*
 
             - name: Archive NotInriaParkas_Caml
               if: github.ref_type != 'tag'
