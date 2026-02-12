@@ -37,7 +37,7 @@ if [ -z "$repository" ]; then
   usage
 fi
 
-if [ "$capturemarkdown" = true ]; then
+if [ "$capturemarkdown" = true ] && [ -n "$capturefile" ]; then
     printf "### Imported packages\n\n" >> "$capturefile"
     printf '```\n' >> "$capturefile"
 fi
@@ -60,7 +60,7 @@ for package in "$@"; do
   printf -- "------------------------------------------------\n\n" >&2
 done
 
-if [ "$capturemarkdown" = true ]; then
+if [ "$capturemarkdown" = true ] && [ -n "$capturefile" ]; then
     printf '```\n' >> "$capturefile"
 fi
 
