@@ -68,7 +68,7 @@ jobs:
             - name: Import and Summarize Packages # No dependencies so no imports
               shell: bash
               run: |
-                [ "${{ github.ref_type }}" = "tag" ] && .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}' >> "$GITHUB_STEP_SUMMARY"
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -76,7 +76,8 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('CommonsBase_Std@{0}', github.ref_name) || format('CommonsBase_Std@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
-                  options: -nosysinc -I etc/dk/v
+                  # dk0=<SOURCE_DIRECTORY>
+                  options: -nosysinc -I etc/dk/v --cell "dk0=${{ github.workspace }}"
                   objects: |
                     Release.Windows_x86_64:CommonsBase_Std.S7z.S7zr@25.1.0
                     Release.Windows_x86_64:CommonsBase_Std.S7z.Windows7zExe@25.1.0
@@ -104,10 +105,9 @@ jobs:
                   scripts: |
                     CommonsBase_Std.Extract@0.1.0
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
+                  #   Use MlFront HEAD when CI build is not from a tag
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
+                  #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
             - name: Archive CommonsBase_Std
@@ -159,10 +159,10 @@ jobs:
                 DEPENDENCIES: CommonsBase_Std
               run: |
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
-                [ "${{ github.ref_type }}" = "tag" ] && .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}' >> "$GITHUB_STEP_SUMMARY"
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
-                find etc/dk/i -type f
+                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
+                echo imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -170,7 +170,7 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('CommonsBase_Build@{0}', github.ref_name) || format('CommonsBase_Build@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
-                  options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
                   # No `Release.Windows_x86:CommonsBase_Build.Ninja0@1.12.1` today
                   objects: |
                     Release.Windows_arm64:CommonsBase_Build.Ninja0@1.12.1
@@ -185,10 +185,9 @@ jobs:
                   scripts: |
                     CommonsBase_Build.CMake0@3.25.3
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
+                  #   Use MlFront HEAD when CI build is not from a tag
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
+                  #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
             - name: Archive CommonsBase_Build
@@ -240,10 +239,10 @@ jobs:
                 DEPENDENCIES: CommonsBase_Std CommonsBase_Build
               run: |
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
-                [ "${{ github.ref_type }}" = "tag" ] && .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}' >> "$GITHUB_STEP_SUMMARY"
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
-                find etc/dk/i -type f
+                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
+                echo imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -251,14 +250,13 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('NotGoogleDev_OR@{0}', github.ref_name) || format('NotGoogleDev_OR@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
-                  options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
                   scripts: |
                     NotGoogleDev_OR.Tools@9.15.0
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
+                  #   Use MlFront HEAD when CI build is not from a tag
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
+                  #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
             - name: Archive NotGoogleDev_OR
@@ -310,10 +308,10 @@ jobs:
                 DEPENDENCIES: CommonsBase_Std CommonsBase_Build NotGoogleDev_OR
               run: |
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
-                [ "${{ github.ref_type }}" = "tag" ] && .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}' >> "$GITHUB_STEP_SUMMARY"
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
-                find etc/dk/i -type f
+                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
+                echo imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -321,7 +319,7 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('NotInriaParkas_Caml@{0}', github.ref_name) || format('NotInriaParkas_Caml@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
-                  options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  options: -d parsetrace -d import -nosysinc -I etc/dk/i -I etc/dk/v --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
                   # TODO: we have a gremlin ... perhaps cached AST ... with SLOT.Release.request translated into Release.Darwin_arm64 even
                   #       though the request is Release.Darwin_x86_64.
                   #       attempt 1: fix to SLOT.request (pending).
@@ -331,11 +329,10 @@ jobs:
                   objects: |
                     Release.Darwin_arm64:NotInriaParkas_Caml.ORTools@9.15.0
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
-                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
-                  # experimental-mlfront-ref: HEAD
+                  #   Use MlFront HEAD when CI build is not from a tag
+                  # experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+                  #   Temporary: use HEAD until MlFront testing is done
+                  experimental-mlfront-ref: HEAD
 
             - name: Archive Logs
               if: failure()
