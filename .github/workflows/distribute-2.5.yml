@@ -104,10 +104,9 @@ jobs:
                   scripts: |
                     CommonsBase_Std.Extract@0.1.0
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
+                  #   Use MlFront HEAD when CI build is not from a tag
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
+                  #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
             - name: Archive CommonsBase_Std
@@ -185,10 +184,9 @@ jobs:
                   scripts: |
                     CommonsBase_Build.CMake0@3.25.3
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
+                  #   Use MlFront HEAD when CI build is not from a tag
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
+                  #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
             - name: Archive CommonsBase_Build
@@ -255,10 +253,9 @@ jobs:
                   scripts: |
                     NotGoogleDev_OR.Tools@9.15.0
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
+                  #   Use MlFront HEAD when CI build is not from a tag
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
+                  #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
             - name: Archive NotGoogleDev_OR
@@ -331,11 +328,10 @@ jobs:
                   objects: |
                     Release.Darwin_arm64:NotInriaParkas_Caml.ORTools@9.15.0
                   use-cache: true
-                  # TODO: put MlFront commit ref and/or version number into distribution; it is part of provenance.
-                  #   Use HEAD when not tagged
-                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
-                  #   Temporary: always use HEAD until MlFront testing is done
-                  # experimental-mlfront-ref: HEAD
+                  #   Use MlFront HEAD when CI build is not from a tag
+                  # experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+                  #   Temporary: use HEAD until MlFront testing is done
+                  experimental-mlfront-ref: HEAD
 
             - name: Archive Logs
               if: failure()
