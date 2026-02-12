@@ -5,9 +5,21 @@
     "definitions": {
         "producer": {
             "type": "object",
-            "description": "The human or machine signer of a build that produces values. The signer provides a form of \"attestation\": a cryptographically verifiable statement (ex. \"the build produced bundle A and object O at time T\") that the producer signs.",
+            "description": "The human or machine that produces and signs values. The producer provides a form of \"attestation\": a cryptographically verifiable statement (ex. \"the build produced bundle A and object O at time T\").",
             "additionalProperties": false,
             "properties": {
+                "application": {
+                    "type": "object",
+                    "description": "The software application that produced and signed the values.",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "version": {
+                            "type": "string"
+                        }
+                    }
+                },
                 "openbsd_signify": {
                     "description": "The signify public key used to verify the distribution's signature.",
                     "type": "object",
