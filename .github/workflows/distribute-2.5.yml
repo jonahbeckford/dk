@@ -324,6 +324,14 @@ jobs:
                   #   Temporary: always use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-NotInriaParkas_Caml
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                path: t/p/*/*/l/*/*
+
             - name: Archive NotInriaParkas_Caml
               if: github.ref_type != 'tag'
               uses: actions/upload-artifact@v4

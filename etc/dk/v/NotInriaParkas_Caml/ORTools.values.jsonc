@@ -21,6 +21,9 @@
             "id": "NotInriaParkas_Caml.ORTools@9.15.0",
             "precommands": {
                 "private": [
+                    // dev note: unlike function.args, we do one precommand per ABI rather than use a single `Release.request` slot.
+                    // we favor explicitness for flexibility if any of the NotGoogleDev_OR.Tools.F_Lib arguments need to be specialized
+                    // for a specific ABI. also we favor explicitness for clarity.
                     "post-object -d ${SLOT.Release.Darwin_arm64}/static NotGoogleDev_OR.Tools.F_Lib@9.15.0 static=1 targetabi=Release.Darwin_arm64",
                     "post-object -d ${SLOT.Release.Darwin_arm64}/shared NotGoogleDev_OR.Tools.F_Lib@9.15.0 static=0 targetabi=Release.Darwin_arm64",
                     "post-object -d ${SLOT.Release.Darwin_x86_64}/static NotGoogleDev_OR.Tools.F_Lib@9.15.0 static=1 targetabi=Release.Darwin_x86_64",
@@ -33,15 +36,15 @@
                         // rename static/include to include/
                         "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.execution_abi -m ./coreutils.exe -e '*' -f coreutils.exe)",
                         "mv",
-                        "${SLOT.Release.execution_abi}/static/include",
-                        "${SLOT.Release.execution_abi}"
+                        "${SLOT.Release.request}/static/include",
+                        "${SLOT.Release.request}"
                     ],
                     [
                         // remove redundant shared/include
                         "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.execution_abi -m ./coreutils.exe -e '*' -f coreutils.exe)",
                         "rm",
                         "-rf",
-                        "${SLOT.Release.execution_abi}/shared/include"
+                        "${SLOT.Release.request}/shared/include"
                     ],
                     [
                         // rename shared/lib/*.dylib to shared/lib/*.so
@@ -51,7 +54,7 @@
                         "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.execution_abi -m ./coreutils.exe -e '*' -f coreutils.exe)",
                         "mv", "{}", "{.}.so", ";", "--",
                         "*.dylib",
-                        "${SLOT.Release.execution_abi}"
+                        "${SLOT.Release.request}"
                     ]
                 ]
             },
