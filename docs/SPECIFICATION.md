@@ -213,7 +213,7 @@
 
 ## Introduction
 
-This specification documents interoperable systems that use composition to build multi-language, repeatable software in a loosely federation of packages and implementations.
+This specification documents interoperable systems that use composition to build multi-language, repeatable software in a loose federation of packages and implementations.
 
 These systems are parameterizable, incremental and remote cacheable build systems that have the following requirements:
 
