@@ -161,8 +161,8 @@ jobs:
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
-                find etc/dk/i -type f
+                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
+                echo imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -242,8 +242,8 @@ jobs:
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
-                find etc/dk/i -type f
+                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
+                echo imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -312,8 +312,8 @@ jobs:
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
-                find etc/dk/i -type f
+                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.* etc/dk/v/$d/; done
+                echo imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -321,7 +321,7 @@ jobs:
                   id: ${{ github.ref_type == 'tag' && format('NotInriaParkas_Caml@{0}', github.ref_name) || format('NotInriaParkas_Caml@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
-                  options: -nosysinc -I etc/dk/i -I etc/dk/v # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  options: -d parsetrace -d import -nosysinc -I etc/dk/i -I etc/dk/v # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
                   # TODO: we have a gremlin ... perhaps cached AST ... with SLOT.Release.request translated into Release.Darwin_arm64 even
                   #       though the request is Release.Darwin_x86_64.
                   #       attempt 1: fix to SLOT.request (pending).
