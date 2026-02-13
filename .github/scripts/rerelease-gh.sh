@@ -37,7 +37,7 @@ check_for_changes() {
 # ask the user to confirm that GitHub job has finished. allow the user to abort.
 confirm_ci_finish() {
   confirm_ci_finish_package="$1"
-  printf "Wait until the GitHub %s job completes, then press y to continue or anything else to abort. (y/n) " "$confirm_ci_finish_package"
+  printf "\nWait until the GitHub %s job completes, then press y to continue or anything else to abort. (y/n) " "$confirm_ci_finish_package"
   read -r answer
   case "$answer" in
     y|Y) ;;
@@ -49,7 +49,7 @@ dopush() {
   dopush_package="$1"
   ts=2.5.$(date -u +%Y%m%d%H%M)
   tag="${ts}+${dopush_package}"
-  printf "Will tag and push release %s to git remote '%s'. Proceed? (y/n) " "$tag" "$git_remote"
+  printf "\nWill tag and push release %s to git remote '%s'. Proceed? (y/n) " "$tag" "$git_remote"
   read -r answer
   case "$answer" in
     y|Y) ;;
@@ -80,6 +80,8 @@ do_NotInriaParkas_Caml() {
   dopush NotInriaParkas-Caml
 }
 
+# TODO: When dk0 gets arrows, we should statically get the package dependency
+# graph and do the topological sort automatically.
 case "$start_package" in
   CommonsBase_Std) 
     do_CommonsBase_Std
@@ -97,3 +99,14 @@ case "$start_package" in
     do_NotInriaParkas_Caml ;;
   *) echo "Error: unknown package $start_package. Supported packages: CommonsBase_Std, CommonsBase_Build, NotGoogleDev_OR, NotInriaParkas_Caml" >&2; exit 1 ;;
 esac
+
+echo '
+
+Now that you have finished rebuilding the packages, you must:
+
+1. Import the packages locally. The GitHub job summary will have
+   copy-and-paste import commands; the imports validate
+   GitHub attestations.
+2. Run the cram tests with ./maintenance/test-cram.sh
+3. Commit and push the imported packages in etc/dk/i.
+'
