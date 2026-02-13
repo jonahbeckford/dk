@@ -29,9 +29,6 @@ while getopts "t:r:c:m" opt; do
   esac
 done
 shift $((OPTIND - 1))
-if [ $# -lt 1 ]; then
-  usage
-fi
 if [ -z "$repository" ]; then
   echo "Error: repository is required" >&2
   usage
@@ -41,18 +38,16 @@ if [ -z "$tag" ]; then
   usage
 fi
 
-if [ "$capturemarkdown" = true ]; then
+if [ "$capturemarkdown" = true ] && [ -n "$capturefile" ]; then
   printf "### Importing this package\n\n" >> "$capturefile"
   printf '```\n' >> "$capturefile"
 fi
 
-printf -- "------------------------------------------------\n" >&2
-printf "./dk0 --trial import-github-l2 --repo %s --tag %s --outdir %s/etc/dk/i/\n\n" "$repository" "$tag" "$PROJECTDIR"
+printf "./dk0 --trial import-github-l2 --repo %s --tag %s --outdir %s/etc/dk/i/\n" "$repository" "$tag" "$PROJECTDIR"
 if [ -n "$capturefile" ]; then
   printf "./dk0 --trial import-github-l2 --repo %s --tag %s --outdir etc/dk/i/\n" "$repository" "$tag" >> "$capturefile"
 fi
-printf -- "------------------------------------------------\n\n" >&2
 
-if [ "$capturemarkdown" = true ]; then
+if [ "$capturemarkdown" = true ] && [ -n "$capturefile" ]; then
     printf '```\n' >> "$capturefile"
 fi
