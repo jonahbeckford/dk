@@ -1000,17 +1000,20 @@ One of the following: `windows`, `macos`, `linux` (includes Android), `netbsd`, 
 ### Precommands
 
 The `precommands` are a **set** of commands run *before* an form's `function`. It is not a sequence of commands since you
-cannot make assumptions about the order of the precommands.
+cannot make assumptions about the order of the precommands until the `sequential` flag is enabled.
 
 The following optimizations are allowed:
 
 - Precommands may be run in parallel unless the `"precommands": { "sequential": true, ... }` flag is enabled.
-- Precommands may be skipped if the requested slot does not match the precommand output slot.
-  For example, let's say you issue the command `get-object THE_ID -s Release.Agnostic`.
-  Let's also say `THE_ID` object has two precommands:
-  1. `get-asset ... -f ${SLOT.Release.Agnostic}`
-  2. `get-object ... -d ${SLOT.Something.Else}`
-  Then the second precommand may be skipped because the requested slot `Release.Agnostic` does not match `Something.Else`.
+
+Precommands *will* be skipped if the requested slot does not match the precommand output slot.
+For example, let's say you issue the command `get-object THE_ID -s Release.Agnostic`.
+Let's also say `THE_ID` object has two precommands:
+
+1. `get-asset ... -f ${SLOT.Release.Agnostic}`
+2. `get-object ... -d ${SLOT.Something.Else}`
+
+Then the second precommand may be skipped because the requested slot `Release.Agnostic` does not match `Something.Else`.
 
 ### Environment Modifications
 
@@ -1056,7 +1059,17 @@ The order of processing is as follows:
 1. The form's subshells in the function `args` and `envmods` (if any) are executed, in parallel if supported by the build system.
 2. The form's precommands are executed, in parallel if supported by the build system.
 3. If there is a breakpoint from the `enter-object` command, a system shell (PowerShell, bash, etc.) is invoked.
-4. The form's function command line is executed. The command line is the concatenation of the function arguments in `"function": { "args": ... }`.
+4. Each form function command line (`args`) is executed *unless* the requested slot does not match the command output slot.
+   For example, let's say you issue the command `get-object THE_ID -s Release.Agnostic`.
+   Let's also say `args` has two args:
+
+   1. "get-asset", ..., "-f", "${SLOT.Release.Agnostic}"
+   2. "get-object", ..., "-d", "${SLOT.Something.Else}"
+
+   Then the second command may be skipped because the requested slot `Release.Agnostic` does not match `Something.Else`.
+
+   Each command line is the concatenation of the function arguments in `"function": { "args": ... }`.
+
 5. The form's output files are verified to exist.
 6. The [`${SLOT.slotname}`](#slotslotname) that are part of the form's arguments and precommands are made available to other forms.
 
