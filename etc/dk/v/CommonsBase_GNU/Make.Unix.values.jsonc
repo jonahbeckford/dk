@@ -14,7 +14,7 @@
                 "private": [
                     // convert the .tar.gz to .zip
                     "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ignored.zip modver=CommonsBase_GNU.Make.Zip@4.4.1 tarfile=$(get-asset CommonsBase_GNU.Make.Bundle@4.4.1 -p make-4.4.1.tar.gz -f make.tar.gz)",
-                    // extract zip to "s/" folder, stripping toplevel make-4.4.1/ folder
+                    // extract zip to current folder, stripping toplevel make-4.4.1/ folder
                     "install-object CommonsBase_GNU.Make.Zip@4.4.1 -s Release.Agnostic -m ./output.zip -n 1 -d ."
                 ]
             },
