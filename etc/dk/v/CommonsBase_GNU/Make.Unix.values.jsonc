@@ -1,5 +1,5 @@
 // Test: ./dk0 -d intermediate --trial --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Make.Unix@4.4.1 -s Release.Darwin_arm64 -d target/make
-// Test: docker run -it --platform linux/amd64 -v $PWD:/work -w /work gcc:15.2.0 ./dk0 -v -d intermediate -x gnu-make:subpath: --trial --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Make@4.4.1 -s Release.Linux_x86_64 -d target/make
+// Test: docker run -it --platform linux/amd64 -v $PWD:/work -w /work gcc:15.2.0 ./dk0 -v -d intermediate -x gnu-make:subpath: --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Make@4.4.1 -s Release.Linux_x86_64 -d target/make
 {
     "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
     "schema_version": {
