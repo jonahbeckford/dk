@@ -10,6 +10,12 @@
           {
             "name": "etc-table-slot",
             "mirrors": ["cell://dk0/etc/table/slot"]
+          },
+          {
+            "name": "commons-base-win32-scripts",
+            "mirrors": [
+              "cell://dk0/etc/dk/v/CommonsBase_Win32/s"
+            ]
           }
         ]
       },
@@ -20,6 +26,14 @@
           "size": 1819,
           "checksum": {
             "sha256": "bea009968f6dd6afd133b085ade12a60f4b824606a80f2f17d5291a70cc78501"
+          }
+        },
+        {
+          "path": "wait-wineserver.sh",
+          "origin": "commons-base-win32-scripts",
+          "size": 1403,
+          "checksum": {
+            "sha256": "85f9d11db31385b8d02fb2595e388ae50600779a21abeb22256be609e090fc6b"
           }
         }
       ]
