@@ -34,6 +34,7 @@
       - [${CONFIG}](#config)
       - [${STATE}](#state)
       - [${RUNTIME}](#runtime)
+      - [${HOMEABS}, ${CACHEABS}, ${DATAABS}, ${CONFIGABS}, ${STATEABS}, ${RUNTIMEABS}](#homeabs-cacheabs-dataabs-configabs-stateabs-runtimeabs)
     - [Execution Constraints](#execution-constraints)
       - [OSFamily](#osfamily)
     - [Precommands](#precommands)
@@ -916,6 +917,10 @@ There is a special edge case for the build system in install mode: the build sys
 A temporary directory for the form function.
 
 There is a special edge case for the build system in install mode: the build system in install mode will set the runtime directory to be the OS-specific data directory (ex. `LocalAppData` on Windows, the XDG-compliant runtime directory in Unix).
+
+#### ${HOMEABS}, ${CACHEABS}, ${DATAABS}, ${CONFIGABS}, ${STATEABS}, ${RUNTIMEABS}
+
+The absolute path to [${HOME}](#home), [${CACHE}](#cache), [${DATA}](#data), [${CONFIG}](#config), [${STATE}](#state) or [${RUNTIME}](#runtime).
 
 ### Execution Constraints
 
