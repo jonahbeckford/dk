@@ -60,9 +60,9 @@
                         "/bin/sh", "./configure", "--disable-dependency-tracking", "--disable-nls",
                         "\"CFLAGS=-mthreads -Wall -std=gnu99 -gdwarf-2 -g3 -O2 -I./src/w32/include\"",
                         "--build=aarch64-apple-darwin",
-                        "--host=aarch64-w64-mingw32",
-                        "CC=aarch64-w64-mingw32-gcc",
-                        "--prefix=${SLOTABS.Release.Darwin_arm64.Windows_arm64}"
+                        "--host=x86_64-w64-mingw32",
+                        "CC=x86_64-w64-mingw32-gcc",
+                        "--prefix=${SLOTABS.Release.Darwin_arm64.Windows_x86_64}"
                     ],
                     [
                         "/bin/sh", "./configure", "--disable-dependency-tracking", "--disable-nls",
