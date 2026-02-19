@@ -1048,9 +1048,9 @@ However, the path seperator (`;` or `:` on Windows or Unix, respectively) is not
 
 The `VALUE` may contain [variables](#form-variables).
 
-For example, `PATH+=C:\Windows\system32` prepends `C:\Windows\system32;` to the PATH on Windows and prepends `C:\Windows\system32:` to the PATH on Unix.
+For example, `<PATH=C:\Windows\system32` prepends `C:\Windows\system32;` to the PATH on Windows and prepends `C:\Windows\system32:` to the PATH on Unix.
 In this example, the Unix prepending does not make sense, which is why the best practice is to use [variables](#form-variables) for the `VALUE`
-like `PATH+=${CACHE}${/}bin` so the modification is portable across operating systems.
+like `<PATH=${CACHE}${/}bin` so the modification is portable across operating systems.
 
 ### Form Order of Processing
 
