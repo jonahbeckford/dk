@@ -5,30 +5,7 @@
         "major": 1,
         "minor": 0
     },
-    "bundles": [
-        {
-            "id": "CommonsBase_GNU.Make.Lookup@0.1.0",
-            "listing": {
-                "origins": [
-                    {
-                        "name": "etc-table-autoconf-triplet",
-                        "mirrors": [
-                            "cell://dk0/etc/table/autoconf"
-                        ]
-                    }
-                ]
-            },
-            "assets": [
-                {
-                    "path": "gnu-triplet",
-                    "origin": "etc-table-autoconf-triplet",
-                    "size": 1485,
-                    "checksum": {
-                        "sha256": "f920d0ba2fd153cf74b90dc1fe50b58bcaf12d61a1f596b1719ecd6aa3077ffd"
-                    }
-                }
-            ]
-        },
+    "bundles": [        
         {
             "id": "CommonsBase_GNU.Make.Bundle@4.4.1",
             "listing": {
