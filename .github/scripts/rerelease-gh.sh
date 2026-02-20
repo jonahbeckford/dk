@@ -62,7 +62,7 @@ dopush() {
   git commit --allow-empty -m "Release $tag"  
   git tag "$tag"
 
-  git push "$git_remote"
+  git push "$git_remote" main:V2_5
   git push "$git_remote" "$tag"
   confirm_ci_finish "$dopush_package"
 }

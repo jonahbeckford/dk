@@ -102,6 +102,10 @@ jobs:
                     Release.Darwin_x86_64:CommonsBase_Std.Fd@10.3.0
                     Release.Linux_x86:CommonsBase_Std.Fd@10.3.0
                     Release.Linux_x86_64:CommonsBase_Std.Fd@10.3.0
+
+                    Release.Linux_arm64:CommonsBase_Std.Toybox@0.8.9
+                    Release.Linux_x86_64:CommonsBase_Std.Toybox@0.8.9
+                    Release.Linux_x86:CommonsBase_Std.Toybox@0.8.9
                   scripts: |
                     CommonsBase_Std.Extract@0.1.0
                   use-cache: true
