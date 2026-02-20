@@ -1,0 +1,34 @@
+// Test: ./dk0 --trial --autofix -x commonsbase-gnu:subpath: -I etc/dk/v --trust-local-package CommonsBase_GNU get-bundle CommonsBase_GNU.Lookup@1.0.0 -d target/gnulookup
+{
+  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
+  "schema_version": {
+    "major": 1,
+    "minor": 0
+  },
+  "bundles": [
+    {
+      "id": "CommonsBase_GNU.Lookup@1.0.0",
+      "listing": {
+        "origins": [
+          {
+            "name": "commonsbase-gnu",
+            "mirrors": [
+              "cell://dk0/etc/dk/v/CommonsBase_GNU"
+            ]
+          }
+        ]
+      },
+      "assets": [
+        {
+          "origin": "commonsbase-gnu",
+          // patches
+          "path": "p",
+          "checksum": {
+            "sha256": "96485345cedf8788091f27c6fd6fc8a1859bc49ea123a6419f572307cb1dd2d2"
+          },
+          "size": 837
+        }
+      ]
+    }
+  ]
+}

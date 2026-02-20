@@ -1,0 +1,33 @@
+// Test: ./dk0 --trial --autofix -x etc-table-llvm-mingw:subpath: -I etc/dk/v --trust-local-package CommonsBase_LLVM get-bundle CommonsBase_LLVM.Lookup@1.0.0 -d target/llvmlookup
+{
+  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
+  "schema_version": {
+    "major": 1,
+    "minor": 0
+  },
+  "bundles": [
+    {
+      "id": "CommonsBase_LLVM.Lookup@1.0.0",
+      "listing": {
+        "origins": [
+          {
+            "name": "etc-table-llvm-mingw",
+            "mirrors": [
+              "cell://dk0/etc/table/llvm-mingw"
+            ]
+          }
+        ]
+      },
+      "assets": [
+        {
+          "origin": "etc-table-llvm-mingw",
+          "path": "host-triplet",
+          "checksum": {
+            "sha256": "3670c87163328642b6a789cea5f5a15cafa71bfcbe4d1234ca6ee5a27377b33a"
+          },
+          "size": 2522
+        }
+      ]
+    }
+  ]
+}
