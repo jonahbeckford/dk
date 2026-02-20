@@ -1,0 +1,87 @@
+// Test: ./dk0 --trial --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Awk@5.3.1 -s Release.Darwin_arm64 -d target/gawk -e 'bin/*'
+{
+    "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
+    "schema_version": {
+        "major": 1,
+        "minor": 0
+    },
+    "forms": [
+        {
+            "id": "CommonsBase_GNU.Awk@5.3.1",
+            "precommands": {
+                "private": [
+                    "get-object CommonsBase_GNU.Awk.Unix@5.3.1 -s Release.Darwin_arm64 -d ${SLOT.Release.Darwin_arm64}",
+                    "get-object CommonsBase_GNU.Awk.Unix@5.3.1 -s Release.Darwin_x86_64 -d ${SLOT.Release.Darwin_x86_64}",
+                    "get-object CommonsBase_GNU.Awk.Unix@5.3.1 -s Release.Linux_x86_64 -d ${SLOT.Release.Linux_x86_64}",
+                    "get-object CommonsBase_GNU.Awk.Unix@5.3.1 -s Release.Linux_x86 -d ${SLOT.Release.Linux_x86}",
+                    "get-object CommonsBase_GNU.Awk.Unix@5.3.1 -s Release.Linux_arm64 -d ${SLOT.Release.Linux_arm64}"
+                ]
+            },
+            "outputs": {
+                "assets": [
+                    {
+                        "slots": [
+                            "Release.Darwin_arm64",
+                            "Release.Darwin_x86_64",
+                            "Release.Linux_x86_64",
+                            "Release.Linux_x86",
+                            "Release.Linux_arm64"
+                        ],
+                        "paths": [
+                            "bin/awk",
+                            "bin/gawk",
+                            "bin/gawk-5.3.1",
+                            "bin/gawkbug",
+                            "etc/profile.d/gawk.csh",
+                            "etc/profile.d/gawk.sh",
+                            "include/gawkapi.h",
+                            "lib/gawk/filefuncs.so",
+                            "lib/gawk/fnmatch.so",
+                            "lib/gawk/fork.so",
+                            "lib/gawk/inplace.so",
+                            "lib/gawk/intdiv.so",
+                            "lib/gawk/ordchr.so",
+                            "lib/gawk/readdir.so",
+                            "lib/gawk/readfile.so",
+                            "lib/gawk/revoutput.so",
+                            "lib/gawk/revtwoway.so",
+                            "lib/gawk/rwarray.so",
+                            "lib/gawk/time.so",
+                            "libexec/awk/grcat",
+                            "libexec/awk/pwcat",
+                            "share/awk/assert.awk",
+                            "share/awk/bits2str.awk",
+                            "share/awk/cliff_rand.awk",
+                            "share/awk/ctime.awk",
+                            "share/awk/ftrans.awk",
+                            "share/awk/getopt.awk",
+                            "share/awk/gettime.awk",
+                            "share/awk/group.awk",
+                            "share/awk/have_mpfr.awk",
+                            "share/awk/inplace.awk",
+                            "share/awk/intdiv0.awk",
+                            "share/awk/isnumeric.awk",
+                            "share/awk/join.awk",
+                            "share/awk/libintl.awk",
+                            "share/awk/noassign.awk",
+                            "share/awk/ns_passwd.awk",
+                            "share/awk/ord.awk",
+                            "share/awk/passwd.awk",
+                            "share/awk/processarray.awk",
+                            "share/awk/quicksort.awk",
+                            "share/awk/readable.awk",
+                            "share/awk/readfile.awk",
+                            "share/awk/rewind.awk",
+                            "share/awk/round.awk",
+                            "share/awk/shellquote.awk",
+                            "share/awk/strtonum.awk",
+                            "share/awk/tocsv.awk",
+                            "share/awk/walkarray.awk",
+                            "share/awk/zerofile.awk"
+                         ]
+                    }
+                ]
+            }
+        }
+    ]
+}
