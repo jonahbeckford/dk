@@ -89,6 +89,13 @@ jobs:
                     Release.Linux_x86:CommonsBase_Std.Coreutils@0.2.2
                     Release.Linux_x86_64:CommonsBase_Std.Coreutils@0.2.2
 
+                    Release.Windows_x86:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Windows_x86_64:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Darwin_arm64:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Darwin_x86_64:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Linux_x86:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Linux_x86_64:CommonsBase_Std.Coreutils@0.6.0
+
                     Release.Windows_x86:CommonsBase_Std.S7z@25.1.0
                     Release.Windows_x86_64:CommonsBase_Std.S7z@25.1.0
                     Release.Darwin_arm64:CommonsBase_Std.S7z@25.1.0

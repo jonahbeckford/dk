@@ -30,7 +30,7 @@ jobs:
                   restore-keys: dk-stores-and-keys             # use latest cache
                   key: dk-stores-and-keys-${{ github.run_id }} # update cache on every run
 
-            - name: Build Windows objects              
+            - name: Build Windows objects
               shell: pwsh
               # `--trial` helps cross-platform CI caches behave best since cache+data is under the project directory
               run: |
@@ -81,7 +81,7 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v5
-            
+
             - name: Checkout # get dksrc/dk0
               uses: actions/checkout@v5
               with: { repository: diskuv/dk, path: dksrc, ref: V2_5 }
@@ -108,7 +108,7 @@ jobs:
                 dksrc/dk0 --trial --print-config
 
                 dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_arm64        -m ./LICENSE       -f target/LICENSE
-                
+
                 dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_arm64        -m ./coreutils.exe -f target/Release.Darwin_arm64.coreutils.exe
                 dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Darwin_x86_64       -m ./coreutils.exe -f target/Release.Darwin_x86_64.coreutils.exe
                 dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Linux_arm64_gnu     -m ./coreutils.exe -f target/Release.Linux_arm64_gnu.coreutils.exe
@@ -122,7 +122,7 @@ jobs:
                 dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Windows_x86         -m ./coreutils.exe -f target/Release.Windows_x86.coreutils.exe
                 dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Windows_x86_64      -m ./coreutils.exe -f target/Release.Windows_x86_64.coreutils.exe
                 dksrc/dk0 --trial -v -nosysinc -I etc/dk/v --trust-local-package CommonsBase_Std get-object ${{ github.workflow }}@${{ env.LIBRARY_VERSION }} -s Release.Windows_x86_64_gnu  -m ./coreutils.exe -f target/Release.Windows_x86_64_gnu.coreutils.exe
-                
+
             - name: Test ${{ github.workflow }}
               run: target/${{ env.TEST_SLOT }}.coreutils.exe --help
 

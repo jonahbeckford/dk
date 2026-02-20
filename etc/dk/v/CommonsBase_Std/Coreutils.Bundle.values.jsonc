@@ -1,3 +1,4 @@
+// Test: ./dk0 --trial --autofix -nosysinc --data-dir t/d-new -I etc/dk/v -x gh-uutils:subpath: --trust-local-package CommonsBase_Std get-bundle CommonsBase_Std.Coreutils.Bundle@0.6.0 -d target/coreutils
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
   "schema_version": { "major": 1, "minor": 0 },
@@ -29,6 +30,33 @@
         {"origin": "gh-uutils", "checksum": {"sha256": "482c5ced97b8090329717b1de3282f6871fbefc95fbe8566606a047285992e25"}, "path": "coreutils-0.2.2-x86_64-unknown-linux-gnu.tar.gz", "size": 5576237},
         {"origin": "gh-uutils", "checksum": {"sha256": "71551a36b13ae5c7078b7e97d4c264a77446246c638379531efdeec813473921"}, "path": "coreutils-0.2.2-x86_64-unknown-linux-musl.tar.gz", "size": 5461853}
       ]
-    }
+    },
+    {
+      "id": "CommonsBase_Std.Coreutils.Bundle@0.6.0",
+      "listing": {
+        "origins": [
+          {
+            "name": "gh-uutils",
+            "mirrors": [
+              "https://github.com/uutils/coreutils/releases/download/0.6.0"
+            ]
+          }
+        ]
+      },
+      "assets": [
+        {"origin": "gh-uutils", "checksum": {"sha256": "6d5cc78e0a78c41beb91cacc74d669f6ee45973cd7ccb2e55b9c5efbf404abfb"}, "path": "coreutils-0.6.0-aarch64-apple-darwin.tar.gz", "size": 4418677},
+        {"origin": "gh-uutils", "checksum": {"sha256": "0adc275faefb361ffb101319bbae848475dc4295dbf1ec4fa34e9525592c4103"}, "path": "coreutils-0.6.0-aarch64-pc-windows-msvc.zip", "size": 4554582},
+        {"origin": "gh-uutils", "checksum": {"sha256": "dc4e473d7eeb85672806e5861654de459fd2a7b989f0e077b66ea780574563dd"}, "path": "coreutils-0.6.0-aarch64-unknown-linux-gnu.tar.gz", "size": 5211158},
+        {"origin": "gh-uutils", "checksum": {"sha256": "47cd0211cf16a801fa3fc4ac8a5d596c17933c39ab147d317dbe7565f28e56ee"}, "path": "coreutils-0.6.0-aarch64-unknown-linux-musl.tar.gz", "size": 4990733},
+        {"origin": "gh-uutils", "checksum": {"sha256": "41de090ca0432cfb5d417dc38a809eb534ef886d2082451504f24113b999bf64"}, "path": "coreutils-0.6.0-arm-unknown-linux-gnueabihf.tar.gz", "size": 5686034},
+        {"origin": "gh-uutils", "checksum": {"sha256": "994f5b3fe300fbb53176c5e84e701ec8e2957e4e0158a8be2fb5837b8db74911"}, "path": "coreutils-0.6.0-i686-pc-windows-msvc.zip", "size": 4685744},
+        {"origin": "gh-uutils", "checksum": {"sha256": "286929e5723d4646d8a63641fb085128b177361188ff1bf2e5e03c3e4ab63b91"}, "path": "coreutils-0.6.0-i686-unknown-linux-gnu.tar.gz", "size": 5827201},
+        {"origin": "gh-uutils", "checksum": {"sha256": "b5d4cfaaaacf3872a1f07b1e837a636ddd657e9df24368ca2f3fac3ee6639d57"}, "path": "coreutils-0.6.0-i686-unknown-linux-musl.tar.gz", "size": 5537832},
+        {"origin": "gh-uutils", "checksum": {"sha256": "58a94f566c0541f712f41f7fd4dac95028cfd7555bd656e22e8b07dca5dd062a"}, "path": "coreutils-0.6.0-x86_64-apple-darwin.tar.gz", "size": 5366367},
+        {"origin": "gh-uutils", "checksum": {"sha256": "a59372b707829086643d9ec25e9cfd3b3fc06c38d0577789f15a9771deef5f8f"}, "path": "coreutils-0.6.0-x86_64-pc-windows-msvc.zip", "size": 4845794},
+        {"origin": "gh-uutils", "checksum": {"sha256": "06fb7eaf046623c013e5509db4e6807fada2c39d1c49c619b9846ef93bd110e8"}, "path": "coreutils-0.6.0-x86_64-unknown-linux-gnu.tar.gz", "size": 5576237},
+        {"origin": "gh-uutils", "checksum": {"sha256": "094a902748433fc865c8d45bb8c850e32f966af18cf9c4a35df11c017d42f16d"}, "path": "coreutils-0.6.0-x86_64-unknown-linux-musl.tar.gz", "size": 5461853}
+      ]
+    }    
   ]
 }
