@@ -1,4 +1,4 @@
-// Test: ./dk0 --trial --autofix -I etc/dk/v --trust-local-package CommonsBase_Win32 get-bundle CommonsBase_Win32.Lookup@1.0.0 -d target/win32lookup
+// Test: ./dk0 --trial --autofix -I etc/dk/v -x etc-table-wine:subpath: --trust-local-package CommonsBase_Win32 get-bundle CommonsBase_Win32.Lookup@1.0.0 -d target/win32lookup
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
   "schema_version": { "major": 1, "minor": 0 },
@@ -8,8 +8,8 @@
       "listing": {
         "origins": [
           {
-            "name": "etc-table-slot",
-            "mirrors": ["cell://dk0/etc/table/slot"]
+            "name": "etc-table-wine",
+            "mirrors": ["cell://dk0/etc/table/wine"]
           },
           {
             "name": "commons-base-win32-scripts",
@@ -21,8 +21,8 @@
       },
       "assets": [
         {
-          "path": "wine",
-          "origin": "etc-table-slot",
+          "path": "slot",
+          "origin": "etc-table-wine",
           "size": 1819,
           "checksum": {
             "sha256": "bea009968f6dd6afd133b085ade12a60f4b824606a80f2f17d5291a70cc78501"

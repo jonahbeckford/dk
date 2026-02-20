@@ -7,7 +7,7 @@
 // Test: ./dk0 --trial --trust-local-package CommonsBase_Win32 --trust-local-package CommonsBase_GNU --trust-local-package CommonsBase_LLVM -I etc/dk/v get-object CommonsBase_Win32.Wine@11.2.0 -s Release.execution_abi -d target/wine -e 'bin/*' -e 'lib/wine/*/*'
 //
 // Subshell to get the Wine installation with the correct execution ABI:
-// $(get-object CommonsBase_Win32.Wine@11.2.0 -s $(get-asset CommonsBase_Win32.Lookup@1.0.0 -p wine -m ./Release.${SLOTNAME.execution_abi}) -d : -e 'bin/*' -e 'lib/wine/*/*')
+// $(get-object CommonsBase_Win32.Wine@11.2.0 -s $(get-asset CommonsBase_Win32.Lookup@1.0.0 -p slot -m ./Release.${SLOTNAME.execution_abi}) -d : -e 'bin/*' -e 'lib/wine/*/*')
 {
     "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
     "schema_version": {
