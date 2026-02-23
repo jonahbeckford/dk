@@ -1,7 +1,7 @@
 // Nettle is a cryptographic library that is designed to fit easily in more or less any context: In crypto toolkits for object-oriented languages (C++, Python, Pike, ...), in applications like LSH or GNUPG, or even in kernel space.
 // GNU? It is available from https://ftp.gnu.org/gnu/nettle/
-// Test: ./dk0 --trial --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@3.10.2 -s Release.execution_abi -d target/nettle
-// Test: ./dk0 --trial --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@4.0.0 -s Release.execution_abi -d target/nettle
+// Test: ./dk0 --trial -x gnu-nettle:subpath: --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@3.10.2 -s Release.execution_abi -d target/nettle
+// Test: ./dk0 --trial -x gnu-nettle:subpath: --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@4.0.0 -s Release.execution_abi -d target/nettle
 {
     "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
     "schema_version": {
@@ -27,30 +27,45 @@
                         "/bin/sh", "./configure",
                         "--host=aarch64-apple-darwin",
                         "\"CC=clang -arch arm64\"", "\"CXX=clang++ -arch arm64\"",
+                        "CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Darwin_arm64 -d :)/include",
+                        "LDFLAGS=-L$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Darwin_arm64 -d :)/lib",
                         "--prefix=${SLOTABS.Release.Darwin_arm64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--enable-public-key",
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure",
                         "--host=x86_64-apple-darwin",
                         "\"CC=clang -arch x86_64\"", "\"CXX=clang++ -arch x86_64\"",
+                        "CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Darwin_x86_64 -d :)/include",
+                        "LDFLAGS=-L$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Darwin_x86_64 -d :)/lib",
                         "--prefix=${SLOTABS.Release.Darwin_x86_64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--enable-public-key",
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure", "\"CC=gcc -m64\"", "\"CXX=g++ -m64\"",
+                        "CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Linux_x86_64 -d :)/include",
+                        "LDFLAGS=-L$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Linux_x86_64 -d :)/lib",
                         "--host=x86_64-linux-gnu", "--prefix=${SLOTABS.Release.Linux_x86_64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--enable-public-key",
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure", "\"CC=gcc -m32\"", "\"CXX=g++ -m32\"",
+                        "CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Linux_x86 -d :)/include",
+                        "LDFLAGS=-L$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Linux_x86 -d :)/lib",
                         "--host=i686-linux-gnu", "--prefix=${SLOTABS.Release.Linux_x86}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--enable-public-key",
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure", "\"CC=gcc -march=armv8-a\"", "\"CXX=g++ -march=armv8-a\"",
+                        "CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Linux_arm64 -d :)/include",
+                        "LDFLAGS=-L$(--path=absnative get-object CommonsBase_GNU.GMP@6.3.0 -s Release.Linux_arm64 -d :)/lib",
                         "--host=aarch64-linux-gnu", "--prefix=${SLOTABS.Release.Linux_arm64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--enable-public-key",
+                        "--disable-dependency-tracking"
                     ],
 
                     // make
@@ -72,10 +87,11 @@
                             "Release.Linux_x86_64", "Release.Linux_x86", "Release.Linux_arm64"
                         ],
                         "paths": [
-                            "bin/sexp-conv",
-                            "bin/nettle-pbkdf2",
                             "bin/nettle-hash",
                             "bin/nettle-lfib-stream",
+                            "bin/nettle-pbkdf2",
+                            "bin/pkcs1-conv",
+                            "bin/sexp-conv",
                             "include/nettle/aes.h",
                             "include/nettle/arcfour.h",
                             "include/nettle/arctwo.h",
@@ -149,8 +165,10 @@
                             "include/nettle/version.h",
                             "include/nettle/xts.h",
                             "include/nettle/yarrow.h",
-                            "lib/pkgconfig/nettle.pc",
-                            "lib/libnettle.a"
+                            "lib/libhogweed.a",
+                            "lib/libnettle.a",
+                            "lib/pkgconfig/hogweed.pc",
+                            "lib/pkgconfig/nettle.pc"
                         ]
                     },
                     {
@@ -158,6 +176,9 @@
                             "Release.Darwin_arm64", "Release.Darwin_x86_64"
                         ],
                         "paths": [
+                            "lib/libhogweed.6.11.dylib",
+                            "lib/libhogweed.6.dylib",
+                            "lib/libhogweed.dylib",
                             "lib/libnettle.8.11.dylib",
                             "lib/libnettle.8.dylib",
                             "lib/libnettle.dylib"
@@ -169,6 +190,9 @@
                         ],
                         "paths": [
                             // Untested; may require tweaking
+                            "lib/libhogweed.6.11.so",
+                            "lib/libhogweed.6.so",
+                            "lib/libhogweed.so",
                             "lib/libnettle.8.11.so",
                             "lib/libnettle.8.so",
                             "lib/libnettle.so"
@@ -196,29 +220,29 @@
                         "--host=aarch64-apple-darwin",
                         "\"CC=clang -arch arm64\"", "\"CXX=clang++ -arch arm64\"",
                         "--prefix=${SLOTABS.Release.Darwin_arm64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure",
                         "--host=x86_64-apple-darwin",
                         "\"CC=clang -arch x86_64\"", "\"CXX=clang++ -arch x86_64\"",
                         "--prefix=${SLOTABS.Release.Darwin_x86_64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure", "\"CC=gcc -m64\"", "\"CXX=g++ -m64\"",
                         "--host=x86_64-linux-gnu", "--prefix=${SLOTABS.Release.Linux_x86_64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure", "\"CC=gcc -m32\"", "\"CXX=g++ -m32\"",
                         "--host=i686-linux-gnu", "--prefix=${SLOTABS.Release.Linux_x86}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--disable-dependency-tracking"
                     ],
                     [
                         "/bin/sh", "./configure", "\"CC=gcc -march=armv8-a\"", "\"CXX=g++ -march=armv8-a\"",
                         "--host=aarch64-linux-gnu", "--prefix=${SLOTABS.Release.Linux_arm64}",
-                        "--disable-dependency-tracking", "--disable-nls"
+                        "--disable-dependency-tracking"
                     ],
 
                     // make

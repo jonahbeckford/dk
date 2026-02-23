@@ -14,7 +14,9 @@
     // intermediate build files for dk0
     "**/t/p/**": true,
     // cached build files for dk0
-    "**/t/c/**": true
+    "**/t/c/**": true,
+    // conventional output folder for dk0
+    "**/target/**": true
   },
   "editor.wordWrapColumn": 78,
   "json.schemaDownload.trustedDomains": {
