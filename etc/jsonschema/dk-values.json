@@ -565,7 +565,7 @@
                         "type": "object",
                         "additionalProperties": false,
                         "properties": {
-                            "args": {
+                            "commands": {
                                 "description": "One or more command lines. A flat list is the command line arguments for a single command line; a two-level list is a list of command lines. All form variables (ex. ${SLOT.Release.Agnostic}) may be used.",
                                 "type": "array",
                                 "items": {
@@ -609,7 +609,7 @@
                             }
                         },
                         "required": [
-                            "args"
+                            "commands"
                         ]
                     },
                     "outputs": {
@@ -666,21 +666,6 @@
                     "id": {
                         "description": "The identifier for the bundle, in the format 'PACKAGE.NAME@VERSION'. It must be unique across the value store. The VERSION must be a semver 2.0.0 compatible version number as documented by https://semver.org/. Any 'bn-*' semver build metadata will be dropped. Any 'dk-*' metadata is reserved for the build system. The bundle may be called from a MlFront script using the function call '<PACKAGE.NAME>.bundle ()'.",
                         "type": "string"
-                    },
-                    "listing_unencrypted": {
-                        "description": "Deprecated. The spec_version is ignored since the schema_version field makes it redundant.",
-                        "type": "object",
-                        "properties": {
-                            "spec_version": {
-                                "type": "integer",
-                                "enum": [
-                                    3
-                                ]
-                            }
-                        },
-                        "required": [
-                            "spec_version"
-                        ]
                     },
                     "listing": {
                         "description": "The metadata for the bundle that may be encrypted in future versions of the bundle spec.",
