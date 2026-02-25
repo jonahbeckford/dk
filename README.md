@@ -212,7 +212,7 @@ The *don't be stupid* goal, combined with avoiding README-itis, are the reasons 
   
    The dual-key mechanism is used internally in `dk` and documented at <https://dkml.gitlab.io/build-tools/MlFront/MlFront_Signify/MlFront_Signify/Signify/index.html>.
 
-4. Real names and countries to know who to trust. The simplest way in 2025 to do this is to require a micropayment (ex. $1/year). But to seed packages to spur adoption in the initial stages I (Jonah Beckford) will manually vet package authors.
+4. Real identities to know who to trust. To seed packages to spur adoption in the initial stages I (Jonah Beckford) will manually vet package authors.
 
 ---
 
