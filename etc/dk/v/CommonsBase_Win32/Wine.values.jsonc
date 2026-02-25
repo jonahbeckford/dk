@@ -125,11 +125,12 @@
                         "/bin/sh", "./configure",
                         //  everything except the slot is x86-64
                         "\"CC=gcc -arch x86_64\"", "\"CXX=g++ -std=gnu++11 -arch x86_64\"",
+                        //  NOTE: all *_LIBS must be in sync with enter-wine.{in.sh, mk.awk} and the <awk> -v *_LIBDIR in a command further below
                         "GNUTLS_CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s Release.Darwin_x86_64 -d :)/include",
                         "GNUTLS_LIBS=-L$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s Release.Darwin_x86_64 -d :)/lib' '-lgnutls",
                         "INOTIFY_CFLAGS=-I$(--path=absnative get-object NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0 -s Release.Darwin_x86_64 -d :)/include",
                         "INOTIFY_LIBS=-L$(--path=absnative get-object NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0 -s Release.Darwin_x86_64 -d :)/lib' '-linotify",
-                        //  krb5: flags from krb5-config except `-dynamic` in KRB5_LIBS which is overspecified
+                        //      krb5: flags from krb5-config except `-dynamic` in KRB5_LIBS which is overspecified
                         "KRB5_CFLAGS=-I$(get-object NotMitEdu_Kerberos.V5@1.22.2 -s Release.Darwin_x86_64 -d :)/include",
                         "KRB5_LIBS=-L$(get-object NotMitEdu_Kerberos.V5@1.22.2 -s Release.Darwin_x86_64 -d :)/lib' '-lkrb5' '-lk5crypto' '-lcom_err",
                         "--prefix=${SLOTABS.Release.Darwin_arm64}",
@@ -147,16 +148,13 @@
                         "--without-freetype",
                         "--without-gettext",
                         "--without-gphoto",
-                        // TODO: Provide package like gnutls-devel. Or else:
-                        // 0164:err:secur32:SECUR32_initSchannelSP no schannel support, expect problems
-                        // 0164:err:kerberos:kerberos_LsaApInitializePackage no Kerberos support, expect problems
                         "--with-gnutls",
                         "--without-gssapi",
                         "--without-gstreamer",
                         "--without-hwloc",
                         "--with-inotify",
                         "--with-krb5",
-                        "--with-mingw", // "--with-mingw=llvm-mingw"
+                        "--with-mingw",
                         "--without-netapi",
                         "--without-opencl",
                         "--without-opengl",
@@ -256,7 +254,9 @@
                     [
                         "$(get-object CommonsBase_GNU.Awk@5.3.1 -s Release.execution_abi -d : -e 'bin/*')${/}bin/gawk",
                         "-v", "OUTPUT_FILE=${SLOT.request}/bin/enter-wine.sh",
-                        "-v", "GNUTLS_LIB=$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s $(get-asset CommonsBase_Win32.Lookup@1.0.0 -p winerunlib-slot -m ./${SLOTNAME.Release.execution_abi}) -d :)${/}lib",
+                        "-v", "GNUTLS_LIBDIR=$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s $(get-asset CommonsBase_Win32.Lookup@1.0.0 -p winerunlib-slot -m ./${SLOTNAME.Release.execution_abi}) -d :)${/}lib",
+                        "-v", "INOTIFY_LIBDIR=$(--path=absnative get-object NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0 -s $(get-asset CommonsBase_Win32.Lookup@1.0.0 -p winerunlib-slot -m ./${SLOTNAME.Release.execution_abi}) -d :)${/}lib",
+                        "-v", "KRB5_LIBDIR=$(--path=absnative get-object NotMitEdu_Kerberos.V5@1.22.2 -s $(get-asset CommonsBase_Win32.Lookup@1.0.0 -p winerunlib-slot -m ./${SLOTNAME.Release.execution_abi}) -d :)${/}lib",
                         "-f", "$(get-asset CommonsBase_Win32.Lookup@1.0.0 -p enter-wine-mk.awk -f enter-wine-mk.awk)",
                         "$(get-asset CommonsBase_Win32.Lookup@1.0.0 -p enter-wine.in.sh -f enter-wine.sh)"
                     ]

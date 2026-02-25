@@ -47,17 +47,17 @@
         {
           "path": "enter-wine.in.sh",
           "origin": "commons-base-win32-scripts",
-          "size": 1378,
+          "size": 1533,
           "checksum": {
-            "sha256": "2dfe1e3fb021b773604cc941a5dc069f49351278fb1d9c5896fc774716458e87"
+            "sha256": "a364ff5868ab772945102f7cdf833f3c78e8fa97830e83696b171330d8962fe1"
           }
         },
         {
           "path": "enter-wine-mk.awk",
           "origin": "commons-base-win32-scripts",
-          "size": 70,
+          "size": 162,
           "checksum": {
-            "sha256": "37ce3a3569f5cd1149da7bf87e8299a4843ff6a5867f531e22ac8889339540c1"
+            "sha256": "64db0154f677049e8153ae89841a0d7de9de1f8222291247dc594369986d993a"
           }
         }
       ]

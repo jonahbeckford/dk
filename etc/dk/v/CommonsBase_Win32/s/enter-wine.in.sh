@@ -33,11 +33,14 @@ _wineprefix=$(install -d "$_wineprefix" && cd "$_wineprefix" && pwd)
 export WINEPREFIX="$_wineprefix"
 
 # Any shared libraries that are given to ./configure must be available at runtime
-# using DYLD_FALLBACK_LIBRARY_PATH.
+# using DYLD_FALLBACK_LIBRARY_PATH:
+#   GNUTLS_LIBDIR: @GNUTLS_LIBDIR@
+#   INOTIFY_LIBDIR: @INOTIFY_LIBDIR@
+#   KRB5_LIBDIR: @KRB5_LIBDIR@
 #
-# If you want X11, the PATH needs to be here as well.
+# If you want X11, the path for X11 libraries needs to be here as well.
 # macOS X11: Confer https://gitlab.winehq.org/wine/wine/-/wikis/MacOS-FAQ#how-to-launch-wine-from-terminal-instead-of-the-wine-application
-export DYLD_FALLBACK_LIBRARY_PATH='@GNUTLS_LIB@:/usr/lib'
+export DYLD_FALLBACK_LIBRARY_PATH='@GNUTLS_LIBDIR@:@INOTIFY_LIBDIR@:@KRB5_LIBDIR@:/usr/lib'
 
 # Disable the Wine Mono installer popup.
 # confer https://gitlab.winehq.org/wine/wine/-/wikis/Wine-User's-Guide#winedlloverrides-dll-overrides
