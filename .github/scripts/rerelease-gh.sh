@@ -73,6 +73,24 @@ do_CommonsBase_Std() {
 do_CommonsBase_Build() {
   dopush CommonsBase-Build
 }
+do_CommonsBase_LLVM() {
+  dopush CommonsBase-LLVM
+}
+do_CommonsBase_GNU() {
+  dopush CommonsBase-GNU
+}
+do_NotMitEdu_Kerberos() {
+  dopush NotMitEdu-Kerberos
+}
+do_NotMatveevKondratyev_Libinotify() {
+  dopush NotMatveevKondratyev-Libinotify
+}
+do_CommonsBase_Win32() {
+  dopush CommonsBase-Win32
+}
+do_NotInriaCaml_Std() {
+  dopush NotInriaCaml-Std
+}
 do_NotGoogleDev_OR() {
   dopush NotGoogleDev-OR
 }
@@ -86,10 +104,61 @@ case "$start_package" in
   CommonsBase_Std) 
     do_CommonsBase_Std
     do_CommonsBase_Build
+    do_CommonsBase_LLVM
+    do_CommonsBase_GNU
+    do_NotMatveevKondratyev_Libinotify
+    do_NotMitEdu_Kerberos
+    do_CommonsBase_Win32
+    do_NotInriaCaml_Std
     do_NotGoogleDev_OR
     do_NotInriaParkas_Caml ;;
   CommonsBase_Build)
     do_CommonsBase_Build
+    do_CommonsBase_LLVM
+    do_CommonsBase_GNU
+    do_NotMatveevKondratyev_Libinotify
+    do_NotMitEdu_Kerberos
+    do_CommonsBase_Win32
+    do_NotInriaCaml_Std
+    do_NotGoogleDev_OR
+    do_NotInriaParkas_Caml ;;
+  CommonsBase_LLVM)
+    do_CommonsBase_LLVM
+    do_CommonsBase_GNU
+    do_NotMatveevKondratyev_Libinotify
+    do_NotMitEdu_Kerberos
+    do_CommonsBase_Win32
+    do_NotInriaCaml_Std
+    do_NotGoogleDev_OR
+    do_NotInriaParkas_Caml ;;
+  CommonsBase_GNU)
+    do_CommonsBase_GNU
+    do_NotMatveevKondratyev_Libinotify
+    do_NotMitEdu_Kerberos
+    do_CommonsBase_Win32
+    do_NotInriaCaml_Std
+    do_NotGoogleDev_OR
+    do_NotInriaParkas_Caml ;;
+  NotMatveevKondratyev_Libinotify)
+    do_NotMatveevKondratyev_Libinotify
+    do_NotMitEdu_Kerberos
+    do_CommonsBase_Win32
+    do_NotInriaCaml_Std
+    do_NotGoogleDev_OR
+    do_NotInriaParkas_Caml ;;
+  NotMitEdu_Kerberos)
+    do_NotMitEdu_Kerberos
+    do_CommonsBase_Win32
+    do_NotInriaCaml_Std
+    do_NotGoogleDev_OR
+    do_NotInriaParkas_Caml ;;
+  CommonsBase_Win32)
+    do_CommonsBase_Win32
+    do_NotInriaCaml_Std
+    do_NotGoogleDev_OR
+    do_NotInriaParkas_Caml ;;
+  NotInriaCaml_Std)
+    do_NotInriaCaml_Std
     do_NotGoogleDev_OR
     do_NotInriaParkas_Caml ;;
   NotGoogleDev_OR)
