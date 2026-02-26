@@ -16,15 +16,19 @@
 -- 
 -- Options:
 --   dir=WENV: The absolute directory where the environment will be created.
---   mount[]=type=bind,src=<host-path>,dst=<mount-path>: (optional, repeatable) Mount a host directory into the wenv.
+--   mount[]=type=bind,src=<host-path>,dst=<mount-path>:
+--     (optional, repeatable) Mount a host directory into the wenv.
 --     For example, `mount[]=type=bind,src=/path/on/host,dst=M:\path\in\wenv` will mount the
 --     host path `/path/on/host` at `M:\path\in\wenv` in the wenv.
 --     [src]: Must be an absolute path on the host machine.
 --     [dst]: Must be on the  M: drive which is reserved for mounted host directories.
--- 
+--     It is undefined what happens when the 'dst' mount paths overlap. Don't do it!
+--
 -- Examples:
---   $ ./dk0 --trial run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=target/my-wenv
+--   $ ./dk0 --trial run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=$PWD/target/my-wenv
 --   $ target/my-wenv/bin/enter cmd.exe
+-- 
+--   $ ./dk0 --trial run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=$PWD/target/my-wenv "mount[]=type=bind,src=$PWD,dst=M:/project"
 --
 --   (local overrides)
 --   $ ./dk0 --trial -I etc/dk/v --trust-local-package NotInriaCaml_Std --trust-local-package CommonsBase_GNU run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=target/my-wenv
@@ -187,6 +191,7 @@ function uirules.Create(command, request)
             end
 
             -- create command to symlink the mount
+            print("Mounting host path " .. mount.src .. " at " .. mount.dst .. " in the wenv")
             table.insert(commands, {
                 p.coreutilsexe,
                 "ln", "-s", mount.src, p.wenv .. "/drive_m/" .. m_dst_subpath
@@ -279,8 +284,8 @@ end
 -- translate a Windows path on the M: drive to the corresponding Unix path in the wenv
 -- ex. M:\path\in\wenv -> path/in/wenv
 function NotInriaCaml_Std__Wenv__0_1_0.m_drive_unix_subpath(path)
-    if string.sub(path, 1, 3) ~= "M:\\" then
-        error("Path must be on the M: drive (ex. M:\\path\\in\\wenv), not " .. path)
+    if string.sub(path, 1, 3) ~= "M:\\" and string.sub(path, 1, 3) ~= "M:/" then
+        error("Path must be on the M: drive (ex. M:\\path\\in\\wenv, M:/otherpath/in/wenv), not " .. path)
     end
     local relative = string.sub(path, 4)
 
