@@ -20,6 +20,9 @@
             },
             "function": {
                 "envmods": [
+                    // do not create/update <installdir>/share/info/dir if the `install-info` program is available. that is not reproducible.
+                    // confer https://www.gnu.org/software/automake/manual/html_node/Texinfo.html
+                    "+AM_UPDATE_INFO_DIR=no",
                     // add YACC from Bison. https://cgit.git.savannah.gnu.org/cgit/gawk.git/tree/configure
                     "+YACC=$(get-object CommonsBase_GNU.Bison@3.8.2 -s Release.execution_abi -m ./bin/yacc -e bin/yacc -f yacc)"
                 ],

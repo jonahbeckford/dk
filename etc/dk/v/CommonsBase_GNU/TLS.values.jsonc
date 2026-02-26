@@ -24,6 +24,11 @@
                 ]
             },
             "function": {
+                "envmods": [
+                    // do not create/update <installdir>/share/info/dir if the `install-info` program is available. that is not reproducible.
+                    // confer https://www.gnu.org/software/automake/manual/html_node/Texinfo.html
+                    "+AM_UPDATE_INFO_DIR=no"
+                ],
                 "commands": [
                     // configure
                     //   https://www.gnutls.org/manual/html_node/Downloading-and-installing.html#Downloading-and-installing
