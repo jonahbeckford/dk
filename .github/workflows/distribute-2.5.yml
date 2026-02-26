@@ -303,6 +303,7 @@ jobs:
         # tag(2.5.x+CommonsBase-GNU) or branch(main)
         if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-GNU')) || github.ref_name == 'main'
 
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
         runs-on: macos-latest
 
         permissions:
@@ -450,7 +451,8 @@ jobs:
         # tag(2.5.x+NotMatveevKondratyev-Libinotify) or branch(main)
         if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotMatveevKondratyev-Libinotify')) || github.ref_name == 'main'
 
-        runs-on: ubuntu-24.04
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
 
         permissions:
           contents: write # for action-gh-release
@@ -516,8 +518,8 @@ jobs:
         # tag(2.5.x+NotMitEdu-Kerberos) or branch(main)
         if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotMitEdu-Kerberos')) || github.ref_name == 'main'
 
-        # runs-on(anything). Linux is cheapest and quickest to boot in Github Actions
-        runs-on: ubuntu-24.04
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
 
         permissions:
           contents: write # for action-gh-release
@@ -586,8 +588,8 @@ jobs:
         # tag(2.5.x+CommonsBase-Win32) or branch(main)
         if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-Win32')) || github.ref_name == 'main'
 
-        # runs-on(anything). Linux is cheapest and quickest to boot in Github Actions
-        runs-on: ubuntu-24.04
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
 
         permissions:
           contents: write # for action-gh-release
@@ -653,8 +655,8 @@ jobs:
         # tag(2.5.x+NotInriaCaml-Std) or branch(main)
         if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotInriaCaml-Std')) || github.ref_name == 'main'
 
-        # runs-on(anything). Linux is cheapest and quickest to boot in Github Actions
-        runs-on: ubuntu-24.04
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
 
         permissions:
           contents: write # for action-gh-release
