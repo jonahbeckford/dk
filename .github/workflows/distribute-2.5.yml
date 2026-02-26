@@ -431,6 +431,7 @@ jobs:
                 path: |
                   t/p/*/*/l/*/*
                   t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
@@ -581,6 +582,7 @@ jobs:
                 path: |
                   t/p/*/*/l/*/*
                   t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
@@ -656,9 +658,11 @@ jobs:
                 name: logs-CommonsBase_Win32
                 # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
                 # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                # ex. t/p/7096/rd6x/o/Release.Darwin_arm64/lib/wine/i386-windows/winex11.drv
                 path: |
                   t/p/*/*/l/*/*
                   t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
@@ -739,6 +743,7 @@ jobs:
                 path: |
                   t/p/*/*/l/*/*
                   t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
@@ -894,6 +899,7 @@ jobs:
                 path: |
                   t/p/*/*/l/*/*
                   t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
