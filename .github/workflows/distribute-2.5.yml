@@ -419,6 +419,14 @@ jobs:
                   use-cache: true
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
 
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-CommonsBase_GNU
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                path: t/p/*/*/l/*/*
+
             - name: Archive Distribution
               if: github.ref_type != 'tag'
               uses: actions/upload-artifact@v4
@@ -839,7 +847,7 @@ jobs:
               if: failure()
               uses: actions/upload-artifact@v4
               with:
-                name: dist-NotInriaParkas_Caml
+                name: logs-NotInriaParkas_Caml
                 # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
                 path: t/p/*/*/l/*/*
 
