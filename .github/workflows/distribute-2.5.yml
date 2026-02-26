@@ -257,7 +257,7 @@ jobs:
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
               with:
-                  id: ${{ github.ref_type == 'tag' && format('CommonsBase_GNU@{0}', github.ref_name) || format('CommonsBase_GNU@{0}', env.dkdist_branch_version) }}
+                  id: ${{ github.ref_type == 'tag' && format('CommonsBase_LLVM@{0}', github.ref_name) || format('CommonsBase_LLVM@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
                   options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
@@ -531,7 +531,7 @@ jobs:
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
               with:
-                  id: ${{ github.ref_type == 'tag' && format('NotMatveevKondratyev_Libinotify@{0}', github.ref_name) || format('NotMatveevKondratyev_Libinotify@{0}', env.dkdist_branch_version) }}
+                  id: ${{ github.ref_type == 'tag' && format('NotMitEdu_Kerberos@{0}', github.ref_name) || format('NotMitEdu_Kerberos@{0}', env.dkdist_branch_version) }}
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
                   options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
