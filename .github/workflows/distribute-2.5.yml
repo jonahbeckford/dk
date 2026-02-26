@@ -326,7 +326,8 @@ jobs:
               shell: bash
               env:
                 GH_TOKEN: ${{ github.token }}
-                DEPENDENCIES: CommonsBase_Std
+                # CommonsBase_LLVM: The LLVM-MinGW toolchain is used to build CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                DEPENDENCIES: CommonsBase_Std CommonsBase_LLVM
               run: |
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
