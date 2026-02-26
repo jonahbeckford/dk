@@ -427,7 +427,10 @@ jobs:
               with:
                 name: logs-CommonsBase_GNU
                 # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
-                path: t/p/*/*/l/*/*
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
@@ -566,6 +569,17 @@ jobs:
                   use-cache: true
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
 
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-NotMitEdu_Kerberos
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
+
             - name: Archive Distribution
               if: github.ref_type != 'tag'
               uses: actions/upload-artifact@v4
@@ -632,6 +646,17 @@ jobs:
                     Release.Darwin_x86_64:CommonsBase_Win32.Wine@11.2.0
                   use-cache: true
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-CommonsBase_Win32
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
@@ -701,6 +726,17 @@ jobs:
                     NotInriaCaml_Std.Wenv@0.1.0
                   use-cache: true
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-NotInriaCaml_Std
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
@@ -852,7 +888,10 @@ jobs:
               with:
                 name: logs-NotInriaParkas_Caml
                 # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
-                path: t/p/*/*/l/*/*
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
 
             - name: Archive Distribution
               if: github.ref_type != 'tag'
