@@ -13,13 +13,13 @@
         "private": [
           // MACOS and LINUX
           // convert the macOS .tar.xz to .zip (we could use F_Untar but that requires paths[]= set)
-          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_arm64}/ignored.zip  modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
-          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_x86_64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
+          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_arm64}/ignored.zip  modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacArm64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
+          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_x86_64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacX64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
           "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Linux_x86_64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuX64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz -f llvm-mingw.tar.xz)",
           "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Linux_arm64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuArm64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-ubuntu-22.04-aarch64.tar.xz -f llvm-mingw.tar.xz)",
           // extract zip to output folder, stripping toplevel llvm-mingw-20251216-ucrt-macos-universal/ folder
-          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_arm64}",
-          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_x86_64}",
+          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacArm64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_arm64}",
+          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacX64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_x86_64}",
           "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuX64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Linux_x86_64}",
           "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuArm64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Linux_arm64}",
           // WINDOWS
