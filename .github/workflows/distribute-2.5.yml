@@ -382,6 +382,18 @@ jobs:
                     # Release.Linux_arm64:CommonsBase_GNU.TLS@3.8.12
 
                   objects: |
+                    Release.Windows_x86:CommonsBase_GNU.Toolchain.W64dev@2.5.0
+                    Release.Windows_x86_64:CommonsBase_GNU.Toolchain.W64dev@2.5.0
+
+                    Release.Darwin_arm64:CommonsBase_GNU.GMP@6.3.0
+                    Release.Darwin_x86_64:CommonsBase_GNU.GMP@6.3.0
+
+                    Release.Darwin_arm64:CommonsBase_GNU.Nettle@3.10.2
+                    Release.Darwin_x86_64:CommonsBase_GNU.Nettle@3.10.2
+
+                    Release.Darwin_arm64:CommonsBase_GNU.TLS@3.8.12
+                    Release.Darwin_x86_64:CommonsBase_GNU.TLS@3.8.12
+
                     Release.Darwin_arm64:CommonsBase_GNU.Awk@5.3.1
                     Release.Darwin_x86_64:CommonsBase_GNU.Awk@5.3.1
 
@@ -395,9 +407,6 @@ jobs:
                     Release.Darwin_arm64:CommonsBase_GNU.Bison@3.8.2
                     Release.Darwin_x86_64:CommonsBase_GNU.Bison@3.8.2
 
-                    Release.Darwin_arm64:CommonsBase_GNU.GMP@6.3.0
-                    Release.Darwin_x86_64:CommonsBase_GNU.GMP@6.3.0
-
                     Release.Darwin_arm64:CommonsBase_GNU.Make@4.4.1
                     Release.Darwin_x86_64:CommonsBase_GNU.Make@4.4.1
 
@@ -407,15 +416,6 @@ jobs:
                     Release.Darwin_arm64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
                     Release.Darwin_arm64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
                     Release.Darwin_arm64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
-
-                    Release.Darwin_arm64:CommonsBase_GNU.Nettle@3.10.2
-                    Release.Darwin_x86_64:CommonsBase_GNU.Nettle@3.10.2
-
-                    Release.Darwin_arm64:CommonsBase_GNU.TLS@3.8.12
-                    Release.Darwin_x86_64:CommonsBase_GNU.TLS@3.8.12
-
-                    Release.Windows_x86:CommonsBase_GNU.Toolchain.W64dev@2.5.0
-                    Release.Windows_x86_64:CommonsBase_GNU.Toolchain.W64dev@2.5.0
 
                   use-cache: true
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
