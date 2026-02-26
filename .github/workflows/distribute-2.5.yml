@@ -493,6 +493,7 @@ jobs:
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
                   options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # We can only build one operating system in one CI job.
                   objects: |
                     Release.Darwin_arm64:NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0
                     Release.Darwin_x86_64:NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0
@@ -560,12 +561,13 @@ jobs:
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
                   options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # We can only build one operating system in one CI job.
+                  #  Release.Linux_x86:NotMitEdu_Kerberos.V5@1.22.2
+                  #  Release.Linux_x86_64:NotMitEdu_Kerberos.V5@1.22.2
+                  #  Release.Linux_arm64:NotMitEdu_Kerberos.V5@1.22.2
                   objects: |
                     Release.Darwin_arm64:NotMitEdu_Kerberos.V5@1.22.2
                     Release.Darwin_x86_64:NotMitEdu_Kerberos.V5@1.22.2
-                    Release.Linux_x86:NotMitEdu_Kerberos.V5@1.22.2
-                    Release.Linux_x86_64:NotMitEdu_Kerberos.V5@1.22.2
-                    Release.Linux_arm64:NotMitEdu_Kerberos.V5@1.22.2
                   use-cache: true
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
 
