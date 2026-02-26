@@ -17,7 +17,7 @@
                     // convert the .tar.xz to .zip
                     "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ignored.zip modver=CommonsBase_GNU.Nettle.Zip@3.10.2 tarfile=$(get-asset CommonsBase_GNU.Nettle.Bundle@3.10.2 -p nettle-3.10.2.tar.gz -f nettle-3.10.2.tar.gz)",
                     // extract zip to current folder, stripping toplevel nettle-4.0/ folder
-                    "install-object CommonsBase_GNU.Nettle.Zip@3.10.2 -s Release.Agnostic -m ./output.zip -n 1 -d ."
+                    "install-object CommonsBase_GNU.Nettle.Zip@3.10.2 -s Release.Agnostic -m ./output.zip -n 1 -d . -e 'install-sh'"
                 ]
             },
             "function": {

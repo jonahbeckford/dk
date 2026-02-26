@@ -385,11 +385,11 @@ jobs:
                     Release.Windows_x86:CommonsBase_GNU.Toolchain.W64dev@2.5.0
                     Release.Windows_x86_64:CommonsBase_GNU.Toolchain.W64dev@2.5.0
 
-                    Release.Darwin_arm64:CommonsBase_GNU.GMP@6.3.0
-                    Release.Darwin_x86_64:CommonsBase_GNU.GMP@6.3.0
-
                     Release.Darwin_arm64:CommonsBase_GNU.Nettle@3.10.2
                     Release.Darwin_x86_64:CommonsBase_GNU.Nettle@3.10.2
+
+                    Release.Darwin_arm64:CommonsBase_GNU.GMP@6.3.0
+                    Release.Darwin_x86_64:CommonsBase_GNU.GMP@6.3.0
 
                     Release.Darwin_arm64:CommonsBase_GNU.TLS@3.8.12
                     Release.Darwin_x86_64:CommonsBase_GNU.TLS@3.8.12
