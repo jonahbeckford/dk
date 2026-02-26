@@ -173,7 +173,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -253,7 +252,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -333,7 +331,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -463,7 +460,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -531,7 +527,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -602,7 +597,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -670,7 +664,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -740,7 +733,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
@@ -810,7 +802,6 @@ jobs:
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
                 echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo delete imports ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/i/$d.values.json etc/dk/i/$d-*.values.json; done
                 echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
