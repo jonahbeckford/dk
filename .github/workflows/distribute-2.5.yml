@@ -303,7 +303,7 @@ jobs:
         # tag(2.5.x+CommonsBase-GNU) or branch(main)
         if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-GNU')) || github.ref_name == 'main'
 
-        runs-on: ubuntu-24.04
+        runs-on: macos-latest
 
         permissions:
           contents: write # for action-gh-release
@@ -341,12 +341,48 @@ jobs:
                   pubkey: ${{ secrets.distribute_2_5_pubkey }}
                   seckey: ${{ secrets.distribute_2_5_seckey }}
                   options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # We can only build one operating system in one CI job.
+                    # Release.Linux_x86:CommonsBase_GNU.Awk@5.3.1
+                    # Release.Linux_x86_64:CommonsBase_GNU.Awk@5.3.1
+                    # Release.Linux_arm64:CommonsBase_GNU.Awk@5.3.1
+
+                    # Release.Linux_x86_64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_x86_64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_x86_64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_arm64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_arm64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_arm64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+
+                    # Release.Linux_x86:CommonsBase_GNU.Bison@3.8.2
+                    # Release.Linux_x86_64:CommonsBase_GNU.Bison@3.8.2
+                    # Release.Linux_arm64:CommonsBase_GNU.Bison@3.8.2
+
+                    # Release.Linux_x86:CommonsBase_GNU.GMP@6.3.0
+                    # Release.Linux_x86_64:CommonsBase_GNU.GMP@6.3.0
+                    # Release.Linux_arm64:CommonsBase_GNU.GMP@6.3.0
+
+                    # Release.Linux_x86:CommonsBase_GNU.Make@4.4.1
+                    # Release.Linux_x86_64:CommonsBase_GNU.Make@4.4.1
+                    # Release.Linux_arm64:CommonsBase_GNU.Make@4.4.1
+
+                    # Release.Linux_x86_64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_x86_64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_x86_64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_arm64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_arm64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_arm64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+
+                    # Release.Linux_x86:CommonsBase_GNU.Nettle@3.10.2
+                    # Release.Linux_x86_64:CommonsBase_GNU.Nettle@3.10.2
+                    # Release.Linux_arm64:CommonsBase_GNU.Nettle@3.10.2
+
+                    # Release.Linux_x86:CommonsBase_GNU.TLS@3.8.12
+                    # Release.Linux_x86_64:CommonsBase_GNU.TLS@3.8.12
+                    # Release.Linux_arm64:CommonsBase_GNU.TLS@3.8.12
+
                   objects: |
                     Release.Darwin_arm64:CommonsBase_GNU.Awk@5.3.1
                     Release.Darwin_x86_64:CommonsBase_GNU.Awk@5.3.1
-                    Release.Linux_x86:CommonsBase_GNU.Awk@5.3.1
-                    Release.Linux_x86_64:CommonsBase_GNU.Awk@5.3.1
-                    Release.Linux_arm64:CommonsBase_GNU.Awk@5.3.1
 
                     Release.Darwin_x86_64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
                     Release.Darwin_x86_64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
@@ -354,30 +390,15 @@ jobs:
                     Release.Darwin_arm64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
                     Release.Darwin_arm64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
                     Release.Darwin_arm64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
-                    Release.Linux_x86_64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
-                    Release.Linux_x86_64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
-                    Release.Linux_x86_64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
-                    Release.Linux_arm64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
-                    Release.Linux_arm64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
-                    Release.Linux_arm64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
 
                     Release.Darwin_arm64:CommonsBase_GNU.Bison@3.8.2
                     Release.Darwin_x86_64:CommonsBase_GNU.Bison@3.8.2
-                    Release.Linux_x86:CommonsBase_GNU.Bison@3.8.2
-                    Release.Linux_x86_64:CommonsBase_GNU.Bison@3.8.2
-                    Release.Linux_arm64:CommonsBase_GNU.Bison@3.8.2
 
                     Release.Darwin_arm64:CommonsBase_GNU.GMP@6.3.0
                     Release.Darwin_x86_64:CommonsBase_GNU.GMP@6.3.0
-                    Release.Linux_x86:CommonsBase_GNU.GMP@6.3.0
-                    Release.Linux_x86_64:CommonsBase_GNU.GMP@6.3.0
-                    Release.Linux_arm64:CommonsBase_GNU.GMP@6.3.0
 
                     Release.Darwin_arm64:CommonsBase_GNU.Make@4.4.1
                     Release.Darwin_x86_64:CommonsBase_GNU.Make@4.4.1
-                    Release.Linux_x86:CommonsBase_GNU.Make@4.4.1
-                    Release.Linux_x86_64:CommonsBase_GNU.Make@4.4.1
-                    Release.Linux_arm64:CommonsBase_GNU.Make@4.4.1
 
                     Release.Darwin_x86_64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
                     Release.Darwin_x86_64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
@@ -385,24 +406,12 @@ jobs:
                     Release.Darwin_arm64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
                     Release.Darwin_arm64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
                     Release.Darwin_arm64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
-                    Release.Linux_x86_64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
-                    Release.Linux_x86_64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
-                    Release.Linux_x86_64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
-                    Release.Linux_arm64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
-                    Release.Linux_arm64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
-                    Release.Linux_arm64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
 
                     Release.Darwin_arm64:CommonsBase_GNU.Nettle@3.10.2
                     Release.Darwin_x86_64:CommonsBase_GNU.Nettle@3.10.2
-                    Release.Linux_x86:CommonsBase_GNU.Nettle@3.10.2
-                    Release.Linux_x86_64:CommonsBase_GNU.Nettle@3.10.2
-                    Release.Linux_arm64:CommonsBase_GNU.Nettle@3.10.2
 
                     Release.Darwin_arm64:CommonsBase_GNU.TLS@3.8.12
                     Release.Darwin_x86_64:CommonsBase_GNU.TLS@3.8.12
-                    Release.Linux_x86:CommonsBase_GNU.TLS@3.8.12
-                    Release.Linux_x86_64:CommonsBase_GNU.TLS@3.8.12
-                    Release.Linux_arm64:CommonsBase_GNU.TLS@3.8.12
 
                     Release.Windows_x86:CommonsBase_GNU.Toolchain.W64dev@2.5.0
                     Release.Windows_x86_64:CommonsBase_GNU.Toolchain.W64dev@2.5.0
