@@ -31,7 +31,7 @@
 --   $ ./dk0 --trial run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=$PWD/target/my-wenv "mount[]=type=bind,src=$PWD,dst=M:/project"
 --
 --   (local overrides)
---   $ ./dk0 --trial -I etc/dk/v --trust-local-package NotInriaCaml_Std --trust-local-package CommonsBase_GNU run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=target/my-wenv
+--   $ ./dk0 --trial -I etc/dk/v --trust-local-package NotInriaCaml_Std --trust-local-package CommonsBase_GNU --trust-local-package CommonsBase_Win32 run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=target/my-wenv
 --   $ target/my-wenv/bin/enter cmd.exe
 --
 -- FAQ:
