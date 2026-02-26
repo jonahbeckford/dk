@@ -1,4 +1,4 @@
-// Test: ./dk0 --trial --autofix -I etc/dk/v -x inria-caml-std:subpath: --trust-local-package NotInriaCaml_Std get-bundle NotInriaCaml_Std.OCaml.Lookup@1.0.0 -d target/camllookup
+// Test: ./dk0 --trial --autofix -I etc/dk/v -x inria-caml-std:subpath: --trust-local-package NotInriaCaml_Std get-bundle NotInriaCaml_Std.Lookup@1.0.0 -d target/camllookup
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
   "schema_version": {
@@ -7,7 +7,7 @@
   },
   "bundles": [
     {
-      "id": "NotInriaCaml_Std.OCaml.Lookup@1.0.0",
+      "id": "NotInriaCaml_Std.Lookup@1.0.0",
       "listing": {
         "origins": [
           {
@@ -32,9 +32,9 @@
           "origin": "inria-caml-std",
           // scripts
           "path": "s",
-          "size": 5486,
+          "size": 6141,
           "checksum": {
-            "sha256": "ed96f6b3aa2252abf319a4066de9e0dc33ce87a8852a4c20e0d683f36d02daaf"
+            "sha256": "e8439916060f6be7dfc7745e3ce562691b1a6cd6584b00a098d5b1068aca416d"
           }
         },
         {

@@ -675,6 +675,8 @@ jobs:
                   objects: |
                     Release.Darwin_arm64:NotInriaCaml_Std.Toolchain.W64devkit@5.4.1
                     Release.Darwin_x86_64:NotInriaCaml_Std.Toolchain.W64devkit@5.4.1
+                  scripts: |
+                    NotInriaCaml_Std.Wenv@0.1.0
                   use-cache: true
                   experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
 

@@ -18,7 +18,7 @@
 //
 // === EXAMPLES ===
 //
-// ./dk0 --trial -v -I etc/dk/v --trust-local-package CommonsBase_Win32 --trust-local-package NotMatveevKondratyev_Libinotify --trust-local-package CommonsBase_LLVM --trust-local-package CommonsBase_GNU --trust-local-package NotInriaCaml_Std get-object NotInriaCaml_Std.Toolchain.W64devkit@5.4.1 -s Release.Darwin_arm64.Windows_x86_64 -d target/ocaml-winx64
+// ./dk0 --trial -v -I etc/dk/v --trust-local-package CommonsBase_Win32 --trust-local-package NotMatveevKondratyev_Libinotify --trust-local-package CommonsBase_LLVM --trust-local-package CommonsBase_GNU --trust-local-package NotInriaCaml_Std --trust-local-package NotMitEdu_Kerberos get-object NotInriaCaml_Std.Toolchain.W64devkit@5.4.1 -s Release.Darwin_arm64.Windows_x86_64 -d target/ocaml-winx64
 //
 // === FOLDERS ===
 //
@@ -81,7 +81,7 @@
                         "--batch",
                         "--directory=s",
                         "-p1",
-                        "-i", "$(--path=absnative get-asset NotInriaCaml_Std.OCaml.Lookup@1.0.0 -p p -m ./ocaml-5.4.1-configure.patch -f ocaml-5.4.1-configure.patch)"
+                        "-i", "$(--path=absnative get-asset NotInriaCaml_Std.Lookup@1.0.0 -p p -m ./ocaml-5.4.1-configure.patch -f ocaml-5.4.1-configure.patch)"
                     ],
 
                     // --- patch: use Compflags-win32.cmd not shell script Compflags
@@ -92,7 +92,7 @@
                     [
                         "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f coreutils.exe -e '*')",
                         "cp",
-                        "$(get-asset NotInriaCaml_Std.OCaml.Lookup@1.0.0 -p s -m ./Compflags-win32.cmd -f Compflags.cmd)",
+                        "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./Compflags-win32.cmd -f Compflags.cmd)",
                         "s/stdlib/Compflags.cmd"
                     ],
 
@@ -151,8 +151,8 @@
                     [
                         "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f coreutils.exe -e '*')",
                         "cp",
-                        "$(get-asset NotInriaCaml_Std.OCaml.Lookup@1.0.0 -p s -m ./cdsrc-w64devkit.sh -f cdsrc.sh)",
-                        "$(get-asset NotInriaCaml_Std.OCaml.Lookup@1.0.0 -p s -m ./cdsrc-w64devkit.cmd -f cdsrc.cmd)",
+                        "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./cdsrc-w64devkit.sh -f cdsrc.sh)",
+                        "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./cdsrc-w64devkit.cmd -f cdsrc.cmd)",
                         "${STATE}/wineprefixes/NotInriaCaml_Std.Toolchain.W64devkit.${SLOTNAME.request}@5.4.1/drive_c/src/NotInriaCaml_Std/w64devkit/5.4.1/bin"
                     ],
 
