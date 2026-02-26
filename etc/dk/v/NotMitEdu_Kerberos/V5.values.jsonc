@@ -37,7 +37,6 @@
                             "bin/klist",
                             "bin/kpasswd",
                             "bin/krb5-config",
-                            "bin/ksu",
                             "bin/kswitch",
                             "bin/ktutil",
                             "bin/kvno",
