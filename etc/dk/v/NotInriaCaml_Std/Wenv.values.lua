@@ -120,7 +120,16 @@ function uirules.Create(command, request)
                 p.wenv .. "/drive_c/opt/w64devkit"
             },
 
-            -- PATH: add OCaml and w64devkit
+            -- Place cygpath.cmd in the wenv at C:\opt\cygpath
+            { p.coreutilsexe, "mkdir", "-p", p.wenv .. "/drive_m/opt/cygpath" },
+            {
+                p.coreutilsexe,
+                "cp",
+                "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./cygpath-winepath.cmd -f cygpath.cmd)",
+                p.wenv .. "/drive_c/opt/cygpath/"
+            },
+
+            -- PATH: add cygpath, OCaml and w64devkit
             {
                 "/bin/sh", p.enterwine,
                 --      add to HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment which is:
@@ -130,7 +139,7 @@ function uirules.Create(command, request)
                 "/t", "REG_EXPAND_SZ",
                 "/f", -- no prompt for configuration
                 "/v", "Path",
-                "/d", "C:\\opt\\ocaml-5.4.1\\bin;C:\\opt\\w64devkit\\bin"
+                "/d", "C:\\opt\\cygpath;C:\\opt\\ocaml-5.4.1\\bin;C:\\opt\\w64devkit\\bin"
             },
 
             -- create M: drive for mounting host directories
@@ -247,6 +256,10 @@ function uirules.Create(command, request)
         print("  # 1+1 ;;")
         print("  - : int = 2")
         print("  # ^Z")
+        print("  Z:\\> echo let () = print_endline \"abcxyz\" > letters.ml")
+        print("  Z:\\> ocamlopt -o letters.exe letters.ml")
+        print("  Z:\\> .\\letters.exe")
+        print("  abcxyz")
         print("  Z:\\> exit")
     end
 end

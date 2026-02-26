@@ -13,8 +13,9 @@ REM    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 REM    See the License for the specific language governing permissions and
 REM    limitations under the License.
 
-REM This script is designed to run inside Wine during the `make` of
-REM github.com/ocaml/ocaml.
+REM This batch script is designed to run inside Wine during the `make` of
+REM github.com/ocaml/ocaml, and at runtime when `ocamlopt` and other
+REM OCaml tools are invoked.
 
 SETLOCAL ENABLEDELAYEDEXPANSION
 SETLOCAL ENABLEEXTENSIONS
