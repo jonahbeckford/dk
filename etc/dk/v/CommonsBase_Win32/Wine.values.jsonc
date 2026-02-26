@@ -29,7 +29,7 @@
                     // add LLVM-MinGW toolchain for PE cross-compilation
                     "<PATH=$(get-object CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216 -s Release.execution_abi -d : -e 'bin/*')${/}bin"
                 ],
-                "args": [
+                "commands": [
                     // --- debugging in case of failure ---
                     [
                         "/bin/sh", "-c", "\"set | grep -E '^(PATH|BISON)=' | sed 's/^/export /' > vars.source.sh\""

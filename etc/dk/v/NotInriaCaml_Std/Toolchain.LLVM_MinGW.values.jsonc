@@ -101,7 +101,7 @@
                     //  0094:err:setupapi:SetupDefaultQueueCallbackW copy error 1812 L"@C:\\windows\\system32\\drivers\\wineusb.sys,-1" -> L"C:\\windows\\inf\\wineusb.inf"
                     //"+WINEDEBUG=-winediag,fixme-actctx,-x11drv,-vulkan,-systray,-setupapi,-ole"
                 ],
-                "args": [
+                "commands": [
                     // DEV NOTE: we could stuff all of this into a shell script because OCaml requires a /bin/sh for ./configure.
                     // But that is a current OCaml shortcoming: at some point we could build OCaml from a dk0 build directly.
                     // In other words, resist the urge to stuff all of this into a non-Windows shell script.

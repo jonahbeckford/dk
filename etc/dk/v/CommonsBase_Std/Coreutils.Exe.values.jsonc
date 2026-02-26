@@ -29,7 +29,7 @@
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // with [7z.exe] ...
           "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -d :)/7z.exe",
           // (e)xtract all files into a single flat directory
@@ -88,7 +88,7 @@
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // with [7z.exe] ...
           "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -d :)/7z.exe",
           // (e)xtract all files into a single flat directory

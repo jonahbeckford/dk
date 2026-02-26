@@ -26,7 +26,7 @@
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // uncompress asset [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           "$(get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86 -d :)/7zr.exe",

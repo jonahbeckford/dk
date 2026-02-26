@@ -344,7 +344,7 @@ Consider the following snippet from JSON build configuration that fetches PowerS
         "envmods": [
           "+DOTNET_ROOT=$(get-object CommonsBase_Dotnet.SDK@10.0.100-rc.2.25502.107 -s ${SLOTNAME.Release.execution_abi} -d :)"
         ],
-        "args": [
+        "commands": [
           "$(get-object CommonsBase_Dotnet.SDK@10.0.100-rc.2.25502.107 -s ${SLOTNAME.Release.execution_abi} -d :)/dotnet${.exe.execution}",
           "tool",
           "install",
@@ -1056,7 +1056,7 @@ The order of processing is as follows:
 1. The form's subshells in the function `args` and `envmods` (if any) are executed, in parallel if supported by the build system.
 2. The form's precommands are executed, in parallel if supported by the build system.
 3. If there is a breakpoint from the `enter-object` command, a system shell (PowerShell, bash, etc.) is invoked.
-4. The form's function command line is executed. The command line is the concatenation of the function arguments in `"function": { "args": ... }`.
+4. The form's function command line is executed. The command line is the concatenation of the function arguments in `"function": { "commands": ... }`.
 5. The form's output files are verified to exist.
 6. The [`${SLOT.slotname}`](#slotslotname) that are part of the form's arguments and precommands are made available to other forms.
 
@@ -1188,7 +1188,7 @@ Words are directly used in other places in the values file:
 
 ```json
 "function": {
-    "args": [
+    "commands": [
       // word 1
       "sh",
       // word 2
@@ -1663,7 +1663,7 @@ For example, the form:
         ]
       },
       "function": {
-        "args": [
+        "commands": [
           "arg1"
         ],
         "envmods": [
@@ -1723,7 +1723,7 @@ For example, the form:
 is canonicalized to:
 
 ```json
-{"bundles":[{"assets":[{"checksum":{"sha256":"4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"},"path":"SHA256"},{"checksum":{"sha256":"0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"},"path":"SHA256.sig"}],"id":"DkDistribution_Std.Bundle@2.4.202508011516-signed"}],"forms":[{"function":{"args":["arg1"],"envmods":["-PATH"]},"id":"FooBar_Baz@0.1.0","outputs":{"assets":[{"paths":["outpath1"],"slots":["output1"]}]},"precommands":{"private":["private1"],"public":["public1"]}}],"schema_version":{"major":1,"minor":0}}
+{"bundles":[{"assets":[{"checksum":{"sha256":"4bd73809eda4fb2bf7459d2e58d202282627bac816f59a848fc24b5ad6a7159e"},"path":"SHA256"},{"checksum":{"sha256":"0d281c9fe4a336b87a07e543be700e906e728becd7318fa17377d37c33be0f75"},"path":"SHA256.sig"}],"id":"DkDistribution_Std.Bundle@2.4.202508011516-signed"}],"forms":[{"function":{"commands":["arg1"],"envmods":["-PATH"]},"id":"FooBar_Baz@0.1.0","outputs":{"assets":[{"paths":["outpath1"],"slots":["output1"]}]},"precommands":{"private":["private1"],"public":["public1"]}}],"schema_version":{"major":1,"minor":0}}
 ```
 
 ## Distributions
@@ -2936,7 +2936,7 @@ function uirules.MyRule(command, request)
               id = request.submit.outputid,
               -- ...
               function_ = {
-                args = {
+                commands = {
                   "some-programming-language-compiler",
                   -- let's pretend that there is a `-c DIR` option
                   -- to compile everything in a directory
@@ -3241,7 +3241,7 @@ or from a subshell in a `values.json` build file:
   // ...
   "forms": [
     "function": {
-      "args": [
+      "commands": [
         "echo",
         "$(post-object MyLibrary_Std.A.B.MyModule.MyRule@1.0.0 -s Some.Slot -- a=1 b=2)"
       ]
@@ -3360,7 +3360,7 @@ return {
         {
           id = "OurExample_Std.SomeModule@0.1.2",
           function_ = {
-            args = {
+            commands = {
               "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f coreutils.exe -e '*')",
               "sort",
               "--output",
@@ -3579,7 +3579,7 @@ elseif command == "submit" && continue_ == "start" then
           {
             id = request.submit.outputid,
             function_ = {
-              args = {
+              commands = {
                 "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f :exe:coreutils.exe)",
                 "sort",
                 "--output",
@@ -4015,9 +4015,10 @@ The form document also contributes to the command line invocation of the form's 
 
 #### Form Command Line
 
-The *command line*, if a form has a `function`, is constructed as the concatenation of:
+The *command* is one array item of the form `[<program>, <arg1>...]` in `"function": { "commands": [ [program1, args1...], [program2, args2...], ... ] }`.
+Each *command line* is constructed as the concatenation of:
 
-1. The function arguments in `"function": { "args": ... }`
+1. The `<program>, <arg1>...` for a single command.
 2. The `{"options": "fields": [...]}` without any `group` field
 3. The arguments in `groups[0]` (if any)
 4. The `{"options": "fields": [...]}` with a `group: 0` field (if any)
@@ -4068,7 +4069,7 @@ A task may depend on zero or more keys. For example, the form task `CommonsBase_
     {
       "id": "CommonsBase_Shell.Pwsh@7.5.4",
       "function": {
-        "args": [
+        "commands": [
             "$(get-object CommonsBase_Dotnet.SDK@10.0.100-rc.2.25502.107 -s ${SLOTNAME.Release.execution_abi} -d :)/dotnet${.exe.execution}",
             "tool",
             "install",

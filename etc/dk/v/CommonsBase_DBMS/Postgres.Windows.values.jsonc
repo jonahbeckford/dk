@@ -10,7 +10,7 @@
         ]
       },
       "function": {
-        "args": [
+        "commands": [
           "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Windows_x86_64 -m ./coreutils.exe -f : -e '*')",
           "rm",
           "-rf",

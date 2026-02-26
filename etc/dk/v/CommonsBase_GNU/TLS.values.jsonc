@@ -24,7 +24,7 @@
                 ]
             },
             "function": {
-                "args": [
+                "commands": [
                     // configure
                     //   https://www.gnutls.org/manual/html_node/Downloading-and-installing.html#Downloading-and-installing
                     //   - ./configure does not allow multiple words in GMP_LIBS because `test x$GMP_LIBS = x` so use LDFLAGS.

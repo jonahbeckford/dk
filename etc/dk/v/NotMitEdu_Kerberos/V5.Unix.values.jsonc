@@ -18,7 +18,7 @@
                 ]
             },
             "function": {
-                "args": [
+                "commands": [
                     // src/configure
                     [
                         "/bin/sh", "src/configure", "--disable-dependency-tracking", "--disable-nls", "--without-system-verto",

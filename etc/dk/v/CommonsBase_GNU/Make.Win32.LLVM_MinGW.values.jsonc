@@ -27,7 +27,7 @@
                     // add LLVM-MinGW toolchain for cross-compilation
                     "<PATH=$(get-object CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216 -s Release.execution_abi -d : -e 'bin/*')${/}bin"
                 ],
-                "args": [
+                "commands": [
                     // ./configure
                     // confer build_w32.bat `:: GCC Compile` section for CFLAGS
 

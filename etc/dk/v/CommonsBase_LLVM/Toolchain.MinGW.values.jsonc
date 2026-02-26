@@ -30,7 +30,7 @@
         ]
       },
       "function": {
-        "args": [
+        "commands": [
           // remove the ignored.zip file from macOS precommands
           [
             "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.execution_abi -m ./coreutils.exe -e coreutils.exe -f coreutils.exe)",

@@ -22,7 +22,7 @@
         ]
       },
       "function": {
-        "args": [
+        "commands": [
           // Release.Windows_x86 only: extract w64devkit-x86.7z.exe into w64devkit/
           [
             "./7zz.exe",

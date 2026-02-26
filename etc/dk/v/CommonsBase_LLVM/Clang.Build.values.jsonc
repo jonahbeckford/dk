@@ -34,7 +34,7 @@
           "+CODEGEN_DIR=codegen/darwin_x86_64",
           "+PACKAGE_CLANG_OUT=${SLOT.request}"
         ],
-        "args": [
+        "commands": [
           "/bin/sh",
           "build-unix-wrapper.sh",
           "${SLOT.request}"
@@ -84,7 +84,7 @@
           "+CODEGEN_DIR=codegen/darwin_arm64",
           "+PACKAGE_CLANG_OUT=${SLOT.request}"
         ],
-        "args": [
+        "commands": [
           "/bin/sh",
           "build-unix-wrapper.sh",
           "${SLOT.request}"
@@ -448,7 +448,7 @@
           "+CODEGEN_DIR=codegen/linux_x86",
           "+PACKAGE_CLANG_OUT=${SLOT.request}"
         ],
-        "args": [
+        "commands": [
           "/bin/sh",
           "build-unix-wrapper.sh",
           "${SLOT.request}"
@@ -496,7 +496,7 @@
           "+CODEGEN_DIR=codegen/linux_x86_64",
           "+PACKAGE_CLANG_OUT=${SLOT.request}"
         ],
-        "args": [
+        "commands": [
           "/bin/sh",
           "build-unix-wrapper.sh",
           "${SLOT.request}"
@@ -540,7 +540,7 @@
           "+CODEGEN_DIR=codegen\\windows_x86",
           "+PACKAGE_CLANG_OUT=${SLOT.request}"
         ],
-        "args": [
+        "commands": [
           "cmd",
           "/C",
           "build-win32-wrapper.cmd",
@@ -585,7 +585,7 @@
           "+CODEGEN_DIR=codegen\\windows_x86_64",
           "+PACKAGE_CLANG_OUT=${SLOT.request}"
         ],
-        "args": [
+        "commands": [
           "cmd",
           "/C",
           "build-win32-wrapper.cmd",

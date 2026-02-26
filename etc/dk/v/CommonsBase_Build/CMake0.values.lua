@@ -463,7 +463,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
   table.move(p.iargs, 1, table.getn(p.iargs), table.getn(iargs) + 1, iargs) ---@diagnostic disable-line: deprecated, access-invisible
 
   -- assemble the array of commands
-  local args = {
+  local commands = {
     -- run: cmake -G
     gargs,
     -- run: cmake --build
@@ -478,7 +478,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
       -- copy contents of t/s into s/
       p.coreutilsexe, "cp", "-v", "-r", "--target-directory", ".", "t/s"
     }
-    table.insert(args, 1, overlaycopycmd)
+    table.insert(commands, 1, overlaycopycmd)
   end
 
   -- validate and add `rm -rf DIRS` for each ${SLOT.Release.Agnostic}/DIR in p.outrmexact
@@ -493,7 +493,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
     local rmrfcmd = { p.coreutilsexe, "rm", "-rf" }
     table.move(rmdirs, 1, table.getn(rmdirs), table.getn(rmrfcmd) + 1, rmrfcmd) ---@diagnostic disable-line: deprecated, access-invisible
     local rmrfcmd1 = { rmrfcmd } -- add one [rm -rf] command
-    table.move(rmrfcmd1, 1, table.getn(rmrfcmd1), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+    table.move(rmrfcmd1, 1, table.getn(rmrfcmd1), table.getn(commands) + 1, commands) ---@diagnostic disable-line: deprecated, access-invisible
   end
 
   -- add `fd --glob --hidden --no-ignore -X coreutils rm -f \; -- GLOB ${SLOT.Release.Agnostic}` for each GLOB in p.outrmglob
@@ -509,7 +509,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
       "-X", p.coreutilsexe, "rm", "-f", ";",
       "--", v, "${SLOT.Release.Agnostic}" }
     local fdcmd1 = { fdcmd } -- add one [fd] command
-    table.move(fdcmd1, 1, table.getn(fdcmd1), table.getn(args) + 1, args) ---@diagnostic disable-line: deprecated, access-invisible
+    table.move(fdcmd1, 1, table.getn(fdcmd1), table.getn(commands) + 1, commands) ---@diagnostic disable-line: deprecated, access-invisible
     k, v = next(p.outrmglob, k)
   end
 
@@ -525,7 +525,7 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
             },
             function_ = {
               execution = { { name = "OSFamily", value = p.osfamily } },
-              args = args
+              commands = commands
             },
             outputs = {
               assets = {

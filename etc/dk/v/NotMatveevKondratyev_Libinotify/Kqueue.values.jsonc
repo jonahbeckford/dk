@@ -30,7 +30,7 @@
                 ]
             },
             "function": {
-                "args": [
+                "commands": [
                     // ./configure
                     [
                         "/bin/sh", "./configure", "--disable-dependency-tracking",

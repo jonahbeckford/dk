@@ -49,7 +49,7 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // with [7zr.exe] ...
           "bin/${SLOTNAME.request}/7zr.exe",
           // e(x)tract files into directory tree

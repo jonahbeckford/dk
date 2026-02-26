@@ -25,7 +25,7 @@
                     // confer https://github.com/gmp-mirror/gmp/commit/f162b5eeab274718539dd1211eec970cc8ed65c5
                     "+YACC=$(get-object CommonsBase_GNU.Bison@3.8.2 -s Release.execution_abi -m ./bin/yacc -e bin/yacc -f yacc)"
                 ],
-                "args": [
+                "commands": [
                     // configure
                     //      https://gmplib.org/manual/Build-Options
                     //      https://github.com/Homebrew/homebrew-core/blob/5f5970337edca8770e364109ae442316337ae06e/Formula/g/gmp.rb

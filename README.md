@@ -848,7 +848,7 @@ Whenever we run a command we need a form with a `function`.
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // extract asset [7z2501-arm.exe] with [7zr.exe] to the output directory
           // for slot [Release.Windows_arm], etc.
           "bin/${SLOTNAME.request}/7zr.exe",
@@ -1029,7 +1029,7 @@ This is a new form with a function that will call `7z.exe` with the right parame
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // uncompress asset [7z2501-mac.tar.xz] with [7zr.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           "$(get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86 -d :)/7zr.exe",
@@ -1151,7 +1151,7 @@ This is a new form with a function that will call `7z.exe` with the right parame
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // extract object [7z2501-mac.tar] with [7z.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -d :)/7z.exe",
@@ -1533,7 +1533,7 @@ The always-failing form is the following (you don't need to create your own copy
         ]
       },
       "function": {
-        "args": [
+        "commands": [
           // run something that will always fail. the precommands are what we want to test
           "false"
         ]

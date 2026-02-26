@@ -31,7 +31,7 @@
                 ]
             },
             "function": {
-                "args": [
+                "commands": [
                     [
                         // rename static/include to include/
                         "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.execution_abi -m ./coreutils.exe -e '*' -f coreutils.exe)",

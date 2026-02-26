@@ -46,7 +46,7 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // e(x)tract object [7z2501-mac.tar] with [7z.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           // with [7z.exe] ...

@@ -110,7 +110,7 @@
           // : Network Location Awareness from `C:\Windows\System32\svchost.exe -k NetworkService`
           // : Seems unavoidable but irrelevant to reproducibility.
         ],
-        "args": [
+        "commands": [
           "$(get-object CommonsBase_Dotnet.SDK@10.0.100-rc.2.25502.107 -s ${SLOTNAME.Release.execution_abi} -d :)/dotnet${.exe.execution}",
           "tool",
           "install",
