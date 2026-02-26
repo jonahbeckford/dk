@@ -21,39 +21,39 @@
                 "commands": [
                     // src/configure
                     [
-                        "/bin/sh", "src/configure", "--disable-dependency-tracking", "--disable-nls", "--without-system-verto",
+                        "/bin/sh", "src/configure", "--disable-nls", "--without-system-verto", "--without-libedit", "--without-keyutils", "--without-tls-impl", "--without-spake-openssl",
                         "--host=x86_64-apple-darwin",
-                        "\"CC=clang -arch x86_64\"",
+                        "\"CC=clang -arch x86_64\"", "\"CXX=clang++ -arch x86_64\"",
                         "--prefix=${SLOTABS.Release.Darwin_x86_64}"
                     ],
                     [
-                        "/bin/sh", "src/configure", "--disable-dependency-tracking", "--disable-nls", "--without-system-verto",
+                        "/bin/sh", "src/configure", "--disable-nls", "--without-system-verto", "--without-libedit", "--without-keyutils", "--without-tls-impl", "--without-spake-openssl",
                         "--host=aarch64-apple-darwin",
-                        "\"CC=clang -arch arm64\"",
+                        "\"CC=clang -arch arm64\"", "\"CXX=clang++ -arch arm64\"",
                         "--prefix=${SLOTABS.Release.Darwin_arm64}"
                     ],
                     [
-                        "/bin/sh", "src/configure", "--disable-dependency-tracking", "--disable-nls", "--without-system-verto",
+                        "/bin/sh", "src/configure", "--disable-nls", "--without-system-verto", "--without-libedit", "--without-keyutils", "--without-tls-impl", "--without-spake-openssl",
                         "--host=x86_64-linux-gnu",
-                        "\"CC=gcc -m64\"",
+                        "\"CC=gcc -m64\"", "\"CXX=g++ -m64\"",
                         "--prefix=${SLOTABS.Release.Linux_x86_64}"
                     ],
                     [
-                        "/bin/sh", "src/configure", "--disable-dependency-tracking", "--disable-nls", "--without-system-verto",
+                        "/bin/sh", "src/configure", "--disable-nls", "--without-system-verto", "--without-libedit", "--without-keyutils", "--without-tls-impl", "--without-spake-openssl",
                         "--host=i686-linux-gnu",
-                        "\"CC=gcc -m32\"",
+                        "\"CC=gcc -m32\"", "\"CXX=g++ -m32\"",
                         "--prefix=${SLOTABS.Release.Linux_x86}"
                     ],
                     [
-                        "/bin/sh", "src/configure", "--disable-dependency-tracking", "--disable-nls", "--without-system-verto",
+                        "/bin/sh", "src/configure", "--disable-nls", "--without-system-verto", "--without-libedit", "--without-keyutils", "--without-tls-impl", "--without-spake-openssl",
                         "--host=aarch64-linux-gnu",
-                        "\"CC=gcc -march=armv8-a\"",
+                        "\"CC=gcc -march=armv8-a\"", "\"CXX=g++ -march=armv8-a\"",
                         "--prefix=${SLOTABS.Release.Linux_arm64}"
                     ],
 
                     // make
                     [
-                        "$(get-object CommonsBase_GNU.Make@4.4.1 -s Release.execution_abi -m ./bin/make -e bin/make -f make)"
+                        "$(get-object CommonsBase_GNU.Make@4.4.1 -s Release.execution_abi -m ./bin/make -e bin/make -f make)", "--trace"
                     ],
 
                     // make install
