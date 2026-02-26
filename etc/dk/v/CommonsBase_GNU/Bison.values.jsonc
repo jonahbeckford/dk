@@ -14,7 +14,7 @@
                     // convert the .tar.xz to .zip
                     "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ignored.zip modver=CommonsBase_GNU.Bison.Zip@3.8.2 tarfile=$(get-asset CommonsBase_GNU.Bison.Bundle@3.8.2 -p bison-3.8.2.tar.xz -f bison.tar.xz)",
                     // extract zip to current folder, stripping toplevel bison-3.8.2/ folder
-                    "install-object CommonsBase_GNU.Bison.Zip@3.8.2 -s Release.Agnostic -m ./output.zip -n 1 -d . -e 'build-aux/move-if-change'"
+                    "install-object CommonsBase_GNU.Bison.Zip@3.8.2 -s Release.Agnostic -m ./output.zip -n 1 -d . -e 'build-aux/*'"
                 ]
             },
             "function": {
