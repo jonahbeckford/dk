@@ -32,9 +32,9 @@
           "origin": "inria-caml-std",
           // scripts
           "path": "s",
-          "size": 8873,
+          "size": 7450,
           "checksum": {
-            "sha256": "0dd303e014ca8b292b8f4255de9e7c726036412bbda58d5aecb042cff7015912"
+            "sha256": "4f12c4f448ca7989bf0e739314e1af612dc2da65c216d968438788e366635c80"
           }
         },
         {
