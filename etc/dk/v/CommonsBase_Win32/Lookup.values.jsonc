@@ -37,19 +37,11 @@
           }
         },
         {
-          "path": "wait-wineserver.sh",
-          "origin": "commons-base-win32-scripts",
-          "size": 1403,
-          "checksum": {
-            "sha256": "85f9d11db31385b8d02fb2595e388ae50600779a21abeb22256be609e090fc6b"
-          }
-        },
-        {
           "path": "enter-wine.in.sh",
           "origin": "commons-base-win32-scripts",
-          "size": 1533,
+          "size": 2491,
           "checksum": {
-            "sha256": "a364ff5868ab772945102f7cdf833f3c78e8fa97830e83696b171330d8962fe1"
+            "sha256": "7991a481a5e169f3929e1d61bcdbeff436e92b790923aa313f0bde99350ef71c"
           }
         },
         {
