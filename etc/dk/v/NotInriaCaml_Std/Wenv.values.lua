@@ -174,7 +174,11 @@ function uirules.Create(command, request)
                 "-v", "GNUTLS_LIBDIR=" .. p.gnutlslib,
                 "-v", "INOTIFY_LIBDIR=" .. p.inotifylib,
                 "-v", "KRB5_LIBDIR=" .. p.krb5lib,
-                "-f", "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./enter-wenv-mk.awk -f enter-wenv-mk.awk)",
+
+                -- temporary until rebuilt
+                -- "-f", "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./enter-wenv-mk.awk -f enter-wenv-mk.awk)",
+                "'{ gsub(/@WINEPREFIX@/, WINEPREFIX); gsub(/@WINEHOME@/, WINEHOME); gsub(/@GNUTLS_LIBDIR@/, GNUTLS_LIBDIR); gsub(/@INOTIFY_LIBDIR@/, INOTIFY_LIBDIR); gsub(/@KRB5_LIBDIR@/, KRB5_LIBDIR); print $0 > OUTPUT_FILE; }'",
+
                 "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./enter-wenv.in.sh -f enter-wenv.sh)"
             },
             --   until we upgrade past coreutils 0.2.2, we have to search for chmod on PATH.
