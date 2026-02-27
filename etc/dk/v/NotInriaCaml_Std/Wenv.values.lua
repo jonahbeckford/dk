@@ -1,7 +1,7 @@
 -- USAGE 1 of 1: NotInriaCaml_Std.Wenv@0.1.0
 -- A UI rule that creates a Windows build environment ("wenv") on Unix (currently macOS only) with a
--- native OCaml compiler using the Wine emulator.
--- The <wenv>/bin/enter script is created so you can run Windows executables like "cmd.exe".
+-- native OCaml compiler and optional mounted directories using the Wine emulator.
+-- The <wenv>/bin/enter script will be created so you can run Windows executables like "cmd.exe".
 -- 
 -- SECURITY:
 -- 1. You can mount arbitrary host directories in the wenv.
@@ -11,20 +11,24 @@
 -- - Consider using https://github.com/containers/bubblewrap or similar to sandbox
 --   the <wenv>/bin/enter script.
 -- 
--- Configurations: One of the following sets of options must be provided:
+-- THINGS THAT WILL CHANGE:
+-- 1. The M: drive is for mounts today. That will change to C:\mnt or similar so that
+--    a wenv can be created on Windows using Windows Sandbox.
+-- 
+-- CONFIGURATIONS: One of the following sets of options must be provided:
 --   dir=
 -- 
--- Options:
+-- OPTIONS:
 --   dir=WENV: The absolute directory where the environment will be created.
 --   mount[]=type=bind,src=<host-path>,dst=<mount-path>:
 --     (optional, repeatable) Mount a host directory into the wenv.
 --     For example, `mount[]=type=bind,src=/path/on/host,dst=M:\path\in\wenv` will mount the
 --     host path `/path/on/host` at `M:\path\in\wenv` in the wenv.
 --     [src]: Must be an absolute path on the host machine.
---     [dst]: Must be on the  M: drive which is reserved for mounted host directories.
+--     [dst]: Must be on the  M: drive which is RESERVED for mounted host directories.
 --     It is undefined what happens when the 'dst' mount paths overlap. Don't do it!
 --
--- Examples:
+-- EXAMPLES:
 --   $ ./dk0 --trial run NotInriaCaml_Std.Wenv.Create@0.1.0 dir=$PWD/target/my-wenv
 --   $ target/my-wenv/bin/enter cmd.exe
 -- 
@@ -125,7 +129,7 @@ function uirules.Create(command, request)
             },
 
             -- Place cygpath.cmd in the wenv at C:\opt\cygpath
-            { p.coreutilsexe, "mkdir", "-p", p.wenv .. "/drive_m/opt/cygpath" },
+            { p.coreutilsexe, "mkdir", "-p", p.wenv .. "/drive_c/opt/cygpath" },
             {
                 p.coreutilsexe,
                 "cp",
