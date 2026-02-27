@@ -163,7 +163,7 @@
                     [
                         // Wait until the wineserver process has exited to avoid race conditions modifying the wine prefix in
                         // the background (wineserver) and in the foreground (the next steps of this LLVM_MinGW function).
-                        "/bin/sh", "$(get-asset CommonsBase_Win32.Lookup@1.0.0 -p wait-wineserver.sh -f wait-wineserver.sh)"
+                        "/bin/sh", "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./wait-wineserver.sh -f wait-wineserver.sh)"
                     ],
 
                     // --- C:\**: make parent directories

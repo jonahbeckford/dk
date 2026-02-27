@@ -98,7 +98,7 @@ function uirules.Create(command, request)
             -- Wait until the wineserver process has exited to avoid race conditions modifying the wine prefix
             {
                 "/bin/sh",
-                "$(get-asset CommonsBase_Win32.Lookup@1.0.0 -p wait-wineserver.sh -f wait-wineserver.sh)"
+                "$(get-asset NotInriaCaml_Std.Lookup@1.0.0 -p s -m ./wait-wineserver.sh -f wait-wineserver.sh)"
             },
 
             -- Place OCaml in the wenv at C:\opt\ocaml-5.4.1
