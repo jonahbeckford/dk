@@ -127,9 +127,9 @@
                     ],
                     [
                         "/bin/sh", "./configure",
-                        //  everything except the slot is x86-64
+                        //      everything except the slot is x86-64
                         "\"CC=gcc -arch x86_64\"", "\"CXX=g++ -std=gnu++11 -arch x86_64\"",
-                        //  NOTE: all *_LIBS must be in sync with enter-wine.{in.sh, mk.awk} and the <awk> -v *_LIBDIR in a command further below
+                        //      NOTE: all *_LIBS must be in sync with enter-wine.{in.sh, mk.awk} and the <awk> -v *_LIBDIR in a command further below
                         "GNUTLS_CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s Release.Darwin_x86_64 -d :)/include",
                         "GNUTLS_LIBS=-L$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s Release.Darwin_x86_64 -d :)/lib' '-lgnutls",
                         "INOTIFY_CFLAGS=-I$(--path=absnative get-object NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0 -s Release.Darwin_x86_64 -d :)/include",
@@ -190,10 +190,16 @@
                     ],
                     [
                         "/bin/sh", "./configure",
-                        //  make sure that Intel binaries are created, even on Apple Silicon
+                        //      make sure that Intel binaries are created, even on Apple Silicon
                         "\"CC=gcc -arch x86_64\"", "\"CXX=g++ -std=gnu++11 -arch x86_64\"",
+                        //      NOTE: all *_LIBS must be in sync with enter-wine.{in.sh, mk.awk} and the <awk> -v *_LIBDIR in a command further below
                         "GNUTLS_CFLAGS=-I$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s Release.Darwin_x86_64 -d :)/include",
                         "GNUTLS_LIBS=-L$(--path=absnative get-object CommonsBase_GNU.TLS@3.8.12 -s Release.Darwin_x86_64 -d :)/lib' '-lgnutls",
+                        "INOTIFY_CFLAGS=-I$(--path=absnative get-object NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0 -s Release.Darwin_x86_64 -d :)/include",
+                        "INOTIFY_LIBS=-L$(--path=absnative get-object NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0 -s Release.Darwin_x86_64 -d :)/lib' '-linotify",
+                        //      krb5: flags from krb5-config except `-dynamic` in KRB5_LIBS which is overspecified
+                        "KRB5_CFLAGS=-I$(get-object NotMitEdu_Kerberos.V5@1.22.2 -s Release.Darwin_x86_64 -d :)/include",
+                        "KRB5_LIBS=-L$(get-object NotMitEdu_Kerberos.V5@1.22.2 -s Release.Darwin_x86_64 -d :)/lib' '-lkrb5' '-lk5crypto' '-lcom_err",
                         "--build=x86_64-apple-darwin",
                         "--prefix=${SLOTABS.Release.Darwin_x86_64}",
                         "--disable-tests",
