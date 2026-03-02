@@ -27,7 +27,7 @@ git clone --branch V2_5 https://github.com/diskuv/dk.git dksrc
 # dksrc/dk0 --trial import-github-l2 --repo jonahbeckford/dk --tag 2.5.202601180004 --outdir dksrc/etc/dk/i/
 
 # Hack dk0 2.4.2.52 until 2.4.2.53 is built
-# if [ -x ../dksdk-coder/_build/default/ext/MlFront/src/MlFront_Exec/Shell.exe ]; then
+# if [ -x ../dksdk-coder/_build/default/ext/MlFront/src/DkZero_Exec/Shell.exe ]; then
 #     echo "SECURITY WARNING: Using local build of dk0" >&2
 #     install -v maintenance/hardcoded-dk0.sh dksrc/dk0
 # fi

@@ -6193,7 +6193,7 @@ end
 
 -- `dk0 run CommonsBase_Dotnet.SDK.Dotnet@10.0.100-rc.2.25502.107 [args...]` runs the `dotnet [args...]`
 function uirules.Dotnet(command, request)
-  -- ../dksdk-coder/_build/default/ext/MlFront/src/MlFront_Exec/Shell.exe -v --trial -d intermediate -d explain --cell dk0=ext/dk -I ext/dk/etc/dk/v --trust-local-package CommonsBase_Std --trust-local-package CommonsBase_Dotnet --trust-local-package CommonsBase_Shell run CommonsBase_Dotnet.SDK.Dotnet@10.0.100-rc.2.25502.107 'args[]=run' 'args[]=ext/dk/samples/2025/AsciiArt.cs' 'args[]=--' 'args[]=test it'
+  -- ../dksdk-coder/_build/default/ext/MlFront/src/DkZero_Exec/Shell.exe -v --trial -d intermediate -d explain --cell dk0=ext/dk -I ext/dk/etc/dk/v --trust-local-package CommonsBase_Std --trust-local-package CommonsBase_Dotnet --trust-local-package CommonsBase_Shell run CommonsBase_Dotnet.SDK.Dotnet@10.0.100-rc.2.25502.107 'args[]=run' 'args[]=ext/dk/samples/2025/AsciiArt.cs' 'args[]=--' 'args[]=test it'
   -- 'args[]=--info'
   -- 'args[]=--list-runtimes'
   if command == "submit" then

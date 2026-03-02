@@ -46,11 +46,11 @@ git clone --branch V2_5 https://github.com/diskuv/dk.git dksrc
 
 # Make dk0 available in PATH
 if [ $use_coder -eq 1 ]; then
-    if [ -x ../dksdk-coder/_build/default/ext/MlFront/src/MlFront_Exec/Shell.exe ]; then
+    if [ -x ../dksdk-coder/_build/default/ext/MlFront/src/DkZero_Exec/Shell.exe ]; then
         echo "Using local build of dk0 from dksdk-coder" >&2
         install -d t/dk0exe
         rm -f t/dk0exe/dk0
-        ln -s "$PWD/../dksdk-coder/_build/default/ext/MlFront/src/MlFront_Exec/Shell.exe" t/dk0exe/dk0
+        ln -s "$PWD/../dksdk-coder/_build/default/ext/MlFront/src/DkZero_Exec/Shell.exe" t/dk0exe/dk0
         export PATH="$PWD/t/dk0exe:$PATH"
     else
         echo "ERROR: Local build of dk0 requested but not found" >&2

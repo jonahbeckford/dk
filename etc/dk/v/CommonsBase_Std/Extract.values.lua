@@ -21,7 +21,7 @@
 --
 --   {or local dev}
 --
---   _build/default/ext/MlFront/src/MlFront_Exec/Shell.exe \
+--   _build/default/ext/MlFront/src/DkZero_Exec/Shell.exe \
 --     -isystem ./ext/dk/etc/dk/i -I ext/dk/etc/dk/v \
 --     --trust-local-package CommonsBase_Std \
 --     --trial post-object CommonsBase_Std.Extract.F_Untar@0.1.0 \
