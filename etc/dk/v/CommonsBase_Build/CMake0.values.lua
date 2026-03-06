@@ -360,11 +360,11 @@ function rules.F_Build(command, request)
       return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
     elseif request.execution.OSFamily == "linux" then
       local cmakeabi
-      if request.execution.ABIv3 == "linux_x86_64" then
+      if request.execution.ABIv3 == "Linux_x86_64" then
         cmakeabi = "linux_x86_64"
-      elseif request.execution.ABIv3 == "linux_x86" then
+      elseif request.execution.ABIv3 == "Linux_x86" then
         cmakeabi = "linux_x86"
-      elseif request.execution.ABIv3 == "linux_arm64" then
+      elseif request.execution.ABIv3 == "Linux_arm64" then
         cmakeabi = "linux_arm64"
       else
         error("unsupported ABIv3: " .. request.execution.ABIv3)
@@ -375,11 +375,11 @@ function rules.F_Build(command, request)
       return CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, p)
     elseif request.execution.OSFamily == "windows" then
       local cmakeabi
-      if request.execution.ABIv3 == "windows_x86_64" then
+      if request.execution.ABIv3 == "Windows_x86_64" then
         cmakeabi = "windows_x86_64"
-      elseif request.execution.ABIv3 == "windows_x86" then
+      elseif request.execution.ABIv3 == "Windows_x86" then
         cmakeabi = "windows_x86"
-      elseif request.execution.ABIv3 == "windows_arm64" then
+      elseif request.execution.ABIv3 == "Windows_arm64" then
         cmakeabi = "windows_arm64"
       else
         error("unsupported ABIv3: " .. request.execution.ABIv3)

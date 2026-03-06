@@ -2535,7 +2535,7 @@ The `OSFamily` of the execution platform. Values include `windows` and `macos`; 
 request.execution.ABIv3
 ```
 
-The third version of the DkML ABI of the execution platform described in [${SLOTNAME.SlotName}](#slotnameslotname). Examples include `windows_x86_64` and `darwin_arm64`.
+The third version of the DkML ABI of the execution platform described in [${SLOTNAME.SlotName}](#slotnameslotname). Examples include `Windows_x86_64` and `Darwin_arm64`.
 
 #### request.execution.OSv3
 

@@ -187,7 +187,6 @@ function CommonsBase_Std__Extract__0_1_0.common_params(request, p)
   p.tarfile = tarfile
   p.file_tar = file_tar
   p.file_tar_basename = file_tar_basename
-  p.abi = request.execution.ABIv3
   p.tarcompressflag = tarcompressflag
   p.gzip = gzip
   p.xz = xz
