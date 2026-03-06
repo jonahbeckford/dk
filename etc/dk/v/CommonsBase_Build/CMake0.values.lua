@@ -376,16 +376,16 @@ function rules.F_Build(command, request)
     elseif request.execution.OSFamily == "windows" then
       local cmakeabi
       if request.execution.ABIv3 == "Windows_x86_64" then
-        cmakeabi = "windows_x86_64"
+        cmakeabi = "windows-x86_64"
       elseif request.execution.ABIv3 == "Windows_x86" then
-        cmakeabi = "windows_x86"
+        cmakeabi = "windows-i386"
       elseif request.execution.ABIv3 == "Windows_arm64" then
-        cmakeabi = "windows_arm64"
+        cmakeabi = "windows-arm64"
       else
         error("unsupported ABIv3: " .. request.execution.ABIv3)
       end
       p.cmakeexe =
-          "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-" ..
+          "$(get-asset CommonsBase_Build.CMake0.Bundle@3.25.3 -p cmake-3.25.3-" ..
           cmakeabi .. ".zip -n 1 -d : -e 'bin/*')/bin/cmake.exe"
       -- use ninja.exe as the executable filename so it runs on Windows
       p.absninjaexe = "$(--path=absnative get-object CommonsBase_Build.Ninja0@1.12.1 -s Release." ..
