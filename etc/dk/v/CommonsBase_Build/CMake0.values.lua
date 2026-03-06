@@ -8,7 +8,9 @@
 --  mirrors[]: HTTP base urls to download the CMake source directory
 --  urlpath: path added to the mirrors so full URL is a ZIP file of the CMake source directory
 --  installdir: (required) the install directory to pass to `cmake --install ... --prefix INSTALL_DIRECTORY`
---  generator: the cmake generator to use (defaults to "Ninja")
+--  generator: the cmake generator to use (defaults to "none" on Windows, "Ninja" on other OS-es).
+--    The special value "none" removes the "-G GENERATOR" CMake option so CMake selects any
+--    available compiler.
 --  sourcesubdir: subdirectory inside the asset or bundle that contains the CMakeLists.txt (defaults to root of asset or bundle)
 --  nstrip: levels of leading directories to nstrip while extract asset or bundle (defaults to 0)
 --  gargs[]: list of cmake generator arguments to pass to cmake executable.
@@ -37,7 +39,9 @@
 --  bundlemodver=
 --  assetmodver= assetpath=
 -- Options:
---  generator: the cmake generator to use (defaults to "Ninja")
+--  generator: the cmake generator to use (defaults to "none" on Windows, "Ninja" on other OS-es).
+--    The special value "none" removes the "-G GENERATOR" CMake option so CMake selects any
+--    available compiler.
 --  assetmodver: asset module@version of CMake source directory
 --  assetpath: path inside the [assetmodver] asset module to the CMake source directory
 --  overlayassetpath: path inside the [assetmodver] asset module that gets layered on top of the source
@@ -71,7 +75,8 @@
 -- COMPILERS
 --
 -- ::: Windows / Visual Studio
--- <TODO> The Ninja generator (the default) only works on Windows when the build is run in a Visual Studio Developer Command Prompt.
+-- The default generator is nothing on Windows. CMake will select any available compiler,
+-- which may be the latest Visual Studio if your build machine has Visual Studio installed.
 
 -- DESIGN QUESTIONS
 -- Q1: Why a rule instead of a simpler `get-object`?
@@ -117,9 +122,19 @@ function CommonsBase_Build__CMake0__3_25_3.parse_common_args(request, p)
   p.nstrip = request.user.nstrip or 0
 end
 
+function CommonsBase_Build__CMake0__3_25_3.get_generator(request)
+  if request.user.generator then
+    return request.user.generator
+  elseif request.execution.OSFamily == "windows" then
+    return "none"
+  else
+    return "Ninja"
+  end
+end
+
 function uirules.Build(command, request)
   local installdir = assert(request.user.installdir, "please provide 'installdir=INSTALL_DIRECTORY'")
-  local generator = request.user.generator or "Ninja"
+  local generator = CommonsBase_Build__CMake0__3_25_3.get_generator(request)
 
   local src = request.user.src
   local mirrors = request.user.mirrors
@@ -333,7 +348,7 @@ function rules.F_Build(command, request)
     CommonsBase_Build__CMake0__3_25_3.parse_common_args(request, p)
 
     p.outputid = request.submit.outputid
-    p.generator = request.user.generator or "Ninja"
+    p.generator = CommonsBase_Build__CMake0__3_25_3.get_generator(request)
     p.bundlemodver = request.user.bundlemodver
     p.assetmodver = request.user.assetmodver
     p.assetpath = request.user.assetpath
@@ -441,10 +456,14 @@ function CommonsBase_Build__CMake0__3_25_3.free_generate_build_install(request, 
 
   -- concatenate [p.gargs] into string "generate_cmd"
   local gargs = {
-    p.cmakeexe, "-G", p.generator, "-S", sourcedir, "-B", "b",
+    p.cmakeexe, "-S", sourcedir, "-B", "b",
     -- CMAKE_INSTALL_PREFIX needs to be absolute path
     "-DCMAKE_INSTALL_PREFIX:FILEPATH=${SLOTABS.Release.Agnostic}"
   }
+  if p.generator ~= "none" then
+    table.insert(gargs, "-G")
+    table.insert(gargs, p.generator)
+  end
   table.move(p.gargs, 1, table.getn(p.gargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
   table.move(gninjaargs, 1, table.getn(gninjaargs), table.getn(gargs) + 1, gargs) ---@diagnostic disable-line: deprecated, access-invisible
 
