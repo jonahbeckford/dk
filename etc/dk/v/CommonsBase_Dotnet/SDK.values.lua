@@ -6050,7 +6050,7 @@ function CommonsBase_Std__Dotnet_SDK.workaround_make_dotnet_executable(response,
       -- it relies on the fact that subshells are in cached directories. our repeated
       -- subshells for dotnetsdk (and nugetpackages) across continuations will be the same path.
       function_ = {
-        args = {
+        commands = {
           -- TODO: When coreutils does not require Windows to run (through S7z.Windows7zExe), we can
           -- avoid the system /bin/chmod and use the coreutils version ...
           -- "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s ${SLOTNAME.Release.execution_abi} -m ./coreutils.exe -f : -e '*')",         

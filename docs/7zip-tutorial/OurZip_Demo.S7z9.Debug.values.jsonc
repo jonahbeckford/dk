@@ -17,7 +17,7 @@
         ]
       },
       "function": {
-        "args": [
+        "commands": [
           // run something that will always fail. the precommands are what we want to test
           "false"
         ]

@@ -538,7 +538,7 @@
                         "type": "object",
                         "additionalProperties": false,
                         "properties": {
-                            "args": {
+                            "commands": {
                                 "description": "The command line arguments to the executable. All form variables (ex. ${SLOT.Release.Agnostic}) may be used.",
                                 "type": "array",
                                 "items": {
@@ -571,7 +571,7 @@
                             }
                         },
                         "required": [
-                            "args"
+                            "commands"
                         ]
                     },
                     "outputs": {

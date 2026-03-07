@@ -20,7 +20,7 @@
           // 7z.exe only runs on Windows
           { "name": "OSFamily", "value": "windows" }
         ],
-        "args": [
+        "commands": [
           "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -d :)/7z.exe",
           // uncompress
           "x",

@@ -89,6 +89,13 @@ jobs:
                     Release.Linux_x86:CommonsBase_Std.Coreutils@0.2.2
                     Release.Linux_x86_64:CommonsBase_Std.Coreutils@0.2.2
 
+                    Release.Windows_x86:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Windows_x86_64:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Darwin_arm64:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Darwin_x86_64:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Linux_x86:CommonsBase_Std.Coreutils@0.6.0
+                    Release.Linux_x86_64:CommonsBase_Std.Coreutils@0.6.0
+
                     Release.Windows_x86:CommonsBase_Std.S7z@25.1.0
                     Release.Windows_x86_64:CommonsBase_Std.S7z@25.1.0
                     Release.Darwin_arm64:CommonsBase_Std.S7z@25.1.0
@@ -114,7 +121,7 @@ jobs:
                   #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
-            - name: Archive CommonsBase_Std
+            - name: Archive Distribution
               if: github.ref_type != 'tag'
               uses: actions/upload-artifact@v4
               with:
@@ -165,8 +172,8 @@ jobs:
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo imports ...; find etc/dk/i -type f
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -194,11 +201,556 @@ jobs:
                   #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
-            - name: Archive CommonsBase_Build
+            - name: Archive Distribution
               if: github.ref_type != 'tag'
               uses: actions/upload-artifact@v4
               with:
                 name: dist-CommonsBase_Build
+                path: dk-dist/
+
+            - name: Attest
+              if: github.ref_type == 'tag'
+              id: attest
+              uses: actions/attest-build-provenance@v3
+              with: { subject-path: dk-dist/* }
+
+            - name: Release ${{ github.workflow }}
+              if: github.ref_type == 'tag'
+              uses: softprops/action-gh-release@f38efdea4c5ffe13e9424b0aa2833bee28f1e34c # v2. Oct. 6, 2025
+              with: { files: dk-dist/* }
+
+    CommonsBase_LLVM:
+        # tag(2.5.x+CommonsBase-LLVM) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-LLVM')) || github.ref_name == 'main'
+
+        runs-on: ubuntu-24.04
+
+        permissions:
+          contents: write # for action-gh-release
+          id-token: write # for actions/attest-build-provenance
+          attestations: write # for actions/attest-build-provenance
+          artifact-metadata: write # for actions/attest-build-provenance
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Import and Summarize Packages
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std
+              run: |
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('CommonsBase_LLVM@{0}', github.ref_name) || format('CommonsBase_LLVM@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # These are not yet ready to be built ... they use precommands instead of subshells and they don't use the CommonsBase_Build package for CMake0.
+                  # Release.Darwin_arm64:CommonsBase_LLVM.Clang@19.1.3
+                  # Release.Darwin_x86_64:CommonsBase_LLVM.Clang@19.1.3
+                  # Release.Linux_x86:CommonsBase_LLVM.Clang@19.1.3
+                  # Release.Linux_x86_64:CommonsBase_LLVM.Clang@19.1.3
+                  # Release.Windows_x86_64:CommonsBase_LLVM.Clang@19.1.3
+                  # Release.Windows_x86:CommonsBase_LLVM.Clang@19.1.3
+                  #
+                  # One or more of these are too big ... each file in a GitHub release must not exceed 2GB (split zip into N smaller zips as part of dk0 consolidate?)
+                  # Release.Windows_x86_64:CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216
+                  # Release.Windows_x86:CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216
+                  # Release.Linux_arm64:CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216
+                  # Release.Linux_x86_64:CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216
+                  objects: |
+                    Release.Darwin_arm64:CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216
+                    Release.Darwin_x86_64:CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216
+
+                  use-cache: true
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Distribution
+              if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-CommonsBase_LLVM
+                path: dk-dist/
+
+            - name: Attest
+              if: github.ref_type == 'tag'
+              id: attest
+              uses: actions/attest-build-provenance@v3
+              with: { subject-path: dk-dist/* }
+
+            - name: Release ${{ github.workflow }}
+              if: github.ref_type == 'tag'
+              uses: softprops/action-gh-release@f38efdea4c5ffe13e9424b0aa2833bee28f1e34c # v2. Oct. 6, 2025
+              with: { files: dk-dist/* }
+
+    CommonsBase_GNU:
+        # tag(2.5.x+CommonsBase-GNU) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-GNU')) || github.ref_name == 'main'
+
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
+
+        permissions:
+          contents: write # for action-gh-release
+          id-token: write # for actions/attest-build-provenance
+          attestations: write # for actions/attest-build-provenance
+          artifact-metadata: write # for actions/attest-build-provenance
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Import and Summarize Packages
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                # CommonsBase_LLVM: The LLVM-MinGW toolchain is used to build CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                DEPENDENCIES: CommonsBase_Std CommonsBase_LLVM
+              run: |
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('CommonsBase_GNU@{0}', github.ref_name) || format('CommonsBase_GNU@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # We can only build one operating system in one CI job.
+                    # Release.Linux_x86:CommonsBase_GNU.Awk@5.3.1
+                    # Release.Linux_x86_64:CommonsBase_GNU.Awk@5.3.1
+                    # Release.Linux_arm64:CommonsBase_GNU.Awk@5.3.1
+
+                    # Release.Linux_x86_64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_x86_64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_x86_64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_arm64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_arm64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    # Release.Linux_arm64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+
+                    # Release.Linux_x86:CommonsBase_GNU.Bison@3.8.2
+                    # Release.Linux_x86_64:CommonsBase_GNU.Bison@3.8.2
+                    # Release.Linux_arm64:CommonsBase_GNU.Bison@3.8.2
+
+                    # Release.Linux_x86:CommonsBase_GNU.GMP@6.3.0
+                    # Release.Linux_x86_64:CommonsBase_GNU.GMP@6.3.0
+                    # Release.Linux_arm64:CommonsBase_GNU.GMP@6.3.0
+
+                    # Release.Linux_x86:CommonsBase_GNU.Make@4.4.1
+                    # Release.Linux_x86_64:CommonsBase_GNU.Make@4.4.1
+                    # Release.Linux_arm64:CommonsBase_GNU.Make@4.4.1
+
+                    # Release.Linux_x86_64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_x86_64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_x86_64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_arm64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_arm64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    # Release.Linux_arm64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+
+                    # Release.Linux_x86:CommonsBase_GNU.Nettle@3.10.2
+                    # Release.Linux_x86_64:CommonsBase_GNU.Nettle@3.10.2
+                    # Release.Linux_arm64:CommonsBase_GNU.Nettle@3.10.2
+
+                    # Release.Linux_x86:CommonsBase_GNU.TLS@3.8.12
+                    # Release.Linux_x86_64:CommonsBase_GNU.TLS@3.8.12
+                    # Release.Linux_arm64:CommonsBase_GNU.TLS@3.8.12
+
+                  objects: |
+                    Release.Windows_x86:CommonsBase_GNU.Toolchain.W64dev@2.5.0
+                    Release.Windows_x86_64:CommonsBase_GNU.Toolchain.W64dev@2.5.0
+
+                    Release.Darwin_arm64:CommonsBase_GNU.Nettle@3.10.2
+                    Release.Darwin_x86_64:CommonsBase_GNU.Nettle@3.10.2
+
+                    Release.Darwin_arm64:CommonsBase_GNU.GMP@6.3.0
+                    Release.Darwin_x86_64:CommonsBase_GNU.GMP@6.3.0
+
+                    Release.Darwin_arm64:CommonsBase_GNU.TLS@3.8.12
+                    Release.Darwin_x86_64:CommonsBase_GNU.TLS@3.8.12
+
+                    Release.Darwin_arm64:CommonsBase_GNU.Awk@5.3.1
+                    Release.Darwin_x86_64:CommonsBase_GNU.Awk@5.3.1
+
+                    Release.Darwin_x86_64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    Release.Darwin_x86_64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    Release.Darwin_x86_64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    Release.Darwin_arm64.Windows_x86_64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    Release.Darwin_arm64.Windows_x86:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+                    Release.Darwin_arm64.Windows_arm64:CommonsBase_GNU.Awk.Win32.LLVM_MinGW@5.3.1
+
+                    Release.Darwin_arm64:CommonsBase_GNU.Bison@3.8.2
+                    Release.Darwin_x86_64:CommonsBase_GNU.Bison@3.8.2
+
+                    Release.Darwin_arm64:CommonsBase_GNU.Make@4.4.1
+                    Release.Darwin_x86_64:CommonsBase_GNU.Make@4.4.1
+
+                    Release.Darwin_x86_64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    Release.Darwin_x86_64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    Release.Darwin_x86_64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    Release.Darwin_arm64.Windows_x86_64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    Release.Darwin_arm64.Windows_x86:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+                    Release.Darwin_arm64.Windows_arm64:CommonsBase_GNU.Make.Win32.LLVM_MinGW@4.4.1
+
+                  use-cache: true
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-CommonsBase_GNU
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
+
+            - name: Archive Distribution
+              if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-CommonsBase_GNU
+                path: dk-dist/
+
+            - name: Attest
+              if: github.ref_type == 'tag'
+              id: attest
+              uses: actions/attest-build-provenance@v3
+              with: { subject-path: dk-dist/* }
+
+            - name: Release ${{ github.workflow }}
+              if: github.ref_type == 'tag'
+              uses: softprops/action-gh-release@f38efdea4c5ffe13e9424b0aa2833bee28f1e34c # v2. Oct. 6, 2025
+              with: { files: dk-dist/* }
+
+    NotMatveevKondratyev_Libinotify:
+        # tag(2.5.x+NotMatveevKondratyev-Libinotify) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotMatveevKondratyev-Libinotify')) || github.ref_name == 'main'
+
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
+
+        permissions:
+          contents: write # for action-gh-release
+          id-token: write # for actions/attest-build-provenance
+          attestations: write # for actions/attest-build-provenance
+          artifact-metadata: write # for actions/attest-build-provenance
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Import and Summarize Packages
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std CommonsBase_GNU
+              run: |
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('NotMatveevKondratyev_Libinotify@{0}', github.ref_name) || format('NotMatveevKondratyev_Libinotify@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # We can only build one operating system in one CI job.
+                  objects: |
+                    Release.Darwin_arm64:NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0
+                    Release.Darwin_x86_64:NotMatveevKondratyev_Libinotify.Kqueue@0.20240724.0
+                  use-cache: true
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Distribution
+              if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-NotMatveevKondratyev_Libinotify
+                path: dk-dist/
+
+            - name: Attest
+              if: github.ref_type == 'tag'
+              id: attest
+              uses: actions/attest-build-provenance@v3
+              with: { subject-path: dk-dist/* }
+
+            - name: Release ${{ github.workflow }}
+              if: github.ref_type == 'tag'
+              uses: softprops/action-gh-release@f38efdea4c5ffe13e9424b0aa2833bee28f1e34c # v2. Oct. 6, 2025
+              with: { files: dk-dist/* }
+
+    NotMitEdu_Kerberos:
+        # tag(2.5.x+NotMitEdu-Kerberos) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotMitEdu-Kerberos')) || github.ref_name == 'main'
+
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
+
+        permissions:
+          contents: write # for action-gh-release
+          id-token: write # for actions/attest-build-provenance
+          attestations: write # for actions/attest-build-provenance
+          artifact-metadata: write # for actions/attest-build-provenance
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Import and Summarize Packages
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std CommonsBase_GNU
+              run: |
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('NotMitEdu_Kerberos@{0}', github.ref_name) || format('NotMitEdu_Kerberos@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # We can only build one operating system in one CI job.
+                  #  Release.Linux_x86:NotMitEdu_Kerberos.V5@1.22.2
+                  #  Release.Linux_x86_64:NotMitEdu_Kerberos.V5@1.22.2
+                  #  Release.Linux_arm64:NotMitEdu_Kerberos.V5@1.22.2
+                  objects: |
+                    Release.Darwin_arm64:NotMitEdu_Kerberos.V5@1.22.2
+                    Release.Darwin_x86_64:NotMitEdu_Kerberos.V5@1.22.2
+                  use-cache: true
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-NotMitEdu_Kerberos
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
+
+            - name: Archive Distribution
+              if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-NotMitEdu_Kerberos
+                path: dk-dist/
+
+            - name: Attest
+              if: github.ref_type == 'tag'
+              id: attest
+              uses: actions/attest-build-provenance@v3
+              with: { subject-path: dk-dist/* }
+
+            - name: Release ${{ github.workflow }}
+              if: github.ref_type == 'tag'
+              uses: softprops/action-gh-release@f38efdea4c5ffe13e9424b0aa2833bee28f1e34c # v2. Oct. 6, 2025
+              with: { files: dk-dist/* }
+
+    CommonsBase_Win32:
+        # tag(2.5.x+CommonsBase-Win32) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+CommonsBase-Win32')) || github.ref_name == 'main'
+
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
+
+        permissions:
+          contents: write # for action-gh-release
+          id-token: write # for actions/attest-build-provenance
+          attestations: write # for actions/attest-build-provenance
+          artifact-metadata: write # for actions/attest-build-provenance
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Import and Summarize Packages
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std CommonsBase_LLVM CommonsBase_GNU NotMatveevKondratyev_Libinotify NotMitEdu_Kerberos
+              run: |
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('CommonsBase_Win32@{0}', github.ref_name) || format('CommonsBase_Win32@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  objects: |
+                    Release.Darwin_x86_64:CommonsBase_Win32.Wine@11.2.0
+                    Release.Darwin_arm64:CommonsBase_Win32.Wine@11.2.0
+                  use-cache: true
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-CommonsBase_Win32
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                # ex. t/p/7096/rd6x/o/Release.Darwin_arm64/lib/wine/i386-windows/winex11.drv
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
+
+            - name: Archive Distribution
+              if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-CommonsBase_Win32
+                path: dk-dist/
+
+            - name: Attest
+              if: github.ref_type == 'tag'
+              id: attest
+              uses: actions/attest-build-provenance@v3
+              with: { subject-path: dk-dist/* }
+
+            - name: Release ${{ github.workflow }}
+              if: github.ref_type == 'tag'
+              uses: softprops/action-gh-release@f38efdea4c5ffe13e9424b0aa2833bee28f1e34c # v2. Oct. 6, 2025
+              with: { files: dk-dist/* }
+
+    NotInriaCaml_Std:
+        # tag(2.5.x+NotInriaCaml-Std) or branch(main)
+        if: (github.ref_type == 'tag' && startsWith(github.ref_name, '2.5.') && endsWith(github.ref_name, '+NotInriaCaml-Std')) || github.ref_name == 'main'
+
+        # runs-on(macOS). This CommonsBase_GNU works on Linux but we are targeting macOS first
+        runs-on: macos-latest
+
+        permissions:
+          contents: write # for action-gh-release
+          id-token: write # for actions/attest-build-provenance
+          attestations: write # for actions/attest-build-provenance
+          artifact-metadata: write # for actions/attest-build-provenance
+
+        # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+        # are tied to this environment only.
+        environment: dk-distribution
+        steps:
+            - name: Harden Runner # Optional but recommended
+              uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+              with: { egress-policy: audit }
+
+            - name: Checkout project
+              uses: actions/checkout@v5
+
+            - name: Import and Summarize Packages
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                DEPENDENCIES: CommonsBase_Std CommonsBase_LLVM CommonsBase_GNU NotMatveevKondratyev_Libinotify NotMitEdu_Kerberos CommonsBase_Win32
+              run: |
+                find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
+                ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
+                .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
+
+            - name: Distribute Modules
+              uses: diskuv/dk-distribute@v1
+              with:
+                  id: ${{ github.ref_type == 'tag' && format('NotInriaCaml_Std@{0}', github.ref_name) || format('NotInriaCaml_Std@{0}', env.dkdist_branch_version) }}
+                  pubkey: ${{ secrets.distribute_2_5_pubkey }}
+                  seckey: ${{ secrets.distribute_2_5_seckey }}
+                  options: -nosysinc -I etc/dk/i -I etc/dk/v  --cell "dk0=${{ github.workspace }}" # "Import and Summarize Packages" etc/dk/i rather than default system dependencies dksrc/etc/dk/i
+                  # One object takes at least 1.5 hours.
+                    # Release.Darwin_arm64.Windows_x86_64:NotInriaCaml_Std.Toolchain.W64devkit@5.4.1
+                  objects: |
+                    Release.Darwin_x86_64.Windows_x86_64:NotInriaCaml_Std.Toolchain.W64devkit@5.4.1
+                  scripts: |
+                    NotInriaCaml_Std.Wenv@0.1.0
+                  use-cache: true
+                  experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
+
+            - name: Archive Logs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: logs-NotInriaCaml_Std
+                # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
+
+            - name: Archive Distribution
+              if: github.ref_type != 'tag'
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-NotInriaCaml_Std
                 path: dk-dist/
 
             - name: Attest
@@ -245,8 +797,8 @@ jobs:
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo imports ...; find etc/dk/i -type f
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -263,7 +815,7 @@ jobs:
                   #   Temporary: use HEAD until MlFront testing is done
                   # experimental-mlfront-ref: HEAD
 
-            - name: Archive NotGoogleDev_OR
+            - name: Archive Distribution
               if: github.ref_type != 'tag'
               uses: actions/upload-artifact@v4
               with:
@@ -314,8 +866,8 @@ jobs:
                 find etc/dk/i -mindepth 1 -type f -exec rm -f {} +
                 ! [ "${{ github.ref_type }}" = "tag" ] || .github/scripts/describe-import-gh-release.sh -m -c "$GITHUB_STEP_SUMMARY" -t '${{ github.ref_name }}' -r '${{ github.repository }}'
                 .github/scripts/import-latest-gh-releases.sh -m -c "$GITHUB_STEP_SUMMARY" -r '${{ github.repository }}' $DEPENDENCIES
-                echo deletes ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.* etc/dk/v/$d/*.values.*; done
-                echo imports ...; find etc/dk/i -type f
+                echo delete dependencies ...; for d in $DEPENDENCIES; do rm -vrf etc/dk/v/$d.*.values.json* etc/dk/v/$d/*.values.json*; done
+                echo final imports ...; find etc/dk/i -type f
 
             - name: Distribute Modules
               uses: diskuv/dk-distribute@v1
@@ -342,11 +894,15 @@ jobs:
               if: failure()
               uses: actions/upload-artifact@v4
               with:
-                name: dist-NotInriaParkas_Caml
+                name: logs-NotInriaParkas_Caml
                 # ex. t/p/1412/mio7/l/Release.Darwin_x86_64/stderr1.log
-                path: t/p/*/*/l/*/*
+                # ex. t/p/5514/mnu2/f/Release.Darwin_arm64/configure.log
+                path: |
+                  t/p/*/*/l/*/*
+                  t/p/*/*/f/*/*
+                  t/p/*/*/o/*/*
 
-            - name: Archive NotInriaParkas_Caml
+            - name: Archive Distribution
               if: github.ref_type != 'tag'
               uses: actions/upload-artifact@v4
               with:

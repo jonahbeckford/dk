@@ -1,4 +1,4 @@
-// Test: ./dk0 --trial -I etc/dk/v --trust-local-package CommonsBase_LLVM get-object CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216 -s Release.execution_abi -d target/llvm-mingw-l64 -e 'bin/*'
+// Test: ./dk0 --trial -v -I etc/dk/v --trust-local-package CommonsBase_LLVM get-object CommonsBase_LLVM.Toolchain.MinGW@21.1.8+rev-20251216 -s Release.execution_abi -e 'bin/*' -d target/llvm-mingw
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
   "schema_version": {
@@ -13,13 +13,13 @@
         "private": [
           // MACOS and LINUX
           // convert the macOS .tar.xz to .zip (we could use F_Untar but that requires paths[]= set)
-          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_arm64}/ignored.zip  modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
-          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_x86_64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
+          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_arm64}/ignored.zip  modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacArm64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
+          "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Darwin_x86_64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.MacX64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-macos-universal.tar.xz -f llvm-mingw.tar.xz)",
           "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Linux_x86_64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuX64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-ubuntu-22.04-x86_64.tar.xz -f llvm-mingw.tar.xz)",
           "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${SLOT.Release.Linux_arm64}/ignored.zip modver=CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuArm64@21.1.8+rev-20251216 tarfile=$(get-asset CommonsBase_LLVM.Toolchain.MinGW.Bundle@21.1.8+rev-20251216 -p llvm-mingw-20251216-ucrt-ubuntu-22.04-aarch64.tar.xz -f llvm-mingw.tar.xz)",
           // extract zip to output folder, stripping toplevel llvm-mingw-20251216-ucrt-macos-universal/ folder
-          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_arm64}",
-          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacUniversal@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_x86_64}",
+          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacArm64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_arm64}",
+          "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.MacX64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Darwin_x86_64}",
           "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuX64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Linux_x86_64}",
           "install-object CommonsBase_LLVM.Toolchain.MinGW.Zip.UbuntuArm64@21.1.8+rev-20251216 -s Release.Agnostic -m ./output.zip -n 1 -d ${SLOT.Release.Linux_arm64}",
           // WINDOWS
@@ -30,7 +30,7 @@
         ]
       },
       "function": {
-        "args": [
+        "commands": [
           // remove the ignored.zip file from macOS precommands
           [
             "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.execution_abi -m ./coreutils.exe -e coreutils.exe -f coreutils.exe)",

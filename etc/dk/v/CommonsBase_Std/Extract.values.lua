@@ -208,7 +208,7 @@ function CommonsBase_Std__Extract__0_1_0.untar_macos(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "macos" } },
-              args = {
+              commands = {
                 { -- macOS system tar
                   "/usr/bin/tar",
                   "-x" .. p.tarcompressflag .. "f",
@@ -242,7 +242,7 @@ function CommonsBase_Std__Extract__0_1_0.tartozip_macos(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "macos" } },
-              args = {
+              commands = {
                 { -- macOS system tar
                   "/usr/bin/tar",
                   "-x" .. p.tarcompressflag .. "f",
@@ -281,7 +281,7 @@ function CommonsBase_Std__Extract__0_1_0.untar_linux(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "linux" } },
-              args = {
+              commands = {
                 {
                   p.toyboxexe,
                   "tar",
@@ -316,7 +316,7 @@ function CommonsBase_Std__Extract__0_1_0.tartozip_linux(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "linux" } },
-              args = {
+              commands = {
                 {
                   p.toyboxexe,
                   "tar",
@@ -357,7 +357,7 @@ function CommonsBase_Std__Extract__0_1_0.untarsomez_win32(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "windows" } },
-              args = {
+              commands = {
                 -- extract the .tar.gz/.tar.xz/.tar.bz2 to a .tar
                 {
                   -- with [7z.exe] ...
@@ -408,7 +408,7 @@ function CommonsBase_Std__Extract__0_1_0.tartozip_somez_win32(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "windows" } },
-              args = {
+              commands = {
                 -- extract the .tar.gz/.tar.xz/.tar.bz2 to a .tar
                 {
                   -- with [7z.exe] ...
@@ -486,7 +486,7 @@ function CommonsBase_Std__Extract__0_1_0.untar_win32(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "windows" } },
-              args = {
+              commands = {
                 -- with [7z.exe] ...
                 p.sevenzexe_win32,
                 -- uncompress
@@ -522,7 +522,7 @@ function CommonsBase_Std__Extract__0_1_0.tartozip_win32(p)
             id = p.outputid,
             function_ = {
               execution = { { name = "OSFamily", value = "windows" } },
-              args = {
+              commands = {
                 -- extract the .tar
                 {
                   -- with [7z.exe] ...

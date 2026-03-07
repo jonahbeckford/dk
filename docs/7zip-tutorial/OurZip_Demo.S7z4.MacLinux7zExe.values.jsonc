@@ -26,7 +26,7 @@
             "value": "windows"
           }
         ],
-        "args": [
+        "commands": [
           // extract object [7z2501-mac.tar] with [7z.exe] to the output directory
           // for slot [Release.Darwin_arm64], etc.
           "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -d :)/7z.exe",
