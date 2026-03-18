@@ -5863,16 +5863,13 @@ function CommonsBase_Std__Dotnet_SDK.form_values_unix(slot)
   end
   local paths_str        = table.concat(pathsarr, " ")
 
-  local getasset_tarfile =
-      string.format(
-        "$(get-asset CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107 -p dotnet-sdk-10.0.100-rc.2.25502.107-%s.tar.gz -f :)",
-        arch)
   local postobject       =
       string.format(
-        "post-object CommonsBase_Std.Extract.F_Untar@0.1.0 -d ${SLOT.%s} modver=CommonsBase_Dotnet.SDK.Unix.%s@10.0.100-rc.2.25502.107 tarfile=%s %s",
+        "post-object CommonsBase_Std.Extract.F_Untar@0.1.0 -d ${SLOT.%s} modver=CommonsBase_Dotnet.SDK.Unix.%s@10.0.100-rc.2.25502.107 tarmodver=%s tarassetpath=%s %s",
         slot,
         slot,
-        getasset_tarfile,
+        "CommonsBase_Dotnet.SDK.Bundle@10.0.100-rc.2.25502.107",
+        "dotnet-sdk-10.0.100-rc.2.25502.107-%s.tar.gz",
         paths_str)
   local precommands      = {
     private = {

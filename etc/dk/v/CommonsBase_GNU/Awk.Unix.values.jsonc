@@ -13,7 +13,7 @@
                 "sequential": true,
                 "private": [
                     // convert the .tar.gz to .zip
-                    "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ignored.zip modver=CommonsBase_GNU.Awk.Zip@5.3.1 tarfile=$(get-asset CommonsBase_GNU.Awk.Bundle@5.3.1 -p gawk-5.3.1.tar.gz -f gawk.tar.gz)",
+                    "post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ignored.zip modver=CommonsBase_GNU.Awk.Zip@5.3.1 tarmodver=CommonsBase_GNU.Awk.Bundle@5.3.1 tarassetpath=gawk-5.3.1.tar.gz",
                     // extract zip to current folder, stripping toplevel gawk-5.3.1/ folder
                     "install-object CommonsBase_GNU.Awk.Zip@5.3.1 -s Release.Agnostic -m ./output.zip -n 1 -d . -e 'build-aux/*'"
                 ]
