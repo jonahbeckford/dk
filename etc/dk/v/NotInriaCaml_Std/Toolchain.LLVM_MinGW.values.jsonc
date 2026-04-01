@@ -38,7 +38,7 @@
 //
 // === EXAMPLES ===
 //
-// ./dk0 --trial -v -I etc/dk/v --trust-local-package CommonsBase_Win32 --trust-local-package NotMatveevKondratyev_Libinotify --trust-local-package CommonsBase_LLVM --trust-local-package CommonsBase_GNU --trust-local-package NotInriaCaml_Std get-object NotInriaCaml_Std.Toolchain.LLVM_MinGW@5.4.1 -s Release.Darwin_arm64.Windows_x86_64 -d target/ocaml-winx64
+// ./dk0 -v -I etc/dk/v --trust-local-package CommonsBase_Win32 --trust-local-package NotMatveevKondratyev_Libinotify --trust-local-package CommonsBase_LLVM --trust-local-package CommonsBase_GNU --trust-local-package NotInriaCaml_Std get-object NotInriaCaml_Std.Toolchain.LLVM_MinGW@5.4.1 -s Release.Darwin_arm64.Windows_x86_64 -d target/ocaml-winx64
 //
 // === FOLDERS ===
 //

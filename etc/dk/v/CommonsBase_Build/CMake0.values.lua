@@ -28,7 +28,7 @@
 --     Remove every file type except directories; use outrmexact for directories for safety.
 --  exe[]: list of glob patterns for executables to set execute permissions (Unix) and locally codesign (macOS).
 -- examples:
---  dk0 --trial run CommonsBase_Build.CMake0.Build@3.25.3 \
+--  dk0 run CommonsBase_Build.CMake0.Build@3.25.3 \
 --    installdir=t/i \
 --    'mirrors[]=https://github.com/google/or-tools/archive/refs/tags' \
 --    'urlpath=v9.15.zip#920d8266b30a7a8f8572a5dc663fdf8d2701792101dd95f09e72397c16e12858,25297362' \
@@ -66,7 +66,7 @@
 --        Remove every file type except directories; use outrmexact for directories for safety.
 --  exe[]: list of glob patterns for executables to set execute permissions (Unix) and locally codesign (macOS).
 -- examples:
---  dk0 --trial post-object CommonsBase_Build.CMake0.F_Build@3.25.3 \
+--  dk0 post-object CommonsBase_Build.CMake0.F_Build@3.25.3 \
 --    generator=Ninja 'iargs[]=-S' 'iargs[]=.' 'out[]=bin/cmake-generated.exe'
 -- what gets run:
 --   get-asset <assetmodver> -p <assetpath> -d s [-or-] get-bundle <bundlemodver> -d s

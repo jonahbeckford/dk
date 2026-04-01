@@ -1,5 +1,5 @@
 // GnuTLS is a secure communications library implementing the SSL, TLS and DTLS protocols and technologies around them.
-// Test: ./dk0 --trial --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.TLS@3.8.12 -s Release.execution_abi -d target/gnutls
+// Test: ./dk0 --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.TLS@3.8.12 -s Release.execution_abi -d target/gnutls
 {
     "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
     "schema_version": {

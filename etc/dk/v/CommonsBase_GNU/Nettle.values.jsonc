@@ -1,7 +1,7 @@
 // Nettle is a cryptographic library that is designed to fit easily in more or less any context: In crypto toolkits for object-oriented languages (C++, Python, Pike, ...), in applications like LSH or GNUPG, or even in kernel space.
 // GNU? It is available from https://ftp.gnu.org/gnu/nettle/
-// Test: ./dk0 --trial -x gnu-nettle:subpath: --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@3.10.2 -s Release.execution_abi -d target/nettle
-// Test: ./dk0 --trial -x gnu-nettle:subpath: --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@4.0.0 -s Release.execution_abi -d target/nettle
+// Test: ./dk0 -x gnu-nettle:subpath: --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@3.10.2 -s Release.execution_abi -d target/nettle
+// Test: ./dk0 -x gnu-nettle:subpath: --trust-local-package CommonsBase_GNU -I etc/dk/v get-object CommonsBase_GNU.Nettle@4.0.0 -s Release.execution_abi -d target/nettle
 {
     "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
     "schema_version": {
